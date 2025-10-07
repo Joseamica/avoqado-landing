@@ -1,0 +1,3 @@
+# Redirect apex domain to www subdomain
+https://avoqado.io/* https://www.avoqado.io/:splat 301
+http://avoqado.io/* https://www.avoqado.io/:splat 301
