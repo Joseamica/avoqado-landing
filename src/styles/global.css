@@ -1,1 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700&display=swap');
 @import "tailwindcss";
+
+@theme {
+  /* Avoqado Brand Colors */
+  --color-avoqado-green: #69E185;
+  --color-avoqado-orange: #C9712F;
+  --color-avoqado-black: #000000;
+  --color-avoqado-light: #F8F8F8;
+  --color-avoqado-dark-bg: #0A0A0A;
+  --color-avoqado-dark-surface: #151515;
+
+  /* Semantic colors */
+  --color-primary: var(--color-avoqado-green);
+  --color-secondary: var(--color-avoqado-orange);
+  --color-background: var(--color-avoqado-dark-bg);
+  --color-background-alt: var(--color-avoqado-dark-surface);
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #A0A0A0;
+
+  /* Typography */
+  --font-family-sans: 'Urbanist', system-ui, -apple-system, sans-serif;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+body {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
