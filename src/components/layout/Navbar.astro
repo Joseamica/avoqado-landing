@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-gray-800">
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="flex justify-between items-center h-16">
+			<!-- Logo -->
+			<div class="flex items-center">
+				<a href="/" class="flex items-center space-x-2">
+					<Image src="/imagotipo-white.png" alt="Avoqado" class="w-full h-10" width={200} height={40} loading="eager" />
+
+				</a>
+			</div>
+
+			<!-- Desktop Navigation -->
+			<div class="hidden md:flex items-center gap-8">
+				<div class="flex items-center space-x-8">
+					<a href="/productos" class="text-gray-300 hover:text-white transition-colors">Productos</a>
+					<a href="/#features" class="text-gray-300 hover:text-white transition-colors">Características</a>
+					<a href="/#pricing" class="text-gray-300 hover:text-white transition-colors">Precios</a>
+					<a href="/#about" class="text-gray-300 hover:text-white transition-colors">Nosotros</a>
+				</div>
+				<div class="flex items-center gap-3">
+					<a href="https://dashboard.avoqado.io" class="px-5 py-2.5 border border-white/30 text-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all font-medium">
+						Iniciar sesión →
+					</a>
+					<a href="/#contact" class="px-5 py-2.5 bg-white text-black rounded-full hover:bg-gray-100 hover:scale-105 transition-all font-semibold shadow-lg">
+						Obtén demo
+					</a>
+				</div>
+			</div>
+
+			<!-- Mobile menu button -->
+			<button class="md:hidden p-2" aria-label="Toggle menu">
+				<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+				</svg>
+			</button>
+		</div>
+	</div>
+</nav>

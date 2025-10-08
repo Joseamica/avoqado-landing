@@ -11,6 +11,7 @@ import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
+  output: 'server', // Required for API routes with Cloudflare adapter
   vite: {
     plugins: [tailwindcss()]
   },

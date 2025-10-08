@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(if [ -f \"src/assets/hero/slide1.png\" ])",
+      "Bash(then mv src/assets/hero/*.png src/assets/hero/principal/)",
+      "Bash(else echo \"No files to move\")",
+      "Bash(fi)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

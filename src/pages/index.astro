@@ -1,15 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
-import Hero from '../components/Hero.astro';
-import SocialProof from '../components/SocialProof.astro';
-import ProblemSolution from '../components/ProblemSolution.astro';
-import Features from '../components/Features.astro';
-import DemoCarousel from '../components/DemoCarousel';
-import Pricing from '../components/Pricing.astro';
-import Testimonials from '../components/Testimonials.astro';
-import FinalCTA from '../components/FinalCTA.astro';
-import Footer from '../components/Footer.astro';
+import Navbar from '../components/layout/Navbar.astro';
+import Hero from '../components/sections/Hero.astro';
+import SocialProof from '../components/sections/SocialProof.astro';
+import ProblemSolution from '../components/sections/ProblemSolution.astro';
+import Features from '../components/sections/Features.astro';
+// import DemoCarousel from '../components/interactive/DemoCarousel';
+import Pricing from '../components/sections/Pricing.astro';
+import Testimonials from '../components/sections/Testimonials.astro';
+import FinalCTA from '../components/sections/FinalCTA.astro';
+import Footer from '../components/layout/Footer.astro';
 ---
 
 <Layout title="Avoqado - Payment Solutions for Restaurants" description="Transforma tu restaurante con pagos instantáneos, analytics en tiempo real y gestión de clientes. Prueba gratis por 14 días.">
@@ -28,7 +28,7 @@ import Footer from '../components/Footer.astro';
 		<Features />
 
 		<!-- 5. Demo Carousel -->
-		<DemoCarousel client:visible />
+		<!-- <DemoCarousel client:visible /> -->
 
 		<!-- 6. Pricing -->
 		<Pricing />

@@ -1,6 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700&display=swap');
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'BabyDoll';
+  src: url('/fonts/Baby Doll.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-baby {
+  font-family: 'BabyDoll', 'Urbanist', sans-serif;
+  text-transform: uppercase;
+}
+
+.text-avoqado-green {
+  color: var(--color-avoqado-green);
+}
+
 @theme {
   /* Avoqado Brand Colors */
   --color-avoqado-green: #69E185;

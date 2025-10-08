@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import ContactForm from '../interactive/ContactForm';
 ---
 
 <section id="contact" class="py-32 bg-gradient-to-br from-[--color-avoqado-green] to-green-500 relative overflow-hidden">
@@ -9,7 +11,7 @@
 	<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
 		<!-- Logo/Icon -->
 		<div class="w-20 h-20 bg-white rounded-full mx-auto mb-8 flex items-center justify-center shadow-xl">
-			<img src="/isotipo.svg" alt="Avoqado" class="w-12 h-12" />
+			<Image src="/isotipo.svg" alt="Avoqado" class="w-12 h-12" width={48} height={48} loading="lazy" />
 		</div>
 
 		<h2 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
@@ -25,47 +27,7 @@
 			<h3 class="text-2xl font-semibold mb-4">Agenda una demo gratuita</h3>
 			<p class="text-gray-600 mb-8">Te mostraremos cómo Avoqado puede ayudar a tu negocio</p>
 
-			<form class="space-y-4">
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-					<input
-						type="text"
-						placeholder="Nombre completo"
-						required
-						class="px-6 py-4 rounded-full border-2 border-gray-200 focus:border-[--color-avoqado-green] focus:outline-none transition-colors text-gray-900 placeholder:text-gray-500"
-					/>
-					<input
-						type="tel"
-						placeholder="Teléfono"
-						required
-						class="px-6 py-4 rounded-full border-2 border-gray-200 focus:border-[--color-avoqado-green] focus:outline-none transition-colors text-gray-900 placeholder:text-gray-500"
-					/>
-				</div>
-
-				<input
-					type="email"
-					placeholder="Email"
-					required
-					class="w-full px-6 py-4 rounded-full border-2 border-gray-200 focus:border-[--color-avoqado-green] focus:outline-none transition-colors text-gray-900 placeholder:text-gray-500"
-				/>
-
-				<input
-					type="text"
-					placeholder="Nombre de tu restaurante"
-					required
-					class="w-full px-6 py-4 rounded-full border-2 border-gray-200 focus:border-[--color-avoqado-green] focus:outline-none transition-colors text-gray-900 placeholder:text-gray-500"
-				/>
-
-				<button
-					type="submit"
-					class="w-full px-8 py-5 bg-black text-white text-lg font-semibold rounded-full hover:bg-gray-900 transition-colors shadow-lg hover:shadow-xl"
-				>
-					Solicitar demo gratuita →
-				</button>
-
-				<p class="text-sm text-gray-500 mt-4">
-					✓ Sin compromiso  •  ✓ 14 días de prueba gratis  •  ✓ Setup en 15 minutos
-				</p>
-			</form>
+			<ContactForm client:load />
 		</div>
 
 		<!-- Alternative CTA -->

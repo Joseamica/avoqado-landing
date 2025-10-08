@@ -24,6 +24,45 @@ Astro was chosen for this landing page because:
 
 ## Architecture
 
+### File Organization
+
+**IMPORTANT:** Every time a new file/component is created, re-evaluate the directory structure and organization. The project should scale to support:
+- Multiple pages per section
+- Dedicated pages for each main Avoqado product
+- Clear separation of concerns
+
+Current structure:
+```
+src/
+├── components/
+│   ├── layout/          # Navbar, Footer, Layout wrappers
+│   ├── sections/        # Full page sections (Hero, Features, etc.)
+│   ├── interactive/     # React components with state/interactivity
+│   ├── productos/       # Product-specific components
+│   └── ui/              # Reusable UI components (buttons, cards, etc.)
+├── pages/
+│   ├── index.astro      # Main landing page
+│   ├── productos/
+│   │   ├── index.astro  # Products overview
+│   │   ├── tpv.astro    # Avoqado TPV (terminal móvil)
+│   │   ├── dashboard.astro  # Dashboard Web (con IA)
+│   │   └── qr.astro     # Avoqado QR (pago en 30s)
+│   ├── precios.astro
+│   ├── casos-de-exito.astro
+│   └── api/
+│       └── contact.ts   # Contact form API endpoint
+├── assets/              # Images, fonts (processed by Astro)
+└── styles/              # Global CSS, theme tokens
+```
+
+### Avoqado Products
+
+The platform consists of 3 main products:
+
+1. **Avoqado TPV** - Terminal móvil para personal con pagos inteligentes
+2. **Dashboard Web** - Plataforma integral con consultor IA integrado
+3. **Avoqado QR** - El cliente escanea, escoge y paga en menos de 30 segundos
+
 ### Page Structure
 - **Hero Section:** First impression, main value proposition
 - **Features:** Key platform capabilities
@@ -99,9 +138,59 @@ import PricingCalculator from '../components/PricingCalculator.tsx'
 - [ ] A/B testing for conversion optimization
 - [ ] Multi-language support (ES/EN)
 
+## Best Practices
+
+### Component Reusability
+**IMPORTANT:** Always create reusable components instead of duplicating code.
+
+**Bad Example:**
+```
+HeroCarousel.tsx (hardcoded slides)
+TpvCarousel.tsx (duplicate with different slides)
+DashboardCarousel.tsx (duplicate with different slides)
+```
+
+**Good Example:**
+```tsx
+// Generic component
+HeroCarousel.tsx (accepts slides as props)
+
+// Usage
+<HeroCarousel slides={tpvSlides} aspectRatio="3/4" />
+<HeroCarousel slides={dashboardSlides} />
+```
+
+### Asset Organization
+Organize images by context and feature:
+```
+src/assets/
+├── hero/
+│   ├── principal/     # Landing page hero images
+│   ├── tpv/          # TPV product hero images
+│   ├── dashboard/    # Dashboard product hero images
+│   └── qr/           # QR product hero images
+├── features/
+│   └── ...
+└── logos/
+    └── ...
+```
+
 ## Notes
 
 - Keep bundle sizes small - use `client:visible` for most React components
-- Optimize images (use Astro's Image component)
+- Optimize images (use Astro's Image component or import from assets/)
 - Test on real devices for performance
 - Ensure accessibility (WCAG 2.1 AA compliance)
+- **Always check for reusability** before creating new components
+
+## Design System
+
+### Fonts
+- **Primary:** Urbanist (body text, UI elements)
+- **Display:** Baby Doll (hero titles, special headings - always uppercase)
+  - Use `font-baby` Tailwind class
+  - Font files in `/public/fonts/`
+
+### Custom Tailwind Classes
+- `font-baby` - Baby Doll font with uppercase transform
+- `text-avoqado-green` - Brand green color (#69E185)

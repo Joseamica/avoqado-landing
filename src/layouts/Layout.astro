@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import CookieConsent from '../components/interactive/CookieConsent';
 
 interface Props {
 	title: string;
@@ -21,5 +22,6 @@ const { title, description = 'Avoqado - Payment solutions designed for the world
 	</head>
 	<body class="antialiased">
 		<slot />
+		<CookieConsent client:load />
 	</body>
 </html>
