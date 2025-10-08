@@ -22,12 +22,12 @@ export default function RotatingText({ words, suffix }: RotatingTextProps) {
 	}, [words.length]);
 
 	return (
-		<span className="inline-flex items-baseline gap-2">
-			<span className="relative inline-grid justify-items-center">
+		<span className="inline-flex items-baseline gap-1 sm:gap-2">
+			<span className="relative inline-grid">
 				{words.map((word, index) => (
 					<span
 						key={word}
-						className={`text-avoqado-green col-start-1 row-start-1 transition-all duration-500 font-baby ${
+						className={`text-avoqado-green col-start-1 row-start-1 transition-all duration-500 font-baby text-left ${
 							index === currentIndex
 								? 'opacity-100 translate-y-0'
 								: 'opacity-0 -translate-y-2 pointer-events-none'
@@ -37,7 +37,7 @@ export default function RotatingText({ words, suffix }: RotatingTextProps) {
 					</span>
 				))}
 			</span>
-			{suffix && <span className="text-white font-baby whitespace-nowrap">{suffix}</span>}
+			{suffix && <span className="text-white font-baby">{suffix}</span>}
 		</span>
 	);
 }
