@@ -18,7 +18,11 @@ import Icon from '../ui/Icon.astro';
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
 			<!-- Restaurantes -->
 			<div class="bg-avoqado-dark-surface rounded-2xl p-8 border-2 border-avoqado-green/30 hover:border-avoqado-green transition-all shadow-xl">
-				<div class="text-5xl mb-4 text-center">🍽️</div>
+				<div class="w-16 h-16 bg-avoqado-green/10 border-2 border-avoqado-green/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+				<svg class="w-8 h-8 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3v7c0 1.657 1.343 3 3 3s3-1.343 3-3V3m0 18V11m9-8v7a3 3 0 01-3 3m3-3a3 3 0 003-3V3M18 21V11"></path>
+				</svg>
+			</div>
 				<h3 class="text-2xl font-bold text-white mb-3 text-center">Restaurantes</h3>
 				<ul class="space-y-3 text-gray-300">
 					<li class="flex items-start gap-2">
@@ -42,7 +46,11 @@ import Icon from '../ui/Icon.astro';
 
 			<!-- Retail / Tiendas -->
 			<div class="bg-avoqado-dark-surface rounded-2xl p-8 border-2 border-avoqado-orange/30 hover:border-avoqado-orange transition-all shadow-xl">
-				<div class="text-5xl mb-4 text-center">🛍️</div>
+				<div class="w-16 h-16 bg-avoqado-orange/10 border-2 border-avoqado-orange/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+				<svg class="w-8 h-8 text-avoqado-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+				</svg>
+			</div>
 				<h3 class="text-2xl font-bold text-white mb-3 text-center">Retail</h3>
 				<ul class="space-y-3 text-gray-300">
 					<li class="flex items-start gap-2">
@@ -66,7 +74,11 @@ import Icon from '../ui/Icon.astro';
 
 			<!-- Servicios -->
 			<div class="bg-avoqado-dark-surface rounded-2xl p-8 border-2 border-blue-500/30 hover:border-blue-500 transition-all shadow-xl">
-				<div class="text-5xl mb-4 text-center">💼</div>
+				<div class="w-16 h-16 bg-blue-500/10 border-2 border-blue-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+				<svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+				</svg>
+			</div>
 				<h3 class="text-2xl font-bold text-white mb-3 text-center">Servicios</h3>
 				<ul class="space-y-3 text-gray-300">
 					<li class="flex items-start gap-2">
@@ -92,7 +104,7 @@ import Icon from '../ui/Icon.astro';
 		<!-- Valor Universal -->
 		<div class="bg-gradient-to-r from-avoqado-green/20 to-avoqado-orange/20 rounded-3xl p-8 md:p-12 border border-avoqado-green/30 text-center">
 			<h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
-				🌍 El Poder del Enrutamiento Inteligente
+				El Poder del Enrutamiento Inteligente
 			</h3>
 			<p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-6">
 				Sin importar tu industria, el problema es el mismo: <strong class="text-white">estás atado a un procesador</strong>. Avoqado rompe esa cadena.
