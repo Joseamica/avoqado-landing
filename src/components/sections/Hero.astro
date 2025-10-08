@@ -20,12 +20,21 @@ const slides = [
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 			<!-- Left Column - Content -->
 			<div class="space-y-8">
-				<h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-					Con avoqado, divide la cuenta, enruta tus pagos y multiplica tu <RotatingText client:load />
-				</h1>
+				<div class="space-y-4">
+					<h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+						<span class="font-baby">Tu</span> <RotatingText
+							words={['restaurante', 'gimnasio', 'hotel', 'joyería', 'estudio', 'comercio']}
+							suffix="tus reglas."
+							client:load
+						/>
+					</h1>
+					<p class="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-200">
+						Cobra donde quieras, cuando quieras, como quieras y a tu gusto.
+					</p>
+				</div>
 
-				<p class="text-lg md:text-xl text-gray-300 max-w-lg">
-					Soluciones de pago diseñadas para todo tipo de comercio. Simplifica operaciones, mejora la experiencia del cliente.
+				<p class="text-base md:text-lg text-gray-300 max-w-lg">
+					La primera plataforma con <strong class="text-white">enrutamiento inteligente de pagos</strong>. Tú decides qué procesador cobra cada transacción. Manual o automático.
 				</p>
 
 				<div class="flex flex-col sm:flex-row gap-4">
@@ -37,19 +46,31 @@ const slides = [
 					</Button>
 				</div>
 
-				<!-- Features Quick List -->
-				<div class="grid grid-cols-3 gap-6 md:gap-8 pt-8 border-t border-gray-800">
+				<!-- Key Benefits -->
+				<div class="grid grid-cols-3 gap-6 md:gap-8 pt-10 border-t border-gray-800">
 					<div class="text-center">
-						<div class="text-3xl md:text-4xl font-bold text-avoqado-green">Q</div>
-						<p class="text-xs md:text-sm text-gray-300 mt-2">Escanea y Ve</p>
+						<div class="w-12 h-12 bg-avoqado-green/10 border-2 border-avoqado-green/30 rounded-xl flex items-center justify-center mx-auto mb-3">
+							<svg class="w-6 h-6 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+							</svg>
+						</div>
+						<p class="text-xs md:text-sm text-gray-300">Tú eliges procesador y cuenta bancaria</p>
 					</div>
 					<div class="text-center">
-						<div class="text-3xl md:text-4xl font-bold text-avoqado-green">$</div>
-						<p class="text-xs md:text-sm text-gray-300 mt-2">Paga y Propina</p>
+						<div class="w-12 h-12 bg-avoqado-green/10 border-2 border-avoqado-green/30 rounded-xl flex items-center justify-center mx-auto mb-3">
+							<svg class="w-6 h-6 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+							</svg>
+						</div>
+						<p class="text-xs md:text-sm text-gray-300">IA optimiza pagos</p>
 					</div>
 					<div class="text-center">
-						<div class="text-3xl md:text-4xl font-bold text-avoqado-green">📱</div>
-						<p class="text-xs md:text-sm text-gray-300 mt-2">Recibo y Reseña</p>
+						<div class="w-12 h-12 bg-avoqado-green/10 border-2 border-avoqado-green/30 rounded-xl flex items-center justify-center mx-auto mb-3">
+							<svg class="w-6 h-6 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+							</svg>
+						</div>
+						<p class="text-xs md:text-sm text-gray-300">Todo unificado</p>
 					</div>
 				</div>
 			</div>

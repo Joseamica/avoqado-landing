@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 
-const words = ['confianza', 'rotación', 'diversión', 'seguridad', 'finanzas'];
+interface RotatingTextProps {
+	words: string[];
+	suffix?: string;
+}
 
-export default function RotatingText() {
+export default function RotatingText({ words, suffix }: RotatingTextProps) {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const [isAnimating, setIsAnimating] = useState(false);
 
@@ -16,15 +19,25 @@ export default function RotatingText() {
 		}, 2000);
 
 		return () => clearInterval(interval);
-	}, []);
+	}, [words.length]);
 
 	return (
-		<span
-			className={`text-avoqado-green inline-block transition-all duration-500 ${
-				isAnimating ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'
-			}`}
-		>
-			{words[currentIndex]}
+		<span className="inline-flex items-baseline gap-2">
+			<span className="relative inline-grid justify-items-center">
+				{words.map((word, index) => (
+					<span
+						key={word}
+						className={`text-avoqado-green col-start-1 row-start-1 transition-all duration-500 font-baby ${
+							index === currentIndex
+								? 'opacity-100 translate-y-0'
+								: 'opacity-0 -translate-y-2 pointer-events-none'
+						}`}
+					>
+						{word}
+					</span>
+				))}
+			</span>
+			{suffix && <span className="text-white font-baby whitespace-nowrap">{suffix}</span>}
 		</span>
 	);
 }

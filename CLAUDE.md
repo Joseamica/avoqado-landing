@@ -140,6 +140,29 @@ import PricingCalculator from '../components/PricingCalculator.tsx'
 
 ## Best Practices
 
+### Design Decisions & Visual Options
+**IMPORTANT:** When proposing design changes or alternatives, ALWAYS implement them visually so the user can see them in the browser, rather than just describing them.
+
+**Bad approach:**
+```
+User: "I don't like this green background"
+Assistant: "I can offer you 3 options:
+  Option 1: Light background with green border
+  Option 2: Orange accent instead
+  Option 3: Dark background with subtle border
+Which would you prefer?"
+```
+
+**Good approach:**
+```
+User: "I don't like this green background"
+Assistant: "Let me show you 3 visual options"
+[Implements all 3 options in the actual code so user can see them live]
+Assistant: "I've created the 3 options - you can now see them on the page. Which one do you prefer?"
+```
+
+The user prefers to see visual examples rather than theoretical descriptions. This allows for faster iteration and better decision-making.
+
 ### Component Reusability
 **IMPORTANT:** Always create reusable components instead of duplicating code.
 
@@ -187,10 +210,11 @@ src/assets/
 
 ### Fonts
 - **Primary:** Urbanist (body text, UI elements)
-- **Display:** Baby Doll (hero titles, special headings - always uppercase)
+- **Display:** Baby Doll (hero titles, special headings)
   - Use `font-baby` Tailwind class
   - Font files in `/public/fonts/`
+  - Note: Does NOT force uppercase (removed as per user request)
 
 ### Custom Tailwind Classes
-- `font-baby` - Baby Doll font with uppercase transform
+- `font-baby` - Baby Doll font family
 - `text-avoqado-green` - Brand green color (#69E185)
