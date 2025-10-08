@@ -1,0 +1,82 @@
+---
+interface Props {
+	type: 'Organization' | 'LocalBusiness' | 'SoftwareApplication' | 'Product';
+	data?: any;
+}
+
+const { type, data = {} } = Astro.props;
+
+const baseOrganization = {
+	'@context': 'https://schema.org',
+	'@type': 'Organization',
+	name: 'Avoqado',
+	description: 'Soluciones de pago y gestión para restaurantes. Pagos instantáneos, analytics en tiempo real y consultor IA.',
+	url: 'https://avoqado.io',
+	logo: 'https://avoqado.io/imagotipo-white.png',
+	sameAs: [
+		'https://twitter.com/avoqado',
+		'https://facebook.com/avoqado',
+		'https://linkedin.com/company/avoqado'
+	],
+	contactPoint: {
+		'@type': 'ContactPoint',
+		telephone: '+52-81-1234-5678',
+		contactType: 'customer service',
+		email: 'hello@avoqado.io',
+		availableLanguage: ['Spanish', 'English']
+	}
+};
+
+const localBusiness = {
+	'@context': 'https://schema.org',
+	'@type': 'LocalBusiness',
+	...baseOrganization,
+	priceRange: '$$',
+	address: {
+		'@type': 'PostalAddress',
+		addressCountry: 'MX',
+		addressRegion: 'Nuevo León'
+	}
+};
+
+const softwareApplication = {
+	'@context': 'https://schema.org',
+	'@type': 'SoftwareApplication',
+	name: 'Avoqado',
+	applicationCategory: 'BusinessApplication',
+	operatingSystem: 'Web, Android, iOS',
+	offers: {
+		'@type': 'Offer',
+		price: '99.00',
+		priceCurrency: 'USD',
+		priceValidUntil: '2025-12-31'
+	},
+	aggregateRating: {
+		'@type': 'AggregateRating',
+		ratingValue: '4.8',
+		ratingCount: '500'
+	}
+};
+
+let structuredData;
+
+switch (type) {
+	case 'LocalBusiness':
+		structuredData = { ...localBusiness, ...data };
+		break;
+	case 'SoftwareApplication':
+		structuredData = { ...softwareApplication, ...data };
+		break;
+	case 'Product':
+		structuredData = {
+			'@context': 'https://schema.org',
+			'@type': 'Product',
+			...data
+		};
+		break;
+	default:
+		structuredData = { ...baseOrganization, ...data };
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

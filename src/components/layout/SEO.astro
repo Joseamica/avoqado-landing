@@ -1,0 +1,59 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	image?: string;
+	url?: string;
+	type?: 'website' | 'article' | 'product';
+	noindex?: boolean;
+}
+
+const {
+	title,
+	description,
+	image = '/imagotipo-white.png',
+	url = Astro.url.href,
+	type = 'website',
+	noindex = false
+} = Astro.props;
+
+const siteName = 'Avoqado';
+const twitterHandle = '@avoqado';
+
+// Ensure absolute URLs for OG images
+const absoluteImage = image.startsWith('http') ? image : new URL(image, Astro.site || Astro.url.origin).href;
+const canonicalURL = new URL(url, Astro.site || Astro.url.origin).href;
+---
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={absoluteImage} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="es_MX" />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalURL} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={absoluteImage} />
+<meta property="twitter:site" content={twitterHandle} />
+<meta property="twitter:creator" content={twitterHandle} />
+
+<!-- Additional SEO -->
+<meta name="author" content={siteName} />
+<meta name="theme-color" content="#69E185" />
+
+<!-- Preconnect to external domains -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

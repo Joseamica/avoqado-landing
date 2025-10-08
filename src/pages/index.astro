@@ -5,14 +5,14 @@ import Hero from '../components/sections/Hero.astro';
 import SocialProof from '../components/sections/SocialProof.astro';
 import ProblemSolution from '../components/sections/ProblemSolution.astro';
 import Features from '../components/sections/Features.astro';
-// import DemoCarousel from '../components/interactive/DemoCarousel';
 import Pricing from '../components/sections/Pricing.astro';
 import Testimonials from '../components/sections/Testimonials.astro';
-import FinalCTA from '../components/sections/FinalCTA.astro';
+import About from '../components/sections/About.astro';
+import Contact from '../components/sections/Contact.astro';
 import Footer from '../components/layout/Footer.astro';
 ---
 
-<Layout title="Avoqado - Payment Solutions for Restaurants" description="Transforma tu restaurante con pagos instantáneos, analytics en tiempo real y gestión de clientes. Prueba gratis por 14 días.">
+<Layout title="Avoqado - Soluciones de Pago para Restaurantes" description="Transforma tu restaurante con pagos instantáneos, analytics en tiempo real y gestión de clientes. Prueba gratis por 14 días.">
 	<Navbar />
 	<main>
 		<!-- 1. Hero Section -->
@@ -27,17 +27,17 @@ import Footer from '../components/layout/Footer.astro';
 		<!-- 4. Features -->
 		<Features />
 
-		<!-- 5. Demo Carousel -->
-		<!-- <DemoCarousel client:visible /> -->
-
-		<!-- 6. Pricing -->
+		<!-- 5. Pricing -->
 		<Pricing />
 
-		<!-- 7. Testimonials -->
+		<!-- 6. Testimonials -->
 		<Testimonials />
 
-		<!-- 8. Final CTA -->
-		<FinalCTA />
+		<!-- 7. About Us -->
+		<About />
+
+		<!-- 8. Contact -->
+		<Contact />
 	</main>
 	<Footer />
 </Layout>

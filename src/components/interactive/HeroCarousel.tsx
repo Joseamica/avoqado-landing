@@ -3,14 +3,40 @@ import { useState, useEffect, useRef } from 'react';
 interface HeroCarouselProps {
 	slides: { src: string; width: number; height: number }[];
 	aspectRatio?: string;
+	priority?: boolean;
 }
 
-export default function HeroCarousel({ slides, aspectRatio = '4/3' }: HeroCarouselProps) {
+export default function HeroCarousel({ slides, aspectRatio = '4/3', priority = false }: HeroCarouselProps) {
 	const [currentSlide, setCurrentSlide] = useState(0);
 	const [isDragging, setIsDragging] = useState(false);
 	const [startX, setStartX] = useState(0);
 	const [currentX, setCurrentX] = useState(0);
+	const [imagesLoaded, setImagesLoaded] = useState<boolean[]>(new Array(slides.length).fill(false));
 	const carouselRef = useRef<HTMLDivElement>(null);
+
+	// Preload all images on mount
+	useEffect(() => {
+		slides.forEach((slide, index) => {
+			const img = new Image();
+			img.onload = () => {
+				setImagesLoaded((prev) => {
+					const newState = [...prev];
+					newState[index] = true;
+					return newState;
+				});
+			};
+			img.onerror = () => {
+				console.error(`Failed to load image: ${slide.src}`);
+				// Mark as loaded anyway to prevent infinite loading
+				setImagesLoaded((prev) => {
+					const newState = [...prev];
+					newState[index] = true;
+					return newState;
+				});
+			};
+			img.src = slide.src;
+		});
+	}, [slides]);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -20,7 +46,7 @@ export default function HeroCarousel({ slides, aspectRatio = '4/3' }: HeroCarous
 		}, 5000);
 
 		return () => clearInterval(interval);
-	}, [isDragging]);
+	}, [isDragging, slides.length]);
 
 	const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
 		e.preventDefault();
@@ -57,12 +83,20 @@ export default function HeroCarousel({ slides, aspectRatio = '4/3' }: HeroCarous
 		setCurrentX(0);
 	};
 
+	const handleImageLoad = (index: number) => {
+		setImagesLoaded((prev) => {
+			const newState = [...prev];
+			newState[index] = true;
+			return newState;
+		});
+	};
+
 	return (
 		<div className="relative w-full h-full">
 			{/* Slides */}
 			<div
 				ref={carouselRef}
-				className={`relative w-full rounded-3xl overflow-hidden shadow-2xl cursor-grab active:cursor-grabbing select-none`}
+				className={`relative w-full rounded-3xl overflow-hidden shadow-2xl cursor-grab active:cursor-grabbing select-none bg-gray-900`}
 				style={{ aspectRatio }}
 				onMouseDown={handleDragStart}
 				onMouseMove={handleDragMove}
@@ -81,21 +115,31 @@ export default function HeroCarousel({ slides, aspectRatio = '4/3' }: HeroCarous
 					>
 						<img
 							src={slide.src}
-							alt={`Slide ${index + 1}`}
-							className="w-full h-full object-contain"
+							alt={`Avoqado slide ${index + 1}`}
+							width={slide.width}
+							height={slide.height}
+							loading={priority && index === 0 ? 'eager' : 'lazy'}
+							decoding={index === currentSlide ? 'sync' : 'async'}
+							className={`w-full h-full object-cover transition-opacity duration-300 ${
+								imagesLoaded[index] ? 'opacity-100' : 'opacity-0'
+							}`}
 							draggable={false}
+							onLoad={() => handleImageLoad(index)}
 						/>
 					</div>
 				))}
 			</div>
 
 			{/* Indicators */}
-			<div className="flex justify-center mt-6 space-x-2">
+			<div className="flex justify-center mt-6 space-x-2" role="tablist" aria-label="Carousel navigation">
 				{slides.map((_, index) => (
 					<button
 						key={index}
 						onClick={() => setCurrentSlide(index)}
-						className={`h-2 rounded-full transition-all ${
+						role="tab"
+						aria-selected={index === currentSlide}
+						aria-controls={`slide-${index}`}
+						className={`h-2 rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-[var(--color-avoqado-green)] ${
 							index === currentSlide
 								? 'bg-[var(--color-avoqado-green)] w-8'
 								: 'bg-gray-600 w-2 hover:bg-gray-500'

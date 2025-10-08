@@ -1,27 +1,48 @@
 ---
 import '../styles/global.css';
 import CookieConsent from '../components/interactive/CookieConsent';
+import SEO from '../components/layout/SEO.astro';
+import StructuredData from '../components/layout/StructuredData.astro';
 
 interface Props {
 	title: string;
 	description?: string;
+	image?: string;
+	type?: 'website' | 'article' | 'product';
+	noindex?: boolean;
 }
 
-const { title, description = 'Avoqado - Payment solutions designed for the world\'s best restaurants' } = Astro.props;
+const {
+	title,
+	description = 'Avoqado - Soluciones de pago diseñadas para los mejores restaurantes del mundo. Pagos instantáneos, analytics con IA y gestión completa.',
+	image,
+	type = 'website',
+	noindex = false
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.png" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
 		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+
+		<!-- SEO Component -->
+		<SEO
+			title={title}
+			description={description}
+			image={image}
+			type={type}
+			noindex={noindex}
+		/>
+
+		<!-- Structured Data -->
+		<StructuredData type="Organization" />
 	</head>
 	<body class="antialiased">
 		<slot />
-		<CookieConsent client:load />
+		<CookieConsent client:idle />
 	</body>
 </html>

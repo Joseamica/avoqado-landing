@@ -1,0 +1,10 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://avoqado.io/sitemap-index.xml
+
+# Disallow admin/test pages (if any)
+Disallow: /admin/
+Disallow: /test/

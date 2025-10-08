@@ -1,0 +1,47 @@
+---
+import ContactForm from '../interactive/ContactForm';
+import Icon from '../ui/Icon.astro';
+---
+
+<section id="contact" class="py-20 bg-gradient-to-br from-avoqado-green to-green-600">
+	<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="text-center mb-12">
+			<h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+				¿Listo para transformar tu restaurante?
+			</h2>
+			<p class="text-xl text-white/90">
+				Agenda una demo gratuita y descubre cómo Avoqado puede ayudarte a crecer
+			</p>
+		</div>
+
+		<div class="bg-white rounded-3xl p-8 md:p-12 shadow-2xl">
+			<ContactForm client:load />
+		</div>
+
+		<div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-white">
+			<div class="text-center">
+				<div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+					<Icon name="phone" size="md" />
+				</div>
+				<h3 class="font-semibold mb-2">Llámanos</h3>
+				<p class="text-white/80">+52 81 1234 5678</p>
+			</div>
+
+			<div class="text-center">
+				<div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+					<Icon name="mail" size="md" />
+				</div>
+				<h3 class="font-semibold mb-2">Email</h3>
+				<p class="text-white/80">hello@avoqado.io</p>
+			</div>
+
+			<div class="text-center">
+				<div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+					<Icon name="clock" size="md" />
+				</div>
+				<h3 class="font-semibold mb-2">Horario</h3>
+				<p class="text-white/80">Lun - Vie: 9AM - 6PM</p>
+			</div>
+		</div>
+	</div>
+</section>

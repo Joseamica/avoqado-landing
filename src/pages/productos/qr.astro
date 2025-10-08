@@ -9,47 +9,47 @@ import Footer from '../../components/layout/Footer.astro';
 	<main>
 		<!-- Hero Section -->
 		<section class="relative min-h-screen flex items-center pt-16">
-			<div class="absolute top-1/4 right-0 w-96 h-96 bg-[--color-avoqado-green] rounded-full opacity-20 blur-3xl"></div>
+			<div class="absolute top-1/4 right-0 w-96 h-96 bg-avoqado-green rounded-full opacity-20 blur-3xl" aria-hidden="true"></div>
 
 			<div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-20">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 					<!-- Left Column - Content -->
 					<div class="space-y-8">
-						<div class="inline-block px-4 py-2 bg-[--color-avoqado-green]/20 rounded-full text-[--color-avoqado-green] text-sm font-semibold mb-4">
+						<div class="inline-block px-4 py-2 bg-avoqado-green/20 rounded-full text-avoqado-green text-sm font-semibold mb-4">
 							Avoqado QR
 						</div>
 						<h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
 							Pago en <span class="text-avoqado-green">30 segundos</span>
 						</h1>
-						<p class="text-xl text-gray-400 max-w-lg">
+						<p class="text-xl text-gray-300 max-w-lg">
 							El cliente escanea el QR, ve su cuenta y paga al instante. Sin esperas, sin fricciones.
 						</p>
 
 						<div class="grid grid-cols-3 gap-4 pt-8">
 							<div class="text-center">
-								<div class="text-3xl font-bold text-[--color-avoqado-green] mb-2">1</div>
-								<p class="text-sm text-gray-400">Escanea QR</p>
+								<div class="text-3xl font-bold text-avoqado-green mb-2">1</div>
+								<p class="text-sm text-gray-300">Escanea QR</p>
 							</div>
 							<div class="text-center">
-								<div class="text-3xl font-bold text-[--color-avoqado-green] mb-2">2</div>
-								<p class="text-sm text-gray-400">Ve su cuenta</p>
+								<div class="text-3xl font-bold text-avoqado-green mb-2">2</div>
+								<p class="text-sm text-gray-300">Ve su cuenta</p>
 							</div>
 							<div class="text-center">
-								<div class="text-3xl font-bold text-[--color-avoqado-green] mb-2">3</div>
-								<p class="text-sm text-gray-400">Paga</p>
+								<div class="text-3xl font-bold text-avoqado-green mb-2">3</div>
+								<p class="text-sm text-gray-300">Paga</p>
 							</div>
 						</div>
 
 						<div class="flex flex-col sm:flex-row gap-4">
 							<a
-								href="#contact"
-								class="inline-block px-8 py-4 bg-[--color-avoqado-green] text-white text-lg font-semibold rounded-full hover:opacity-90 transition-opacity text-center"
+								href="/#contact"
+								class="inline-block px-8 py-4 bg-avoqado-green text-white text-lg font-semibold rounded-full hover:opacity-90 hover:scale-105 transition-all text-center shadow-glow-green"
 							>
 								Solicitar demo
 							</a>
 							<a
 								href="#features"
-								class="inline-block px-8 py-4 border-2 border-[--color-avoqado-green] text-[--color-avoqado-green] text-lg font-semibold rounded-full hover:bg-[--color-avoqado-green] hover:text-white transition-all text-center"
+								class="inline-block px-8 py-4 border-2 border-avoqado-green text-avoqado-green text-lg font-semibold rounded-full hover:bg-avoqado-green hover:text-white transition-all text-center"
 							>
 								Ver características
 							</a>
@@ -67,62 +67,62 @@ import Footer from '../../components/layout/Footer.astro';
 		</section>
 
 		<!-- Features Section -->
-		<section id="features" class="py-20 bg-[--color-avoqado-dark-surface]">
+		<section id="features" class="py-20 bg-avoqado-dark-surface">
 			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div class="text-center mb-16">
 					<h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
 						Características principales
 					</h2>
-					<p class="text-xl text-gray-400">
+					<p class="text-xl text-gray-300">
 						La forma más rápida de cobrar
 					</p>
 				</div>
 
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-					<div class="bg-[--color-avoqado-dark-bg] rounded-2xl p-8">
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
 						<div class="text-4xl mb-4">⚡</div>
 						<h3 class="text-2xl font-bold text-white mb-3">Pago instantáneo</h3>
-						<p class="text-gray-400">
+						<p class="text-gray-300">
 							El cliente paga en menos de 30 segundos sin esperar al mesero
 						</p>
 					</div>
 
-					<div class="bg-[--color-avoqado-dark-bg] rounded-2xl p-8">
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
 						<div class="text-4xl mb-4">✂️</div>
 						<h3 class="text-2xl font-bold text-white mb-3">Divide la cuenta</h3>
-						<p class="text-gray-400">
+						<p class="text-gray-300">
 							Cada comensal puede pagar solo lo suyo de forma automática
 						</p>
 					</div>
 
-					<div class="bg-[--color-avoqado-dark-bg] rounded-2xl p-8">
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
 						<div class="text-4xl mb-4">💳</div>
 						<h3 class="text-2xl font-bold text-white mb-3">Todos los métodos</h3>
-						<p class="text-gray-400">
+						<p class="text-gray-300">
 							Tarjetas, transferencias, wallets digitales
 						</p>
 					</div>
 
-					<div class="bg-[--color-avoqado-dark-bg] rounded-2xl p-8">
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
 						<div class="text-4xl mb-4">💰</div>
 						<h3 class="text-2xl font-bold text-white mb-3">Propina integrada</h3>
-						<p class="text-gray-400">
+						<p class="text-gray-300">
 							El cliente elige cuánto dejar de propina al pagar
 						</p>
 					</div>
 
-					<div class="bg-[--color-avoqado-dark-bg] rounded-2xl p-8">
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
 						<div class="text-4xl mb-4">📱</div>
 						<h3 class="text-2xl font-bold text-white mb-3">Sin app necesaria</h3>
-						<p class="text-gray-400">
+						<p class="text-gray-300">
 							Funciona directo en el navegador, sin descargas
 						</p>
 					</div>
 
-					<div class="bg-[--color-avoqado-dark-bg] rounded-2xl p-8">
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
 						<div class="text-4xl mb-4">🔄</div>
 						<h3 class="text-2xl font-bold text-white mb-3">Actualización en tiempo real</h3>
-						<p class="text-gray-400">
+						<p class="text-gray-300">
 							Tu TPV y Dashboard se actualizan al instante
 						</p>
 					</div>
@@ -131,7 +131,7 @@ import Footer from '../../components/layout/Footer.astro';
 		</section>
 
 		<!-- Benefits Section -->
-		<section class="py-20 bg-[--color-avoqado-dark-bg]">
+		<section class="py-20 bg-avoqado-dark-bg">
 			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div class="text-center mb-16">
 					<h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -141,42 +141,42 @@ import Footer from '../../components/layout/Footer.astro';
 
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 					<div class="flex items-start space-x-4">
-						<div class="flex-shrink-0 w-12 h-12 bg-[--color-avoqado-green]/20 rounded-full flex items-center justify-center">
-							<span class="text-2xl">⏱️</span>
+						<div class="flex-shrink-0 w-12 h-12 bg-avoqado-green/20 rounded-full flex items-center justify-center">
+							<span class="text-2xl" aria-hidden="true">⏱️</span>
 						</div>
 						<div>
 							<h3 class="text-xl font-bold text-white mb-2">Aumenta la rotación de mesas</h3>
-							<p class="text-gray-400">Reduce el tiempo de espera para pagar hasta en 80%</p>
+							<p class="text-gray-300">Reduce el tiempo de espera para pagar hasta en 80%</p>
 						</div>
 					</div>
 
 					<div class="flex items-start space-x-4">
-						<div class="flex-shrink-0 w-12 h-12 bg-[--color-avoqado-green]/20 rounded-full flex items-center justify-center">
-							<span class="text-2xl">😊</span>
+						<div class="flex-shrink-0 w-12 h-12 bg-avoqado-green/20 rounded-full flex items-center justify-center">
+							<span class="text-2xl" aria-hidden="true">😊</span>
 						</div>
 						<div>
 							<h3 class="text-xl font-bold text-white mb-2">Mejora la experiencia</h3>
-							<p class="text-gray-400">Los clientes se van felices sin esperar</p>
+							<p class="text-gray-300">Los clientes se van felices sin esperar</p>
 						</div>
 					</div>
 
 					<div class="flex items-start space-x-4">
-						<div class="flex-shrink-0 w-12 h-12 bg-[--color-avoqado-green]/20 rounded-full flex items-center justify-center">
-							<span class="text-2xl">💵</span>
+						<div class="flex-shrink-0 w-12 h-12 bg-avoqado-green/20 rounded-full flex items-center justify-center">
+							<span class="text-2xl" aria-hidden="true">💵</span>
 						</div>
 						<div>
 							<h3 class="text-xl font-bold text-white mb-2">Incrementa propinas</h3>
-							<p class="text-gray-400">Sistema de sugerencias aumenta propinas en promedio 25%</p>
+							<p class="text-gray-300">Sistema de sugerencias aumenta propinas en promedio 25%</p>
 						</div>
 					</div>
 
 					<div class="flex items-start space-x-4">
-						<div class="flex-shrink-0 w-12 h-12 bg-[--color-avoqado-green]/20 rounded-full flex items-center justify-center">
-							<span class="text-2xl">👥</span>
+						<div class="flex-shrink-0 w-12 h-12 bg-avoqado-green/20 rounded-full flex items-center justify-center">
+							<span class="text-2xl" aria-hidden="true">👥</span>
 						</div>
 						<div>
 							<h3 class="text-xl font-bold text-white mb-2">Libera a tu personal</h3>
-							<p class="text-gray-400">Tu equipo puede enfocarse en dar mejor servicio</p>
+							<p class="text-gray-300">Tu equipo puede enfocarse en dar mejor servicio</p>
 						</div>
 					</div>
 				</div>
@@ -184,7 +184,7 @@ import Footer from '../../components/layout/Footer.astro';
 		</section>
 
 		<!-- CTA Section -->
-		<section class="py-20 bg-gradient-to-br from-[--color-avoqado-green] to-green-500">
+		<section class="py-20 bg-gradient-to-br from-avoqado-green to-green-500">
 			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 				<h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
 					Acelera tu servicio hoy

@@ -25,6 +25,7 @@
     "tailwindcss": "^4.1.14"
   },
   "devDependencies": {
+    "@astrojs/sitemap": "^3.6.0",
     "@types/nodemailer": "^7.0.2"
   }
 }
