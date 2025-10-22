@@ -7,14 +7,16 @@ import Layout from '../layouts/Layout.astro';
 	description="Explora todas las demos y productos de Avoqado - Soluciones de pago para restaurantes"
 >
 	<main class="min-h-screen flex items-center justify-center px-4 py-16 relative overflow-hidden">
-		<!-- Animated hyperloop background -->
-		<div class="hyperloop-container">
-			<div class="hyperloop-ring hyperloop-ring-1"></div>
-			<div class="hyperloop-ring hyperloop-ring-2"></div>
-			<div class="hyperloop-ring hyperloop-ring-3"></div>
-			<div class="hyperloop-ring hyperloop-ring-4"></div>
-			<div class="hyperloop-ring hyperloop-ring-5"></div>
-			<div class="hyperloop-ring hyperloop-ring-6"></div>
+		<!-- Animated diagonal lines background -->
+		<div class="diagonal-lines-container">
+			<div class="diagonal-line diagonal-line-1"></div>
+			<div class="diagonal-line diagonal-line-2"></div>
+			<div class="diagonal-line diagonal-line-3"></div>
+			<div class="diagonal-line diagonal-line-4"></div>
+			<div class="diagonal-line diagonal-line-5"></div>
+			<div class="diagonal-line diagonal-line-6"></div>
+			<div class="diagonal-line diagonal-line-7"></div>
+			<div class="diagonal-line diagonal-line-8"></div>
 		</div>
 
 		<!-- Background decorations -->
@@ -209,81 +211,94 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
-	/* Hyperloop tunnel animation */
-	.hyperloop-container {
+	/* Diagonal lines animation */
+	.diagonal-lines-container {
 		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
+		top: 0;
+		left: 0;
 		width: 100%;
 		height: 100%;
-		perspective: 1000px;
 		overflow: hidden;
 		pointer-events: none;
+		opacity: 0.4;
 	}
 
-	.hyperloop-ring {
+	.diagonal-line {
 		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		border-radius: 50%;
-		border: 2px solid;
+		width: 2px;
+		height: 200%;
+		transform-origin: center;
+		transform: rotate(-45deg);
 		opacity: 0;
-		animation: hyperloop 8s linear infinite;
+		animation: moveDiagonal 15s linear infinite;
 	}
 
-	.hyperloop-ring-1 {
-		border-color: var(--color-avoqado-green);
+	/* Alternating green and orange colors */
+	.diagonal-line-1 {
+		background: linear-gradient(to bottom, transparent, var(--color-avoqado-green), transparent);
+		left: 0%;
 		animation-delay: 0s;
 	}
 
-	.hyperloop-ring-2 {
-		border-color: var(--color-avoqado-orange);
-		animation-delay: 1.3s;
+	.diagonal-line-2 {
+		background: linear-gradient(to bottom, transparent, var(--color-avoqado-orange), transparent);
+		left: 12.5%;
+		animation-delay: 2s;
 	}
 
-	.hyperloop-ring-3 {
-		border-color: var(--color-avoqado-green);
-		animation-delay: 2.6s;
-	}
-
-	.hyperloop-ring-4 {
-		border-color: var(--color-avoqado-orange);
+	.diagonal-line-3 {
+		background: linear-gradient(to bottom, transparent, var(--color-avoqado-green), transparent);
+		left: 25%;
 		animation-delay: 4s;
 	}
 
-	.hyperloop-ring-5 {
-		border-color: var(--color-avoqado-green);
-		animation-delay: 5.3s;
+	.diagonal-line-4 {
+		background: linear-gradient(to bottom, transparent, var(--color-avoqado-orange), transparent);
+		left: 37.5%;
+		animation-delay: 6s;
 	}
 
-	.hyperloop-ring-6 {
-		border-color: var(--color-avoqado-orange);
-		animation-delay: 6.6s;
+	.diagonal-line-5 {
+		background: linear-gradient(to bottom, transparent, var(--color-avoqado-green), transparent);
+		left: 50%;
+		animation-delay: 8s;
 	}
 
-	@keyframes hyperloop {
+	.diagonal-line-6 {
+		background: linear-gradient(to bottom, transparent, var(--color-avoqado-orange), transparent);
+		left: 62.5%;
+		animation-delay: 10s;
+	}
+
+	.diagonal-line-7 {
+		background: linear-gradient(to bottom, transparent, var(--color-avoqado-green), transparent);
+		left: 75%;
+		animation-delay: 12s;
+	}
+
+	.diagonal-line-8 {
+		background: linear-gradient(to bottom, transparent, var(--color-avoqado-orange), transparent);
+		left: 87.5%;
+		animation-delay: 14s;
+	}
+
+	@keyframes moveDiagonal {
 		0% {
-			width: 50px;
-			height: 50px;
+			top: -100%;
 			opacity: 0;
-			border-width: 1px;
 		}
 		10% {
-			opacity: 0.3;
+			opacity: 0.6;
 		}
 		50% {
-			opacity: 0.15;
+			opacity: 0.3;
 		}
-		80% {
-			opacity: 0.05;
+		90% {
+			opacity: 0.1;
 		}
 		100% {
-			width: 1800px;
-			height: 1800px;
+			top: 100%;
 			opacity: 0;
-			border-width: 8px;
 		}
 	}
 
@@ -304,29 +319,29 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	/* Stagger animation for links */
-	.space-y-4 > a {
+	.space-y-3 > a {
 		animation: fadeIn 0.6s ease-out backwards;
 	}
 
-	.space-y-4 > a:nth-child(1) {
+	.space-y-3 > a:nth-child(1) {
 		animation-delay: 0.1s;
 	}
 
-	.space-y-4 > a:nth-child(2) {
+	.space-y-3 > a:nth-child(2) {
 		animation-delay: 0.2s;
 	}
 
-	.space-y-4 > a:nth-child(3) {
+	.space-y-3 > a:nth-child(3) {
 		animation-delay: 0.3s;
 	}
 
-	.space-y-4 > a:nth-child(4) {
+	.space-y-3 > a:nth-child(4) {
 		animation-delay: 0.4s;
 	}
 
 	/* Reduce motion for users who prefer it */
 	@media (prefers-reduced-motion: reduce) {
-		.hyperloop-ring {
+		.diagonal-line {
 			animation: none;
 			display: none;
 		}
