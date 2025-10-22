@@ -7,6 +7,16 @@ import Layout from '../layouts/Layout.astro';
 	description="Explora todas las demos y productos de Avoqado - Soluciones de pago para restaurantes"
 >
 	<main class="min-h-screen flex items-center justify-center px-4 py-16 relative overflow-hidden">
+		<!-- Animated hyperloop background -->
+		<div class="hyperloop-container">
+			<div class="hyperloop-ring hyperloop-ring-1"></div>
+			<div class="hyperloop-ring hyperloop-ring-2"></div>
+			<div class="hyperloop-ring hyperloop-ring-3"></div>
+			<div class="hyperloop-ring hyperloop-ring-4"></div>
+			<div class="hyperloop-ring hyperloop-ring-5"></div>
+			<div class="hyperloop-ring hyperloop-ring-6"></div>
+		</div>
+
 		<!-- Background decorations -->
 		<div class="absolute top-1/4 right-0 w-96 h-96 bg-[--color-avoqado-green] rounded-full opacity-10 blur-3xl"></div>
 		<div class="absolute bottom-1/4 left-0 w-96 h-96 bg-[--color-avoqado-orange] rounded-full opacity-10 blur-3xl"></div>
@@ -207,6 +217,84 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
+	/* Hyperloop tunnel animation */
+	.hyperloop-container {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 100%;
+		height: 100%;
+		perspective: 1000px;
+		overflow: hidden;
+		pointer-events: none;
+	}
+
+	.hyperloop-ring {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		border-radius: 50%;
+		border: 2px solid;
+		opacity: 0;
+		animation: hyperloop 8s linear infinite;
+	}
+
+	.hyperloop-ring-1 {
+		border-color: var(--color-avoqado-green);
+		animation-delay: 0s;
+	}
+
+	.hyperloop-ring-2 {
+		border-color: var(--color-avoqado-orange);
+		animation-delay: 1.3s;
+	}
+
+	.hyperloop-ring-3 {
+		border-color: var(--color-avoqado-green);
+		animation-delay: 2.6s;
+	}
+
+	.hyperloop-ring-4 {
+		border-color: var(--color-avoqado-orange);
+		animation-delay: 4s;
+	}
+
+	.hyperloop-ring-5 {
+		border-color: var(--color-avoqado-green);
+		animation-delay: 5.3s;
+	}
+
+	.hyperloop-ring-6 {
+		border-color: var(--color-avoqado-orange);
+		animation-delay: 6.6s;
+	}
+
+	@keyframes hyperloop {
+		0% {
+			width: 50px;
+			height: 50px;
+			opacity: 0;
+			border-width: 1px;
+		}
+		10% {
+			opacity: 0.3;
+		}
+		50% {
+			opacity: 0.15;
+		}
+		80% {
+			opacity: 0.05;
+		}
+		100% {
+			width: 1800px;
+			height: 1800px;
+			opacity: 0;
+			border-width: 8px;
+		}
+	}
+
 	/* Custom animations */
 	@keyframes fadeIn {
 		from {
@@ -219,7 +307,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 	}
 
-	main > div {
+	.max-w-2xl {
 		animation: fadeIn 0.6s ease-out;
 	}
 
@@ -242,5 +330,13 @@ import Layout from '../layouts/Layout.astro';
 
 	.space-y-4 > a:nth-child(4) {
 		animation-delay: 0.4s;
+	}
+
+	/* Reduce motion for users who prefer it */
+	@media (prefers-reduced-motion: reduce) {
+		.hyperloop-ring {
+			animation: none;
+			display: none;
+		}
 	}
 </style>
