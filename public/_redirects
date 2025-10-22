@@ -1,3 +1,7 @@
+# Redirect links subdomain to /links page
+https://links.avoqado.io/* /links 200
+https://links.avoqado.io /links 200
+
 # Redirect apex domain to www subdomain
 https://avoqado.io/* https://www.avoqado.io/:splat 301
 http://avoqado.io/* https://www.avoqado.io/:splat 301
