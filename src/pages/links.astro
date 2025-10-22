@@ -233,12 +233,13 @@ import Layout from '../layouts/Layout.astro';
 
 	.particle {
 		position: absolute;
-		width: 3px;
-		height: 3px;
+		width: 12px;
+		height: 12px;
 		border-radius: 50%;
 		background: var(--color-avoqado-green);
 		opacity: 0;
 		animation: float 20s infinite ease-in-out;
+		box-shadow: 0 0 20px currentColor;
 	}
 
 	/* Different starting positions and colors for each particle */
@@ -329,14 +330,14 @@ import Layout from '../layouts/Layout.astro';
 			opacity: 0;
 		}
 		10% {
-			opacity: 0.4;
+			opacity: 0.7;
 		}
 		50% {
 			transform: translate(50px, -80px) scale(1.5);
-			opacity: 0.6;
+			opacity: 1;
 		}
 		90% {
-			opacity: 0.3;
+			opacity: 0.5;
 		}
 	}
 
