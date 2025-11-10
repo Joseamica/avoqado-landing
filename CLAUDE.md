@@ -1,149 +1,118 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # Avoqado Landing Page
 
-This is the official landing page for Avoqado (avoqado.io) - a modern restaurant management platform.
+Official marketing landing page for Avoqado (avoqado.io) - a restaurant management platform.
 
-## Project Overview
+## Tech Stack
 
-**Purpose:** Marketing landing page to showcase Avoqado's features, pricing, and value proposition.
-
-**Tech Stack:**
-- **Framework:** Astro 5.x (content-first static site generator)
-- **UI Components:** React 19.x (for interactive islands)
+- **Framework:** Astro 5.x (SSR mode with Cloudflare adapter)
+- **UI Components:** React 19.x (Islands Architecture)
 - **Styling:** Tailwind CSS 4.x
 - **TypeScript:** Strict mode enabled
-- **Hosting:** Cloudflare Pages (planned)
+- **Integrations:** Sentry, Sitemap, Spotlight
+- **Hosting:** Cloudflare Pages
+
+## Development Commands
+
+```bash
+npm run dev      # Start dev server at http://localhost:4321
+npm run build    # Build for production (outputs to ./dist/)
+npm run preview  # Preview production build locally
+npm run astro    # Run Astro CLI commands
+```
 
 ## Why Astro?
 
-Astro was chosen for this landing page because:
-1. **Performance-first:** Ships 0 KB JavaScript by default, only loads JS where needed
-2. **SEO-optimized:** Static HTML pre-rendering ensures perfect SEO
-3. **React Islands:** Use React components for interactive parts (calculators, forms, animations)
-4. **Flexibility:** Can add Vue, Svelte, or other frameworks if needed
-5. **Developer Experience:** Similar to React but optimized for content sites
+This project uses Astro's Islands Architecture:
+- Ships 0 KB JavaScript by default
+- Static HTML pre-rendering for SEO
+- React components load only when needed via `client:*` directives
+- SSR mode enabled for API routes (contact form)
 
 ## Architecture
 
-### File Organization
+**IMPORTANT:** When creating new files/components, re-evaluate the directory structure. The project is organized for scalability with multiple product pages and clear separation of concerns.
 
-**IMPORTANT:** Every time a new file/component is created, re-evaluate the directory structure and organization. The project should scale to support:
-- Multiple pages per section
-- Dedicated pages for each main Avoqado product
-- Clear separation of concerns
-
-Current structure:
 ```
 src/
 ├── components/
 │   ├── layout/          # Navbar, Footer, Layout wrappers
 │   ├── sections/        # Full page sections (Hero, Features, etc.)
-│   ├── interactive/     # React components with state/interactivity
-│   ├── productos/       # Product-specific components
+│   ├── interactive/     # React components (HeroCarousel, ContactForm, etc.)
 │   └── ui/              # Reusable UI components (buttons, cards, etc.)
 ├── pages/
 │   ├── index.astro      # Main landing page
-│   ├── productos/
-│   │   ├── index.astro  # Products overview
-│   │   ├── tpv.astro    # Avoqado TPV (terminal móvil)
-│   │   ├── dashboard.astro  # Dashboard Web (con IA)
-│   │   └── qr.astro     # Avoqado QR (pago en 30s)
-│   ├── precios.astro
-│   ├── casos-de-exito.astro
+│   ├── links.astro      # Links page (served via links.avoqado.io)
+│   ├── productos/       # Product pages (tpv.astro, dashboard.astro, qr.astro)
 │   └── api/
-│       └── contact.ts   # Contact form API endpoint
-├── assets/              # Images, fonts (processed by Astro)
-└── styles/              # Global CSS, theme tokens
+│       └── contact.ts   # Contact form API endpoint (uses nodemailer)
+├── layouts/             # Layout components
+├── assets/
+│   └── hero/
+│       ├── principal/   # Main landing page hero images
+│       └── tpv/         # Product-specific hero images
+├── styles/              # Global CSS
+└── middleware.ts        # Subdomain routing (links.avoqado.io → /links)
 ```
 
 ### Avoqado Products
-
-The platform consists of 3 main products:
 
 1. **Avoqado TPV** - Terminal móvil para personal con pagos inteligentes
 2. **Dashboard Web** - Plataforma integral con consultor IA integrado
 3. **Avoqado QR** - El cliente escanea, escoge y paga en menos de 30 segundos
 
-### Page Structure
-- **Hero Section:** First impression, main value proposition
-- **Features:** Key platform capabilities
-- **Pricing:** Plans and pricing calculator (interactive React component)
-- **Demo/Screenshots:** Product showcase
-- **Testimonials:** Social proof
-- **CTA/Contact:** Lead capture form
+### Subdomain Routing
 
-### Interactive Components (React Islands)
-Use the `client:*` directives to control when React components load:
-- `client:load` - Load immediately on page load
+The middleware handles subdomain-based routing:
+- `links.avoqado.io` → Rewrites to `/links` page
+- Main domain serves the standard landing page
+
+Related subdomains (other projects):
+- `dashboard.avoqado.io` - Admin dashboard (separate repo)
+- `api.avoqado.io` - Backend API (separate repo)
+
+### React Islands
+
+Interactive React components use `client:*` directives to control hydration:
+- `client:visible` - Load when entering viewport (recommended default)
 - `client:idle` - Load when browser is idle
-- `client:visible` - Load when component enters viewport (recommended for most)
-- `client:only` - Only render on client (not during build)
+- `client:load` - Load immediately
 
 Example:
 ```astro
 ---
-import PricingCalculator from '../components/PricingCalculator.tsx'
+import HeroCarousel from '../components/interactive/HeroCarousel.tsx'
 ---
-<PricingCalculator client:visible />
+<HeroCarousel client:visible slides={tpvSlides} />
 ```
 
-### Styling Guidelines
-- Use Tailwind CSS utility classes
-- Follow the same design tokens as the dashboard (avoqado-web-dashboard)
-- Ensure responsive design (mobile-first)
-- Support light/dark mode if applicable
+## Design System
 
-### Animations
-- Use Framer Motion for scroll animations
-- Use Astro View Transitions for page transitions
-- Keep animations performant and purposeful
+### Fonts
+- **Primary:** Urbanist (body text, UI elements)
+- **Display:** Baby Doll (hero titles, special headings)
+  - Use `font-baby` Tailwind class
+  - Font files: `/public/fonts/Baby Doll.otf`, `/public/fonts/Baby Doll.ttf`
+  - Does NOT force uppercase
 
-## Development Commands
+### Colors
+- Brand green: `#69E185` (use `text-avoqado-green` class)
 
-- `npm run dev` - Start dev server at http://localhost:4321
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build locally
+### Styling
+- Tailwind CSS 4.x utility classes
+- Mobile-first responsive design
+- Follow design tokens from the dashboard repo for consistency
 
-## Related Projects
+## Critical Development Practices
 
-- **Dashboard:** `/Users/amieva/Documents/Programming/Avoqado/avoqado-web-dashboard` - Main admin dashboard
-- **Backend (old):** `/Users/amieva/Documents/Programming/React/avo-pwa/server` - Legacy API server
-- **Backend (new):** `/Users/amieva/Documents/Programming/Avoqado/avoqado-server` - New TypeScript backend
+### 1. Show, Don't Tell - Visual Design Options
 
-## DNS & Hosting Setup
+**CRITICAL:** When the user requests design changes or doesn't like something, ALWAYS implement visual alternatives instead of describing options.
 
-- **Domain:** avoqado.io
-- **DNS:** Route 53 (AWS)
-- **CDN/Proxy:** Cloudflare
-- **Hosting:** Cloudflare Pages (to be configured)
-
-### Subdomain Structure
-- `avoqado.io` - This landing page
-- `dashboard.avoqado.io` - Admin dashboard
-- `bills.avoqado.io` - Bill/receipt viewer (old frontend)
-- `api.avoqado.io` - Backend API
-
-## Content Guidelines
-
-- **Tone:** Professional, modern, approachable
-- **Audience:** Restaurant owners, managers
-- **Focus:** Showcase how Avoqado simplifies restaurant operations
-- **CTA:** Drive sign-ups for demos or trials
-
-## Future Enhancements
-
-- [ ] Add blog/resources section
-- [ ] Implement lead capture forms
-- [ ] Add live chat widget
-- [ ] Integrate analytics (Google Analytics, etc.)
-- [ ] A/B testing for conversion optimization
-- [ ] Multi-language support (ES/EN)
-
-## Best Practices
-
-### Design Decisions & Visual Options
-**IMPORTANT:** When proposing design changes or alternatives, ALWAYS implement them visually so the user can see them in the browser, rather than just describing them.
-
-**Bad approach:**
+**❌ Bad:**
 ```
 User: "I don't like this green background"
 Assistant: "I can offer you 3 options:
@@ -153,68 +122,60 @@ Assistant: "I can offer you 3 options:
 Which would you prefer?"
 ```
 
-**Good approach:**
+**✅ Good:**
 ```
 User: "I don't like this green background"
-Assistant: "Let me show you 3 visual options"
-[Implements all 3 options in the actual code so user can see them live]
-Assistant: "I've created the 3 options - you can now see them on the page. Which one do you prefer?"
+Assistant: "Let me show you 3 visual alternatives"
+[Implements all 3 options so user sees them live in the browser]
+Assistant: "I've implemented 3 options - check them out and let me know which you prefer"
 ```
 
-The user prefers to see visual examples rather than theoretical descriptions. This allows for faster iteration and better decision-making.
+**Why:** The user learns and decides faster by seeing actual implementations rather than reading descriptions.
 
-### Component Reusability
-**IMPORTANT:** Always create reusable components instead of duplicating code.
+### 2. Component Reusability
 
-**Bad Example:**
-```
-HeroCarousel.tsx (hardcoded slides)
-TpvCarousel.tsx (duplicate with different slides)
-DashboardCarousel.tsx (duplicate with different slides)
-```
+Always create generic, reusable components that accept props instead of duplicating code.
 
-**Good Example:**
+**❌ Bad:**
 ```tsx
-// Generic component
+// Three separate carousel components with hardcoded content
+HeroCarousel.tsx, TpvCarousel.tsx, DashboardCarousel.tsx
+```
+
+**✅ Good:**
+```tsx
+// One generic carousel component
 HeroCarousel.tsx (accepts slides as props)
 
-// Usage
+// Usage in different pages
 <HeroCarousel slides={tpvSlides} aspectRatio="3/4" />
 <HeroCarousel slides={dashboardSlides} />
 ```
 
-### Asset Organization
-Organize images by context and feature:
+Before creating a new component, check if existing components can be made more generic.
+
+### 3. Asset Organization
+
+Images are organized by feature and product:
 ```
-src/assets/
-├── hero/
-│   ├── principal/     # Landing page hero images
-│   ├── tpv/          # TPV product hero images
-│   ├── dashboard/    # Dashboard product hero images
-│   └── qr/           # QR product hero images
-├── features/
-│   └── ...
-└── logos/
-    └── ...
+src/assets/hero/
+├── principal/   # Main landing page
+├── tpv/         # TPV product page
+├── dashboard/   # Dashboard product page
+└── qr/          # QR product page
 ```
 
-## Notes
+When adding new images, follow this pattern and create subdirectories as needed.
 
-- Keep bundle sizes small - use `client:visible` for most React components
-- Optimize images (use Astro's Image component or import from assets/)
-- Test on real devices for performance
-- Ensure accessibility (WCAG 2.1 AA compliance)
-- **Always check for reusability** before creating new components
+## Performance & Bundle Size
 
-## Design System
+- Use `client:visible` for most React components (loads when entering viewport)
+- Import images from `src/assets/` (processed and optimized by Astro)
+- Keep JavaScript minimal - Astro ships 0 KB by default
+- Test performance on real devices
 
-### Fonts
-- **Primary:** Urbanist (body text, UI elements)
-- **Display:** Baby Doll (hero titles, special headings)
-  - Use `font-baby` Tailwind class
-  - Font files in `/public/fonts/`
-  - Note: Does NOT force uppercase (removed as per user request)
+## Related Projects
 
-### Custom Tailwind Classes
-- `font-baby` - Baby Doll font family
-- `text-avoqado-green` - Brand green color (#69E185)
+- **Dashboard:** `/Users/amieva/Documents/Programming/Avoqado/avoqado-web-dashboard`
+- **Backend (new):** `/Users/amieva/Documents/Programming/Avoqado/avoqado-server`
+- **Backend (old):** `/Users/amieva/Documents/Programming/React/avo-pwa/server`

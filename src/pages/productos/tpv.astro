@@ -17,7 +17,7 @@ const slides = [
 ];
 ---
 
-<Layout title="Avoqado TPV - Terminal Móvil" description="Terminal móvil para personal con pagos inteligentes. Gestión de mesas, órdenes y propinas en una sola app.">
+<Layout title="Avoqado TPV - Terminal Inteligente PAX i910s" description="Terminal de punto de venta con PAX i910s: pagos en menos de 1 segundo, sincronización en tiempo real y analytics completo. Optimizado para restaurantes en México.">
 	<Navbar />
 	<main>
 		<!-- Hero Section -->
@@ -25,38 +25,131 @@ const slides = [
 			<div class="absolute top-1/4 right-0 w-96 h-96 bg-avoqado-green rounded-full opacity-20 blur-3xl" aria-hidden="true"></div>
 
 			<div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-20">
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 					<!-- Left Column - Content -->
 					<div class="space-y-8">
 						<div class="inline-block px-4 py-2 bg-avoqado-green/20 rounded-full text-avoqado-green text-sm font-semibold mb-4">
-							Avoqado TPV
+							Avoqado TPV Ultra-Rápido
 						</div>
-						<h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-							Terminal móvil para tu personal
+						<h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight font-baby">
+							TPV Inteligente Para Restaurantes Modernos
 						</h1>
 						<p class="text-xl text-gray-300 max-w-lg">
-							Gestiona mesas, toma órdenes y procesa pagos desde cualquier dispositivo móvil. Todo tu restaurante en la palma de tu mano.
+							El terminal de punto de venta más rápido del mercado con sincronización en tiempo real y analytics completo.
 						</p>
+
+						<!-- Key Benefits -->
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="text-2xl">⚡</div>
+								<div>
+									<span class="font-semibold text-avoqado-green">Pagos en menos de 1 segundo</span>
+									<span class="text-gray-400 text-sm block">después del primer pago</span>
+								</div>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="text-2xl">🔄</div>
+								<div>
+									<span class="font-semibold text-avoqado-green">Sincronización instantánea</span>
+									<span class="text-gray-400 text-sm block">entre todos los dispositivos en tiempo real</span>
+								</div>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="text-2xl">📊</div>
+								<div>
+									<span class="font-semibold text-avoqado-green">Analytics completo</span>
+									<span class="text-gray-400 text-sm block">reportes al instante con métricas por staff</span>
+								</div>
+							</div>
+						</div>
 
 						<div class="flex flex-col sm:flex-row gap-4">
 							<a
-								href="/#contact"
+								href="https://tpv.avoqado.io"
+								target="_blank"
+								rel="noopener noreferrer"
 								class="inline-block px-8 py-4 bg-avoqado-green text-white text-lg font-semibold rounded-full hover:opacity-90 hover:scale-105 transition-all text-center shadow-glow-green"
 							>
-								Solicitar demo
+								Probar TPV →
 							</a>
 							<a
 								href="#features"
 								class="inline-block px-8 py-4 border-2 border-avoqado-green text-avoqado-green text-lg font-semibold rounded-full hover:bg-avoqado-green hover:text-white transition-all text-center"
 							>
-								Ver características
+								Conocer Características
 							</a>
 						</div>
 					</div>
 
 					<!-- Right Column - Carousel -->
-					<div class="relative max-w-md mx-auto lg:mx-0">
-						<HeroCarousel slides={slides} aspectRatio="3/4" priority={true} client:visible />
+					<div class="relative w-full flex items-start justify-center lg:justify-end">
+						<div class="w-full max-w-sm">
+							<HeroCarousel slides={slides} aspectRatio="3/4" priority={true} client:visible />
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Problem/Solution Section -->
+		<section class="py-20 bg-avoqado-dark-bg">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="text-center mb-16">
+					<h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+						Dile adiós a los problemas tradicionales
+					</h2>
+					<p class="text-xl text-gray-300">
+						Avoqado TPV resuelve los puntos críticos que hacen perder dinero a tu restaurante
+					</p>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+					<!-- Problem 1 -->
+					<div class="bg-avoqado-dark-surface rounded-2xl p-8 border-2 border-red-500/20">
+						<div class="text-4xl mb-4">😩</div>
+						<h3 class="text-xl font-bold text-red-400 mb-3">Terminales lentas</h3>
+						<p class="text-gray-400 mb-4">
+							Los clientes esperan 5+ minutos para pagar. Pierdes ventas y propinas.
+						</p>
+						<div class="border-t border-avoqado-green/30 pt-4 mt-4">
+							<div class="text-4xl mb-4">✅</div>
+							<h4 class="text-lg font-bold text-avoqado-green mb-2">Pagos ultra-rápidos</h4>
+							<p class="text-gray-300 text-sm">
+								Caché inteligente de credenciales reduce el tiempo de pago de 3-5 segundos a menos de 1 segundo después del primer pago.
+							</p>
+						</div>
+					</div>
+
+					<!-- Problem 2 -->
+					<div class="bg-avoqado-dark-surface rounded-2xl p-8 border-2 border-red-500/20">
+						<div class="text-4xl mb-4">😵</div>
+						<h3 class="text-xl font-bold text-red-400 mb-3">Confusión entre meseros</h3>
+						<p class="text-gray-400 mb-4">
+							Varios meseros atienden la misma mesa. Órdenes duplicadas, cuentas incorrectas.
+						</p>
+						<div class="border-t border-avoqado-green/30 pt-4 mt-4">
+							<div class="text-4xl mb-4">✅</div>
+							<h4 class="text-lg font-bold text-avoqado-green mb-2">Sincronización en tiempo real</h4>
+							<p class="text-gray-300 text-sm">
+								Socket.IO mantiene todos los dispositivos sincronizados al instante. Cambios visibles para todo el equipo en menos de 100ms.
+							</p>
+						</div>
+					</div>
+
+					<!-- Problem 3 -->
+					<div class="bg-avoqado-dark-surface rounded-2xl p-8 border-2 border-red-500/20">
+						<div class="text-4xl mb-4">🤷</div>
+						<h3 class="text-xl font-bold text-red-400 mb-3">Sin visibilidad de ventas</h3>
+						<p class="text-gray-400 mb-4">
+							No sabes qué mesero vende más, qué días son mejores, o cuánto llevas del día.
+						</p>
+						<div class="border-t border-avoqado-green/30 pt-4 mt-4">
+							<div class="text-4xl mb-4">✅</div>
+							<h4 class="text-lg font-bold text-avoqado-green mb-2">Analytics en tiempo real</h4>
+							<p class="text-gray-300 text-sm">
+								Dashboard completo con ventas por staff, comparación vs. ayer, desglose por método de pago y más. Todo actualizado en vivo.
+							</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -67,77 +160,907 @@ const slides = [
 			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div class="text-center mb-16">
 					<h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
-						Características principales
+						Todo lo que necesitas en un solo dispositivo
 					</h2>
 					<p class="text-xl text-gray-300">
-						Todo lo que necesitas para operar tu restaurante
+						Sistema completo de punto de venta con más de 100 funcionalidades
 					</p>
 				</div>
 
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
+					<!-- Feature 1: Pagos inteligentes -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all group">
 						<div class="text-4xl mb-4">💳</div>
 						<h3 class="text-2xl font-bold text-white mb-3">Pagos inteligentes</h3>
-						<p class="text-gray-300">
-							Acepta tarjetas, efectivo, propinas y divide cuentas automáticamente
+						<p class="text-gray-300 mb-4">
+							Procesamiento ultra-rápido con múltiples métodos de pago
 						</p>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Contactless NFC, Chip EMV, Banda magnética</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>División de cuenta por producto o por persona</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Propinas integradas con cálculo automático</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Multi-merchant routing (múltiples cuentas)</span>
+							</li>
+						</ul>
 					</div>
 
-					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
+					<!-- Feature 2: Gestión de mesas -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all group">
 						<div class="text-4xl mb-4">🍽️</div>
 						<h3 class="text-2xl font-bold text-white mb-3">Gestión de mesas</h3>
-						<p class="text-gray-300">
-							Control total de tu salon con estados en tiempo real
+						<p class="text-gray-300 mb-4">
+							Vista en tiempo real de todas las mesas del restaurante
 						</p>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Estado de mesas actualizado instantáneamente</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Órdenes sincronizadas entre dispositivos</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Soporte para múltiples terminales</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Sin duplicación de órdenes</span>
+							</li>
+						</ul>
 					</div>
 
-					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
+					<!-- Feature 3: Toma de órdenes -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all group">
 						<div class="text-4xl mb-4">📋</div>
 						<h3 class="text-2xl font-bold text-white mb-3">Toma de órdenes</h3>
-						<p class="text-gray-300">
-							Envía órdenes a cocina al instante desde cualquier mesa
+						<p class="text-gray-300 mb-4">
+							Sistema completo de menú con personalizaciones
 						</p>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Menú completo con categorías</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Modificadores y personalizaciones de productos</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Carrito de compras intuitivo</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Envío automático a cocina</span>
+							</li>
+						</ul>
 					</div>
 
-					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
+					<!-- Feature 4: Modo offline -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all group">
 						<div class="text-4xl mb-4">⚡</div>
 						<h3 class="text-2xl font-bold text-white mb-3">Modo offline</h3>
-						<p class="text-gray-300">
-							Funciona sin internet, sincroniza cuando vuelve la conexión
+						<p class="text-gray-300 mb-4">
+							Opera sin internet, sincroniza automáticamente
 						</p>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Procesa órdenes sin conexión</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Base de datos local (Room SQLite)</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Sincronización automática al reconectar</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Cero pérdida de datos</span>
+							</li>
+						</ul>
 					</div>
 
-					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
-						<div class="text-4xl mb-4">💰</div>
-						<h3 class="text-2xl font-bold text-white mb-3">Propinas inteligentes</h3>
-						<p class="text-gray-300">
-							Sistema automático de cálculo y distribución de propinas
+					<!-- Feature 5: Analytics en tiempo real -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all group">
+						<div class="text-4xl mb-4">📊</div>
+						<h3 class="text-2xl font-bold text-white mb-3">Analytics en tiempo real</h3>
+						<p class="text-gray-300 mb-4">
+							Dashboard completo con métricas actualizadas al instante
 						</p>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Ventas del día vs. ayer en tiempo real</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Desglose por método de pago</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Performance individual por mesero</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Reportes por periodo con filtros avanzados</span>
+							</li>
+						</ul>
 					</div>
 
-					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
+					<!-- Feature 6: Control de tiempo -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all group">
+						<div class="text-4xl mb-4">⏰</div>
+						<h3 class="text-2xl font-bold text-white mb-3">Control de tiempo</h3>
+						<p class="text-gray-300 mb-4">
+							Reloj checador integrado con seguimiento de turnos
+						</p>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Inicio y fin de turno con PIN</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Tracking de breaks y descansos</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Resumen de turno con ventas y propinas</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Historial completo de turnos</span>
+							</li>
+						</ul>
+					</div>
+
+					<!-- Feature 7: Impresión profesional -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all group">
+						<div class="text-4xl mb-4">🖨️</div>
+						<h3 class="text-2xl font-bold text-white mb-3">Impresión profesional</h3>
+						<p class="text-gray-300 mb-4">
+							Impresora térmica integrada para recibos y comandas
+						</p>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Recibos de pago automáticos</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Tickets de cocina (comandas)</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Resúmenes de turno y reportes de periodo</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Códigos QR en recibos</span>
+							</li>
+						</ul>
+					</div>
+
+					<!-- Feature 8: Hardware integrado -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all group">
+						<div class="text-4xl mb-4">📱</div>
+						<h3 class="text-2xl font-bold text-white mb-3">Hardware integrado</h3>
+						<p class="text-gray-300 mb-4">
+							Dispositivo PAX i910s todo-en-uno profesional
+						</p>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Pantalla táctil 5.5" HD ultra-sensible</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Batería de alta capacidad para turno completo</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Lector NFC contactless integrado</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>WiFi + 4G LTE</span>
+							</li>
+						</ul>
+					</div>
+
+					<!-- Feature 9: Sincronización en tiempo real -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all group">
 						<div class="text-4xl mb-4">🔄</div>
-						<h3 class="text-2xl font-bold text-white mb-3">Sincronización en tiempo real</h3>
-						<p class="text-gray-300">
-							Todo tu equipo siempre actualizado al instante
+						<h3 class="text-2xl font-bold text-white mb-3">Sincronización instantánea</h3>
+						<p class="text-gray-300 mb-4">
+							Socket.IO para comunicación en tiempo real
 						</p>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Cambios visibles en menos de 100ms</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Coordinación perfecta entre múltiples TPVs</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Heartbeat monitoring de salud del dispositivo</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Reconexión automática</span>
+							</li>
+						</ul>
+					</div>
+
+					<!-- Feature 10: Reseñas de clientes -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all group">
+						<div class="text-4xl mb-4">⭐</div>
+						<h3 class="text-2xl font-bold text-white mb-3">Reseñas de clientes</h3>
+						<p class="text-gray-300 mb-4">
+							Captura feedback post-pago automáticamente
+						</p>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Calificación con estrellas</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Comentarios de clientes</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Solicitud automática post-pago</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Mejora continua del servicio</span>
+							</li>
+						</ul>
+					</div>
+
+					<!-- Feature 11: Escaneo QR/Códigos -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all group">
+						<div class="text-4xl mb-4">📷</div>
+						<h3 class="text-2xl font-bold text-white mb-3">Escaneo QR/Códigos</h3>
+						<p class="text-gray-300 mb-4">
+							Cámara integrada con Google ML Kit Vision
+						</p>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Códigos de barras 1D/2D</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Códigos QR de mesa o productos</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Escaneo rápido y preciso</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Detección automática</span>
+							</li>
+						</ul>
+					</div>
+
+					<!-- Feature 12: Seguridad y permisos -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all group">
+						<div class="text-4xl mb-4">🔒</div>
+						<h3 class="text-2xl font-bold text-white mb-3">Seguridad y permisos</h3>
+						<p class="text-gray-300 mb-4">
+							Control de acceso basado en roles
+						</p>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Autenticación de staff con credenciales</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>PIN de 4 dígitos para time clock</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Sesiones seguras con tokens</span>
+							</li>
+							<li class="flex items-start gap-2">
+								<span class="text-avoqado-green">✓</span>
+								<span>Permisos diferenciados por rol</span>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>
 		</section>
 
-		<!-- CTA Section -->
+		<!-- Technical Specs Comparison -->
+		<section class="py-20 bg-avoqado-dark-bg">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="text-center mb-16">
+					<h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+						¿Por qué Avoqado TPV es superior?
+					</h2>
+					<p class="text-xl text-gray-300">
+						Comparación técnica con otras soluciones del mercado
+					</p>
+				</div>
+
+				<div class="overflow-x-auto">
+					<table class="w-full text-left border-collapse">
+						<thead>
+							<tr class="border-b-2 border-avoqado-green">
+								<th class="p-4 text-lg font-bold text-white">Característica</th>
+								<th class="p-4 text-lg font-bold text-avoqado-green">Avoqado TPV</th>
+								<th class="p-4 text-lg font-bold text-gray-400">Competencia</th>
+							</tr>
+						</thead>
+						<tbody class="text-gray-300">
+							<tr class="border-b border-gray-700">
+								<td class="p-4 font-semibold">Velocidad de pago</td>
+								<td class="p-4">
+									<div class="flex items-center gap-2">
+										<span class="text-2xl">✅</span>
+										<span class="text-avoqado-green font-bold">&lt;1s</span>
+										<span class="text-sm text-gray-400">(después del 1er pago)</span>
+									</div>
+								</td>
+								<td class="p-4 text-gray-400">3-5 segundos</td>
+							</tr>
+							<tr class="border-b border-gray-700">
+								<td class="p-4 font-semibold">Sincronización</td>
+								<td class="p-4">
+									<div class="flex items-center gap-2">
+										<span class="text-2xl">✅</span>
+										<span class="text-avoqado-green font-bold">Tiempo real (Socket.IO)</span>
+										<span class="text-sm text-gray-400">(&lt;100ms)</span>
+									</div>
+								</td>
+								<td class="p-4 text-gray-400">Polling cada 30 segundos</td>
+							</tr>
+							<tr class="border-b border-gray-700">
+								<td class="p-4 font-semibold">Modo offline</td>
+								<td class="p-4">
+									<div class="flex items-center gap-2">
+										<span class="text-2xl">✅</span>
+										<span class="text-avoqado-green font-bold">Total</span>
+										<span class="text-sm text-gray-400">(Room SQLite)</span>
+									</div>
+								</td>
+								<td class="p-4 text-gray-400">⚠️ Limitado o no disponible</td>
+							</tr>
+							<tr class="border-b border-gray-700">
+								<td class="p-4 font-semibold">Split de cuenta</td>
+								<td class="p-4">
+									<div class="flex items-center gap-2">
+										<span class="text-2xl">✅</span>
+										<span class="text-avoqado-green font-bold">Por producto Y por persona</span>
+									</div>
+								</td>
+								<td class="p-4 text-gray-400">Solo división igual entre todos</td>
+							</tr>
+							<tr class="border-b border-gray-700">
+								<td class="p-4 font-semibold">Analytics</td>
+								<td class="p-4">
+									<div class="flex items-center gap-2">
+										<span class="text-2xl">✅</span>
+										<span class="text-avoqado-green font-bold">Tiempo real con métricas por staff</span>
+									</div>
+								</td>
+								<td class="p-4 text-gray-400">Solo reportes al fin del día</td>
+							</tr>
+							<tr class="border-b border-gray-700">
+								<td class="p-4 font-semibold">Control de tiempo</td>
+								<td class="p-4">
+									<div class="flex items-center gap-2">
+										<span class="text-2xl">✅</span>
+										<span class="text-avoqado-green font-bold">Integrado con PIN y turnos</span>
+									</div>
+								</td>
+								<td class="p-4 text-gray-400">❌ Requiere app separada</td>
+							</tr>
+							<tr class="border-b border-gray-700">
+								<td class="p-4 font-semibold">Multi-merchant</td>
+								<td class="p-4">
+									<div class="flex items-center gap-2">
+										<span class="text-2xl">✅</span>
+										<span class="text-avoqado-green font-bold">3 cuentas simultáneas</span>
+									</div>
+								</td>
+								<td class="p-4 text-gray-400">❌ Solo 1 cuenta</td>
+							</tr>
+							<tr class="border-b border-gray-700">
+								<td class="p-4 font-semibold">Hardware</td>
+								<td class="p-4">
+									<div class="flex items-center gap-2">
+										<span class="text-2xl">✅</span>
+										<span class="text-avoqado-green font-bold">Todo-en-uno (PAX i910s)</span>
+										<span class="text-sm text-gray-400">(NFC + impresora + Android)</span>
+									</div>
+								</td>
+								<td class="p-4 text-gray-400">Requiere periféricos separados</td>
+							</tr>
+							<tr class="border-b border-gray-700">
+								<td class="p-4 font-semibold">Impresión</td>
+								<td class="p-4">
+									<div class="flex items-center gap-2">
+										<span class="text-2xl">✅</span>
+										<span class="text-avoqado-green font-bold">Térmica integrada 58mm</span>
+									</div>
+								</td>
+								<td class="p-4 text-gray-400">Requiere impresora externa</td>
+							</tr>
+							<tr>
+								<td class="p-4 font-semibold">Reseñas de clientes</td>
+								<td class="p-4">
+									<div class="flex items-center gap-2">
+										<span class="text-2xl">✅</span>
+										<span class="text-avoqado-green font-bold">Integrado post-pago</span>
+									</div>
+								</td>
+								<td class="p-4 text-gray-400">❌ No disponible</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="mt-12 text-center">
+					<p class="text-2xl font-bold text-white mb-4">
+						Optimizado para México con procesamiento Blumon PAX
+					</p>
+					<p class="text-gray-400">
+						Integración directa con BANORTE y soporte completo para MXN
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Use Cases / Customer Stories -->
+		<section class="py-20 bg-avoqado-dark-surface">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="text-center mb-16">
+					<h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+						Perfecto para cualquier tipo de restaurante
+					</h2>
+					<p class="text-xl text-gray-300">
+						Casos de uso reales que demuestran el poder de Avoqado TPV
+					</p>
+				</div>
+
+				<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+					<!-- Use Case 1: Fine Dining -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all">
+						<div class="text-5xl mb-4">🍽️</div>
+						<h3 class="text-2xl font-bold text-white mb-4">Restaurante de Manteles</h3>
+						<div class="space-y-4">
+							<div class="bg-avoqado-dark-surface rounded-lg p-4">
+								<p class="text-sm text-gray-400 mb-2">Escenario:</p>
+								<p class="text-white">Mesa de 8 personas, cada quien quiere pagar lo suyo</p>
+							</div>
+							<div class="space-y-2">
+								<p class="text-avoqado-green font-semibold">Solución Avoqado:</p>
+								<ul class="space-y-2 text-sm text-gray-300">
+									<li class="flex items-start gap-2">
+										<span class="text-avoqado-green">✓</span>
+										<span>Split por producto en 30 segundos</span>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="text-avoqado-green">✓</span>
+										<span>Cada cliente paga con su tarjeta contactless</span>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="text-avoqado-green">✓</span>
+										<span>Recibo impreso automáticamente para cada uno</span>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="text-avoqado-green">✓</span>
+										<span>Propinas individuales calculadas correctamente</span>
+									</li>
+								</ul>
+							</div>
+							<div class="bg-avoqado-green/10 rounded-lg p-4 border border-avoqado-green/30">
+								<p class="text-avoqado-green font-bold text-lg">Resultado:</p>
+								<p class="text-white text-sm">Mesa procesada en 5 minutos vs. 15 minutos con sistema tradicional</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Use Case 2: Casual Dining -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all">
+						<div class="text-5xl mb-4">🍔</div>
+						<h3 class="text-2xl font-bold text-white mb-4">Restaurante Casual</h3>
+						<div class="space-y-4">
+							<div class="bg-avoqado-dark-surface rounded-lg p-4">
+								<p class="text-sm text-gray-400 mb-2">Escenario:</p>
+								<p class="text-white">20 mesas, 4 meseros con TPV, hora pico del sábado</p>
+							</div>
+							<div class="space-y-2">
+								<p class="text-avoqado-green font-semibold">Solución Avoqado:</p>
+								<ul class="space-y-2 text-sm text-gray-300">
+									<li class="flex items-start gap-2">
+										<span class="text-avoqado-green">✓</span>
+										<span>Sincronización perfecta entre 4 terminales</span>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="text-avoqado-green">✓</span>
+										<span>Sin órdenes duplicadas ni confusión</span>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="text-avoqado-green">✓</span>
+										<span>Gerente ve ventas en tiempo real en dashboard</span>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="text-avoqado-green">✓</span>
+										<span>Analytics por mesero para motivar al equipo</span>
+									</li>
+								</ul>
+							</div>
+							<div class="bg-avoqado-green/10 rounded-lg p-4 border border-avoqado-green/30">
+								<p class="text-avoqado-green font-bold text-lg">Resultado:</p>
+								<p class="text-white text-sm">30% más rotación de mesas, cero errores de duplicación</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Use Case 3: Bar/Cantina -->
+					<div class="bg-avoqado-dark-bg rounded-2xl p-8 border-2 border-transparent hover:border-avoqado-green transition-all">
+						<div class="text-5xl mb-4">🍹</div>
+						<h3 class="text-2xl font-bold text-white mb-4">Bar / Cantina</h3>
+						<div class="space-y-4">
+							<div class="bg-avoqado-dark-surface rounded-lg p-4">
+								<p class="text-sm text-gray-400 mb-2">Escenario:</p>
+								<p class="text-white">Turnos de 8 horas, 3 bartenders, control de propinas</p>
+							</div>
+							<div class="space-y-2">
+								<p class="text-avoqado-green font-semibold">Solución Avoqado:</p>
+								<ul class="space-y-2 text-sm text-gray-300">
+									<li class="flex items-start gap-2">
+										<span class="text-avoqado-green">✓</span>
+										<span>Check-in/out con PIN al inicio del turno</span>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="text-avoqado-green">✓</span>
+										<span>Propinas automáticas por empleado</span>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="text-avoqado-green">✓</span>
+										<span>Cierre de turno automático con reporte</span>
+									</li>
+									<li class="flex items-start gap-2">
+										<span class="text-avoqado-green">✓</span>
+										<span>Batería dura todo el turno (5200mAh)</span>
+									</li>
+								</ul>
+							</div>
+							<div class="bg-avoqado-green/10 rounded-lg p-4 border border-avoqado-green/30">
+								<p class="text-avoqado-green font-bold text-lg">Resultado:</p>
+								<p class="text-white text-sm">Transparencia total en propinas, ahorro en nómina</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Hardware Showcase - PAX i910s -->
+		<section class="py-20 bg-avoqado-dark-bg">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="text-center mb-16">
+					<h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+						Hardware profesional todo-en-uno
+					</h2>
+					<p class="text-xl text-gray-300">
+						PAX i910s: Terminal inteligente con Android
+					</p>
+				</div>
+
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+					<!-- Left: Device specs -->
+					<div class="space-y-6">
+						<div class="inline-block px-4 py-2 bg-avoqado-green/20 rounded-full text-avoqado-green text-sm font-semibold mb-4">
+							PAX i910s - Terminal Inteligente Android
+						</div>
+
+						<h3 class="text-3xl font-bold text-white">
+							Todo lo que necesitas en un solo dispositivo
+						</h3>
+
+						<p class="text-lg text-gray-300">
+							Terminal de pago inteligente con Android, diseñado específicamente para operaciones de restaurante de alto volumen.
+						</p>
+
+						<!-- Specs Grid -->
+						<div class="grid grid-cols-2 gap-4">
+							<div class="bg-avoqado-dark-surface rounded-lg p-4">
+								<div class="text-2xl mb-2">📱</div>
+								<h4 class="font-bold text-white mb-1">Pantalla</h4>
+								<p class="text-sm text-gray-400">5.5" HD Touchscreen</p>
+								<p class="text-sm text-gray-400">1280x720 capacitiva</p>
+							</div>
+
+							<div class="bg-avoqado-dark-surface rounded-lg p-4">
+								<div class="text-2xl mb-2">🔋</div>
+								<h4 class="font-bold text-white mb-1">Batería</h4>
+								<p class="text-sm text-gray-400">Alta capacidad</p>
+								<p class="text-sm text-gray-400">Turno completo garantizado</p>
+							</div>
+
+							<div class="bg-avoqado-dark-surface rounded-lg p-4">
+								<div class="text-2xl mb-2">💳</div>
+								<h4 class="font-bold text-white mb-1">Lector de Tarjetas</h4>
+								<p class="text-sm text-gray-400">NFC Contactless</p>
+								<p class="text-sm text-gray-400">EMV Chip + Banda magnética</p>
+							</div>
+
+							<div class="bg-avoqado-dark-surface rounded-lg p-4">
+								<div class="text-2xl mb-2">🖨️</div>
+								<h4 class="font-bold text-white mb-1">Impresora</h4>
+								<p class="text-sm text-gray-400">Térmica 58mm integrada</p>
+								<p class="text-sm text-gray-400">Alta velocidad</p>
+							</div>
+
+							<div class="bg-avoqado-dark-surface rounded-lg p-4">
+								<div class="text-2xl mb-2">🌐</div>
+								<h4 class="font-bold text-white mb-1">Conectividad</h4>
+								<p class="text-sm text-gray-400">WiFi 802.11 a/b/g/n</p>
+								<p class="text-sm text-gray-400">4G LTE + Bluetooth</p>
+							</div>
+
+							<div class="bg-avoqado-dark-surface rounded-lg p-4">
+								<div class="text-2xl mb-2">⚙️</div>
+								<h4 class="font-bold text-white mb-1">Sistema</h4>
+								<p class="text-sm text-gray-400">Android OS</p>
+								<p class="text-sm text-gray-400">Procesador Quad-core</p>
+							</div>
+						</div>
+
+						<!-- Key Benefits -->
+						<div class="bg-gradient-to-r from-avoqado-green/20 to-transparent rounded-lg p-6 border-l-4 border-avoqado-green">
+							<h4 class="font-bold text-white mb-3">Ventajas clave:</h4>
+							<ul class="space-y-2 text-sm text-gray-300">
+								<li class="flex items-start gap-2">
+									<span class="text-avoqado-green">✓</span>
+									<span><strong>Sin periféricos externos:</strong> Todo integrado en un solo dispositivo</span>
+								</li>
+								<li class="flex items-start gap-2">
+									<span class="text-avoqado-green">✓</span>
+									<span><strong>Grado industrial:</strong> Diseñado para uso intensivo en restaurantes</span>
+								</li>
+								<li class="flex items-start gap-2">
+									<span class="text-avoqado-green">✓</span>
+									<span><strong>Portátil y ligero:</strong> Meseros se mueven libremente por todo el salón</span>
+								</li>
+								<li class="flex items-start gap-2">
+									<span class="text-avoqado-green">✓</span>
+									<span><strong>Impresión inmediata:</strong> Recibos y comandas sin impresora externa</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- Right: Visual - Product Image -->
+					<div class="relative">
+						<div class="bg-gradient-to-br from-avoqado-green/20 to-transparent rounded-2xl p-8 border-2 border-avoqado-green/30">
+							<img
+								src={slide1.src}
+								alt="PAX i910s Terminal"
+								class="w-full h-auto rounded-xl shadow-2xl"
+								width={slide1.width}
+								height={slide1.height}
+							/>
+						</div>
+
+						<!-- Floating specs badges -->
+						<div class="absolute -top-4 -right-4 bg-avoqado-green text-white px-4 py-2 rounded-full font-bold shadow-glow-green z-10">
+							5.5" HD
+						</div>
+						<div class="absolute -bottom-4 -left-4 bg-avoqado-green text-white px-4 py-2 rounded-full font-bold shadow-glow-green z-10">
+							Android
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- FAQ Section -->
+		<section class="py-20 bg-avoqado-dark-surface">
+			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="text-center mb-16">
+					<h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
+						Preguntas Frecuentes
+					</h2>
+					<p class="text-xl text-gray-300">
+						Respuestas a las dudas más comunes sobre Avoqado TPV
+					</p>
+				</div>
+
+				<div class="space-y-6">
+					<!-- FAQ 1 -->
+					<details class="bg-avoqado-dark-bg rounded-2xl p-6 group">
+						<summary class="text-xl font-bold text-white cursor-pointer list-none flex items-center justify-between">
+							¿Qué pasa si se va el internet?
+							<span class="text-avoqado-green text-2xl group-open:rotate-180 transition-transform">⌄</span>
+						</summary>
+						<div class="mt-4 text-gray-300 space-y-2">
+							<p>
+								Avoqado TPV funciona <strong>completamente offline</strong>. Puedes seguir tomando órdenes y procesando pagos sin conexión a internet.
+							</p>
+							<p>
+								Toda la información se guarda localmente en el dispositivo usando Room SQLite, y cuando vuelve la conexión, se sincroniza automáticamente con el servidor. <strong>Cero pérdida de datos.</strong>
+							</p>
+						</div>
+					</details>
+
+					<!-- FAQ 2 -->
+					<details class="bg-avoqado-dark-bg rounded-2xl p-6 group">
+						<summary class="text-xl font-bold text-white cursor-pointer list-none flex items-center justify-between">
+							¿Puedo usar mis propias terminales o dispositivos?
+							<span class="text-avoqado-green text-2xl group-open:rotate-180 transition-transform">⌄</span>
+						</summary>
+						<div class="mt-4 text-gray-300 space-y-2">
+							<p>
+								Avoqado TPV está optimizado para el <strong>PAX i910s</strong>, terminal inteligente con Android que incluye todo lo necesario: pantalla táctil HD, impresora térmica integrada, lector NFC contactless y batería de alta capacidad.
+							</p>
+							<p>
+								Este dispositivo todo-en-uno garantiza la mejor experiencia y elimina la necesidad de periféricos externos. Incluimos el hardware como parte del servicio.
+							</p>
+						</div>
+					</details>
+
+					<!-- FAQ 3 -->
+					<details class="bg-avoqado-dark-bg rounded-2xl p-6 group">
+						<summary class="text-xl font-bold text-white cursor-pointer list-none flex items-center justify-between">
+							¿Cómo se capacita al personal?
+							<span class="text-avoqado-green text-2xl group-open:rotate-180 transition-transform">⌄</span>
+						</summary>
+						<div class="mt-4 text-gray-300 space-y-2">
+							<p>
+								La interfaz de Avoqado TPV es <strong>extremadamente intuitiva</strong>. La mayoría del personal aprende a usarla en menos de 15 minutos.
+							</p>
+							<p>
+								Incluimos capacitación presencial o remota durante la instalación, y tenemos videos tutoriales disponibles 24/7. El soporte técnico está siempre disponible para resolver dudas.
+							</p>
+						</div>
+					</details>
+
+					<!-- FAQ 4 -->
+					<details class="bg-avoqado-dark-bg rounded-2xl p-6 group">
+						<summary class="text-xl font-bold text-white cursor-pointer list-none flex items-center justify-between">
+							¿Cuánto tiempo toma la instalación?
+							<span class="text-avoqado-green text-2xl group-open:rotate-180 transition-transform">⌄</span>
+						</summary>
+						<div class="mt-4 text-gray-300 space-y-2">
+							<p>
+								La instalación típica toma <strong>menos de 24 horas</strong> desde que recibimos tu confirmación.
+							</p>
+							<p>
+								Incluye: configuración de la cuenta, carga de tu menú, entrega de dispositivos, capacitación del personal y pruebas completas. Puedes estar operando al día siguiente.
+							</p>
+						</div>
+					</details>
+
+					<!-- FAQ 5 -->
+					<details class="bg-avoqado-dark-bg rounded-2xl p-6 group">
+						<summary class="text-xl font-bold text-white cursor-pointer list-none flex items-center justify-between">
+							¿Es compatible con mi sistema actual de punto de venta?
+							<span class="text-avoqado-green text-2xl group-open:rotate-180 transition-transform">⌄</span>
+						</summary>
+						<div class="mt-4 text-gray-300 space-y-2">
+							<p>
+								Avoqado TPV es un <strong>sistema completo e independiente</strong> que no requiere integración con otros POS.
+							</p>
+							<p>
+								Sin embargo, si necesitas migrar datos de tu sistema actual (menú, productos, historial), nuestro equipo puede ayudarte con la importación durante la instalación.
+							</p>
+						</div>
+					</details>
+
+					<!-- FAQ 6 -->
+					<details class="bg-avoqado-dark-bg rounded-2xl p-6 group">
+						<summary class="text-xl font-bold text-white cursor-pointer list-none flex items-center justify-between">
+							¿Qué bancos y procesadores de pago soportan?
+							<span class="text-avoqado-green text-2xl group-open:rotate-180 transition-transform">⌄</span>
+						</summary>
+						<div class="mt-4 text-gray-300 space-y-2">
+							<p>
+								Actualmente trabajamos con <strong>Blumon PAX</strong> para procesamiento de pagos, con integración directa a <strong>BANORTE</strong> en México.
+							</p>
+							<p>
+								Soportamos múltiples cuentas merchant simultáneamente (multi-merchant routing), permitiéndote usar hasta 3 cuentas de procesamiento diferentes según tus necesidades.
+							</p>
+						</div>
+					</details>
+				</div>
+			</div>
+		</section>
+
+		<!-- Final CTA with Multiple Options -->
 		<section class="py-20 bg-gradient-to-br from-avoqado-green to-green-500">
-			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-				<h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
-					¿Listo para modernizar tu operación?
-				</h2>
-				<p class="text-xl text-white/90 mb-8">
-					Agenda una demo y descubre cómo Avoqado TPV puede transformar tu restaurante
-				</p>
-				<a href="/#contact" class="inline-block px-8 py-4 bg-black text-white text-lg font-semibold rounded-full hover:bg-gray-900 transition-colors">
-					Solicitar demo gratuita
-				</a>
+			<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="text-center mb-12">
+					<h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+						¿Listo para modernizar tu operación?
+					</h2>
+					<p class="text-xl text-white/90 mb-8">
+						Únete a los restaurantes que ya están aumentando sus ventas con Avoqado TPV
+					</p>
+				</div>
+
+				<!-- CTA Cards -->
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+					<!-- CTA 1: Try TPV -->
+					<div class="bg-white/10 backdrop-blur rounded-2xl p-6 text-center hover:bg-white/20 transition-all">
+						<div class="text-4xl mb-4">🚀</div>
+						<h3 class="text-xl font-bold text-white mb-3">Probar TPV</h3>
+						<p class="text-white/80 text-sm mb-4">
+							Accede a la demo en línea de Avoqado TPV ahora mismo
+						</p>
+						<a href="https://tpv.avoqado.io" target="_blank" rel="noopener noreferrer" class="inline-block px-6 py-3 bg-black text-white font-semibold rounded-full hover:bg-gray-900 transition-colors w-full">
+							Ir a TPV →
+						</a>
+					</div>
+
+					<!-- CTA 2: Contact Sales -->
+					<div class="bg-white/10 backdrop-blur rounded-2xl p-6 text-center hover:bg-white/20 transition-all">
+						<div class="text-4xl mb-4">💬</div>
+						<h3 class="text-xl font-bold text-white mb-3">Habla con Ventas</h3>
+						<p class="text-white/80 text-sm mb-4">
+							Obtén una cotización personalizada para tu restaurante
+						</p>
+						<a href="/#contact" class="inline-block px-6 py-3 bg-black text-white font-semibold rounded-full hover:bg-gray-900 transition-colors w-full">
+							Contactar
+						</a>
+					</div>
+
+					<!-- CTA 3: Schedule Demo -->
+					<div class="bg-white/10 backdrop-blur rounded-2xl p-6 text-center hover:bg-white/20 transition-all">
+						<div class="text-4xl mb-4">🎯</div>
+						<h3 class="text-xl font-bold text-white mb-3">Agenda Demo</h3>
+						<p class="text-white/80 text-sm mb-4">
+							Ve Avoqado TPV en acción con una demostración personalizada
+						</p>
+						<a href="/#contact" class="inline-block px-6 py-3 bg-black text-white font-semibold rounded-full hover:bg-gray-900 transition-colors w-full">
+							Agendar
+						</a>
+					</div>
+				</div>
+
+				<!-- Trust Signals -->
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center text-white/90">
+					<div>
+						<div class="text-2xl font-bold mb-1">✓ Instalación en 24h</div>
+						<p class="text-sm text-white/70">Empieza a operar mañana mismo</p>
+					</div>
+					<div>
+						<div class="text-2xl font-bold mb-1">✓ Soporte 24/7</div>
+						<p class="text-sm text-white/70">Ayuda cuando la necesites</p>
+					</div>
+					<div>
+						<div class="text-2xl font-bold mb-1">✓ Sin contratos anuales</div>
+						<p class="text-sm text-white/70">Flexibilidad total</p>
+					</div>
+				</div>
 			</div>
 		</section>
 	</main>
