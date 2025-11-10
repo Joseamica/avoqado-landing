@@ -12,5 +12,11 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
 		return context.rewrite('/links');
 	}
 
+	// If accessing from tpv.avoqado.io subdomain, rewrite to /productos/tpv
+	if (hostname === 'tpv.avoqado.io' && url.pathname === '/') {
+		console.log('Rewriting tpv.avoqado.io to /productos/tpv');
+		return context.rewrite('/productos/tpv');
+	}
+
 	return next();
 };
