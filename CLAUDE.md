@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # Avoqado Landing Page
 
-Official marketing landing page for Avoqado (avoqado.io) - a restaurant management platform.
+Official marketing landing page for Avoqado (avoqado.io) - a multi-sector venue management platform for restaurants, hotels, gyms, retail, and entertainment businesses.
 
 ## Tech Stack
 

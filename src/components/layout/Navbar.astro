@@ -1,44 +1,84 @@
 ---
 import { Image } from 'astro:assets';
 import MobileMenu from '../interactive/MobileMenu';
+
+interface Props {
+	position?: 'fixed' | 'absolute';
+    transparentOnTop?: boolean;
+}
+
+const { position = 'fixed', transparentOnTop = false } = Astro.props;
+
+// Base classes that are always present
+const baseClasses = "top-0 left-0 right-0 z-50 transition-all duration-300";
+
+// Classes for the "solid/scrolled" state
+const solidClasses = "bg-[#0A0A0A] md:bg-black/80 md:backdrop-blur-md border-b border-gray-800";
+
+// Classes for the "transparent/top" state
+const transparentClasses = "bg-transparent border-transparent";
+
+// Initial class determination (server-side)
+// If transparentOnTop is true, start transparent (client script handles scroll)
+// If false, start solid.
+const initialClasses = transparentOnTop ? transparentClasses : solidClasses;
 ---
 
-<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0A] md:bg-black/80 md:backdrop-blur-md border-b border-gray-800">
+<nav 
+    id="main-navbar"
+    data-transparent-on-top={transparentOnTop.toString()}
+    class:list={[baseClasses, initialClasses, position, "group"]}
+>
 	<div class="mx-10 mx-auto px-4 sm:px-6 lg:px-8">
 		<div class="flex justify-between items-center h-16">
 			<!-- Logo -->
 			<div class="flex items-center">
 				<a href="/" class="flex items-center space-x-2 focus:outline-none">
-					<Image src="/imagotipo-white.png" alt="Avoqado Logo" class="h-10 w-auto" width={200} height={40} priority />
+					<Image 
+                        src="/imagotipo-white.png" 
+                        alt="Avoqado Logo" 
+                        class="h-10 w-auto group-[.white-nav]:hidden transition-all duration-300" 
+                        width={200} 
+                        height={40} 
+                        priority 
+                    />
+                    <Image 
+                        src="/imagotipo.png" 
+                        alt="Avoqado Logo" 
+                        class="h-10 w-auto hidden group-[.white-nav]:block transition-all duration-300" 
+                        width={200} 
+                        height={40} 
+                        priority 
+                    />
 				</a>
 			</div>
 
 			<!-- Desktop Navigation -->
 			<div class="hidden md:flex items-center gap-8">
-				<div class="flex items-center space-x-8">
+				<div id="nav-center-links" class="flex items-center space-x-8 transition-opacity duration-300">
+					<a href="/#industries" class="text-gray-300 hover:text-white transition-colors focus-visible:text-avoqado-green">
+						Tipos de negocios
+					</a>
 					<a href="/productos" class="text-gray-300 hover:text-white transition-colors focus-visible:text-avoqado-green">
 						Productos
 					</a>
-					<a href="/#features" class="text-gray-300 hover:text-white transition-colors focus-visible:text-avoqado-green">
-						Características
+					<a href="/#solutions" class="text-gray-300 hover:text-white transition-colors focus-visible:text-avoqado-green">
+						Soluciones
 					</a>
 					<a href="/#pricing" class="text-gray-300 hover:text-white transition-colors focus-visible:text-avoqado-green">
 						Precios
-					</a>
-					<a href="/#about" class="text-gray-300 hover:text-white transition-colors focus-visible:text-avoqado-green">
-						Nosotros
 					</a>
 				</div>
 				<div class="flex items-center gap-3">
 					<a
 						href="https://dashboard.avoqado.io"
-						class="px-5 py-2.5 border border-white/30 text-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all font-medium"
+						class="px-5 py-2.5 border border-white/30 text-white rounded-full hover:bg-white/10 hover:border-white/50 transition-all font-medium group-[.white-nav]:text-black group-[.white-nav]:border-black/30 group-[.white-nav]:hover:bg-black/10"
 					>
 						Iniciar sesión →
 					</a>
 					<a
-						href="/#contact"
-						class="px-5 py-2.5 bg-white text-black rounded-full hover:bg-gray-100 hover:scale-105 transition-all font-semibold shadow-lg"
+						href="/contact"
+						class="px-5 py-2.5 bg-white text-black rounded-full hover:bg-gray-100 hover:scale-105 transition-all font-semibold shadow-lg group-[.white-nav]:bg-black group-[.white-nav]:text-white group-[.white-nav]:hover:bg-gray-900"
 					>
 						Obtén demo
 					</a>
@@ -50,3 +90,75 @@ import MobileMenu from '../interactive/MobileMenu';
 		</div>
 	</div>
 </nav>
+
+<script>
+    const navbar = document.getElementById('main-navbar');
+    const navLinks = document.getElementById('nav-center-links');
+    
+    if (navbar && navbar.dataset.transparentOnTop === 'true') {
+        const solidClasses = ["bg-[#0A0A0A]", "md:bg-black/80", "md:backdrop-blur-md", "border-b", "border-gray-800"];
+        const transparentClasses = ["bg-transparent", "border-transparent"];
+        const whiteClasses = ["bg-white/90", "backdrop-blur-md", "border-b", "border-gray-200", "shadow-sm", "white-nav"];
+        
+        let isChatbotInView = false;
+        
+        // Setup Intersection Observer for the chatbot section if it exists
+        const chatbotSection = document.getElementById('chatbot-section');
+        if (chatbotSection) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                   isChatbotInView = entry.isIntersecting;
+                   updateNavbar();
+                });
+            }, { 
+                rootMargin: "-60px 0px 0px 0px", 
+                threshold: 0
+            });
+            observer.observe(chatbotSection);
+        }
+
+        const updateNavbar = () => {
+             // Reset unique classes first
+             navbar.classList.remove('white-nav');
+
+             if (isChatbotInView) {
+                 // Chatbot Section: White Background + Simplified (Hide Links)
+                 navbar.classList.remove('-translate-y-full', ...solidClasses, ...transparentClasses);
+                 navbar.classList.add(...whiteClasses);
+                 
+                 if (navLinks) {
+                    navLinks.classList.add('opacity-0', 'pointer-events-none');
+                    navLinks.classList.remove('opacity-100', 'pointer-events-auto');
+                 }
+             } else if (window.scrollY > 10) {
+                // Middle Scroll: Hidden
+                navbar.classList.remove(...transparentClasses, ...solidClasses, ...whiteClasses);
+                navbar.classList.add('-translate-y-full');
+                
+                if (navLinks) {
+                    navLinks.classList.remove('opacity-0', 'pointer-events-none');
+                    navLinks.classList.add('opacity-100', 'pointer-events-auto');
+                 }
+            } else {
+                // Top: Visible + Transparent + Full
+                navbar.classList.remove('-translate-y-full', ...solidClasses, ...whiteClasses);
+                navbar.classList.add(...transparentClasses);
+                
+                if (navLinks) {
+                    navLinks.classList.remove('opacity-0', 'pointer-events-none');
+                    navLinks.classList.add('opacity-100', 'pointer-events-auto');
+                 }
+            }
+        };
+
+        const handleScroll = () => {
+             updateNavbar();
+        };
+
+        // Run once on load
+        handleScroll();
+
+        // Listen for scroll
+        window.addEventListener('scroll', handleScroll, { passive: true });
+    }
+</script>

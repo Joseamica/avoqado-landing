@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/layout/Navbar.astro';
+import SquareHero from '../components/interactive/SquareHero';
+import IndustryAccordion from '../components/interactive/IndustryAccordion';
+import ChatbotCTA from '../components/interactive/ChatbotCTA';
+import Footer from '../components/layout/Footer.astro';
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Avoqado Scrollytelling Demo</title>
+        <link rel="icon" type="image/png" href="/favicon.png" />
+		<!-- Google Fonts - Diferentes estilos para cada industria -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Monoton&family=Black+Ops+One&family=Special+Elite&family=Bungee+Shade&display=swap" rel="stylesheet">
+	</head>
+	<body class="bg-black m-0 p-0 w-full overflow-x-hidden">
+		<Navbar position="fixed" transparentOnTop={true} />
+
+        <!-- PURE INTERACTIVE COMPONENT -->
+		<SquareHero client:load />
+	<!-- CHATBOT CTA SECTION -->
+		<div id="chatbot-section" class="chatbot-section-wrapper">
+			<ChatbotCTA client:visible />
+		</div>
+		<!-- INDUSTRY SECTION WITH SCROLL ANIMATION -->
+		<div class="industry-section-wrapper opacity-0 translate-y-20 transition-all duration-1000 ease-out" data-animate-on-scroll>
+			<IndustryAccordion client:visible />
+		</div>
+
+	
+
+		<Footer />
+
+		<script>
+			// Scroll animation with Intersection Observer
+			const observerOptions = {
+				threshold: 0.2,
+				rootMargin: '0px 0px -100px 0px'
+			};
+
+			const observer = new IntersectionObserver((entries) => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						entry.target.classList.remove('opacity-0', 'translate-y-20');
+						entry.target.classList.add('opacity-100', 'translate-y-0');
+					}
+				});
+			}, observerOptions);
+
+			// Observe all elements with data-animate-on-scroll
+			document.addEventListener('DOMContentLoaded', () => {
+				const animateElements = document.querySelectorAll('[data-animate-on-scroll]');
+				animateElements.forEach(el => observer.observe(el));
+			});
+		</script>
+	</body>
+</html>

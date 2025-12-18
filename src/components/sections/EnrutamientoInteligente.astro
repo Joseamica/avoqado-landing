@@ -1,218 +1,71 @@
 ---
-import Icon from '../ui/Icon.astro';
+import Button from '../ui/Button.astro';
 ---
 
-<section class="py-20 bg-gradient-to-br from-avoqado-dark-bg via-avoqado-dark-surface to-avoqado-dark-bg relative overflow-hidden">
-	<!-- Background decoration -->
-	<div class="absolute top-0 right-1/4 w-96 h-96 bg-avoqado-green rounded-full opacity-10 blur-3xl" aria-hidden="true"></div>
-	<div class="absolute bottom-0 left-1/4 w-96 h-96 bg-avoqado-orange rounded-full opacity-10 blur-3xl" aria-hidden="true"></div>
+<section class="py-24 bg-white relative overflow-hidden">
+    <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            
+            <!-- LEFT: TEXT CONTENT -->
+            <div class="space-y-8 order-2 lg:order-1">
+                <div class="inline-block px-4 py-1 rounded-full border border-gray-200 bg-gray-50 text-xs font-bold tracking-widest uppercase text-gray-500">
+                    Exclusivo de Avoqado
+                </div>
+                
+                <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight tracking-tight">
+                    Enrutamiento Inteligente <br/>
+                    <span class="text-gray-400">de tus pagos.</span>
+                </h2>
+                
+                <p class="text-xl text-gray-600 leading-relaxed max-w-lg">
+                    El único sistema que te permite decidir, transacción por transacción, qué procesador y qué cuenta bancaria recibe el dinero.
+                </p>
 
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-		<!-- Header -->
-		<div class="text-center mb-16">
-			<div class="inline-flex items-center gap-2 px-4 py-2 bg-avoqado-green/20 rounded-full text-avoqado-green text-sm font-semibold mb-4">
-				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 6h9m0 0l-3-3m3 3l-3 3"></path>
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h9m0 0l-3-3m3 3l-3 3"></path>
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 18h9m0 0l-3-3m3 3l-3 3"></path>
-				</svg>
-				<span>Flagship Feature</span>
-			</div>
-			<h2 class="text-4xl md:text-5xl font-bold mb-6">
-				<span class="text-white">Enrutamiento Inteligente</span><br/>
-				<span class="text-avoqado-green">de Pagos</span>
-			</h2>
-			<p class="text-xl text-gray-300 max-w-3xl mx-auto mb-4">
-				El único sistema que te da control total sobre <strong class="text-white">dónde cae cada peso</strong>. Nunca estés atado a un solo procesador.
-			</p>
-			<div class="inline-flex items-center gap-2 bg-avoqado-dark-surface px-6 py-3 rounded-full border border-avoqado-green/30">
-				<span class="text-avoqado-green font-bold">💳 Elige procesador</span>
-				<span class="text-gray-500">+</span>
-				<span class="text-avoqado-orange font-bold">🏦 Elige cuenta bancaria destino</span>
-			</div>
-		</div>
+                <ul class="space-y-4 mt-4">
+                    <li class="flex items-start gap-4">
+                        <div class="w-6 h-6 rounded-full bg-black flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <div>
+                            <strong class="block text-black text-lg">Modo Manual</strong>
+                            <span class="text-gray-500">Tu equipo elige la cuenta destino al cobrar.</span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="w-6 h-6 rounded-full bg-avoqado-green flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg class="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <div>
+                            <strong class="block text-black text-lg">Modo Automático (IA)</strong>
+                            <span class="text-gray-500">Reglas inteligentes para optimizar comisiones.</span>
+                        </div>
+                    </li>
+                </ul>
 
-		<!-- Two Modes: Manual vs Automático -->
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-			<!-- Modo Manual -->
-			<div class="bg-avoqado-dark-surface rounded-3xl p-8 border-2 border-avoqado-green/30 hover:border-avoqado-green transition-all shadow-xl">
-				<div class="flex items-center gap-4 mb-6">
-					<div class="w-16 h-16 bg-avoqado-green/10 border-2 border-avoqado-green/30 rounded-2xl flex items-center justify-center">
-						<svg class="w-8 h-8 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-						</svg>
-					</div>
-					<div>
-						<h3 class="text-2xl font-bold text-white">Modo Manual</h3>
-						<p class="text-avoqado-green text-sm">Poder de Decisión al Staff</p>
-					</div>
-				</div>
+                <div class="pt-6">
+                    <Button href="/#contact" variant="primary" class="bg-black text-white hover:bg-gray-800 border-none rounded-full px-8 py-4 text-lg">
+                        Conocer más
+                    </Button>
+                </div>
+            </div>
 
-				<p class="text-gray-300 mb-6 leading-relaxed">
-					Tu equipo ve en pantalla <strong class="text-white">todas las opciones disponibles</strong> y elige el procesador <strong class="text-white">Y la cuenta bancaria destino</strong> al momento de cobrar.
-				</p>
+            <!-- RIGHT: IMAGE / BANANA PRO PLACEHOLDER -->
+            <div class="relative order-1 lg:order-2">
+                <div class="aspect-square w-full bg-gray-100 rounded-3xl overflow-hidden relative flex items-center justify-center border border-gray-200">
+                    
+                    {/* Banana Pro Placeholder Info */}
+                    <div class="absolute inset-0 p-8 flex flex-col items-center justify-center text-center opacity-50 hover:opacity-100 transition-opacity">
+                         <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Banana Pro Image Prompt</p>
+                         <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 max-w-md mx-auto">
+                            <code class="text-sm font-mono text-gray-800 block whitespace-pre-wrap">Abstract 3D visualization of digital payment routing. A sleek, glowing stream of digital coins splitting into three distinct, secure paths (blue, green, orange) leading to different stylized bank vaults. Minimalist, white background, high-tech, clean lines, isometric view. 8k resolution.</code>
+                        </div>
+                    </div>
 
-				<div class="space-y-4">
-					<div class="flex items-start gap-3">
-						<Icon name="check" size="sm" class="text-avoqado-green mt-1 flex-shrink-0" />
-						<div>
-							<p class="text-white font-semibold">Decisión instantánea</p>
-							<p class="text-gray-400 text-sm">Según conveniencia del momento</p>
-						</div>
-					</div>
-					<div class="flex items-start gap-3">
-						<Icon name="check" size="sm" class="text-avoqado-green mt-1 flex-shrink-0" />
-						<div>
-							<p class="text-white font-semibold">Control total</p>
-							<p class="text-gray-400 text-sm">Tu staff sabe qué es mejor para cada situación</p>
-						</div>
-					</div>
-					<div class="flex items-start gap-3">
-						<Icon name="check" size="sm" class="text-avoqado-green mt-1 flex-shrink-0" />
-						<div>
-							<p class="text-white font-semibold">Flexibilidad máxima</p>
-							<p class="text-gray-400 text-sm">Cambia de procesador en cada transacción</p>
-						</div>
-					</div>
-				</div>
+                    {/* Temporary Placeholder Image (Unsplash) */}
+                     <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-20" alt="Placeholder" />
+                </div>
+            </div>
 
-				<!-- Visual Example -->
-				<div class="mt-6 p-4 bg-black/40 rounded-xl border border-avoqado-green/20">
-					<p class="text-xs text-gray-500 mb-3">Ejemplo en pantalla:</p>
-					<div class="space-y-3">
-						<div class="bg-avoqado-green/10 rounded border border-avoqado-green/30 p-3">
-							<div class="flex items-center justify-between mb-2">
-								<span class="text-white text-sm font-semibold">💳 Stripe (2.9% + $0.30)</span>
-								<span class="text-avoqado-green text-xs">● Disponible</span>
-							</div>
-							<div class="text-xs text-gray-400 pl-6">
-								→ 🏦 Cuenta Principal BBVA
-							</div>
-						</div>
-						<div class="bg-white/5 rounded border border-gray-700 p-3">
-							<div class="flex items-center justify-between mb-2">
-								<span class="text-white text-sm">💳 Clip (3.5%)</span>
-								<span class="text-gray-400 text-xs">● Disponible</span>
-							</div>
-							<div class="text-xs text-gray-400 pl-6">
-								→ 🏦 Cuenta Sucursal Norte
-							</div>
-						</div>
-						<div class="bg-white/5 rounded border border-gray-700 p-3">
-							<div class="flex items-center justify-between mb-2">
-								<span class="text-white text-sm">💳 Mercado Pago (3.2%)</span>
-								<span class="text-gray-400 text-xs">● Disponible</span>
-							</div>
-							<div class="text-xs text-gray-400 pl-6">
-								→ 🏦 Cuenta Reserva Impuestos
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Modo Automático -->
-			<div class="bg-avoqado-dark-surface rounded-3xl p-8 border-2 border-avoqado-orange/30 hover:border-avoqado-orange transition-all shadow-xl">
-				<div class="flex items-center gap-4 mb-6">
-					<div class="w-16 h-16 bg-avoqado-orange/10 border-2 border-avoqado-orange/30 rounded-2xl flex items-center justify-center">
-						<svg class="w-8 h-8 text-avoqado-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-						</svg>
-					</div>
-					<div>
-						<h3 class="text-2xl font-bold text-white">Modo Automático</h3>
-						<p class="text-avoqado-orange text-sm">Inteligencia Artificial Optimizando</p>
-					</div>
-				</div>
-
-				<p class="text-gray-300 mb-6 leading-relaxed">
-					El sistema decide <strong class="text-white">automáticamente</strong> procesador Y cuenta destino con reglas configurables que tú defines. Optimización sin esfuerzo.
-				</p>
-
-				<div class="space-y-4">
-					<div class="flex items-start gap-3">
-						<Icon name="lightning" size="sm" class="text-avoqado-orange mt-1 flex-shrink-0" />
-						<div>
-							<p class="text-white font-semibold">Por tipo de tarjeta</p>
-							<p class="text-gray-400 text-sm">American Express → Procesador con mejor tasa AMEX</p>
-						</div>
-					</div>
-					<div class="flex items-start gap-3">
-						<Icon name="lightning" size="sm" class="text-avoqado-orange mt-1 flex-shrink-0" />
-						<div>
-							<p class="text-white font-semibold">Por contexto operativo</p>
-							<p class="text-gray-400 text-sm">Horario pico → Cuenta principal alta capacidad</p>
-						</div>
-					</div>
-					<div class="flex items-start gap-3">
-						<Icon name="lightning" size="sm" class="text-avoqado-orange mt-1 flex-shrink-0" />
-						<div>
-							<p class="text-white font-semibold">Por capacidad y límites</p>
-							<p class="text-gray-400 text-sm">Auto-switch cuando alcanza 80% límite diario</p>
-						</div>
-					</div>
-				</div>
-
-				<!-- Visual Example -->
-				<div class="mt-6 p-4 bg-black/40 rounded-xl border border-avoqado-orange/20">
-					<p class="text-xs text-gray-500 mb-2">Reglas configuradas:</p>
-					<div class="space-y-2">
-						<div class="p-2 bg-avoqado-orange/10 rounded border border-avoqado-orange/30">
-							<p class="text-white text-sm">🔧 Si AMEX → Stripe + Cuenta Principal</p>
-							<p class="text-gray-400 text-xs">Mejor comisión + liquidez inmediata</p>
-						</div>
-						<div class="p-2 bg-avoqado-orange/10 rounded border border-avoqado-orange/30">
-							<p class="text-white text-sm">🔧 Si monto >$5,000 → Clip + Cuenta Impuestos</p>
-							<p class="text-gray-400 text-xs">Separa fondos para obligaciones fiscales</p>
-						</div>
-						<div class="p-2 bg-avoqado-orange/10 rounded border border-avoqado-orange/30">
-							<p class="text-white text-sm">🔧 Sucursal Norte → Mercado Pago + Cuenta Sucursal</p>
-							<p class="text-gray-400 text-xs">Cada sucursal a su propia cuenta</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Beneficio Clave -->
-		<div class="bg-linear-to-r from-avoqado-green/20 to-avoqado-orange/20 rounded-3xl p-8 md:p-12 border border-avoqado-green/30">
-			<h3 class="text-2xl md:text-3xl font-bold text-white mb-6 text-center">
-				El Beneficio Real
-			</h3>
-			<p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed text-center mb-8">
-				<strong class="text-white">Control total de procesador Y cuenta bancaria destino.</strong><br/>
-				Tu dinero fluye exactamente como <span class="text-avoqado-green">TÚ</span> decides.
-			</p>
-
-			<div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-				<div class="bg-avoqado-dark-surface/60 rounded-xl p-4 border border-avoqado-green/30">
-					<div class="w-10 h-10 bg-avoqado-green/10 border-2 border-avoqado-green/30 rounded-xl flex items-center justify-center mb-3">
-						<svg class="w-5 h-5 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-						</svg>
-					</div>
-					<h4 class="text-white font-semibold mb-1 text-sm">Multi-Sucursal</h4>
-					<p class="text-gray-400 text-xs">Cada sucursal a su propia cuenta bancaria</p>
-				</div>
-				<div class="bg-avoqado-dark-surface/60 rounded-xl p-4 border border-avoqado-green/30">
-					<div class="w-10 h-10 bg-avoqado-green/10 border-2 border-avoqado-green/30 rounded-xl flex items-center justify-center mb-3">
-						<svg class="w-5 h-5 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-						</svg>
-					</div>
-					<h4 class="text-white font-semibold mb-1 text-sm">Separación de Fondos</h4>
-					<p class="text-gray-400 text-xs">Operaciones, impuestos, ahorros automáticamente</p>
-				</div>
-				<div class="bg-avoqado-dark-surface/60 rounded-xl p-4 border border-avoqado-green/30">
-					<div class="w-10 h-10 bg-avoqado-green/10 border-2 border-avoqado-green/30 rounded-xl flex items-center justify-center mb-3">
-						<svg class="w-5 h-5 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-						</svg>
-					</div>
-					<h4 class="text-white font-semibold mb-1 text-sm">Multi-Negocio</h4>
-					<p class="text-gray-400 text-xs">Varios negocios, varias cuentas, una plataforma</p>
-				</div>
-			</div>
-		</div>
-	</div>
+        </div>
+    </div>
 </section>

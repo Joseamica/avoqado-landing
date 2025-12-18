@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 @import "tailwindcss";
 
 @font-face {
@@ -19,8 +19,8 @@
   --color-avoqado-dark-surface: #151515;
 
   /* Font Families */
-  --font-family-sans: 'Urbanist', system-ui, -apple-system, sans-serif;
-  --font-family-baby: 'BabyDoll', 'Urbanist', sans-serif;
+  --font-family-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-family-baby: 'BabyDoll', 'DM Sans', sans-serif;
 
   /* Custom Animations */
   --animate-fade-in: fade-in 0.6s ease-in-out;

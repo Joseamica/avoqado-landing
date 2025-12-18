@@ -1,0 +1,73 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import ContactSalesForm from '../components/forms/ContactSalesForm';
+import Footer from '../components/layout/Footer.astro';
+
+// Clean white layout
+---
+
+<Layout title="Contactar Ventas | Avoqado">
+  <main class="bg-black min-h-screen flex flex-col relative overflow-hidden">
+    
+    {/* Blue/Gradient bottom section to mimic Square's transition or just keep it simple? 
+        User asked for "Black Strip". Let's make the top black and maybe the bottom white?
+        Square usually has a split. Let's do a full black hero for now as requested "franja negra".
+    */}
+
+    {/* Header - White Text on Black */}
+    <header class="w-full border-b border-gray-800 bg-black/90 backdrop-blur-sm sticky top-0 z-50">
+        <div class="max-w-[1400px] mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="/" class="block hover:opacity-80 transition-opacity">
+                {/* Use white logo for black bg */}
+                <Image src="/imagotipo-white.png" alt="Avoqado" width={140} height={32} class="h-8 w-auto" />
+            </a>
+            <a href="/" class="text-sm font-medium text-gray-400 hover:text-white transition-colors">
+                ← Volver al inicio
+            </a>
+        </div>
+    </header>
+
+    <div class="flex-1 w-full max-w-[1400px] mx-auto px-6 py-12 md:py-20 lg:py-24 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
+            
+            {/* Left Column: Value Proposition - White Text */}
+            <div class="lg:col-span-5 flex flex-col justify-start pt-4">
+                <h1 class="text-5xl md:text-7xl font-medium tracking-tight text-white mb-8 leading-[1.1] font-baby">
+                    Hablemos de <br/>
+                    <span class="text-gray-400">tu negocio.</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-300 leading-relaxed mb-12 font-light">
+                    Descubre cómo Avoqado puede ayudarte a escalar operaciones, mejorar pagos y deleitar a tus clientes.
+                </p>
+
+                <div class="space-y-8 mt-12 hidden lg:block">
+                     <div>
+                        <h3 class="text-lg font-bold text-white mb-2">¿Ya eres cliente?</h3>
+                        <p class="text-gray-400 mb-2">Visita nuestro centro de ayuda o contacta a soporte.</p>
+                        <a href="#" class="text-avoqado-green font-bold hover:underline">Ir a Soporte →</a>
+                    </div>
+                </div>
+            </div>
+
+            {/* Right Column: Form - White Card */}
+            <div class="lg:col-span-6 lg:col-start-7">
+                <div class="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl">
+                    <ContactSalesForm client:load />
+                </div>
+                
+                 {/* Mobile only support link */}
+                 <div class="mt-12 pt-12 border-t border-gray-800 lg:hidden">
+                    <h3 class="text-lg font-bold text-white mb-2">¿Ya eres cliente?</h3>
+                    <p class="text-gray-400 mb-2">Visita nuestro centro de ayuda o contacta a soporte.</p>
+                    <a href="#" class="text-white font-bold hover:underline">Ir a Soporte →</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+  </main>
+  <Footer />
+</Layout>

@@ -6,10 +6,10 @@ export const prerender = false; // This ensures the endpoint is server-rendered
 export const POST: APIRoute = async ({ request }) => {
 	try {
 		const data = await request.json();
-		const { name, phone, email, restaurant } = data;
+		const { firstName, lastName, phone, email, companyName, employees, revenue } = data;
 
 		// Validate required fields
-		if (!name || !phone || !email || !restaurant) {
+		if (!firstName || !lastName || !phone || !email || !companyName) {
 			return new Response(
 				JSON.stringify({
 					success: false,
@@ -56,15 +56,17 @@ export const POST: APIRoute = async ({ request }) => {
 		await transporter.sendMail({
 			from: smtpUser,
 			to: 'hola@avoqado.io',
-			subject: `Nueva solicitud de demo - ${restaurant}`,
+			subject: `Nueva solicitud de demo - ${companyName}`,
 			html: `
-				<h2>Nueva solicitud de demo</h2>
-				<p><strong>Nombre:</strong> ${name}</p>
-				<p><strong>Teléfono:</strong> ${phone}</p>
+				<h2>Nueva solicitud de ventas</h2>
+				<p><strong>Nombre:</strong> ${firstName} ${lastName}</p>
 				<p><strong>Email:</strong> ${email}</p>
-				<p><strong>Restaurante:</strong> ${restaurant}</p>
+				<p><strong>Teléfono:</strong> ${phone}</p>
+				<p><strong>Empresa:</strong> ${companyName}</p>
+				<p><strong>Tamaño:</strong> ${employees}</p>
+				<p><strong>Ingresos:</strong> ${revenue}</p>
 				<hr>
-				<p><em>Enviado desde avoqado.io</em></p>
+				<p><em>Enviado desde avoqado.io/contact</em></p>
 			`,
 		});
 
@@ -72,12 +74,12 @@ export const POST: APIRoute = async ({ request }) => {
 		await transporter.sendMail({
 			from: smtpUser,
 			to: email,
-			subject: 'Solicitud de demo recibida - Avoqado',
+			subject: 'Solicitud de contacto recibida - Avoqado',
 			html: `
 				<h2>¡Gracias por tu interés en Avoqado!</h2>
-				<p>Hola ${name},</p>
-				<p>Hemos recibido tu solicitud de demo para <strong>${restaurant}</strong>.</p>
-				<p>Nuestro equipo se pondrá en contacto contigo en las próximas 24 horas.</p>
+				<p>Hola ${firstName},</p>
+				<p>Hemos recibido tu solicitud de información para <strong>${companyName}</strong>.</p>
+				<p>Nuestro equipo de ventas se pondrá en contacto contigo en las próximas 24 horas.</p>
 				<br>
 				<p>Saludos,<br>El equipo de Avoqado</p>
 				<hr>

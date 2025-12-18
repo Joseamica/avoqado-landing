@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+---
+
+<section class="relative h-screen w-full overflow-hidden bg-black text-white">
+    {/* Background - Simulating Square's Video Background */}
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div>
+        {/* Placeholder for Video/Image - Using a dark abstract background for now */}
+        <div class="w-full h-full bg-[url('https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center grayscale opacity-60"></div>
+    </div>
+
+    <div class="relative z-20 h-full max-w-[1400px] mx-auto px-6 flex flex-col justify-center items-start fade-in-up">
+        {/* Tagline */}
+        <span class="text-white/80 font-medium tracking-widest uppercase mb-6 text-xs md:text-sm">
+            Avoqado para Restaurantes
+        </span>
+        
+        {/* Headline */}
+        <h1 class="text-6xl md:text-8xl font-light tracking-tight mb-8 leading-[1] font-sans max-w-4xl">
+            El TPV que gestiona <br/>
+            tu restaurante.
+        </h1>
+        
+        {/* Subheadline */}
+        <p class="text-xl md:text-2xl text-white/90 leading-relaxed mb-10 font-light max-w-lg">
+            Olvídate de sistemas complejos. Cobra, gestiona mesas y modifica tu menú desde una sola terminal.
+        </p>
+
+        {/* Buttons */}
+        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <a href="/contact" class="bg-white text-black px-10 py-5 rounded-full font-bold text-lg hover:scale-105 transition-transform text-center min-w-[200px]">
+                Comenzar
+            </a>
+            <a href="/contact" class="bg-transparent border-2 border-white text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-white hover:text-black transition-colors text-center min-w-[200px]">
+                Contactar ventas
+            </a>
+        </div>
+
+        <p class="mt-8 text-xs text-white/60 font-light">
+            *Hardware incluido en planes Pro.
+        </p>
+    </div>
+</section>
+
+<style>
+    .fade-in-up {
+        animation: fadeInUp 1s ease-out forwards;
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

@@ -5,7 +5,7 @@ import Hero from '../components/sections/Hero.astro';
 import EnrutamientoInteligente from '../components/sections/EnrutamientoInteligente.astro';
 import ProblemSolution from '../components/sections/ProblemSolution.astro';
 import Features from '../components/sections/Features.astro';
-import MultiSector from '../components/sections/MultiSector.astro';
+import IndustryAccordion from '../components/interactive/IndustryAccordion';
 import SocialProof from '../components/sections/SocialProof.astro';
 import About from '../components/sections/About.astro';
 import Contact from '../components/sections/Contact.astro';
@@ -19,10 +19,10 @@ import Footer from '../components/layout/Footer.astro';
 	</div>
 	<Navbar />
 	<main>
-		<!-- 1. Hero Section -->
+		<!-- 1. Hero Section (Interactive Scroll) -->
 		<Hero />
 
-		<!-- 2. Enrutamiento Inteligente - Flagship Feature -->
+		<!-- 2. EnrutamientoInteligente - Flagship Feature -->
 		<EnrutamientoInteligente />
 
 		<!-- 3. Problem/Solution -->
@@ -31,8 +31,9 @@ import Footer from '../components/layout/Footer.astro';
 		<!-- 4. Features - 8 Diferenciadores Únicos -->
 		<Features />
 
-		<!-- 5. Multi-Sector -->
-		<MultiSector />
+		<!-- 5. Multi-Sector (Replaced with Interactive Accordion) -->
+		<IndustryAccordion client:visible />
+
 
 		<!-- 6. Early Access / Social Proof -->
 		<SocialProof />

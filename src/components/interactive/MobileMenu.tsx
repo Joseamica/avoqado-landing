@@ -31,10 +31,10 @@ export default function MobileMenu() {
 	const closeMenu = () => setIsOpen(false);
 
 	const navLinks = [
+		{ href: '/#industries', label: 'Tipos de negocios' },
 		{ href: '/productos', label: 'Productos' },
-		{ href: '/#features', label: 'Características' },
+		{ href: '/#solutions', label: 'Soluciones' },
 		{ href: '/#pricing', label: 'Precios' },
-		{ href: '/#about', label: 'Nosotros' },
 	];
 
 	return (

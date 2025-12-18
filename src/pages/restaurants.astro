@@ -1,0 +1,115 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/layout/Footer.astro';
+import Navbar from '../components/layout/Navbar.astro';
+import RestaurantHero from '../components/sections/RestaurantHero.astro';
+import RestaurantFeatures from '../components/interactive/RestaurantFeatures';
+import MobileMenu from '../components/interactive/MobileMenu';
+---
+
+<Layout title="Avoqado para Restaurantes | El TPV todo en uno">
+  <body class="bg-black min-h-screen">
+    
+    <Navbar position="fixed" transparentOnTop={true} />
+
+    {/* Hero Section */}
+    <RestaurantHero />
+
+    {/* Features Section */}
+    <div class="opacity-0 translate-y-20 transition-all duration-1000 ease-out" data-animate-on-scroll>
+        <section id="features" class="py-24 px-6 max-w-[1400px] mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-light text-white mb-6 font-sans">
+                    Todo lo que necesitas. <br/>
+                    <span class="text-gray-500">En un solo dispositivo.</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+                    Avoqado reemplaza la caja registradora, la impresora y el datáfono con una solución elegante y potente.
+                </p>
+            </div>
+            
+            <RestaurantFeatures client:visible />
+        </section>
+    </div>
+
+    {/* Hardware Spotlight - Dark Theme matching Square */}
+    <div class="opacity-0 translate-y-20 transition-all duration-1000 ease-out" data-animate-on-scroll>
+        <section class="py-32 bg-[#111] text-white">
+            <div class="max-w-[1400px] mx-auto px-6">
+                <div class="mb-20 text-center md:text-left">
+                    <h2 class="text-5xl md:text-6xl font-light mb-6 font-sans tracking-tight">Hardware para <br/> cada concepto.</h2>
+                    <p class="text-xl text-gray-400 max-w-2xl font-light">
+                        Desde cafeterías hasta alta cocina. Equipos diseñados para resistir el ritmo de tu cocina.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {/* Card 1: Main TPV */}
+                    <div class="group relative h-[500px] bg-black rounded-3xl border border-gray-800 overflow-hidden hover:border-white transition-colors duration-300">
+                        <div class="p-8 relative z-10">
+                            <h3 class="text-2xl font-medium mb-2">Avoqado TPV</h3>
+                            <p class="text-gray-400 font-light">La potencia de un servidor en tu mostrador.</p>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
+                        {/* Simulated Image */}
+                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-3/4 bg-gray-800 rounded-t-2xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                    </div>
+
+                    {/* Card 2: Handheld */}
+                    <div class="group relative h-[500px] bg-black rounded-3xl border border-gray-800 overflow-hidden hover:border-white transition-colors duration-300">
+                        <div class="p-8 relative z-10">
+                            <h3 class="text-2xl font-medium mb-2">Avoqado Go</h3>
+                            <p class="text-gray-400 font-light">Toma pedidos en la mesa y cobra al instante.</p>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
+                         {/* Simulated Image */}
+                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-2/3 bg-gray-800 rounded-t-2xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                    </div>
+
+                     {/* Card 3: Kitchen Display */}
+                     <div class="group relative h-[500px] bg-black rounded-3xl border border-gray-800 overflow-hidden hover:border-white transition-colors duration-300">
+                        <div class="p-8 relative z-10">
+                            <h3 class="text-2xl font-medium mb-2">KDS Cocina</h3>
+                            <p class="text-gray-400 font-light">Sincroniza sala y cocina sin gritos ni papel.</p>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
+                         {/* Simulated Image */}
+                        <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gray-800 rounded-t-none opacity-40 group-hover:opacity-70 transition-opacity flex items-center justify-center border-t border-gray-700">
+                           <span class="text-gray-500 text-xs tracking-widest uppercase">Coming Soon</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16 text-center md:text-left">
+                    <a href="/shop" class="text-lg font-bold underline hover:text-gray-300 transition-colors">Ver todos los dispositivos →</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <Footer />
+
+    <script>
+        // Scroll animation with Intersection Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('opacity-0', 'translate-y-20');
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements with data-animate-on-scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const animateElements = document.querySelectorAll('[data-animate-on-scroll]');
+            animateElements.forEach(el => observer.observe(el));
+        });
+    </script>
+  </body>
+</Layout>
