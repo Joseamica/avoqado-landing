@@ -81,7 +81,7 @@ export default function IndustryAccordion() {
 
   return (
     <section 
-        className="relative w-full bg-white py-20 px-4 md:px-10 overflow-hidden cursor-none"
+        className="relative w-full py-20 px-4 md:px-10 overflow-hidden cursor-none"
         ref={containerRef}
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHoveringSection(true)}
@@ -92,8 +92,8 @@ export default function IndustryAccordion() {
     >
       <div className="max-w-7xl mx-auto">
         <div className="mb-12">
-            <p className="!text-black text-sm tracking-widest uppercase mb-2 font-medium">Construido para Cada Industria</p>
-            <h2 className="!text-black text-5xl md:text-6xl font-thin leading-tight">
+            <p className="!text-white text-sm tracking-widest uppercase mb-2 font-medium">Construido para Cada Industria</p>
+            <h2 className="!text-white text-5xl md:text-6xl font-thin leading-tight">
                 Mantén tu negocio <br/> creciendo
             </h2>
         </div>

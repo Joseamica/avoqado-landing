@@ -50,7 +50,7 @@ export default function ChatbotCTA() {
           
           {/* Title Section */}
           <motion.div style={{ opacity: titleOpacity, y: titleY }} className="space-y-4">
-            <h2 className="text-4xl md:text-6xl font-baby text-white max-w-xl leading-tight mx-auto">
+            <h2 className="text-4xl md:text-6xl  text-white max-w-xl leading-tight mx-auto">
               Pregúntale a tu negocio <span className="text-avoqado-green">lo que sea.</span>
             </h2>
             <p className="text-gray-400 text-lg md:text-xl font-urbanist max-w-lg mx-auto">

@@ -6,7 +6,10 @@
       "Bash(else echo \"No files to move\")",
       "Bash(fi)",
       "Bash(xargs cat:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "WebSearch",
+      "Bash(cat:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []
