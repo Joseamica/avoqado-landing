@@ -233,6 +233,20 @@ const localFAQ: { keywords: string[], answer: string }[] = [
   {
     keywords: ['adios', 'adiós', 'bye', 'chao', 'hasta luego', 'nos vemos'],
     answer: '¡Hasta pronto! 👋 Si necesitas más ayuda, estaré aquí. También puedes visitar avoqado.io o contactar a nuestro equipo directamente. ¡Éxito con tu negocio!'
+  },
+
+  // ===== ACCESO ANTICIPADO / EARLY ACCESS =====
+  {
+    keywords: ['acceso anticipado', 'early access', 'lugares', 'spots', 'fundador', 'fundadores', 'primeros 100', 'reservar lugar'],
+    answer: '🚀 ¡Tenemos Acceso Anticipado! Solo quedan ~50 lugares de los 100 disponibles. Los beneficios incluyen: \n• **Co-crear el producto** - 100% de features priorizadas por usuarios\n• **Soporte VIP** - Canal directo vía Slack, <2h respuesta\n• **Pricing Fundador** - 50% descuento permanente de por vida\n• **Features a medida** - Personalizaciones sin costo\n\n¿Te interesa? Puedes registrarte directamente en la sección "Sé parte del futuro" de nuestra página.'
+  },
+  {
+    keywords: ['descuento', 'oferta', 'promoción', 'promocion', 'beneficios', 'ventajas'],
+    answer: '¡Tenemos algo especial! 🎉 Nuestro programa de Acceso Anticipado ofrece **50% de descuento permanente** para los primeros 100 negocios. También incluye soporte VIP, co-creación del producto, y features personalizadas. Solo quedan ~50 lugares.'
+  },
+  {
+    keywords: ['registrar', 'registrarse', 'inscribir', 'unirse', 'apuntar'],
+    answer: 'Puedes registrarte de dos formas: 1) En la sección "Sé parte del futuro" al final de avoqado.io, 2) En dashboardv2.avoqado.io/signup. Si quieres ser parte del programa de Acceso Anticipado, ¡date prisa! Solo quedan ~50 lugares con 50% de descuento permanente. 🚀'
   }
 ];
 
@@ -250,6 +264,16 @@ INFORMACIÓN CLAVE DE AVOQADO:
 - Precios: avoqado.io/pricing (calculadora interactiva)
 - Seguridad: Encriptación bancaria, PCI-DSS
 
+PROGRAMA DE ACCESO ANTICIPADO (MUY IMPORTANTE):
+- Solo 100 lugares disponibles, quedan aproximadamente 50
+- Beneficios exclusivos para fundadores:
+  • Co-crear el producto: 100% de las features son priorizadas por usuarios fundadores
+  • Soporte VIP: Canal directo de Slack con el equipo, tiempo de respuesta menor a 2 horas
+  • Pricing Fundador: 50% de descuento PERMANENTE de por vida
+  • Features a medida: Desarrollamos funcionalidades específicas para tu negocio sin costo adicional
+- Sin costo ni compromiso para registrarse
+- Los usuarios pueden reservar su lugar en la sección "Sé parte del futuro" de avoqado.io
+
 COMISIONES POR SECTOR:
 - Restaurantes/Bares: Crédito 2.50%, Débito 1.88%
 - Retail/Tiendas: Crédito 1.73%, Débito 1.35%
@@ -264,6 +288,7 @@ REGLAS:
 4. Usa español informal pero profesional
 5. Siempre menciona avoqado.io/pricing para cálculos exactos
 6. NO menciones detalles internos como márgenes o porcentajes adicionales
+7. Si mencionan interés en unirse/probar, menciona el programa de Acceso Anticipado con sus beneficios
 `;
 
 // Simple fuzzy matching function (skip if in pricing context)

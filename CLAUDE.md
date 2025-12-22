@@ -175,6 +175,84 @@ src/assets/hero/
 
 When adding new images, follow this pattern and create subdirectories as needed.
 
+## Scrollytelling Animation Pattern
+
+**CRITICAL:** When creating scroll-linked animations, follow this exact pattern used throughout the landing page.
+
+### Required Structure
+
+```tsx
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+
+export default function ScrollytellingComponent() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // 1. Setup scroll tracking
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]  // IMPORTANT: This exact offset
+  });
+
+  // 2. Create transforms linked to scroll progress (0 to 1)
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
+  const titleY = useTransform(scrollYProgress, [0, 0.15], [50, 0]);
+
+  // Staggered animations for multiple items
+  const card0Y = useTransform(scrollYProgress, [0.2, 0.35], [80, 0]);
+  const card1Y = useTransform(scrollYProgress, [0.25, 0.4], [80, 0]);
+  const card2Y = useTransform(scrollYProgress, [0.3, 0.45], [80, 0]);
+
+  return (
+    // 3. TALL container (150vh-200vh) for scroll space
+    <div ref={containerRef} className="relative h-[180vh] bg-black z-0">
+
+      {/* 4. STICKY viewport that stays in view while scrolling */}
+      <div className="sticky top-0 h-screen overflow-hidden flex items-center">
+
+        {/* 5. Animated content using style prop with transforms */}
+        <motion.div style={{ opacity: titleOpacity, y: titleY }}>
+          <h2>Title animates on scroll</h2>
+        </motion.div>
+
+        {cards.map((card, i) => (
+          <motion.div
+            key={i}
+            style={{ y: cardTransforms[i].y, opacity: cardTransforms[i].opacity }}
+          >
+            {card.content}
+          </motion.div>
+        ))}
+
+      </div>
+    </div>
+  );
+}
+```
+
+### Key Rules
+
+1. **Container height**: Must be tall (`h-[150vh]` to `h-[200vh]`) to provide scroll space
+2. **Sticky inner div**: `sticky top-0 h-screen` keeps content visible while scrolling
+3. **useScroll offset**: Always use `["start start", "end end"]` for predictable behavior
+4. **useTransform ranges**: Map scroll progress (0-1) to animation values
+5. **Stagger animations**: Offset the scroll ranges for sequential reveals (e.g., 0.2-0.35, 0.25-0.4, 0.3-0.45)
+
+### Examples in Codebase
+
+- `SquareHero.tsx` - Hero with grid animation
+- `ChatbotCTA.tsx` - Input expansion animation
+- `PaymentRouting.tsx` - Product grid with connections
+- `UnifiedPlatform.tsx` - Radial diagram with electric flow
+- `EarlyAccessCTA.tsx` - Staggered card reveals
+
+### Common Mistakes
+
+**DON'T** use `whileInView` for scroll-linked animations - it only triggers once
+**DON'T** use `min-h-screen` - not enough scroll space for animations
+**DON'T** forget the `sticky` class on the inner viewport
+**DON'T** use `offset: ["start end", "end start"]` - this tracks viewport entry/exit, not scroll-through
+
 ## Performance & Bundle Size
 
 - Use `client:visible` for most React components (loads when entering viewport)

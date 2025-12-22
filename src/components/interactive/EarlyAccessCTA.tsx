@@ -1,165 +1,159 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
+
+const AnimatedCounter: React.FC<{ value: number; className?: string }> = ({ value, className }) => {
+  const motionValue = useMotionValue(0);
+  const springValue = useSpring(motionValue, { stiffness: 100, damping: 30 });
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => { motionValue.set(value); }, [value, motionValue]);
+  useEffect(() => {
+    const unsubscribe = springValue.on("change", (v) => setDisplayValue(Math.round(v)));
+    return () => unsubscribe();
+  }, [springValue]);
+
+  return <span className={className}>{displayValue}</span>;
+};
 
 export const EarlyAccessCTA: React.FC = () => {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [hasTriggered, setHasTriggered] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const ACTUAL_SPOTS_LEFT = 47;
+  const SPOTS_TAKEN = 100 - ACTUAL_SPOTS_LEFT;
+
+  const [animatedSpotsLeft, setAnimatedSpotsLeft] = useState(0);
+  const [animatedSpotsTaken, setAnimatedSpotsTaken] = useState(0);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
+      if (latest > 0.15 && !hasTriggered) {
+        setHasTriggered(true);
+        setAnimatedSpotsLeft(ACTUAL_SPOTS_LEFT);
+        setAnimatedSpotsTaken(SPOTS_TAKEN);
+      }
+    });
+    return () => unsubscribe();
+  }, [scrollYProgress, hasTriggered]);
+
+  const titleOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
+  const titleY = useTransform(scrollYProgress, [0.05, 0.15], [40, 0]);
+  const counterOpacity = useTransform(scrollYProgress, [0.12, 0.22], [0, 1]);
+  const benefitsOpacity = useTransform(scrollYProgress, [0.22, 0.32], [0, 1]);
+  const formOpacity = useTransform(scrollYProgress, [0.38, 0.48], [0, 1]);
+  const footerOpacity = useTransform(scrollYProgress, [0.48, 0.55], [0, 1]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    // Simulación - aquí irías a tu endpoint real
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
+    await new Promise(resolve => setTimeout(resolve, 1500));
     setSubmitted(true);
     setIsSubmitting(false);
     setEmail('');
+    setAnimatedSpotsLeft(prev => Math.max(1, prev - 1));
+    setAnimatedSpotsTaken(prev => Math.min(99, prev + 1));
   };
 
+  const benefits = [
+    { stat: "100%", label: "Features priorizadas por ti" },
+    { stat: "<2h", label: "Tiempo de respuesta VIP" },
+    { stat: "50%", label: "Descuento de por vida" },
+    { stat: "∞", label: "Personalizaciones incluidas" },
+  ];
+
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-6 py-32" style={{ backgroundColor: '#000000' }}>
-      <div className="max-w-4xl w-full">
-        {/* Main Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20"
-        >
-          <h2
-            className="text-6xl md:text-8xl font-bold mb-8"
-            style={{
-              color: '#ffffff',
-              lineHeight: '1.05',
-              letterSpacing: '-0.02em'
-            }}
+    <div ref={containerRef} className="relative h-[250vh] bg-white">
+      <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
+        <div className="relative px-6 w-full max-w-4xl mx-auto text-center">
+          
+          {/* Heading */}
+          <motion.div className="mb-16" style={{ opacity: titleOpacity, y: titleY }}>
+            <h2 className="text-4xl md:text-6xl font-bold text-black mb-4">
+              Sé parte del futuro
+            </h2>
+            <p className="text-lg text-gray-500">
+              Únete a los primeros 100 fundadores
+            </p>
+          </motion.div>
+
+          {/* Big Counter */}
+          <motion.div className="mb-16" style={{ opacity: counterOpacity }}>
+            <AnimatedCounter 
+              value={animatedSpotsLeft} 
+              className="text-[120px] md:text-[180px] font-bold text-black leading-none" 
+            />
+            <p className="text-xl text-gray-400 mt-2">lugares disponibles</p>
+          </motion.div>
+
+          {/* Benefits Grid - Clean 4 columns */}
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-16 max-w-3xl mx-auto"
+            style={{ opacity: benefitsOpacity }}
           >
-            Acceso anticipado
-          </h2>
-          <p
-            className="text-2xl md:text-3xl max-w-2xl mx-auto"
-            style={{
-              color: '#86868b',
-              lineHeight: '1.4',
-              fontWeight: '400'
-            }}
-          >
-            Únete a los primeros 100 negocios que darán forma al futuro de Avoqado
-          </p>
-        </motion.div>
-
-        {/* Benefits List - Clean Typography */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-20"
-        >
-          <div className="space-y-8 max-w-2xl mx-auto">
-            <div className="border-t" style={{ borderColor: '#1d1d1f' }} />
-
-            <div className="py-6">
-              <h3 className="text-xl font-semibold mb-3" style={{ color: '#ffffff' }}>
-                Influencia directa en el producto
-              </h3>
-              <p className="text-lg" style={{ color: '#86868b' }}>
-                Tu feedback ayuda a definir las funcionalidades que construimos
-              </p>
-            </div>
-
-            <div className="border-t" style={{ borderColor: '#1d1d1f' }} />
-
-            <div className="py-6">
-              <h3 className="text-xl font-semibold mb-3" style={{ color: '#ffffff' }}>
-                Soporte prioritario
-              </h3>
-              <p className="text-lg" style={{ color: '#86868b' }}>
-                Atención personalizada con canal directo a nuestro equipo
-              </p>
-            </div>
-
-            <div className="border-t" style={{ borderColor: '#1d1d1f' }} />
-
-            <div className="py-6">
-              <h3 className="text-xl font-semibold mb-3" style={{ color: '#ffffff' }}>
-                Funcionalidades a medida
-              </h3>
-              <p className="text-lg" style={{ color: '#86868b' }}>
-                Desarrollamos features específicas para tu negocio sin costo adicional
-              </p>
-            </div>
-
-            <div className="border-t" style={{ borderColor: '#1d1d1f' }} />
-          </div>
-        </motion.div>
-
-        {/* Email Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="max-w-2xl mx-auto"
-        >
-          {submitted ? (
-            <div className="text-center py-12">
-              <h3 className="text-3xl font-semibold mb-4" style={{ color: '#ffffff' }}>
-                Solicitud recibida
-              </h3>
-              <p className="text-xl" style={{ color: '#86868b' }}>
-                Te contactaremos pronto con más detalles
-              </p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="tu@email.com"
-                  required
-                  className="flex-1 px-5 py-4 rounded-xl text-base outline-none transition-all duration-200"
-                  style={{
-                    backgroundColor: '#1d1d1f',
-                    color: '#ffffff',
-                    border: '1px solid #2d2d2f',
-                  }}
-                  onFocus={(e) => e.target.style.borderColor = '#3d3d3f'}
-                  onBlur={(e) => e.target.style.borderColor = '#2d2d2f'}
-                />
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-8 py-4 rounded-xl text-base font-medium transition-all duration-150 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{
-                    backgroundColor: '#ffffff',
-                    color: '#000000',
-                  }}
-                >
-                  {isSubmitting ? 'Enviando...' : 'Solicitar acceso'}
-                </button>
+            {benefits.map((b, i) => (
+              <div key={i} className="text-center">
+                <p className="text-3xl md:text-4xl font-bold text-black mb-2">{b.stat}</p>
+                <p className="text-sm text-gray-500 leading-tight">{b.label}</p>
               </div>
-            </form>
-          )}
-        </motion.div>
+            ))}
+          </motion.div>
 
-        {/* Footer Note */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="text-center mt-16"
-        >
-          <p className="text-sm" style={{ color: '#555555' }}>
-            Sin costo ni compromiso
-          </p>
-        </motion.div>
+          {/* Form */}
+          <motion.div className="max-w-md mx-auto" style={{ opacity: formOpacity }}>
+            <AnimatePresence mode="wait">
+              {submitted ? (
+                <motion.div
+                  key="success"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="py-8"
+                >
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-avoqado-green flex items-center justify-center">
+                    <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <p className="text-xl font-semibold text-black">¡Bienvenido al equipo!</p>
+                </motion.div>
+              ) : (
+                <motion.form key="form" onSubmit={handleSubmit} className="space-y-4">
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="tu@email.com"
+                      required
+                      className="flex-1 px-6 py-4 text-lg border-2 border-gray-200 rounded-full focus:border-black bg-white text-black"
+                      style={{ outline: 'none', boxShadow: 'none', borderRadius: '9999px' }}
+                    />
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="px-8 py-4 rounded-full font-semibold bg-black text-white hover:bg-gray-800 transition-colors disabled:opacity-50"
+                    >
+                      {isSubmitting ? '...' : 'Reservar'}
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-400">Sin costo · Sin compromiso</p>
+                </motion.form>
+              )}
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Footer */}
+          <motion.p className="mt-12 text-sm text-gray-400" style={{ opacity: footerOpacity }}>
+            <span className="text-black font-medium">+<AnimatedCounter value={animatedSpotsTaken} /> negocios</span> ya reservaron
+          </motion.p>
+        </div>
       </div>
     </div>
   );

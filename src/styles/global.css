@@ -81,6 +81,12 @@ body {
   background-color: var(--color-avoqado-dark-bg);
 }
 
+/* Mobile menu solid background */
+.mobile-menu-panel {
+  background-color: #000000 !important;
+  background: #000000 !important;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   /* color controlled by Tailwind classes (text-white, text-black, etc.) */
