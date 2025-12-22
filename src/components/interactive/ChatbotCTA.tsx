@@ -40,8 +40,8 @@ export default function ChatbotCTA() {
   };
 
   return (
-    <div ref={containerRef} className="relative h-[200vh] bg-black">
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
+    <div ref={containerRef} className="relative h-[200vh] bg-black z-0">
+      <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-4 overflow-hidden z-10">
         
         {/* Background decorations - REMOVED for pure black */}
         {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] h-[150vw] bg-avoqado-green/5 rounded-full blur-3xl pointer-events-none" /> */}

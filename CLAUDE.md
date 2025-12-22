@@ -108,6 +108,14 @@ import HeroCarousel from '../components/interactive/HeroCarousel.tsx'
 
 ## Critical Development Practices
 
+### 0. No Emojis
+
+**NEVER use emojis in code, UI, or content.** Keep the design clean and professional.
+
+- No emojis in component text, labels, or buttons
+- No emojis in comments or documentation
+- Use icons (SVG/Lucide) instead when visual indicators are needed
+
 ### 1. Show, Don't Tell - Visual Design Options
 
 **CRITICAL:** When the user requests design changes or doesn't like something, ALWAYS implement visual alternatives instead of describing options.

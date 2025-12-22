@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import CookieConsent from '../components/interactive/CookieConsent';
+import WhatsAppButton from '../components/interactive/WhatsAppButton';
 import SEO from '../components/layout/SEO.astro';
 import StructuredData from '../components/layout/StructuredData.astro';
 
@@ -43,6 +44,7 @@ const {
 	</head>
 	<body class="antialiased overflow-x-hidden">
 		<slot />
+		<WhatsAppButton client:idle />
 		<CookieConsent client:idle />
 	</body>
 </html>

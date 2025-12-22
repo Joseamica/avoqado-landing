@@ -10,7 +10,7 @@ interface Props {
 const { position = 'fixed', transparentOnTop = false } = Astro.props;
 
 // Base classes that are always present
-const baseClasses = "top-0 left-0 right-0 z-50 transition-all duration-300";
+const baseClasses = "top-0 left-0 right-0 z-[60] transition-all duration-300";
 
 // Classes for the "solid/scrolled" state
 const solidClasses = "bg-[#0A0A0A] md:bg-black/80 md:backdrop-blur-md border-b border-gray-800";
@@ -55,20 +55,54 @@ const initialClasses = transparentOnTop ? transparentClasses : solidClasses;
 
 			<!-- Desktop Navigation -->
 			<div class="hidden md:flex items-center gap-8">
-				<!-- <div id="nav-center-links" class="flex items-center space-x-8 transition-opacity duration-300">
-					<a href="/#industries" class="text-gray-300 hover:text-white transition-colors focus-visible:text-avoqado-green">
-						Tipos de negocios
-					</a>
-					<a href="/productos" class="text-gray-300 hover:text-white transition-colors focus-visible:text-avoqado-green">
+				<div id="nav-center-links" class="flex items-center space-x-8 transition-opacity duration-300">
+				<div id="mega-menu-trigger" class="relative group/menu">
+						<!-- Trigger with extended hover area -->
+						<button class="text-gray-300 hover:text-white group-hover/menu:text-white group-[.white-nav]:text-gray-700 group-[.white-nav]:hover:text-black transition-colors focus-visible:text-avoqado-green flex items-center cursor-pointer py-5">
+							Tipos de negocios
+							<svg class="w-3 h-3 ml-1 transition-transform group-hover/menu:rotate-180" style="width: 12px; height: 12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+						</button>
+						
+						<!-- Invisible bridge to prevent hover gap -->
+						<div class="absolute left-0 w-full h-4 top-full"></div>
+						
+						<!-- Mega Menu Dropdown -->
+						<div class="fixed top-16 left-0 w-full bg-white text-black origin-top scale-y-0 group-hover/menu:scale-y-100 transition-transform duration-300 ease-out border-b border-gray-100 shadow-xl z-50">
+							<div class="max-w-7xl mx-auto px-10 sm:px-12 lg:px-14 py-12">
+								<div class="flex flex-col items-start gap-4">
+									<a href="/restaurants" class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 hover:from-avoqado-green hover:to-green-600 transition-all duration-300">
+										Alimentos y bebidas
+									</a>
+									<a href="/retail" class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 hover:from-avoqado-green hover:to-green-600 transition-all duration-300">
+										Tienda
+									</a>
+									<a href="/beauty" class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 hover:from-avoqado-green hover:to-green-600 transition-all duration-300">
+										Belleza
+									</a>
+									<a href="/services" class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 hover:from-avoqado-green hover:to-green-600 transition-all duration-300">
+										Servicios
+									</a>
+									
+									<div class="h-px w-32 bg-gray-200 my-2"></div>
+									
+									<a href="/#industries" class="text-base font-medium text-gray-500 hover:text-black transition-colors flex items-center group/link">
+										Todos los tipos de negocio
+										<svg class="w-4 h-4 ml-1 transform group-hover/link:translate-x-1 transition-transform" style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<a href="/productos" class="text-gray-300 hover:text-white group-[.white-nav]:text-gray-700 group-[.white-nav]:hover:text-black transition-colors focus-visible:text-avoqado-green">
 						Productos
 					</a>
-					<a href="/#solutions" class="text-gray-300 hover:text-white transition-colors focus-visible:text-avoqado-green">
+					<a href="/#solutions" class="text-gray-300 hover:text-white group-[.white-nav]:text-gray-700 group-[.white-nav]:hover:text-black transition-colors focus-visible:text-avoqado-green">
 						Soluciones
 					</a>
-					<a href="/#pricing" class="text-gray-300 hover:text-white transition-colors focus-visible:text-avoqado-green">
+					<a href="/pricing" class="text-gray-300 hover:text-white group-[.white-nav]:text-gray-700 group-[.white-nav]:hover:text-black transition-colors focus-visible:text-avoqado-green">
 						Precios
 					</a>
-				</div> -->
+				</div>
 				<div class="flex items-center gap-3">
 					<a
 						href="https://dashboard.avoqado.io"
@@ -94,71 +128,55 @@ const initialClasses = transparentOnTop ? transparentClasses : solidClasses;
 <script>
     const navbar = document.getElementById('main-navbar');
     const navLinks = document.getElementById('nav-center-links');
-    
+    const megaMenuTrigger = document.getElementById('mega-menu-trigger');
+
     if (navbar && navbar.dataset.transparentOnTop === 'true') {
-        const solidClasses = ["bg-[#0A0A0A]", "md:bg-black/80", "md:backdrop-blur-md", "border-b", "border-gray-800"];
         const transparentClasses = ["bg-transparent", "border-transparent"];
-        const whiteClasses = ["bg-white/90", "backdrop-blur-md", "border-b", "border-gray-200", "shadow-sm", "white-nav"];
-        
-        let isChatbotInView = false;
-        
-        // Setup Intersection Observer for the chatbot section if it exists
-        const chatbotSection = document.getElementById('chatbot-section');
-        if (chatbotSection) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                   isChatbotInView = entry.isIntersecting;
-                   updateNavbar();
-                });
-            }, { 
-                rootMargin: "-60px 0px 0px 0px", 
-                threshold: 0
-            });
-            observer.observe(chatbotSection);
-        }
+        const whiteClasses = ["bg-white/95", "backdrop-blur-md", "border-b", "border-gray-200", "shadow-sm", "white-nav"];
+
+        let isMegaMenuOpen = false;
 
         const updateNavbar = () => {
-             // Reset unique classes first
              navbar.classList.remove('white-nav');
 
-             if (isChatbotInView) {
-                 // Chatbot Section: White Background + Simplified (Hide Links)
-                 navbar.classList.remove('-translate-y-full', ...solidClasses, ...transparentClasses);
-                 navbar.classList.add(...whiteClasses);
-                 
-                 if (navLinks) {
+             if (isMegaMenuOpen || window.scrollY > 50) {
+                // Mega menu open OR scrolled: White navbar
+                navbar.classList.remove(...transparentClasses);
+                navbar.classList.add(...whiteClasses);
+                if (navLinks && window.scrollY > 50 && !isMegaMenuOpen) {
                     navLinks.classList.add('opacity-0', 'pointer-events-none');
-                    navLinks.classList.remove('opacity-100', 'pointer-events-auto');
-                 }
-             } else if (window.scrollY > 10) {
-                // Middle Scroll: Hidden
-                navbar.classList.remove(...transparentClasses, ...solidClasses, ...whiteClasses);
-                navbar.classList.add('-translate-y-full');
-                
-                if (navLinks) {
+                    navLinks.classList.remove('opacity-100');
+                } else if (navLinks) {
                     navLinks.classList.remove('opacity-0', 'pointer-events-none');
-                    navLinks.classList.add('opacity-100', 'pointer-events-auto');
-                 }
+                    navLinks.classList.add('opacity-100');
+                }
             } else {
-                // Top: Visible + Transparent + Full
-                navbar.classList.remove('-translate-y-full', ...solidClasses, ...whiteClasses);
+                // At top, no menu: Transparent dark navbar
+                navbar.classList.remove(...whiteClasses);
                 navbar.classList.add(...transparentClasses);
-                
                 if (navLinks) {
                     navLinks.classList.remove('opacity-0', 'pointer-events-none');
-                    navLinks.classList.add('opacity-100', 'pointer-events-auto');
-                 }
+                    navLinks.classList.add('opacity-100');
+                }
             }
         };
 
-        const handleScroll = () => {
-             updateNavbar();
-        };
+        // Mega menu hover listeners
+        if (megaMenuTrigger) {
+            megaMenuTrigger.addEventListener('mouseenter', () => {
+                isMegaMenuOpen = true;
+                updateNavbar();
+            });
+            megaMenuTrigger.addEventListener('mouseleave', () => {
+                isMegaMenuOpen = false;
+                updateNavbar();
+            });
+        }
 
         // Run once on load
-        handleScroll();
+        updateNavbar();
 
         // Listen for scroll
-        window.addEventListener('scroll', handleScroll, { passive: true });
+        window.addEventListener('scroll', updateNavbar, { passive: true });
     }
 </script>

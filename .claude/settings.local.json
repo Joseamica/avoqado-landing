@@ -9,10 +9,16 @@
       "Bash(npm run dev:*)",
       "WebSearch",
       "Bash(cat:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "WebFetch(domain:www.squareup.com)",
+      "WebFetch(domain:squareup.com)"
     ],
     "deny": [],
-    "ask": []
+    "ask": [],
+    "additionalDirectories": [
+      "/Users/amieva/Documents/Programming/Avoqado/avoqado-server",
+      "/Users/amieva/Documents/Programming/Avoqado/avoqado-web-dashboard"
+    ]
   },
   "disabledMcpjsonServers": [
     "notion",

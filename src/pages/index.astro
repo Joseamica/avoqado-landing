@@ -7,7 +7,9 @@ import { PaymentRouting } from '../components/interactive/PaymentRouting';
 import { UnifiedPlatform } from '../components/interactive/UnifiedPlatform';
 import { EarlyAccessCTA } from '../components/interactive/EarlyAccessCTA';
 import ChatbotCTA from '../components/interactive/ChatbotCTA';
+import FAQ from '../components/interactive/FAQ';
 import Footer from '../components/layout/Footer.astro';
+import WhatsAppButton from '../components/interactive/WhatsAppButton';
 ---
 
 <!doctype html>
@@ -50,6 +52,11 @@ import Footer from '../components/layout/Footer.astro';
 		<!-- EARLY ACCESS CTA -->
 		<EarlyAccessCTA client:visible />
 
+		<!-- FAQ SECTION -->
+		<div class="faq-section-wrapper opacity-0 translate-y-20 transition-all duration-1000 ease-out" data-animate-on-scroll>
+			<FAQ client:visible />
+		</div>
+
 		<Footer />
 
 		<script>
@@ -74,5 +81,6 @@ import Footer from '../components/layout/Footer.astro';
 				animateElements.forEach(el => observer.observe(el));
 			});
 		</script>
+		<WhatsAppButton client:idle />
 	</body>
 </html>

@@ -176,6 +176,9 @@ const MAX_RADIUS = 230;
 const CENTER_SIZE = 120;
 const NODE_SIZE = 80;
 
+// Helper to fix hydration mismatches by standardizing floating point precision
+const toPrecision = (num: number) => Math.round(num * 1000) / 1000;
+
 // Simple curved connection with flowing electricity animation
 const ElectricConnection: React.FC<{
   fromPos: { x: number; y: number };
@@ -289,10 +292,10 @@ const CleanCard: React.FC<{
       animate={{ scale: isVisible ? 1 : 0.8, opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.4 }}
       style={{
-        width: NODE_SIZE,
-        height: NODE_SIZE,
-        left: position.x - NODE_SIZE / 2,
-        top: position.y - NODE_SIZE / 2,
+        width: toPrecision(NODE_SIZE),
+        height: toPrecision(NODE_SIZE),
+        left: toPrecision(position.x - NODE_SIZE / 2),
+        top: toPrecision(position.y - NODE_SIZE / 2),
         background: 'rgba(17, 17, 17, 0.95)',
         border: '1px solid rgba(255, 255, 255, 0.1)',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
@@ -338,8 +341,8 @@ export const UnifiedPlatform: React.FC = () => {
   const getNodeCenter = (source: DataSource) => {
     const angleRad = (source.angle * Math.PI) / 180;
     return {
-      x: centerX + source.radius * Math.cos(angleRad),
-      y: centerY + source.radius * Math.sin(angleRad),
+      x: toPrecision(centerX + source.radius * Math.cos(angleRad)),
+      y: toPrecision(centerY + source.radius * Math.sin(angleRad)),
     };
   };
 
@@ -353,8 +356,8 @@ export const UnifiedPlatform: React.FC = () => {
   const showElectricity = scrollValue >= 0.75;
 
   return (
-    <div ref={containerRef} className="relative h-[250vh] bg-black">
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+    <div ref={containerRef} className="relative h-[250vh] bg-black z-0">
+      <div className="sticky top-0 h-screen flex items-center overflow-hidden z-10">
         <div className="max-w-7xl mx-auto px-6 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left: Text */}

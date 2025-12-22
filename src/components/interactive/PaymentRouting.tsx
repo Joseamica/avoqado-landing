@@ -566,8 +566,8 @@ export const PaymentRouting: React.FC = () => {
   const getGridPos = (p: Product) => ({ x: p.col * (CARD_SIZE + GAP), y: p.row * (CARD_SIZE + GAP) });
 
   return (
-    <div ref={containerRef} className="relative h-[300vh]" style={{ backgroundColor: '#f6f9fc' }}>
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+    <div ref={containerRef} className="relative h-[300vh] z-0" style={{ backgroundColor: '#f6f9fc' }}>
+      <div className="sticky top-0 h-screen flex items-center overflow-hidden z-10">
         <div className="max-w-7xl mx-auto px-6 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 items-center">
             <div className="space-y-8">

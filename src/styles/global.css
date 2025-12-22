@@ -77,13 +77,13 @@
 
 body {
   font-family: var(--font-family-sans);
-  color: white;
+  /* color: white; */
   background-color: var(--color-avoqado-dark-bg);
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
-  color: white;
+  /* color controlled by Tailwind classes (text-white, text-black, etc.) */
 }
 
 /* Utility classes */

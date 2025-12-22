@@ -82,10 +82,10 @@ export default function SquareHero() {
   };
 
   return (
-    <div ref={containerRef} className="relative h-[250vh] bg-white">
-      
+    <div ref={containerRef} className="relative h-[250vh] bg-white z-0">
+
       {/* STICKY VIEWPORT */}
-      <div className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-white">
+      <div className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-white z-10">
 
         {/* --- CSS GRID (9 columns, 5 rows) --- */}
         <motion.div 
@@ -115,8 +115,8 @@ export default function SquareHero() {
                   }}
                   className="rounded-2xl overflow-hidden bg-gray-100"
                 >
-                  <img 
-                    src={`${item.img}?v=${Date.now()}`} 
+                  <img
+                    src={item.img}
                     className="w-full h-full object-cover"
                     style={{ 
                       // "Perspective hack" to force high-quality anti-aliasing on downscaled images

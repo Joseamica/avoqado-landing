@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/layout/Navbar.astro';
+import PricingCalculator from '../components/interactive/PricingCalculator';
+import BusinessTypePricing from '../components/interactive/BusinessTypePricing';
+import PricingAddons from '../components/interactive/PricingAddons';
+import PricingFAQ from '../components/interactive/PricingFAQ';
+import Footer from '../components/layout/Footer.astro';
+---
+
+<Layout
+	title="Precios y Comisiones | Avoqado"
+	description="Conoce los precios y comisiones de Avoqado. Sin costos ocultos, sin contratos largos. Comienza gratis hoy."
+>
+	<!-- Navbar with solid white background -->
+	<Navbar position="fixed" transparentOnTop={false} />
+
+	<main class="pt-16 bg-white">
+		<!-- Interactive Rate Calculator (now the hero) -->
+		<PricingCalculator client:load />
+
+		<!-- Business Type Pricing Tabs -->
+		<BusinessTypePricing client:visible />
+
+		<!-- Addons Section -->
+		<PricingAddons client:visible />
+
+		<!-- FAQ Section -->
+		<PricingFAQ client:visible />
+
+		<!-- CTA Section -->
+		<section class="py-20 bg-black text-white">
+			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+				<h2 class="text-4xl md:text-5xl font-bold mb-6">
+					¿Listo para <span class="text-avoqado-green">crecer</span>?
+				</h2>
+				<p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+					Únete a miles de negocios que ya transformaron sus operaciones con Avoqado.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a
+						href="/contact"
+						class="px-8 py-4 bg-avoqado-green text-black font-bold rounded-full hover:bg-green-400 transition-all hover:scale-105 text-lg"
+					>
+						Comienza tu prueba gratis →
+					</a>
+					<a
+						href="/contact"
+						class="px-8 py-4 border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-black transition-all text-lg"
+					>
+						Hablar con ventas
+					</a>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>
