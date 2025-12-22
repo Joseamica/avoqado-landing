@@ -11,13 +11,19 @@
       "Bash(cat:*)",
       "Bash(rm:*)",
       "WebFetch(domain:www.squareup.com)",
-      "WebFetch(domain:squareup.com)"
+      "WebFetch(domain:squareup.com)",
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [],
     "ask": [],
     "additionalDirectories": [
       "/Users/amieva/Documents/Programming/Avoqado/avoqado-server",
-      "/Users/amieva/Documents/Programming/Avoqado/avoqado-web-dashboard"
+      "/Users/amieva/Documents/Programming/Avoqado/avoqado-web-dashboard",
+      "/Users/amieva/Documents/Programming/Avoqado/avoqado-tpv"
     ]
   },
   "disabledMcpjsonServers": [

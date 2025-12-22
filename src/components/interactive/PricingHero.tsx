@@ -57,7 +57,7 @@ export default function PricingHero() {
 
           {/* CTA */}
           <motion.a 
-            href="/contact"
+            href="https://dashboardv2.avoqado.io/signup"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white font-bold text-lg rounded-full hover:bg-gray-800 transition-colors"

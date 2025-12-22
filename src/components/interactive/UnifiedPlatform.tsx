@@ -356,7 +356,7 @@ export const UnifiedPlatform: React.FC = () => {
   const showElectricity = scrollValue >= 0.75;
 
   return (
-    <div ref={containerRef} className="relative h-[250vh] bg-black z-0">
+    <div ref={containerRef} className="relative h-[180vh] bg-black z-0">
       <div className="sticky top-0 h-screen flex items-center overflow-hidden z-10">
         <div className="max-w-7xl mx-auto px-6 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">

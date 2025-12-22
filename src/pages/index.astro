@@ -9,7 +9,7 @@ import { EarlyAccessCTA } from '../components/interactive/EarlyAccessCTA';
 import ChatbotCTA from '../components/interactive/ChatbotCTA';
 import FAQ from '../components/interactive/FAQ';
 import Footer from '../components/layout/Footer.astro';
-import WhatsAppButton from '../components/interactive/WhatsAppButton';
+import FloatingChatbot from '../components/interactive/FloatingChatbot';
 ---
 
 <!doctype html>
@@ -81,6 +81,6 @@ import WhatsAppButton from '../components/interactive/WhatsAppButton';
 				animateElements.forEach(el => observer.observe(el));
 			});
 		</script>
-		<WhatsAppButton client:idle />
+		<FloatingChatbot client:idle />
 	</body>
 </html>

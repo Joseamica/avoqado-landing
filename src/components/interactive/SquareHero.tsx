@@ -82,10 +82,10 @@ export default function SquareHero() {
   };
 
   return (
-    <div ref={containerRef} className="relative h-[250vh] bg-white z-0">
+    <div ref={containerRef} className="relative h-[180vh] bg-white z-0">
 
       {/* STICKY VIEWPORT */}
-      <div className="sticky top-0 left-0 h-screen w-screen overflow-hidden bg-white z-10">
+      <div className="sticky top-0 left-0 h-screen w-full overflow-hidden bg-white z-10">
 
         {/* --- CSS GRID (9 columns, 5 rows) --- */}
         <motion.div 
@@ -215,7 +215,7 @@ export default function SquareHero() {
               Domina tus calles. Piensa en grande.
             </p> */}
             <div className="flex flex-col sm:flex-row gap-4 items-center">
-              <a href="/signup" className="bg-black text-white px-10 py-4 rounded-full font-bold text-2xl hover:scale-105 transition-transform cursor-pointer font-baby">
+              <a href="https://dashboardv2.avoqado.io/signup" className="bg-black text-white px-10 py-4 rounded-full font-bold text-2xl hover:scale-105 transition-transform cursor-pointer font-baby">
                 Comienza gratis
               </a>
               <a href="/contact" className="bg-transparent border-2 bg-white text-black px-10 py-4 rounded-full font-bold text-2xl hover:scale-105 transition-transform cursor-pointer ">

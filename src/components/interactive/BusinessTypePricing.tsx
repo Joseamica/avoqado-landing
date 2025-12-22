@@ -259,13 +259,14 @@ const tabs: { id: BusinessType; label: string }[] = [
 ];
 
 // Calculate transaction fee string based on business type and tier discount
+// Shows the lowest rate (debit) with "desde" prefix
 function getTransactionFee(businessType: BusinessType, tierDiscount: number): string {
   if (tierDiscount === -1) return 'Negociable';
 
   const baseRates = baseRatesByType[businessType];
-  const creditRate = baseRates.credito + AVOQADO_MARGIN - tierDiscount;
+  const debitRate = baseRates.debito + AVOQADO_MARGIN - tierDiscount;
 
-  return `${creditRate.toFixed(1)}% + $3`;
+  return `desde ${debitRate.toFixed(2)}% + $3`;
 }
 
 export default function BusinessTypePricing() {

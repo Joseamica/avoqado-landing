@@ -40,7 +40,7 @@ export default function ChatbotCTA() {
   };
 
   return (
-    <div ref={containerRef} className="relative h-[200vh] bg-black z-0">
+    <div ref={containerRef} className="relative h-[150vh] bg-black z-0">
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-4 overflow-hidden z-10">
         
         {/* Background decorations - REMOVED for pure black */}
@@ -109,7 +109,7 @@ export default function ChatbotCTA() {
           >
             <span className="bg-white/5 px-4 py-2 rounded-full border border-white/5 hover:bg-white/10 cursor-pointer transition-colors" onClick={() => setInputValue("Dame un reporte de ventas")}>"Dame un reporte de ventas"</span>
             <span className="bg-white/5 px-4 py-2 rounded-full border border-white/5 hover:bg-white/10 cursor-pointer transition-colors" onClick={() => setInputValue("Crear una promoción 2x1")}>"Crear una promoción 2x1"</span>
-            <span className="bg-white/5 px-4 py-2 rounded-full border border-white/5 hover:bg-white/10 cursor-pointer transition-colors sm:block hidden" onClick={() => setInputValue("Optimizar inventario")}>"Optimizar inventario"</span>
+            <span className="bg-white/5 px-4 py-2 rounded-full border border-white/5 hover:bg-white/10 cursor-pointer transition-colors sm:block hidden" onClick={() => setInputValue("¿Por qué mi mejor cliente Juan dejó de venir?")}>"¿Por qué mi mejor cliente Juan dejó de venir?"</span>
           </motion.div>
         
         </div>
@@ -161,10 +161,10 @@ export default function ChatbotCTA() {
                 </p>
 
                 <div className="w-full space-y-3">
-                  <a href="#" className="block w-full bg-avoqado-green text-black font-baby py-4 rounded-xl hover:scale-[1.02] transition-transform text-center">
+                  <a href="https://dashboardv2.avoqado.io/signup" className="block w-full bg-avoqado-green text-black font-baby py-4 rounded-xl hover:scale-[1.02] transition-transform text-center">
                     Comenzar prueba gratis
                   </a>
-                  <a href="#" className="block w-full bg-white/5 text-white font-medium py-4 rounded-xl hover:bg-white/10 transition-colors border border-white/5 text-center">
+                  <a href="/contact" className="block w-full bg-white/5 text-white font-medium py-4 rounded-xl hover:bg-white/10 transition-colors border border-white/5 text-center">
                     Agendar demostración
                   </a>
                 </div>

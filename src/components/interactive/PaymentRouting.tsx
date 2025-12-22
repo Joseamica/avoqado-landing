@@ -219,7 +219,7 @@ const PRODUCTS: Product[] = [
   // === ROW 3: Banks and Staff ===
   {
     id: 'santander',
-    name: 'Santander',
+    name: 'CLABE "A"',
     icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="san-a" x1="20" y1="8" x2="20" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#FF3333"/><stop offset="1" stopColor="#CC0000"/></linearGradient></defs><rect x="2" y="10" width="36" height="20" rx="4" fill="url(#san-a)"/><path d="M10 20h20" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><rect x="2" y="10" width="36" height="20" rx="4" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/></svg>),
     row: 4, col: 1,
@@ -228,7 +228,7 @@ const PRODUCTS: Product[] = [
   },
   {
     id: 'bbva',
-    name: 'BBVA',
+    name: 'CLABE "B"',
     icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="bbva-a" x1="20" y1="8" x2="20" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#0073E6"/><stop offset="1" stopColor="#004481"/></linearGradient></defs><rect x="2" y="10" width="36" height="20" rx="4" fill="url(#bbva-a)"/><path d="M10 20h20" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><rect x="2" y="10" width="36" height="20" rx="4" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/></svg>),
     row: 4, col: 2,
@@ -237,11 +237,11 @@ const PRODUCTS: Product[] = [
   },
   {
     id: 'inbursa',
-    name: 'Inbursa',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="inb-a" x1="20" y1="8" x2="20" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#0073E6"/><stop offset="1" stopColor="#003366"/></linearGradient></defs><rect x="2" y="10" width="36" height="20" rx="4" fill="url(#inb-a)"/><path d="M10 20h20" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>),
+    name: 'CLABE "C"',
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="inb-a" x1="20" y1="8" x2="20" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#00e61bff"/><stop offset="1" stopColor="#003366"/></linearGradient></defs><rect x="2" y="10" width="36" height="20" rx="4" fill="url(#inb-a)"/><path d="M10 20h20" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><rect x="2" y="10" width="36" height="20" rx="4" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/></svg>),
     row: 4, col: 3,
-    color: '#0073E6',
+    color: '#00e61bff',
     connectsTo: ['enrutamiento'],
   },
   {
@@ -566,7 +566,7 @@ export const PaymentRouting: React.FC = () => {
   const getGridPos = (p: Product) => ({ x: p.col * (CARD_SIZE + GAP), y: p.row * (CARD_SIZE + GAP) });
 
   return (
-    <div ref={containerRef} className="relative h-[300vh] z-0" style={{ backgroundColor: '#f6f9fc' }}>
+    <div ref={containerRef} className="relative h-[200vh] z-0" style={{ backgroundColor: '#f6f9fc' }}>
       <div className="sticky top-0 h-screen flex items-center overflow-hidden z-10">
         <div className="max-w-7xl mx-auto px-6 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 items-center">
