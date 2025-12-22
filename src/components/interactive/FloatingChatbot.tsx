@@ -268,6 +268,8 @@ export default function FloatingChatbot() {
       }]);
     } finally {
       setIsLoading(false);
+      // Refocus input after response
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
   };
 
@@ -278,38 +280,49 @@ export default function FloatingChatbot() {
     }
   };
 
-  // Parse markdown links [text](url) and render as clickeable
+  // Parse markdown links [text](url) and render as clickeable, also handle newlines
   const renderMessageContent = (content: string, role: 'user' | 'assistant') => {
-    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-    const parts: React.ReactNode[] = [];
-    let lastIndex = 0;
-    let match;
+    // Split by newlines first to preserve line breaks
+    const lines = content.split('\n');
+    
+    return lines.map((line, lineIndex) => {
+      const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+      const parts: React.ReactNode[] = [];
+      let lastIndex = 0;
+      let match;
 
-    while ((match = linkRegex.exec(content)) !== null) {
-      // Add text before the link
-      if (match.index > lastIndex) {
-        parts.push(content.slice(lastIndex, match.index));
+      while ((match = linkRegex.exec(line)) !== null) {
+        // Add text before the link
+        if (match.index > lastIndex) {
+          parts.push(line.slice(lastIndex, match.index));
+        }
+        // Add the link
+        const [, text, url] = match;
+        parts.push(
+          <a
+            key={`${lineIndex}-${match.index}`}
+            href={url}
+            className={`underline hover:opacity-80 ${role === 'user' ? 'text-black font-medium' : 'text-avoqado-green'}`}
+          >
+            {text}
+          </a>
+        );
+        lastIndex = match.index + match[0].length;
       }
-      // Add the link
-      const [, text, url] = match;
-      parts.push(
-        <a
-          key={match.index}
-          href={url}
-          className={`underline hover:opacity-80 ${role === 'user' ? 'text-black font-medium' : 'text-avoqado-green'}`}
-        >
-          {text}
-        </a>
+
+      // Add remaining text
+      if (lastIndex < line.length) {
+        parts.push(line.slice(lastIndex));
+      }
+
+      // Return the line with a line break if not the last line
+      return (
+        <span key={lineIndex}>
+          {parts.length > 0 ? parts : line}
+          {lineIndex < lines.length - 1 && <br />}
+        </span>
       );
-      lastIndex = match.index + match[0].length;
-    }
-
-    // Add remaining text
-    if (lastIndex < content.length) {
-      parts.push(content.slice(lastIndex));
-    }
-
-    return parts.length > 0 ? parts : content;
+    });
   };
 
   return (
