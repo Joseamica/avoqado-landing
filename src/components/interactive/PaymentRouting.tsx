@@ -636,52 +636,48 @@ const AnimatedConnection: React.FC<{
       // Let's rewrite the smoothing loop to be robust with trimmed points
       d = `M ${start.x} ${start.y}`;
       
+      // Safer loop for path construction
       for (let i = 1; i < gridPath.length - 1; i++) {
           const curr = getPixel(gridPath[i]);
-          const next = getPixel(gridPath[i+1]); // Real next pixel
-          const prev = getPixel(gridPath[i-1]); // Real prev pixel
-          
-          // Vector 1 (Income)
+          const next = getPixel(gridPath[i+1]);
+          const prev = getPixel(gridPath[i-1]);
+
+          // Vector incoming
           const vx1 = curr.x - prev.x;
           const vy1 = curr.y - prev.y;
-          
-          // Vector 2 (Outcome)
+          // Vector outgoing
           const vx2 = next.x - curr.x;
           const vy2 = next.y - curr.y;
-          
+
+          // Check if turn
           const isTurn = (vx1 !== 0 && vy2 !== 0) || (vy1 !== 0 && vx2 !== 0);
-          
+
           if (isTurn) {
-               // Curve logic based on curr (corner)
-               
-               // Stop R before curr
                const len1 = Math.sqrt(vx1*vx1 + vy1*vy1);
-               // If i==1, we are coming from prev (full node center). 
-               // The visual line starts at 'start'. 
-               // Does 'start' lie on the vector prev->curr? Yes.
-               // So we can draw L to (curr - margin).
+               const len2 = Math.sqrt(vx2*vx2 + vy2*vy2);
                
+               if (len1 === 0 || len2 === 0) {
+                 d += ` L ${curr.x} ${curr.y}`;
+                 continue;
+               }
+
                const r1 = Math.min(R, len1/2);
+               const r2 = Math.min(R, len2/2);
+
                const bx = curr.x - (vx1/len1)*r1;
                const by = curr.y - (vy1/len1)*r1;
                
-               d += ` L ${bx} ${by}`;
-               
-               // Curve 
-               // ... same
-               const len2 = Math.sqrt(vx2*vx2 + vy2*vy2);
-               const r2 = Math.min(R, len2/2);
                const ax = curr.x + (vx2/len2)*r2;
                const ay = curr.y + (vy2/len2)*r2;
-               
-               d += ` Q ${curr.x} ${curr.y} ${ax} ${ay}`;
+
+               d += ` L ${bx} ${by} Q ${curr.x} ${curr.y} ${ax} ${ay}`;
           } else {
              d += ` L ${curr.x} ${curr.y}`;
           }
       }
-      
-      // Last segment: connect to trimmed end
+      // Add final segment to trimmed end
       d += ` L ${end.x} ${end.y}`;
+
   }
   
   // Smoothing Logic (Refined)
@@ -1063,25 +1059,17 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
                         <div
                           key={p.id}
                           onClick={() => setHoveredCard(p.id)}
-                          className="flex flex-col items-center justify-start p-2 rounded-xl transition-all duration-300 relative overflow-hidden group"
-                          style={{
-                            backgroundColor: '#ffffff',
-                            boxShadow: isActive ? '0 4px 12px rgba(0,0,0,0.08)' : '0 1px 2px rgba(0,0,0,0.03)',
-                            transform: isActive ? 'translateY(-2px)' : 'none',
-                          }}
+                          className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-200 relative group aspect-square
+                            ${isActive ? 'bg-white shadow-md ring-2 ring-black transform scale-[1.02] z-10' : 'bg-gray-50 hover:bg-white hover:shadow-sm'}
+                          `}
                         >
-                          {isActive && (
-                            <div 
-                              className="absolute bottom-0 left-0 right-0 h-1 opacity-80" 
-                              style={{ backgroundColor: p.color }}
-                            />
-                          )}
-                          <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center mb-1.5 transition-transform duration-300 group-hover:scale-110">
+                          <div className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center mb-2 transition-transform duration-300 ${isActive ? 'scale-110' : 'grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100'}`}>
                             {p.icon}
                           </div>
                           <span 
-                            className="text-[10px] md:text-xs font-medium text-center leading-tight tracking-tight line-clamp-2 px-0.5"
-                            style={{ color: isActive ? '#1d1d1f' : '#6e6e73' }}
+                            className={`text-[10px] md:text-xs font-semibold text-center leading-tight tracking-tight line-clamp-2 px-1
+                                ${isActive ? 'text-black' : 'text-gray-500'}
+                            `}
                           >
                             {p.name}
                           </span>
@@ -1091,27 +1079,30 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
                   </div>
                 </div>
 
-                {/* Bottom: Details Panel (Fills remaining space) */}
-                <div className="flex-1 bg-white rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] p-6 md:p-8 flex flex-col justify-start items-start transition-all duration-300 z-20 mt-2">
-                  <div className="flex items-center gap-4 mb-3">
-                     <div className="w-12 h-12 p-2 bg-gray-50 rounded-xl flex items-center justify-center">
+                {/* Bottom: Details Panel (Streamlined) */}
+                <div className="flex-shrink-0 bg-white border-t border-gray-100 p-6 md:p-8 flex flex-col gap-4 z-20">
+                  <div className="flex items-start gap-5">
+                     {/* Large Icon Preview */}
+                     <div className="w-16 h-16 p-3 bg-gray-50 rounded-2xl flex items-center justify-center flex-shrink-0">
                         {hoveredCard && PRODUCTS.find(p => p.id === hoveredCard)?.icon || 
                          PRODUCTS.find(p => p.id === activePillar)?.icon}
                      </div>
-                     <h3 className="text-xl font-bold text-gray-900">
-                        {hoveredCard ? PRODUCTS.find(p => p.id === hoveredCard)?.name : 
-                         activePillar === 'tpv' ? 'TPV Móvil' : 
-                         activePillar === 'qr' ? 'Pagos QR' : 'Dashboard'}
-                     </h3>
+                     <div className="flex-1 min-w-0">
+                        <h3 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight mb-2">
+                            {hoveredCard ? PRODUCTS.find(p => p.id === hoveredCard)?.name : 
+                             activePillar === 'tpv' ? 'TPV Móvil' : 
+                             activePillar === 'qr' ? 'Pagos QR' : 'Dashboard'}
+                        </h3>
+                        <p className="text-gray-600 text-sm md:text-base leading-relaxed line-clamp-3">
+                            {selectedDescription}
+                        </p>
+                     </div>
                   </div>
-                  <p className="text-gray-600 text-base leading-relaxed">
-                    {selectedDescription}
-                  </p>
-                  <div className="mt-auto pt-4 w-full">
-                    <button className="w-full py-3 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">
-                      Más detalles
-                    </button>
-                  </div>
+                  
+                  <button className="w-full py-3.5 bg-black text-white rounded-xl text-sm font-semibold hover:bg-gray-900 transition-colors active:scale-[0.98] flex items-center justify-center gap-2">
+                    <span>Ver funcionalidad completa</span>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  </button>
                 </div>
               </motion.div>
             ) : (
