@@ -1028,9 +1028,8 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
                     return (
                       <button
                         key={p}
-                        onClick={() => setSelectedPillar(p)} // Click to select
-                        onMouseEnter={() => setHoveredCard(p === 'todo' ? null : p)}
-                        onMouseLeave={() => setHoveredCard(null)}
+                        onClick={() => setSelectedPillar(p)} // Click as fallback
+                        onMouseEnter={() => setSelectedPillar(p)} // Hover selects immediately
                         className="px-4 py-2 lg:px-6 lg:py-2.5 rounded-full text-xs lg:text-sm font-medium transition-all duration-300"
                         style={{
                           backgroundColor: isActive ? '#ffffff' : 'transparent',

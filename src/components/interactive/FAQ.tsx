@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import DoodleBackground from './DoodleBackground';
 
 export default function FAQ() {
   const containerRef = useRef<HTMLElement>(null);
@@ -101,6 +102,9 @@ export default function FAQ() {
 
       {/* Sticky Content - Stays centered while scrolling */}
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+        {/* Doodles Background with Parallax */}
+        <DoodleBackground scrollYProgress={scrollYProgress} />
+
         <div className="max-w-4xl mx-auto px-4 text-center z-10 relative">
           
           {/* Rotated Container for Diagonal Text */}
