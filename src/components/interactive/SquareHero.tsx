@@ -1,43 +1,48 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 /**
- * Square-like Hero Animation
+ * Square-like Hero Animation - Mobile Responsive
  * 
- * Grid Structure (matches Square):
- * - 9 columns, 5 rows
- * - Rows 1 & 2: Top cards
- * - Row 3: Center text
- * - Rows 4 & 5: Bottom cards
+ * Simple approach: All items rendered, CSS handles visibility and positioning
  */
 
-// Grid item data with positions matching Square's layout
+// Grid items - Position specified for 9-column desktop grid
+// mobilePos: position in 3-column mobile grid (col, row), null = hidden on mobile
 const gridItems = [
   // Row 1
-  { col: 2, row: 1, img: "/1.png", isIcon: false },
-  { col: 4, row: 1, img: "/2.png", isIcon: false },
-  { col: 6, row: 1, img: "/3.png", isIcon: false },
-  { col: 8, row: 1, img: "/4.png", isIcon: false }, // Was 📱 emoji
-  // Row 2
-  { col: 1, row: 2, img: "/5.png", isIcon: false },
-  { col: 3, row: 2, img: "/6.png", isIcon: false }, // Was 🏪 emoji
-  { col: 5, row: 2, img: "/7.png", isIcon: false },
-  { col: 7, row: 2, img: "/8.png", isIcon: false },
-  { col: 9, row: 2, img: "/9.png", isIcon: false },
-  // Row 4 (col 5 is empty - hero lands there)
-  { col: 1, row: 4, img: "/10.png", isIcon: false },
-  { col: 3, row: 4, img: "/11.png", isIcon: false },
-  { col: 7, row: 4, img: "/12.png", isIcon: false }, // Was 🛍️ emoji
-  { col: 9, row: 4, img: "/13.png", isIcon: false },
+  { col: 2, row: 1, img: "/1.png", mobilePos: { col: 1, row: 1 } },
+  { col: 4, row: 1, img: "/2.png", mobilePos: { col: 2, row: 1 } },
+  { col: 6, row: 1, img: "/3.png", mobilePos: { col: 3, row: 1 } },
+  { col: 8, row: 1, img: "/4.png", mobilePos: null },
+  // Row 2 - center reserved for video on mobile (col 2)
+  { col: 1, row: 2, img: "/5.png", mobilePos: { col: 1, row: 2 } },
+  { col: 3, row: 2, img: "/6.png", mobilePos: null }, // Reserved for video
+  { col: 5, row: 2, img: "/7.png", mobilePos: { col: 3, row: 2 } },
+  { col: 7, row: 2, img: "/8.png", mobilePos: null },
+  { col: 9, row: 2, img: "/9.png", mobilePos: null },
+  // Row 4
+  { col: 1, row: 4, img: "/10.png", mobilePos: { col: 1, row: 4 } },
+  { col: 3, row: 4, img: "/11.png", mobilePos: { col: 2, row: 4 } },
+  { col: 7, row: 4, img: "/12.png", mobilePos: { col: 3, row: 4 } },
+  { col: 9, row: 4, img: "/13.png", mobilePos: null },
   // Row 5
-  { col: 2, row: 5, img: "/14.png", isIcon: false },
-  { col: 4, row: 5, img: "/15.png", isIcon: false }, // Was ✨ emoji
-  { col: 6, row: 5, img: "/16.png", isIcon: false },
-  { col: 8, row: 5, img: "/17.png", isIcon: false },
+  { col: 2, row: 5, img: "/14.png", mobilePos: { col: 1, row: 5 } },
+  { col: 4, row: 5, img: "/15.png", mobilePos: { col: 2, row: 5 } },
+  { col: 6, row: 5, img: "/16.png", mobilePos: { col: 3, row: 5 } },
+  { col: 8, row: 5, img: "/17.png", mobilePos: null },
 ];
 
 export default function SquareHero() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -46,143 +51,67 @@ export default function SquareHero() {
 
   const SHRINK_END = 0.5;
 
-  // --- HERO TRANSFORMS ---
-  // Hero shrinks and moves to land in the center-left area of the grid
-  const heroScale = useTransform(scrollYProgress, [0, SHRINK_END], [1, 0.105]);
+  // Hero transforms - different values for mobile vs desktop
+  // Now sticky container is h-screen (top-0), video needs to end at correct position
+  // Desktop: scale 0.105, ends at ~65% to fit in row 3 area (accounting for navbar offset)
+  // Mobile: scale 0.14, ends at ~22% to fit above row 3
+  const heroScale = useTransform(scrollYProgress, [0, SHRINK_END], [1, isMobile ? 0.31 : 0.105]);
   const heroBorderRadius = useTransform(scrollYProgress, [0, SHRINK_END], [0, 16]);
-  // Position: lands roughly at col 5, row 4 area (center of grid)
-  const heroX = useTransform(scrollYProgress, [0, SHRINK_END], ["0%", "44%"]);
-  const heroY = useTransform(scrollYProgress, [0, SHRINK_END], ["0px", "60%"]);
+  const heroX = useTransform(scrollYProgress, [0, SHRINK_END], ["0%", isMobile ? "34.5%" : "44%"]);
+  const heroY = useTransform(scrollYProgress, [0, SHRINK_END], ["0px", isMobile ? "23%" : "65%"]);
+  // Mobile only: Clip top/bottom to make video less tall and fit in grid cell without covering text
+  const heroClip = useTransform(scrollYProgress, [0, SHRINK_END], ["inset(0% 0% 0% 0%)", isMobile ? "inset(25% 0% 25% 0%)" : "inset(0% 0% 0% 0%)"]);
   const heroTextOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
 
-  // --- GRID & TEXT TRANSFORMS ---
+  // Grid opacity
   const gridOpacity = useTransform(scrollYProgress, [0.1, 0.35], [0, 1]);
 
-  // Text animations trigger near the end of scroll (70% - 95%)
-  // First line: "Sin importar tu tipo de negocio,"
-  const textLine1Opacity = useTransform(scrollYProgress, [0.7, 0.82], [0, 1]);
-  const textLine1Y = useTransform(scrollYProgress, [0.7, 0.82], ["40px", "0px"]);
-  const textLine1BlurValue = useTransform(scrollYProgress, [0.7, 0.82], [10, 0]);
-  const textLine1Blur = useTransform(textLine1BlurValue, (value) => `blur(${value}px)`);
+  // Pre-compute ALL 17 item transforms at the top level
+  const t0 = { scale: useTransform(scrollYProgress, [0.08, 0.43], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.08, 0.28], [0, 1]), y: useTransform(scrollYProgress, [0.08, 0.43], ["50px", "0px"]) };
+  const t1 = { scale: useTransform(scrollYProgress, [0.095, 0.445], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.095, 0.295], [0, 1]), y: useTransform(scrollYProgress, [0.095, 0.445], ["50px", "0px"]) };
+  const t2 = { scale: useTransform(scrollYProgress, [0.11, 0.46], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.11, 0.31], [0, 1]), y: useTransform(scrollYProgress, [0.11, 0.46], ["50px", "0px"]) };
+  const t3 = { scale: useTransform(scrollYProgress, [0.125, 0.475], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.125, 0.325], [0, 1]), y: useTransform(scrollYProgress, [0.125, 0.475], ["50px", "0px"]) };
+  const t4 = { scale: useTransform(scrollYProgress, [0.14, 0.49], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.14, 0.34], [0, 1]), y: useTransform(scrollYProgress, [0.14, 0.49], ["50px", "0px"]) };
+  const t5 = { scale: useTransform(scrollYProgress, [0.155, 0.505], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.155, 0.355], [0, 1]), y: useTransform(scrollYProgress, [0.155, 0.505], ["50px", "0px"]) };
+  const t6 = { scale: useTransform(scrollYProgress, [0.17, 0.52], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.17, 0.37], [0, 1]), y: useTransform(scrollYProgress, [0.17, 0.52], ["50px", "0px"]) };
+  const t7 = { scale: useTransform(scrollYProgress, [0.185, 0.535], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.185, 0.385], [0, 1]), y: useTransform(scrollYProgress, [0.185, 0.535], ["50px", "0px"]) };
+  const t8 = { scale: useTransform(scrollYProgress, [0.2, 0.55], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.2, 0.4], [0, 1]), y: useTransform(scrollYProgress, [0.2, 0.55], ["50px", "0px"]) };
+  const t9 = { scale: useTransform(scrollYProgress, [0.215, 0.565], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.215, 0.415], [0, 1]), y: useTransform(scrollYProgress, [0.215, 0.565], ["50px", "0px"]) };
+  const t10 = { scale: useTransform(scrollYProgress, [0.23, 0.58], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.23, 0.43], [0, 1]), y: useTransform(scrollYProgress, [0.23, 0.58], ["50px", "0px"]) };
+  const t11 = { scale: useTransform(scrollYProgress, [0.245, 0.595], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.245, 0.445], [0, 1]), y: useTransform(scrollYProgress, [0.245, 0.595], ["50px", "0px"]) };
+  const t12 = { scale: useTransform(scrollYProgress, [0.26, 0.61], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.26, 0.46], [0, 1]), y: useTransform(scrollYProgress, [0.26, 0.61], ["50px", "0px"]) };
+  const t13 = { scale: useTransform(scrollYProgress, [0.275, 0.625], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.275, 0.475], [0, 1]), y: useTransform(scrollYProgress, [0.275, 0.625], ["50px", "0px"]) };
+  const t14 = { scale: useTransform(scrollYProgress, [0.29, 0.64], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.29, 0.49], [0, 1]), y: useTransform(scrollYProgress, [0.29, 0.64], ["50px", "0px"]) };
+  const t15 = { scale: useTransform(scrollYProgress, [0.305, 0.655], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.305, 0.505], [0, 1]), y: useTransform(scrollYProgress, [0.305, 0.655], ["50px", "0px"]) };
+  const t16 = { scale: useTransform(scrollYProgress, [0.32, 0.67], [0.25, 1]), opacity: useTransform(scrollYProgress, [0.32, 0.52], [0, 1]), y: useTransform(scrollYProgress, [0.32, 0.67], ["50px", "0px"]) };
+  
+  const itemTransforms = [t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16];
 
-  // Second line: "comienza y crece a tu manera." (appears after first line)
-  const textLine2Opacity = useTransform(scrollYProgress, [0.78, 0.92], [0, 1]);
-  const textLine2Y = useTransform(scrollYProgress, [0.78, 0.92], ["40px", "0px"]);
-  const textLine2BlurValue = useTransform(scrollYProgress, [0.78, 0.92], [10, 0]);
-  const textLine2Blur = useTransform(textLine2BlurValue, (value) => `blur(${value}px)`);
+  // Text animations
+  const textLine1Opacity = useTransform(scrollYProgress, [0.45, 0.58], [0, 1]);
+  const textLine1Y = useTransform(scrollYProgress, [0.45, 0.58], ["30px", "0px"]);
+  const textLine1BlurValue = useTransform(scrollYProgress, [0.45, 0.58], [8, 0]);
+  const textLine1Blur = useTransform(textLine1BlurValue, (v) => `blur(${v}px)`);
 
-  // Create staggered animations for each grid item
-  const getItemTransforms = (index: number) => {
-    const baseDelay = 0.08 + (index * 0.015);
-    return {
-      scale: useTransform(scrollYProgress, [baseDelay, baseDelay + 0.35], [0.25, 1]),
-      opacity: useTransform(scrollYProgress, [baseDelay, baseDelay + 0.2], [0, 1]),
-      y: useTransform(scrollYProgress, [baseDelay, baseDelay + 0.35], ["50px", "0px"]),
-    };
-  };
+  const textLine2Opacity = useTransform(scrollYProgress, [0.52, 0.68], [0, 1]);
+  const textLine2Y = useTransform(scrollYProgress, [0.52, 0.68], ["30px", "0px"]);
+  const textLine2BlurValue = useTransform(scrollYProgress, [0.52, 0.68], [8, 0]);
+  const textLine2Blur = useTransform(textLine2BlurValue, (v) => `blur(${v}px)`);
 
   return (
-    <div ref={containerRef} className="relative h-[180vh] bg-white z-0">
-
-      {/* STICKY VIEWPORT */}
-      <div className="sticky top-0 left-0 h-screen w-full overflow-hidden bg-white z-10">
-
-        {/* --- CSS GRID (9 columns, 5 rows) --- */}
-        <motion.div 
-          style={{ opacity: gridOpacity }}
-          className="absolute inset-0 z-10 w-full h-full p-4 md:p-8"
-        >
-          <div 
-            className="w-full h-full grid gap-4"
-            style={{
-              gridTemplateColumns: 'repeat(9, minmax(140px, 1fr))',
-              gridTemplateRows: 'repeat(5, minmax(140px, 1fr))',
-            }}
-          >
-            {/* Grid Items - Rows 1, 2, 4, 5 */}
-            {gridItems.map((item, index) => {
-              const transforms = getItemTransforms(index);
-              return (
-                <motion.div
-                  key={index}
-                  style={{
-                    gridColumn: item.col,
-                    gridRow: item.row,
-                    scale: transforms.scale,
-                    opacity: transforms.opacity,
-                    y: transforms.y,
-                    aspectRatio: '1', // Force square shape
-                  }}
-                  className="rounded-2xl overflow-hidden bg-gray-100"
-                >
-                  <img
-                    src={item.img}
-                    className="w-full h-full object-cover"
-                    style={{ 
-                      // "Perspective hack" to force high-quality anti-aliasing on downscaled images
-                      transform: 'perspective(1px) translateZ(0)',
-                      backfaceVisibility: 'hidden'
-                    }}
-                    alt=""
-                    loading="lazy"
-                  />
-                </motion.div>
-              );
-            })}
-
-            {/* Row 3: Center Text (spans full width) */}
-            <div
-              style={{
-                gridColumn: '1 / -1',
-                gridRow: 3,
-              }}
-              className="flex items-center justify-center px-4"
-            >
-              <h2
-                className="text-3xl md:text-5xl lg:text-6xl text-center text-black leading-snug"
-                style={{ fontWeight: 300 }}
-              >
-                {/* First line with independent animation */}
-                <motion.span
-                  style={{
-                    opacity: textLine1Opacity,
-                    y: textLine1Y,
-                    filter: textLine1Blur,
-                    display: 'inline-block',
-                    willChange: 'transform, opacity, filter'
-                  }}
-                  className="text-black"
-                >
-                  Sin importar tu tipo de negocio,
-                </motion.span>
-                <br/>
-                {/* Second line with delayed animation */}
-                <motion.span
-                  style={{
-                    opacity: textLine2Opacity,
-                    y: textLine2Y,
-                    filter: textLine2Blur,
-                    display: 'inline-block',
-                    willChange: 'transform, opacity, filter'
-                  }}
-                  className="text-black"
-                >
-                  comienza y crece a tu manera.
-                </motion.span>
-              </h2>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* --- THE HERO (Full Width -> Shrinks into grid) --- */}
+    <div ref={containerRef} className="relative h-[180vh] bg-black z-0">
+      {/* Sticky container - starts at top-0 but has padding for navbar */}
+      <div className="sticky top-0 left-0 h-screen w-full overflow-hidden z-10">
+        {/* HERO VIDEO - Covers full screen including navbar area */}
         <motion.div
           style={{
             scale: heroScale,
             x: heroX,
             y: heroY,
             borderRadius: heroBorderRadius,
+            clipPath: heroClip,
           }}
-          className="absolute top-0 left-0 z-20 w-full h-screen overflow-hidden bg-black shadow-2xl origin-top-left"
+          className="absolute top-0 left-0 z-20 w-full h-full overflow-hidden bg-black shadow-2xl origin-top-left"
         >
           <video
             src="/video.webm"
@@ -192,46 +121,159 @@ export default function SquareHero() {
             playsInline
             className="absolute inset-0 w-full h-full object-cover"
           />
-
           <motion.div style={{ opacity: heroTextOpacity }} className="absolute inset-0 bg-black/50" />
-
-        <motion.div 
+          <motion.div
             style={{ opacity: heroTextOpacity }}
-            className="absolute inset-0 flex flex-col items-center justify-center z-30 px-8 text-center"
+            className="absolute inset-0 flex flex-col items-center justify-center z-30 px-4 md:px-8 text-center"
           >
-            {/* <img 
-              src="/imagotipo-white.png" 
-              alt="Avoqado" 
-              className="w-48 md:w-64 mb-12"
-            /> */}
-            <h1
-              className="text-4xl md:text-7xl text-white tracking-tight mb-6 text-center px-4 max-w-5xl"
-              style={{ fontWeight: 300, fontFamily: "'DM Sans', sans-serif" }}
-            >
+            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl text-white tracking-tight mb-4 md:mb-6 text-center max-w-5xl font-light">
               Empezó en tu barrio.<br/>
               Terminó en todo México.
             </h1>
-            {/* <p className="text-2xl md:text-3xl text-avoqado-green mb-8 text-center font-light">
-              Domina tus calles. Piensa en grande.
-            </p> */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center">
-              <a href="https://dashboardv2.avoqado.io/signup" className="bg-black text-white px-10 py-4 rounded-full font-bold text-2xl hover:scale-105 transition-transform cursor-pointer font-baby">
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 items-center">
+              <a href="https://dashboardv2.avoqado.io/signup" className="bg-black text-white px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer font-baby">
                 Comienza gratis
               </a>
-              <a href="/contact" className="bg-transparent border-2 bg-white text-black px-10 py-4 rounded-full font-bold text-2xl hover:scale-105 transition-transform cursor-pointer ">
+              <a href="/contact" className="bg-white text-black px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer border-2">
                 Contáctanos
               </a>
             </div>
           </motion.div>
         </motion.div>
 
+        {/* Grid content - offset by navbar height */}
+        <div className="absolute top-16 left-0 right-0 bottom-0 overflow-hidden bg-white">
+
+        {/* CSS GRID - Desktop (9 cols) */}
+        <motion.div
+          style={{ opacity: gridOpacity }}
+          className="absolute inset-0 z-10 w-full h-full p-4 md:p-6 lg:p-8 hidden md:block"
+        >
+          <div
+            className="w-full h-full grid gap-3 lg:gap-4"
+            style={{
+              gridTemplateColumns: 'repeat(9, 1fr)',
+              gridTemplateRows: 'repeat(5, 1fr)',
+            }}
+          >
+            {gridItems.map((item, index) => {
+              const transforms = itemTransforms[index];
+              return (
+                <motion.div
+                  key={index}
+                  style={{
+                    gridColumn: item.col,
+                    gridRow: item.row,
+                    scale: transforms.scale,
+                    opacity: transforms.opacity,
+                    y: transforms.y,
+                  }}
+                  className="rounded-xl lg:rounded-2xl overflow-hidden bg-gray-100"
+                >
+                  <img
+                    src={item.img}
+                    className="w-full h-full object-cover"
+                    alt=""
+                    loading="lazy"
+                  />
+                </motion.div>
+              );
+            })}
+
+            {/* Center Text Row - spans full width */}
+            <div
+              style={{ gridColumn: '1 / -1', gridRow: 3 }}
+              className="flex items-center justify-center px-4 relative z-20"
+            >
+              <div className="relative">
+                <div className="absolute inset-0 -inset-x-6 -inset-y-3 bg-white/90 backdrop-blur-sm rounded-xl" />
+                <h2 className="relative text-2xl lg:text-4xl xl:text-5xl text-center text-black leading-snug font-light">
+                  <motion.span
+                    style={{ opacity: textLine1Opacity, y: textLine1Y, filter: textLine1Blur, display: 'inline-block' }}
+                  >
+                    Sin importar tu tipo de negocio,
+                  </motion.span>
+                  <br/>
+                  <motion.span
+                    style={{ opacity: textLine2Opacity, y: textLine2Y, filter: textLine2Blur, display: 'inline-block' }}
+                  >
+                    comienza y crece a tu manera.
+                  </motion.span>
+                </h2>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* CSS GRID - Mobile (3 cols, fewer images) */}
+        <motion.div
+          style={{ opacity: gridOpacity }}
+          className="absolute inset-0 z-10 w-full h-full p-3 md:hidden"
+        >
+          <div
+            className="w-full h-full grid gap-2"
+            style={{
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gridTemplateRows: 'repeat(5, 1fr)',
+            }}
+          >
+            {gridItems.map((item, index) => {
+              if (!item.mobilePos) return null;
+              const transforms = itemTransforms[index];
+              return (
+                <motion.div
+                  key={index}
+                  style={{
+                    gridColumn: item.mobilePos.col,
+                    gridRow: item.mobilePos.row,
+                    scale: transforms.scale,
+                    opacity: transforms.opacity,
+                    y: transforms.y,
+                  }}
+                  className="rounded-lg overflow-hidden bg-gray-100"
+                >
+                  <img
+                    src={item.img}
+                    className="w-full h-full object-cover"
+                    alt=""
+                    loading="lazy"
+                  />
+                </motion.div>
+              );
+            })}
+
+            {/* Center Text Row - Mobile */}
+            <div
+              style={{ gridColumn: '1 / -1', gridRow: 3 }}
+              className="flex items-center justify-center px-2 relative z-20"
+            >
+              <div className="relative">
+                <div className="absolute inset-0 -inset-x-4 -inset-y-2 bg-white/90 backdrop-blur-sm rounded-lg" />
+                <h2 className="relative text-base sm:text-lg text-center text-black leading-snug font-light">
+                  <motion.span
+                    style={{ opacity: textLine1Opacity, y: textLine1Y, filter: textLine1Blur, display: 'inline-block' }}
+                  >
+                    Sin importar tu negocio,
+                  </motion.span>
+                  <br/>
+                  <motion.span
+                    style={{ opacity: textLine2Opacity, y: textLine2Y, filter: textLine2Blur, display: 'inline-block' }}
+                  >
+                    crece a tu manera.
+                  </motion.span>
+                </h2>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        </div>
       </div>
 
-      {/* More content below */}
+      {/* Spacer */}
       <div className="h-screen w-full bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-400 text-2xl">Continue scrolling...</p>
+        <p className="text-gray-400 text-xl md:text-2xl">Continue scrolling...</p>
       </div>
-
     </div>
   );
 }

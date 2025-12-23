@@ -182,8 +182,6 @@ const initialClasses = transparentOnTop ? transparentClasses : solidClasses;
         let isMegaMenuOpen = false;
 
         const updateNavbar = () => {
-             navbar.classList.remove('white-nav');
-
              if (isMegaMenuOpen || window.scrollY > 50) {
                 // Mega menu open OR scrolled: White navbar
                 navbar.classList.remove(...transparentClasses);

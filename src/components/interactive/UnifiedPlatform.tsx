@@ -71,7 +71,7 @@ const DATA_SOURCES: DataSource[] = [
     ),
     color: '#A78BFA',
     angle: 45,
-    radius: 185,
+    radius: 175,
   },
   {
     id: 'terminal2',
@@ -90,7 +90,7 @@ const DATA_SOURCES: DataSource[] = [
     ),
     color: '#C084FC',
     angle: 100,
-    radius: 210,
+    radius: 180,
   },
   {
     id: 'pos',
@@ -333,8 +333,8 @@ export const UnifiedPlatform: React.FC = () => {
   const titleY = useTransform(scrollYProgress, [0, 0.15], [30, 0]);
   const centerOpacity = useTransform(scrollYProgress, [0.1, 0.25], [0, 1]);
 
-  const containerWidth = MAX_RADIUS * 2 + NODE_SIZE + 80;
-  const containerHeight = MAX_RADIUS * 2 + NODE_SIZE + 80;
+  const containerWidth = MAX_RADIUS * 2 + NODE_SIZE + 180; // Increased buffer
+  const containerHeight = MAX_RADIUS * 2 + NODE_SIZE + 180;
   const centerX = containerWidth / 2;
   const centerY = containerHeight / 2;
 
@@ -356,22 +356,22 @@ export const UnifiedPlatform: React.FC = () => {
   const showElectricity = scrollValue >= 0.75;
 
   return (
-    <div ref={containerRef} className="relative h-[180vh] bg-black z-0">
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden z-10">
-        <div className="max-w-7xl mx-auto px-6 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div ref={containerRef} className="relative h-[120vh] bg-black z-0">
+      <div className="sticky top-16 h-[calc(100vh-4rem)] flex items-start lg:items-center z-10 pt-4 lg:pt-0">
+        <div className="max-w-7xl mx-auto px-4 lg:px-6 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start lg:items-center">
             {/* Left: Text */}
-            <div className="space-y-6">
+            <div className="space-y-4 lg:space-y-6">
               <motion.p
                 style={{ opacity: titleOpacity }}
-                className="text-avoqado-green font-semibold text-sm tracking-widest uppercase"
+                className="text-avoqado-green font-semibold text-xs lg:text-sm tracking-widest uppercase"
               >
                 Plataforma Unificada
               </motion.p>
 
               <motion.h2
                 style={{ opacity: titleOpacity, y: titleY }}
-                className="text-4xl md:text-5xl font-bold text-white leading-tight"
+                className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight"
               >
                 Un solo sistema.<br />
                 <span className="text-gray-400">Cero conciliaciones.</span>
@@ -379,7 +379,7 @@ export const UnifiedPlatform: React.FC = () => {
 
               <motion.p
                 style={{ opacity: useTransform(scrollYProgress, [0.1, 0.2], [0, 1]) }}
-                className="text-gray-500 text-lg leading-relaxed max-w-lg"
+                className="text-gray-500 text-sm lg:text-lg leading-relaxed max-w-lg"
               >
                 Múltiples terminales, pagos en efectivo, tarjetas, QR y conexiones POS.
                 Todo registrado automáticamente en un solo lugar.
@@ -387,7 +387,7 @@ export const UnifiedPlatform: React.FC = () => {
 
               <motion.div
                 style={{ opacity: useTransform(scrollYProgress, [0.6, 0.75], [0, 1]) }}
-                className="space-y-3"
+                className="hidden lg:block space-y-3"
               >
                 {['Sin hojas de Excel para conciliar', 'Cierre de caja automático', 'Reportes unificados en tiempo real'].map((text, i) => (
                   <div key={i} className="flex items-center gap-3">
@@ -402,12 +402,23 @@ export const UnifiedPlatform: React.FC = () => {
               </motion.div>
             </div>
 
-            {/* Right: Radial Diagram with Electric Flow */}
-            <div className="flex justify-center lg:justify-end">
+            {/* Right: Radial Diagram with Electric Flow - Responsive */}
+            <div className="flex justify-center lg:justify-end w-full overflow-visible">
+              {/* Wrapper that scales with the viewport */}
               <div
-                className="relative"
-                style={{ width: containerWidth, height: containerHeight }}
+                className="relative overflow-visible"
+                style={{
+                  width: `min(100%, ${containerWidth}px)`,
+                  height: `min(70vh, ${containerHeight}px)`,
+                }}
               >
+                <div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.7] sm:scale-[0.85] md:scale-[1] lg:scale-[1.1] xl:scale-[1.2]"
+                  style={{
+                    width: containerWidth,
+                    height: containerHeight,
+                  }}
+                >
                 {/* Subtle radial gradient background */}
                 <div 
                   className="absolute inset-0 rounded-full opacity-20"
@@ -494,6 +505,7 @@ export const UnifiedPlatform: React.FC = () => {
                     />
                   );
                 })}
+                </div>
               </div>
             </div>
           </div>

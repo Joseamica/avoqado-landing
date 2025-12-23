@@ -41,7 +41,7 @@ export default function ChatbotCTA() {
 
   return (
     <div ref={containerRef} className="relative h-[150vh] bg-black z-0">
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-4 overflow-hidden z-10">
+      <div className="sticky top-16 h-[calc(100vh-4rem)] flex flex-col items-center justify-center px-4 overflow-hidden z-10">
         
         {/* Background decorations - REMOVED for pure black */}
         {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] h-[150vw] bg-avoqado-green/5 rounded-full blur-3xl pointer-events-none" /> */}
@@ -70,30 +70,30 @@ export default function ChatbotCTA() {
             <div className="absolute inset-0 bg-gradient-to-r from-avoqado-green/20 via-white/10 to-avoqado-green/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             
             <div className="relative flex items-center bg-gray-900/80 backdrop-blur-xl border border-white/10 rounded-full overflow-hidden shadow-2xl transition-all duration-300 focus-within:border-avoqado-green/50 focus-within:ring-1 focus-within:ring-avoqado-green/50">
-              <div className="pl-6 text-avoqado-green shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-pulse">
+              <div className="pl-3 sm:pl-6 text-avoqado-green shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-6 sm:h-6 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
                   <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
                   <line x1="12" x2="12" y1="19" y2="22"/>
                 </svg>
               </div>
-              
+
               <input
                 ref={inputRef}
                 type="text"
-                className="flex-1 w-full bg-transparent border-none text-white text-lg px-4 py-4 focus:ring-0 focus:outline-none focus:border-none focus-visible:ring-0 focus-visible:outline-none focus-visible:border-none placeholder-gray-500 font-urbanist appearance-none !outline-none !shadow-none !ring-0 m-0 min-w-0"
-                placeholder="¿Cuál fue el platillo más vendido hoy?"
+                className="flex-1 w-full bg-transparent border-none text-white text-sm sm:text-base lg:text-lg px-2 sm:px-4 py-3 sm:py-4 focus:ring-0 focus:outline-none focus:border-none focus-visible:ring-0 focus-visible:outline-none focus-visible:border-none placeholder-gray-500 font-urbanist appearance-none !outline-none !shadow-none !ring-0 m-0 min-w-0"
+                placeholder="¿Cuál fue el platillo más vendido?"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
               />
-              
-              <div className="pr-2 shrink-0">
-                <button 
+
+              <div className="pr-1 sm:pr-2 shrink-0">
+                <button
                   onClick={() => inputValue.trim().length > 0 && setIsModalOpen(true)}
-                  className={`p-2 rounded-full transition-all duration-300 ${inputValue.trim().length > 0 ? 'bg-avoqado-green text-black hover:scale-105' : 'bg-white/5 text-gray-500 cursor-not-allowed'}`}
+                  className={`p-1.5 sm:p-2 rounded-full transition-all duration-300 ${inputValue.trim().length > 0 ? 'bg-avoqado-green text-black hover:scale-105' : 'bg-white/5 text-gray-500 cursor-not-allowed'}`}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14"/>
                     <path d="m12 5 7 7-7 7"/>
                   </svg>
@@ -103,13 +103,13 @@ export default function ChatbotCTA() {
           </motion.div>
 
           {/* Chips Section */}
-          <motion.div 
+          <motion.div
             style={{ opacity: chipsOpacity, y: chipsY }}
-            className="flex flex-wrap gap-3 justify-center text-sm text-gray-500"
+            className="flex flex-wrap gap-2 sm:gap-3 justify-center text-xs sm:text-sm text-gray-500"
           >
-            <span className="bg-white/5 px-4 py-2 rounded-full border border-white/5 hover:bg-white/10 cursor-pointer transition-colors" onClick={() => setInputValue("Dame un reporte de ventas")}>"Dame un reporte de ventas"</span>
-            <span className="bg-white/5 px-4 py-2 rounded-full border border-white/5 hover:bg-white/10 cursor-pointer transition-colors" onClick={() => setInputValue("Crear una promoción 2x1")}>"Crear una promoción 2x1"</span>
-            <span className="bg-white/5 px-4 py-2 rounded-full border border-white/5 hover:bg-white/10 cursor-pointer transition-colors sm:block hidden" onClick={() => setInputValue("¿Por qué mi mejor cliente Juan dejó de venir?")}>"¿Por qué mi mejor cliente Juan dejó de venir?"</span>
+            <span className="bg-white/5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-white/5 hover:bg-white/10 cursor-pointer transition-colors" onClick={() => setInputValue("Dame un reporte de ventas")}>"Reporte de ventas"</span>
+            <span className="bg-white/5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-white/5 hover:bg-white/10 cursor-pointer transition-colors" onClick={() => setInputValue("Crear una promoción 2x1")}>"Promoción 2x1"</span>
+            <span className="bg-white/5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-white/5 hover:bg-white/10 cursor-pointer transition-colors sm:block hidden" onClick={() => setInputValue("¿Por qué mi mejor cliente Juan dejó de venir?")}>"¿Por qué Juan dejó de venir?"</span>
           </motion.div>
         
         </div>

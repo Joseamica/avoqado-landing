@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 // Image imports
 import foodImg from '../../assets/industry/food.png';
@@ -66,12 +66,55 @@ export default function IndustryAccordion() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [isHoveringSection, setIsHoveringSection] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(true); // Default true to hide cursor on SSR
   const containerRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+
+  // Detect touch device
+  useEffect(() => {
+    const checkTouch = () => {
+      setIsTouchDevice(
+        'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        window.matchMedia('(pointer: coarse)').matches
+      );
+    };
+    checkTouch();
+  }, []);
+
+  // Scroll-based animations
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  // Title animations
+  // Title animations starts immediately
+  const titleOpacity = useTransform(scrollYProgress, [0, 0.1], [0, 1]); // accelerated
+  const titleY = useTransform(scrollYProgress, [0, 0.1], [50, 0]);
+
+  // Panel animations - shifted earlier
+  // Panel animations - instant start to prevent gaps
+  const panel0Opacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
+  const panel0Y = useTransform(scrollYProgress, [0, 0.15], [60, 0]);
+  const panel1Opacity = useTransform(scrollYProgress, [0.05, 0.2], [0, 1]);
+  const panel1Y = useTransform(scrollYProgress, [0.05, 0.2], [60, 0]);
+  const panel2Opacity = useTransform(scrollYProgress, [0.1, 0.25], [0, 1]);
+  const panel2Y = useTransform(scrollYProgress, [0.1, 0.25], [60, 0]);
+  const panel3Opacity = useTransform(scrollYProgress, [0.15, 0.3], [0, 1]);
+  const panel3Y = useTransform(scrollYProgress, [0.15, 0.3], [60, 0]);
+
+  const panelTransforms = [
+    { opacity: panel0Opacity, y: panel0Y },
+    { opacity: panel1Opacity, y: panel1Y },
+    { opacity: panel2Opacity, y: panel2Y },
+    { opacity: panel3Opacity, y: panel3Y },
+  ];
 
   // Mouse move handler for custom cursor
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
+    if (stickyRef.current) {
+        const rect = stickyRef.current.getBoundingClientRect();
         setCursorPos({
             x: e.clientX - rect.left,
             y: e.clientY - rect.top
@@ -80,82 +123,96 @@ export default function IndustryAccordion() {
   };
 
   return (
-    <section 
-        className="relative w-full py-20 px-4 md:px-10 overflow-hidden cursor-none"
-        ref={containerRef}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setIsHoveringSection(true)}
-        onMouseLeave={() => {
+    <div ref={containerRef} className="relative h-auto bg-black pt-4 pb-20">
+      {/* Standard container */}
+      <div
+        ref={stickyRef}
+        className={`relative h-[600px] flex flex-col px-4 md:px-10 overflow-hidden ${!isTouchDevice ? 'cursor-none' : ''}`}
+        onMouseMove={!isTouchDevice ? handleMouseMove : undefined}
+        onMouseEnter={!isTouchDevice ? () => setIsHoveringSection(true) : undefined}
+        onMouseLeave={!isTouchDevice ? () => {
             setIsHoveringSection(false);
             setHoveredIndex(null);
-        }}
-    >
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-12">
-            <p className="!text-white text-sm tracking-widest uppercase mb-2 font-medium">Construido para Cada Industria</p>
-            <h2 className="!text-white text-5xl md:text-6xl font-thin leading-tight">
+        } : undefined}
+      >
+        <div className="max-w-7xl mx-auto w-full flex flex-col flex-1 min-h-0">
+          {/* Animated Title */}
+          <motion.div
+            className="mb-4 sm:mb-6 lg:mb-8 shrink-0"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <p className="!text-white text-xs sm:text-sm tracking-widest uppercase mb-1 sm:mb-2 font-medium">Construido para Cada Industria</p>
+            <h2 className="!text-white text-2xl sm:text-3xl lg:text-5xl font-thin leading-tight">
                 Mantén tu negocio <br/> creciendo
             </h2>
-        </div>
+          </motion.div>
 
-        <div className="flex flex-col md:flex-row h-[600px] gap-2 md:gap-4">
+          {/* Animated Panels */}
+          <div className="flex flex-col md:flex-row flex-1 min-h-0 gap-2 md:gap-4">
             {industries.map((industry, index) => (
-                <IndustryPanel 
+                <IndustryPanel
                     key={industry.id}
                     industry={industry}
                     isHovered={hoveredIndex === index}
                     isAnyHovered={hoveredIndex !== null}
                     onHover={() => setHoveredIndex(index)}
+                    onLeave={() => setHoveredIndex(null)}
+                    scrollStyles={{ opacity: 1, y: 0 }}
                 />
             ))}
+          </div>
         </div>
-      </div>
 
-      {/* ========== Custom Cursor: Imagen o Texto según industria ========== */}
-       <motion.div
-            className="pointer-events-none fixed top-0 left-0 z-50"
-            animate={{
-                x: cursorPos.x + (containerRef.current?.getBoundingClientRect().left || 0) - 75,
-                y: cursorPos.y + (containerRef.current?.getBoundingClientRect().top || 0) - 75,
-                scale: isHoveringSection ? 1 : 0,
-                opacity: isHoveringSection ? 1 : 0,
-                rotate: hoveredIndex !== null ? industries[hoveredIndex].rotation : 0
-            }}
-            transition={{
-                 x: { type: "tween", duration: 0, ease: "linear" }, // Instantáneo en X
-                 y: { type: "tween", duration: 0, ease: "linear" }, // Instantáneo en Y
-                 scale: { type: "spring", damping: 20, stiffness: 300, mass: 0.5 }, // Spring solo para aparecer/desaparecer
-                 opacity: { duration: 0.2 },
-                 rotate: { type: "spring", damping: 20, stiffness: 200 }
-            }}
-            style={{ position: 'fixed' }}
-        >
-            {/* Si la industria tiene cursorImage, mostrar imagen; sino, mostrar texto */}
-            {hoveredIndex !== null && industries[hoveredIndex].cursorImage ? (
-                <img
-                    src={industries[hoveredIndex].cursorImage}
-                    alt={industries[hoveredIndex].cursorText}
-                    className={`${industries[hoveredIndex].cursorSize || 'w-44'} h-auto`}
-                />
-            ) : (
-                <div
-                    className="text-4xl text-white uppercase leading-none"
-                    style={{
-                        fontFamily: hoveredIndex !== null ? industries[hoveredIndex].font : "'Permanent Marker', cursive",
-                        textShadow: `
-                            -1px -1px 0px #000,
-                            1px -1px 0px #000,
-                            -1px 1px 0px #000,
-                            1px 1px 0px #000
-                        `,
-                        WebkitTextStroke: '2px black',
-                        letterSpacing: '0.05em'
-                    }}
-                >
-                    {hoveredIndex !== null ? industries[hoveredIndex].cursorText : 'Ver'}
-                </div>
-            )}
-        </motion.div>
+        {/* ========== Custom Cursor: Only shows on desktop when hovering a panel ========== */}
+        {!isTouchDevice && (
+          <motion.div
+              className="pointer-events-none absolute z-50"
+              animate={{
+                  x: cursorPos.x - 75,
+                  y: cursorPos.y - 75,
+                  scale: hoveredIndex !== null ? 1 : 0,
+                  opacity: hoveredIndex !== null ? 1 : 0,
+                  rotate: hoveredIndex !== null ? industries[hoveredIndex].rotation : 0
+              }}
+              transition={{
+                   x: { type: "tween", duration: 0, ease: "linear" },
+                   y: { type: "tween", duration: 0, ease: "linear" },
+                   scale: { type: "spring", damping: 20, stiffness: 300, mass: 0.5 },
+                   opacity: { duration: 0.2 },
+                   rotate: { type: "spring", damping: 20, stiffness: 200 }
+              }}
+          >
+              {/* Si la industria tiene cursorImage, mostrar imagen; sino, mostrar texto */}
+              {hoveredIndex !== null && industries[hoveredIndex].cursorImage ? (
+                  <img
+                      src={industries[hoveredIndex].cursorImage}
+                      alt={industries[hoveredIndex].cursorText}
+                      className={`${industries[hoveredIndex].cursorSize || 'w-44'} h-auto`}
+                  />
+              ) : (
+                  <div
+                      className="text-4xl text-white uppercase leading-none"
+                      style={{
+                          fontFamily: hoveredIndex !== null ? industries[hoveredIndex].font : "'Permanent Marker', cursive",
+                          textShadow: `
+                              -1px -1px 0px #000,
+                              1px -1px 0px #000,
+                              -1px 1px 0px #000,
+                              1px 1px 0px #000
+                          `,
+                          WebkitTextStroke: '2px black',
+                          letterSpacing: '0.05em'
+                      }}
+                  >
+                      {hoveredIndex !== null ? industries[hoveredIndex].cursorText : 'Ver'}
+                  </div>
+              )}
+          </motion.div>
+        )}
+      </div>
 
       {/* ========== OPCIÓN 2: Texto Neón Verde (Descomenta para usar) ==========
        <motion.div
@@ -215,23 +272,32 @@ export default function IndustryAccordion() {
             </div>
         </motion.div>
       */}
-    </section>
+    </div>
   );
 }
 
-function IndustryPanel({ industry, isHovered, isAnyHovered, onHover }: { 
-    industry: typeof industries[0], 
-    isHovered: boolean, 
+function IndustryPanel({ industry, isHovered, isAnyHovered, onHover, onLeave, scrollStyles }: {
+    industry: typeof industries[0],
+    isHovered: boolean,
     isAnyHovered: boolean,
-    onHover: () => void 
+    onHover: () => void,
+    onLeave: () => void,
+    scrollStyles: { opacity: any, y: any }
 }) {
     return (
         <motion.div
-            className="relative h-full rounded-2xl overflow-hidden cursor-none"
+            className="relative flex-1 min-h-0 md:h-full rounded-xl sm:rounded-2xl overflow-hidden cursor-none"
             onMouseEnter={onHover}
+            onMouseLeave={onLeave}
+            style={{
+                opacity: scrollStyles.opacity,
+                y: scrollStyles.y
+            }}
             animate={{
                 flex: isHovered ? 3 : 1,
-                opacity: isAnyHovered && !isHovered ? 0.7 : 1
+            }}
+            whileHover={{
+                opacity: 1
             }}
             transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
         >
@@ -249,31 +315,31 @@ function IndustryPanel({ industry, isHovered, isAnyHovered, onHover }: {
             </div>
 
             {/* Content */}
-            <div className="absolute inset-0 p-8 flex flex-col justify-end">
+            <div className="absolute inset-0 p-4 sm:p-6 lg:p-8 flex flex-col justify-end">
                  <motion.div
                     initial={false}
                     animate={{ y: isHovered ? 0 : 20 }}
                     transition={{ duration: 0.4 }}
                  >
-                    <h3 className="text-white text-3xl mb-3 leading-none">
+                    <h3 className="text-white text-xl sm:text-2xl lg:text-3xl mb-2 lg:mb-3 leading-none">
                         {industry.title}
                     </h3>
-                    
+
                     <motion.div
                         initial={{ height: 0, opacity: 0 }}
-                        animate={{ 
+                        animate={{
                             height: isHovered ? 'auto' : 0,
                             opacity: isHovered ? 1 : 0
                         }}
                         transition={{ duration: 0.4 }}
                         className="overflow-hidden"
                     >
-                        <p className="text-gray-300 text-lg font-medium leading-relaxed pb-2">
+                        <p className="text-gray-300 text-sm sm:text-base lg:text-lg font-medium leading-relaxed pb-1 sm:pb-2">
                             {industry.description}
                         </p>
-                        <span className="inline-flex items-center text-white font-bold text-sm mt-4 group">
+                        <span className="inline-flex items-center text-white font-bold text-xs sm:text-sm mt-2 sm:mt-4 group">
                             Conocer más
-                            <svg className="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            <svg className="w-3 h-3 sm:w-4 sm:h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                         </span>
                     </motion.div>
                  </motion.div>
