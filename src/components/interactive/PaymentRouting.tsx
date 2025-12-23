@@ -929,7 +929,7 @@ export const PaymentRouting: React.FC = () => {
       // Available height for diagram: viewport - navbar (80px) - header text (~120px) - padding
       const availableHeight = vh - 80 - 140 - 40; // navbar + header + margins
       const isTightDesktop = vw >= 1024 && vw < 1280;
-      const availableWidth = vw < 1024 ? vw - 32 : (vw - 64) * (isTightDesktop ? 0.62 : 0.62); // 62% width matches new grid layout
+      const availableWidth = vw < 1024 ? vw - 32 : (vw - 64) * (isTightDesktop ? 0.6 : 0.62); // Accounting for PR-8 padding
       
       // Calculate scale to fit both dimensions
       const scaleForHeight = Math.min(1, availableHeight / GRID_HEIGHT);
@@ -938,8 +938,8 @@ export const PaymentRouting: React.FC = () => {
       // Use the smaller scale to ensure it fits both ways
       let scale = Math.min(scaleForHeight, scaleForWidth);
       
-      // Clamp between 0.25 and 1
-      scale = Math.max(0.25, Math.min(1, scale));
+      // Clamp between 0.25 and 0.95 to avoid edge-to-edge look
+      scale = Math.max(0.25, Math.min(0.95, scale));
       
       setDynamicScale(scale);
     };
@@ -1003,8 +1003,8 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
 
 
   return (
-    <div ref={containerRef} className="relative h-[250vh] z-0" style={{ backgroundColor: '#f6f9fc' }}>
-      <div className="sticky top-20 lg:top-16 h-[calc(100vh-5rem)] lg:h-[calc(100vh-4rem)] flex items-start lg:items-center z-10">
+    <div ref={containerRef} className="relative h-auto lg:h-[250vh] z-0" style={{ backgroundColor: '#f6f9fc' }}>
+      <div className="relative lg:sticky top-0 lg:top-16 h-auto lg:h-[calc(100vh-4rem)] flex items-start lg:items-center z-10 py-8 lg:py-0">
         <div className="max-w-7xl mx-auto px-4 lg:px-6 w-full h-full flex flex-col">
           <div className="flex flex-col lg:grid lg:grid-cols-[35%_65%] gap-2 lg:gap-8 items-start lg:items-center flex-1 h-full">
             <div className="space-y-2 lg:space-y-8 w-full flex-shrink-0">
@@ -1051,7 +1051,7 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
             {isMobile ? (
               <motion.div style={{ opacity: gridOpacity }} className="w-full flex-1 flex flex-col min-h-0">
                 {/* Top: Grid (scrollable if needed, max height limited) */}
-                <div className="flex-shrink-0 max-h-[50vh] overflow-y-auto min-h-0 p-2">
+                <div className="flex-shrink-0 w-full p-2">
                   <div className="grid grid-cols-4 md:grid-cols-5 gap-3 md:gap-4 p-2">
                     {PRODUCTS.filter(p => activeCards.has(p.id) || !hoveredCard && !activePillar).map((p) => {
                       const isActive = activeCards.has(p.id);
@@ -1059,8 +1059,8 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
                         <div
                           key={p.id}
                           onClick={() => setHoveredCard(p.id)}
-                          className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-200 relative group aspect-square
-                            ${isActive ? 'bg-white shadow-md ring-2 ring-black transform scale-[1.02] z-10' : 'bg-gray-50 hover:bg-white hover:shadow-sm'}
+                          className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-300 relative group aspect-square
+                            ${isActive ? 'bg-white shadow-[0_12px_24px_rgba(0,0,0,0.08)] ring-1 ring-black/5 transform scale-105 z-10' : 'bg-gray-50 hover:bg-white hover:shadow-sm'}
                           `}
                         >
                           <div className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center mb-2 transition-transform duration-300 ${isActive ? 'scale-110' : 'grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100'}`}>
@@ -1080,7 +1080,7 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
                 </div>
 
                 {/* Bottom: Details Panel (Streamlined) */}
-                <div className="flex-shrink-0 bg-white border-t border-gray-100 p-6 md:p-8 flex flex-col gap-4 z-20">
+                <div className="flex-1 bg-white border border-gray-100 p-6 md:p-8 flex flex-col justify-center gap-8 z-20 min-h-0 rounded-3xl mx-4 mb-4 shadow-xl">
                   <div className="flex items-start gap-5">
                      {/* Large Icon Preview */}
                      <div className="w-16 h-16 p-3 bg-gray-50 rounded-2xl flex items-center justify-center flex-shrink-0">
@@ -1093,21 +1093,18 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
                              activePillar === 'tpv' ? 'TPV Móvil' : 
                              activePillar === 'qr' ? 'Pagos QR' : 'Dashboard'}
                         </h3>
-                        <p className="text-gray-600 text-sm md:text-base leading-relaxed line-clamp-3">
+                        <p className="text-base md:text-lg text-gray-600 leading-relaxed">
                             {selectedDescription}
                         </p>
                      </div>
                   </div>
                   
-                  <button className="w-full py-3.5 bg-black text-white rounded-xl text-sm font-semibold hover:bg-gray-900 transition-colors active:scale-[0.98] flex items-center justify-center gap-2">
-                    <span>Ver funcionalidad completa</span>
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                  </button>
+
                 </div>
               </motion.div>
             ) : (
               /* DESKTOP: Full grid with connections */
-              <motion.div style={{ opacity: gridOpacity }} className="flex justify-end w-full">
+              <motion.div style={{ opacity: gridOpacity }} className="flex justify-end w-full lg:pr-8">
                 <div 
                   className="origin-top-right transition-transform duration-200"
                   style={{ 

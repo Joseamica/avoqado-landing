@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 
 const AnimatedCounter: React.FC<{ value: number; className?: string }> = ({ value, className }) => {
   const motionValue = useMotionValue(0);
@@ -16,9 +16,6 @@ const AnimatedCounter: React.FC<{ value: number; className?: string }> = ({ valu
 };
 
 export const EarlyAccessCTA: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const [hasTriggered, setHasTriggered] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -51,16 +48,7 @@ export const EarlyAccessCTA: React.FC = () => {
   const formOpacity = useTransform(scrollYProgress, [0.55, 0.75], [0, 1]);
   const footerOpacity = useTransform(scrollYProgress, [0.75, 0.9], [0, 1]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setSubmitted(true);
-    setIsSubmitting(false);
-    setEmail('');
-    setAnimatedSpotsLeft(prev => Math.max(1, prev - 1));
-    setAnimatedSpotsTaken(prev => Math.min(99, prev + 1));
-  };
+
 
   const benefits = [
     { stat: "100%", label: "Features priorizadas por ti" },
@@ -106,47 +94,17 @@ export const EarlyAccessCTA: React.FC = () => {
             ))}
           </motion.div>
 
-          {/* Form */}
+          {/* Button */}
           <motion.div className="max-w-md mx-auto" style={{ opacity: formOpacity }}>
-            <AnimatePresence mode="wait">
-              {submitted ? (
-                <motion.div
-                  key="success"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="py-4 sm:py-8"
-                >
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-full bg-avoqado-green flex items-center justify-center">
-                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <p className="text-lg sm:text-xl font-semibold text-black">¡Bienvenido al equipo!</p>
-                </motion.div>
-              ) : (
-                <motion.form key="form" onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
-                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="tu@email.com"
-                      required
-                      className="flex-1 px-4 sm:px-6 py-3 sm:py-4 text-base sm:text-lg border-2 border-gray-200 rounded-full focus:border-black bg-white text-black"
-                      style={{ outline: 'none', boxShadow: 'none', borderRadius: '9999px' }}
-                    />
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold bg-black text-white hover:bg-gray-800 transition-colors disabled:opacity-50"
-                    >
-                      {isSubmitting ? '...' : 'Reservar'}
-                    </button>
-                  </div>
-                  <p className="text-xs text-gray-400">Sin costo · Sin compromiso</p>
-                </motion.form>
-              )}
-            </AnimatePresence>
+            <div className="flex justify-center">
+              <a
+                href="/contact"
+                className="inline-flex px-10 sm:px-12 py-4 sm:py-5 rounded-full font-bold text-lg sm:text-xl bg-black text-white hover:bg-gray-800 hover:scale-105 transition-all shadow-xl"
+              >
+                Reservar
+              </a>
+            </div>
+            <p className="text-xs text-gray-400 mt-4">Sin costo · Sin compromiso</p>
           </motion.div>
 
           {/* Footer */}

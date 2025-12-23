@@ -1,139 +1,189 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-
-type FAQItem = {
-  question: string;
-  answer: string;
-  category: string;
-};
-
-const faqs: FAQItem[] = [
-  {
-    category: 'General',
-    question: '¿Qué es Avoqado?',
-    answer: 'Avoqado es una plataforma integral de gestión para comercios que unifica punto de venta, pagos, reservas y administración en una sola solución elegante y fácil de usar.'
-  },
-  {
-    category: 'General',
-    question: '¿Cuáles son las características principales?',
-    answer: 'Incluye TPV móvil, dashboard administrativo web, pagos con QR, gestión de inventario, y herramientas de marketing para fidelización de clientes.'
-  },
-  {
-    category: 'Precios',
-    question: '¿Cúales son los costos?',
-    answer: 'Ofrecemos planes flexibles adaptados al tamaño de tu negocio. Contáctanos para una cotización personalizada.'
-  },
-  {
-    category: 'Precios',
-    question: '¿Hay comisiones ocultas?',
-    answer: 'No. Creemos en la transparencia total. Todas las comisiones se acuerdan previamente y no hay cargos sorpresa.'
-  },
-  {
-    category: 'Seguridad',
-    question: '¿Mis datos están seguros?',
-    answer: 'Sí, utilizamos encriptación de grado bancario y cumplimos con los estándares internacionales de seguridad de datos (PCI-DSS) para proteger tu información y la de tus clientes.'
-  },
-  {
-    category: 'Soporte',
-    question: '¿Qué tipo de soporte ofrecen?',
-    answer: 'Ofrecemos soporte técnico 24/7 a través de chat en vivo, correo electrónico y línea telefónica prioritaria para cuentas empresariales.'
-  }
-];
+import { useRef, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function FAQ() {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const [mounted, setMounted] = useState(false);
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
-  const toggleIndex = (index: number) => {
-    setActiveIndex(activeIndex === index ? null : index);
-  };
+  useEffect(() => {
+    setMounted(true);
+    const updateSize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+    
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  
+  // Track scroll progress of this specific section (200vh height)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  // Animation Maps
+  // 1. Text Writing Sequence
+  // Line 1: 0% -> 10% (Starts as soon as it sticks)
+  const writeProgress1 = useTransform(scrollYProgress, [0, 0.1], ["0%", "100%"]);
+  // Line 2: 10% -> 20%
+  const writeProgress2 = useTransform(scrollYProgress, [0.1, 0.2], ["0%", "100%"]);
+
+  // 2. Arrow Sequence
+  // a) Main Line draws first (25% -> 60%)
+  const lineDraw = useTransform(scrollYProgress, [0.25, 0.60], [0, 1]); 
+  // Fix "White Dot" - Opacity 0 until just before drawing
+  const arrowLineOpacity = useTransform(scrollYProgress, [0.24, 0.25], [0, 1]);
+  
+  // b) Arrow Head fades in immediately AFTER line finishes
+  const arrowHeadOpacity = useTransform(scrollYProgress, [0.59, 0.60], [0, 1]);
+
+  // 3. Circle draws around the bot (65% -> 90%)
+  const circleDraw = useTransform(scrollYProgress, [0.65, 0.90], [0, 1]); 
+  
+  // Overlay Opacity
+  // Fade in at start (0-5%) and STAY VISIBLE
+  const overlayOpacity = useTransform(scrollYProgress, [0, 0.05], [0, 1]);
+
+  // Calculate coordinates based on window size
+  const { width, height } = windowSize;
+  const startX = width / 2;
+  const startY = height / 2 + 90; // Start lower to avoid crossing text
+  
+  // Updated Target: Width-115 (Left) and Height-70 (Lower)
+  const endX = width - 115;
+  const endY = height - 70;
+  
+  // Control points for the curve (Cubic Bezier)
+  const cp1X = width * 0.4; 
+  const cp1Y = height * 0.7;
+  const cp2X = width * 0.75; 
+  const cp2Y = endY - 10;
+
+  const arrowPathD = `M ${startX} ${startY} C ${cp1X} ${cp1Y}, ${cp2X} ${cp2Y}, ${endX} ${endY}`;
+  // Expert UX: "C-Shaped" Hook Arrowhead (Matches reference)
+  // A clean, simple hook curve
+  const arrowHeadD = `M ${endX - 25} ${endY - 25} Q ${endX} ${endY - 5} ${endX} ${endY} Q ${endX} ${endY + 5} ${endX - 25} ${endY + 20}`;
+
+  // Double-Loop "Scribble" Circle Path
+  // We construct a path that loops around the center essentially twice with variation
+  const cx = width - 54;
+  const cy = height - 54;
+  const rx = 60;
+  const ry = 55;
+  
+  // Approximation of a hand-drawn double oval using Cubic Beziers
+  // Loop 1 (Outer) -> Loop 2 (Inner/Offset)
+  const scribblePathD = `
+    M ${cx - rx + 10} ${cy - 5} 
+    C ${cx - rx + 10} ${cy - ry}, ${cx + rx} ${cy - ry}, ${cx + rx} ${cy} 
+    C ${cx + rx} ${cy + ry}, ${cx - rx} ${cy + ry}, ${cx - rx} ${cy} 
+    C ${cx - rx} ${cy - ry + 10}, ${cx + rx - 5} ${cy - ry + 15}, ${cx + rx - 5} ${cy + 5} 
+    C ${cx + rx - 5} ${cy + ry - 10}, ${cx - rx + 15} ${cy + ry - 5}, ${cx - rx + 20} ${cy + 10}
+  `;
 
   return (
-    <section className="w-full py-24 px-4 md:px-10 bg-black text-white">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-16 text-center">
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-avoqado-green text-sm tracking-widest uppercase mb-4 font-medium"
-          >
-            Preguntas Frecuentes
-          </motion.p>
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-5xl md:text-6xl font-baby mb-6"
-          >
-            Todo lo que necesitas saber
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-xl text-gray-400 max-w-2xl mx-auto font-light"
-          >
-            Resolvemos tus dudas para que puedas enfocarte en lo que importa: tu negocio.
-          </motion.p>
-        </div>
+    <section ref={containerRef} className="w-full h-[300vh] bg-black text-white relative">
+      {/* Background Texture (Subtle Chalkboard effect) */}
+      <div className="fixed inset-0 opacity-20 pointer-events-none" 
+           style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/black-scales.png")' }}></div>
 
-        <div className="space-y-4">
-          {faqs.map((faq, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className={`border-b border-white/10 ${activeIndex === index ? 'bg-white/5' : 'hover:bg-white/5'} transition-colors duration-300 rounded-lg overflow-hidden`}
-            >
-              <button
-                onClick={() => toggleIndex(index)}
-                className="w-full text-left p-6 flex justify-between items-center group cursor-pointer focus:outline-none"
-              >
-                <div>
-                  <span className="text-xs font-mono text-avoqado-green/70 mb-1 block uppercase tracking-wider">{faq.category}</span>
-                  <span className="text-xl md:text-2xl font-light group-hover:text-avoqado-green transition-colors duration-300">{faq.question}</span>
-                </div>
-                <span className="ml-4 flex-shrink-0 text-2xl font-thin text-white/50 group-hover:text-white transition-colors duration-300">
-                  {activeIndex === index ? '−' : '+'}
-                </span>
-              </button>
-              
-              <AnimatePresence>
-                {activeIndex === index && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="overflow-hidden"
-                  >
-                    <div className="p-6 pt-0 text-gray-400 leading-relaxed text-lg font-light">
-                      {faq.answer}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
+      {/* Sticky Content - Stays centered while scrolling */}
+      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+        <div className="max-w-4xl mx-auto px-4 text-center z-10 relative">
+          
+          {/* Rotated Container for Diagonal Text */}
+          <div className="rotate-[-15deg] transform origin-center">
+            {/* Title Line 1 */}
+            <div className="relative inline-block mr-4">
+               {/* Ghost Text for layout */}
+               <span className="text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-transparent opacity-0">
+                 ¿Quieres saber
+               </span>
+               {/* Reveal Mask */}
+               <motion.div 
+                 style={{ width: writeProgress1 }}
+                 className="absolute top-0 left-0 h-full overflow-hidden whitespace-nowrap"
+               >
+                 <span className="text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
+                    ¿Quieres saber
+                 </span>
+               </motion.div>
+            </div>
+            
+            <br />
+
+            {/* Title Line 2 */}
+            <div className="relative inline-block">
+               <span className="text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-transparent opacity-0">
+                 todo de Avoqado?
+               </span>
+               <motion.div 
+                 style={{ width: writeProgress2 }}
+                 className="absolute top-0 left-0 h-full overflow-hidden whitespace-nowrap"
+               >
+                 <span className="text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
+                    todo de Avoqado?
+                 </span>
+               </motion.div>
+            </div>
+          </div>
+
         </div>
-        
-        <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.6 }}
-            className="mt-16 text-center"
-        >
-            <p className="text-gray-500 mb-4">¿No encuentras lo que buscas?</p>
-            <a href="/contact" className="inline-block border border-white/20 hover:border-avoqado-green text-white hover:text-avoqado-green px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105">
-                Contáctanos
-            </a>
-        </motion.div>
       </div>
+
+      {/* Global Overlay Portal - Renders outside of any transform context */}
+      {mounted && createPortal(
+        <motion.div 
+          style={{ opacity: overlayOpacity }}
+          className="fixed inset-0 pointer-events-none z-[9999]"
+        >
+          <svg className="w-full h-full"> 
+             {/* Arrow Path using calculated coordinates */}
+             <motion.path
+               d={arrowPathD}
+               fill="none"
+               stroke="white"
+               strokeWidth="5"
+               strokeLinecap="round"
+               strokeDasharray="15 10 5 10" // Organic chalk
+               style={{ 
+                 pathLength: lineDraw,
+                 opacity: arrowLineOpacity 
+               }}
+             />
+             
+             {/* Arrow Head */}
+             <motion.path
+                d={arrowHeadD}
+                fill="none"
+                stroke="white"
+                strokeWidth="5"
+                strokeLinecap="round"
+                style={{ opacity: arrowHeadOpacity }} 
+             />
+             
+             {/* Double-Loop Scribble Oval */}
+             <motion.path
+                d={scribblePathD}
+                fill="none"
+                stroke="white"
+                strokeWidth="3" // Slightly thinner for the scribble to look detailed
+                strokeDasharray="20 5 10 5" 
+                style={{ 
+                  pathLength: circleDraw,
+                  rotate: -10 
+                }}
+             />
+          </svg>
+        </motion.div>,
+        document.body
+      )}
     </section>
   );
 }

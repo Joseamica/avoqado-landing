@@ -179,7 +179,7 @@ const NODE_SIZE = 80;
 // Helper to fix hydration mismatches by standardizing floating point precision
 const toPrecision = (num: number) => Math.round(num * 1000) / 1000;
 
-// Simple curved connection with flowing electricity animation
+// Smooth Cubic Bezier Curve Connection (Stripe-like organic flow)
 const ElectricConnection: React.FC<{
   fromPos: { x: number; y: number };
   toPos: { x: number; y: number };
@@ -189,23 +189,20 @@ const ElectricConnection: React.FC<{
   showElectricity: boolean;
   index: number;
 }> = ({ fromPos, toPos, color, id, isDrawn, showElectricity, index }) => {
-  // Circuit-board style connections (90 degree angles)
+  // Cubic Bezier Logic
+  // Control points: 50% of the way horizontally, keeping y flat
   const dx = toPos.x - fromPos.x;
-  const dy = toPos.y - fromPos.y;
   
-  // Determine dominant direction to create cleaner paths
-  const isHorizontal = Math.abs(dx) > Math.abs(dy);
+  // Stretch control points further for outer columns to smooth the curve
+  const tension = 0.5; 
+  const c1x = fromPos.x + dx * tension;
+  const c1y = fromPos.y;
+  const c2x = toPos.x - dx * tension;
+  const c2y = toPos.y;
+
+  const path = `M ${fromPos.x} ${fromPos.y} C ${c1x} ${c1y} ${c2x} ${c2y} ${toPos.x} ${toPos.y}`;
   
-  let path = '';
-  if (isHorizontal) {
-    const midX = fromPos.x + dx / 2;
-    path = `M ${fromPos.x} ${fromPos.y} L ${midX} ${fromPos.y} L ${midX} ${toPos.y} L ${toPos.x} ${toPos.y}`;
-  } else {
-    const midY = fromPos.y + dy / 2;
-    path = `M ${fromPos.x} ${fromPos.y} L ${fromPos.x} ${midY} L ${toPos.x} ${midY} L ${toPos.x} ${toPos.y}`;
-  }
-  
-  // Fixed pattern for seamless looping: 12px dash, 118px gap = 130px total pattern
+  // Fixed pattern for seamless looping
   const dashSize = 12;
   const gapSize = 118;
   const patternLength = dashSize + gapSize;
@@ -214,8 +211,8 @@ const ElectricConnection: React.FC<{
     <g key={`connection-${id}`}>
       <defs>
         <linearGradient id={`grad-${id}`} x1={fromPos.x} y1={fromPos.y} x2={toPos.x} y2={toPos.y} gradientUnits="userSpaceOnUse">
-          <stop stopColor={color} stopOpacity="0.7" />
-          <stop offset="1" stopColor={color} stopOpacity="0.3" />
+          <stop stopColor={color} stopOpacity="0.4" />
+          <stop offset="1" stopColor={color} stopOpacity="0.1" />
         </linearGradient>
       </defs>
       
@@ -224,9 +221,9 @@ const ElectricConnection: React.FC<{
         d={path}
         fill="none"
         stroke={`url(#grad-${id})`}
-        strokeWidth={2}
+        strokeWidth={1.5}
         strokeLinecap="round"
-        opacity={isDrawn ? 0.6 : 0}
+        opacity={isDrawn ? 1 : 0}
         style={{ transition: 'opacity 0.5s ease' }}
       />
       
@@ -238,27 +235,13 @@ const ElectricConnection: React.FC<{
             d={path}
             fill="none"
             stroke={color}
-            strokeWidth={3}
+            strokeWidth={2}
             strokeLinecap="round"
             strokeDasharray={`${dashSize} ${gapSize}`}
-            opacity={0.9}
+            opacity={0.8}
             style={{
-              animation: `electricFlow 1.5s linear infinite`,
-              filter: `drop-shadow(0 0 4px ${color})`,
-            }}
-          />
-          {/* Glow layer */}
-          <path
-            d={path}
-            fill="none"
-            stroke={color}
-            strokeWidth={6}
-            strokeLinecap="round"
-            strokeDasharray={`${dashSize} ${gapSize}`}
-            opacity={0.3}
-            style={{
-              animation: `electricFlow 1.5s linear infinite`,
-              filter: `blur(3px)`,
+              animation: `electricFlow 2s linear infinite`,
+              filter: `drop-shadow(0 0 3px ${color})`,
             }}
           />
           <style>
@@ -287,7 +270,7 @@ const CleanCard: React.FC<{
 }> = ({ source, position, isVisible }) => {
   return (
     <motion.div
-      className="absolute flex flex-col items-center justify-center rounded-xl cursor-pointer transition-all duration-300 hover:scale-105"
+      className="absolute flex flex-col items-center justify-center rounded-2xl cursor-pointer transition-all duration-300 hover:scale-110 group"
       initial={{ scale: 0.8, opacity: 0 }}
       animate={{ scale: isVisible ? 1 : 0.8, opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.4 }}
@@ -296,14 +279,16 @@ const CleanCard: React.FC<{
         height: toPrecision(NODE_SIZE),
         left: toPrecision(position.x - NODE_SIZE / 2),
         top: toPrecision(position.y - NODE_SIZE / 2),
-        background: 'rgba(17, 17, 17, 0.95)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
+        background: 'rgba(20, 20, 20, 0.8)', // Lighter, glassier
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
         zIndex: 10,
       }}
       whileHover={{
-        boxShadow: `0 8px 30px rgba(0, 0, 0, 0.5), 0 0 20px ${source.color}30`,
-        borderColor: `${source.color}40`,
+        boxShadow: `0 12px 40px rgba(0, 0, 0, 0.4), 0 0 25px ${source.color}20`,
+        borderColor: `${source.color}60`,
+        background: 'rgba(30, 30, 30, 0.95)'
       }}
     >
       {source.icon}
@@ -333,17 +318,32 @@ export const UnifiedPlatform: React.FC = () => {
   const titleY = useTransform(scrollYProgress, [0, 0.15], [30, 0]);
   const centerOpacity = useTransform(scrollYProgress, [0.1, 0.25], [0, 1]);
 
-  const containerWidth = MAX_RADIUS * 2 + NODE_SIZE + 180; // Increased buffer
-  const containerHeight = MAX_RADIUS * 2 + NODE_SIZE + 180;
-  const centerX = containerWidth / 2;
-  const centerY = containerHeight / 2;
+  const containerWidth = 700;
+  const containerHeight = 600;
+  
+  // Right-side center for Avoqado
+  const coreX = 580;
+  const coreY = 300;
 
-  const getNodeCenter = (source: DataSource) => {
-    const angleRad = (source.angle * Math.PI) / 180;
-    return {
-      x: toPrecision(centerX + source.radius * Math.cos(angleRad)),
-      y: toPrecision(centerY + source.radius * Math.sin(angleRad)),
-    };
+  const getNodeCenter = (source: DataSource, index: number) => {
+
+    // "Organic Staggered Grid" (Hive Layout)
+    const col = index % 2; // 0 (Left), 1 (Right)
+    const row = Math.floor(index / 2); // 0, 1, 2, 3
+
+    // Horizontal Positions
+    const xBase = 60;
+    const xStep = 160; // Distance between columns
+    
+    // Vertical Positions
+    const yBase = 70;
+    const yStep = 125; // Vertical distance between items in same column
+    const yStagger = 62.5; // Offset for second column (half of yStep)
+
+    const x = xBase + col * xStep; 
+    const y = yBase + (row * yStep) + (col * yStagger);
+
+    return { x, y };
   };
 
   // Check visibility based on scroll
@@ -402,28 +402,32 @@ export const UnifiedPlatform: React.FC = () => {
               </motion.div>
             </div>
 
-            {/* Right: Radial Diagram with Electric Flow - Responsive */}
+            {/* Right: Left-to-Right Flow Diagram - Responsive */}
             <div className="flex justify-center lg:justify-end w-full overflow-visible">
               {/* Wrapper that scales with the viewport */}
               <div
                 className="relative overflow-visible"
                 style={{
                   width: `min(100%, ${containerWidth}px)`,
-                  height: `min(70vh, ${containerHeight}px)`,
+                  height: `min(60vh, ${containerHeight}px)`,
                 }}
               >
                 <div
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.7] sm:scale-[0.85] md:scale-[1] lg:scale-[1.1] xl:scale-[1.2]"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.6] sm:scale-[0.8] md:scale-[0.9] lg:scale-[1.0] xl:scale-[1.0]"
                   style={{
                     width: containerWidth,
                     height: containerHeight,
                   }}
                 >
-                {/* Subtle radial gradient background */}
+                {/* Subtle radial gradient background behind core */}
                 <div 
-                  className="absolute inset-0 rounded-full opacity-20"
+                  className="absolute rounded-full opacity-20"
                   style={{
-                    background: 'radial-gradient(circle at center, rgba(105, 225, 133, 0.15) 0%, transparent 50%)',
+                    width: '600px',
+                    height: '600px',
+                    left: coreX - 300,
+                    top: coreY - 300,
+                    background: 'radial-gradient(circle at center, rgba(105, 225, 133, 0.15) 0%, transparent 60%)',
                   }}
                 />
 
@@ -436,13 +440,13 @@ export const UnifiedPlatform: React.FC = () => {
                   height={containerHeight}
                 >
                   {DATA_SOURCES.map((source, index) => {
-                    const nodeCenter = getNodeCenter(source);
+                    const nodeCenter = getNodeCenter(source, index);
                     return (
                       <ElectricConnection
                         key={`line-${source.id}`}
                         id={source.id}
                         fromPos={nodeCenter}
-                        toPos={{ x: centerX, y: centerY }}
+                        toPos={{ x: coreX - 60, y: coreY }}
                         color={source.color}
                         isDrawn={areLinesDrawn}
                         showElectricity={showElectricity}
@@ -452,33 +456,20 @@ export const UnifiedPlatform: React.FC = () => {
                   })}
                 </svg>
 
-                {/* Center Node - Avoqado Logo Container */}
+                {/* Center Node - Avoqado Logo Container (Now on Right) */}
                 <motion.div
-                  className="absolute flex items-center justify-center rounded-full  bg-black"
+                  className="absolute flex items-center justify-center rounded-full"
                   style={{
                     width: CENTER_SIZE,
                     height: CENTER_SIZE,
-                    left: centerX - CENTER_SIZE / 2,
-                    top: centerY - CENTER_SIZE / 2,
+                    left: coreX - CENTER_SIZE / 2,
+                    top: coreY - CENTER_SIZE / 2,
                     opacity: centerOpacity,
                     zIndex: 20,
-                    boxShadow: '0 0 40px rgba(0,0,0,0.5)'
                   }}
                 >
-                  {/* Pulsing glow when electricity flows */}
-                  {/* {showElectricity && (
-                    <div 
-                      className="absolute inset-0 rounded-full "
-                      style={{
-                        background: 'radial-gradient(circle, rgba(105, 225, 133, 0.2) 0%, transparent 80%)',
-                        transform: 'scale(1.8)',
-                        zIndex: -1
-                      }}
-                    />
-                  )} */}
-                  
                   {/* Inner logo */}
-                  <div className="relative w-[77%] h-[77%] flex items-center justify-center">
+                  <div className="relative w-[100%] h-[77%] flex items-center justify-center">
                     <img
                       src="/imagotipo-white.png"
                       alt="Avoqado"
@@ -493,9 +484,9 @@ export const UnifiedPlatform: React.FC = () => {
                   </div>
                 </motion.div>
 
-                {/* Data Source Cards */}
+                {/* Data Source Cards (Left Grid) */}
                 {DATA_SOURCES.map((source, index) => {
-                  const nodeCenter = getNodeCenter(source);
+                  const nodeCenter = getNodeCenter(source, index);
                   return (
                     <CleanCard
                       key={source.id}
