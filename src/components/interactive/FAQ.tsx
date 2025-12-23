@@ -52,30 +52,36 @@ export default function FAQ() {
 
   // Calculate coordinates based on window size
   const { width, height } = windowSize;
+  const isMobile = width < 768;
+
+  // Responsive start point (below the text)
   const startX = width / 2;
-  const startY = height / 2 + 90; // Start lower to avoid crossing text
-  
-  // Updated Target: Width-115 (Left) and Height-70 (Lower)
-  const endX = width - 115;
-  const endY = height - 70;
-  
-  // Control points for the curve (Cubic Bezier)
-  const cp1X = width * 0.4; 
-  const cp1Y = height * 0.7;
-  const cp2X = width * 0.75; 
-  const cp2Y = endY - 10;
+  const startY = height / 2 + (isMobile ? 60 : 90);
+
+  // Responsive end point (chatbot button position)
+  const endX = width - (isMobile ? 50 : 115);
+  const endY = height - (isMobile ? 50 : 70);
+
+  // Control points for the curve - adjusted for mobile
+  // On mobile: shorter, more direct curve
+  // On desktop: wider, more elegant curve
+  const cp1X = isMobile ? width * 0.3 : width * 0.4;
+  const cp1Y = isMobile ? height * 0.65 : height * 0.7;
+  const cp2X = isMobile ? width * 0.7 : width * 0.75;
+  const cp2Y = endY - (isMobile ? 30 : 10);
 
   const arrowPathD = `M ${startX} ${startY} C ${cp1X} ${cp1Y}, ${cp2X} ${cp2Y}, ${endX} ${endY}`;
-  // Expert UX: "C-Shaped" Hook Arrowhead (Matches reference)
-  // A clean, simple hook curve
-  const arrowHeadD = `M ${endX - 25} ${endY - 25} Q ${endX} ${endY - 5} ${endX} ${endY} Q ${endX} ${endY + 5} ${endX - 25} ${endY + 20}`;
 
-  // Double-Loop "Scribble" Circle Path
-  // We construct a path that loops around the center essentially twice with variation
-  const cx = width - 54;
-  const cy = height - 54;
-  const rx = 60;
-  const ry = 55;
+  // Arrowhead - responsive size
+  const headSize = isMobile ? 15 : 25;
+  const arrowHeadD = `M ${endX - headSize} ${endY - headSize} Q ${endX} ${endY - 5} ${endX} ${endY} Q ${endX} ${endY + 5} ${endX - headSize} ${endY + (isMobile ? 12 : 20)}`;
+
+  // Circle around chatbot button - responsive position and size
+  // Mobile: larger circle so button fits completely inside
+  const cx = width - (isMobile ? 58 : 54);
+  const cy = height - (isMobile ? 48 : 54);
+  const rx = isMobile ? 55 : 60;
+  const ry = isMobile ? 52 : 55;
   
   // Approximation of a hand-drawn double oval using Cubic Beziers
   // Loop 1 (Outer) -> Loop 2 (Inner/Offset)
@@ -139,16 +145,16 @@ export default function FAQ() {
 
       {/* Global Overlay Portal - Renders outside of any transform context */}
       {mounted && createPortal(
-        <motion.div 
+        <motion.div
           style={{ opacity: overlayOpacity }}
-          className="fixed inset-0 pointer-events-none z-[9999]"
+          className="fixed inset-0 pointer-events-none z-[40]"
         >
           <svg className="w-full h-full"> 
              {/* Arrow Path using calculated coordinates */}
              <motion.path
                d={arrowPathD}
                fill="none"
-               stroke="white"
+               stroke="#69E185"
                strokeWidth="5"
                strokeLinecap="round"
                strokeDasharray="15 10 5 10" // Organic chalk
@@ -162,7 +168,7 @@ export default function FAQ() {
              <motion.path
                 d={arrowHeadD}
                 fill="none"
-                stroke="white"
+                stroke="#69E185"
                 strokeWidth="5"
                 strokeLinecap="round"
                 style={{ opacity: arrowHeadOpacity }} 
@@ -172,7 +178,7 @@ export default function FAQ() {
              <motion.path
                 d={scribblePathD}
                 fill="none"
-                stroke="white"
+                stroke="#69E185"
                 strokeWidth="3" // Slightly thinner for the scribble to look detailed
                 strokeDasharray="20 5 10 5" 
                 style={{ 
