@@ -96,8 +96,8 @@ export default function FAQ() {
 
   return (
     <section ref={containerRef} className="w-full h-[300vh] bg-black text-white relative">
-      {/* Background Texture (Subtle Chalkboard effect) */}
-      <div className="fixed inset-0 opacity-20 pointer-events-none" 
+      {/* Background Texture (Subtle Chalkboard effect) - only within this section */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none"
            style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/black-scales.png")' }}></div>
 
       {/* Sticky Content - Stays centered while scrolling */}
