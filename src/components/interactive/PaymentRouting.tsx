@@ -897,8 +897,8 @@ export const PaymentRouting: React.FC = () => {
 
   // SCROLL-BASED SELECTION
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    // Only auto-select if user isn't hovering
-    if (!hoveredCard) {
+    // Only auto-select if user isn't hovering AND we are not on mobile
+    if (!hoveredCard && !isMobile) {
       if (latest < 0.3) {
         if (selectedPillar !== 'tpv') setSelectedPillar('tpv');
       } else if (latest < 0.6) {
@@ -1009,7 +1009,13 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
           <div className="flex flex-col lg:grid lg:grid-cols-[35%_65%] gap-2 lg:gap-8 items-start lg:items-center flex-1 h-full">
             <div className="space-y-2 lg:space-y-8 w-full flex-shrink-0">
               {/* Header - Compact on mobile/tablet */}
-              <motion.div style={{ opacity: titleOpacity, y: titleY }} className="space-y-1 lg:space-y-2">
+              <motion.div 
+                style={{ 
+                  opacity: isMobile ? 1 : titleOpacity, 
+                  y: isMobile ? 0 : titleY 
+                }} 
+                className="space-y-1 lg:space-y-2"
+              >
                 <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold tracking-tight" style={{ color: '#1d1d1f', lineHeight: '1.1' }}>
                   Una suite integrada
                 </h2>
@@ -1019,7 +1025,7 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
               </motion.div>
 
               {/* Tab Navigation - Pill Style */}
-              <motion.div style={{ opacity: gridOpacity }}>
+              <motion.div style={{ opacity: isMobile ? 1 : gridOpacity }}>
                 <div className="inline-flex p-1 rounded-full border border-white/10" style={{ backgroundColor: '#1a1a1a' }}>
                   {pillars.map((p) => {
                     const isActive = hoveredCard === p || (!hoveredCard && activePillar === p);
@@ -1047,8 +1053,7 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
             </div>
             
             {/* MOBILE/TABLET: Split Screen Layout */}
-            {isMobile ? (
-              <motion.div style={{ opacity: gridOpacity }} className="w-full flex-1 flex flex-col min-h-0">
+            <div className="w-full flex-1 flex flex-col min-h-0 lg:hidden">
                 {/* Top: Grid (scrollable if needed, max height limited) */}
                 <div className="flex-shrink-0 w-full p-2">
                   <div className="grid grid-cols-4 md:grid-cols-5 gap-3 md:gap-4 p-2">
@@ -1097,13 +1102,11 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
                         </p>
                      </div>
                   </div>
-                  
-
                 </div>
-              </motion.div>
-            ) : (
-              /* DESKTOP: Full grid with connections */
-              <motion.div style={{ opacity: gridOpacity }} className="flex justify-end w-full lg:pr-8">
+            </div>
+
+            {/* DESKTOP: Full grid with connections */}
+            <motion.div style={{ opacity: gridOpacity }} className="hidden lg:flex justify-end w-full lg:pr-8">
                 <div 
                   className="origin-top-right transition-transform duration-200"
                   style={{ 
@@ -1156,8 +1159,7 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
                     })}
                   </div>
                 </div>
-              </motion.div>
-            )}
+            </motion.div>
           </div>
         </div>
       </div>

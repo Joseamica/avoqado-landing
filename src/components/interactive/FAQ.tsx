@@ -114,7 +114,7 @@ export default function FAQ() {
             {/* Title Line 1 */}
             <div className="relative inline-block mr-4">
                {/* Ghost Text for layout */}
-               <span className="text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-transparent opacity-0">
+               <span className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-transparent opacity-0">
                  ¿Quieres saber
                </span>
                {/* Reveal Mask */}
@@ -122,7 +122,7 @@ export default function FAQ() {
                  style={{ width: writeProgress1 }}
                  className="absolute top-0 left-0 h-full overflow-hidden whitespace-nowrap"
                >
-                 <span className="text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
+                 <span className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
                     ¿Quieres saber
                  </span>
                </motion.div>
@@ -132,14 +132,14 @@ export default function FAQ() {
 
             {/* Title Line 2 */}
             <div className="relative inline-block">
-               <span className="text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-transparent opacity-0">
+               <span className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-transparent opacity-0">
                  todo de Avoqado?
                </span>
                <motion.div 
                  style={{ width: writeProgress2 }}
                  className="absolute top-0 left-0 h-full overflow-hidden whitespace-nowrap"
                >
-                 <span className="text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
+                 <span className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
                     todo de Avoqado?
                  </span>
                </motion.div>

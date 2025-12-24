@@ -379,7 +379,7 @@ export const UnifiedPlatform: React.FC = () => {
 
               <motion.p
                 style={{ opacity: useTransform(scrollYProgress, [0.1, 0.2], [0, 1]) }}
-                className="text-gray-500 text-sm lg:text-lg leading-relaxed max-w-lg"
+                className="hidden lg:block text-gray-500 text-sm lg:text-lg leading-relaxed max-w-lg"
               >
                 Múltiples terminales, pagos en efectivo, tarjetas, QR y conexiones POS.
                 Todo registrado automáticamente en un solo lugar.
@@ -402,8 +402,8 @@ export const UnifiedPlatform: React.FC = () => {
               </motion.div>
             </div>
 
-            {/* Right: Left-to-Right Flow Diagram - Responsive */}
-            <div className="flex justify-center lg:justify-end w-full overflow-hidden">
+            {/* Right: Left-to-Right Flow Diagram - Responsive (Desktop Only) */}
+            <div className="hidden lg:flex justify-center lg:justify-end w-full overflow-visible">
               {/* Wrapper that scales with the viewport */}
               <div
                 className="relative overflow-visible"
@@ -499,9 +499,127 @@ export const UnifiedPlatform: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* Mobile Waterfall Diagram (lg:hidden) */}
+            <div className="lg:hidden absolute inset-0 w-full h-[85vh] top-24 pointer-events-none">
+                 <div className="relative w-full h-full"> 
+                    {/* Avoqado Goal Node (Bottom Center) */}
+                    <motion.div 
+                        style={{ opacity: centerOpacity }}
+                        className="absolute bottom-20 left-1/2 -translate-x-1/2 p-4 rounded-3xl bg-black/80 border border-white/10 backdrop-blur-md z-20 flex flex-col items-center shadow-2xl"
+                    >
+                         <img src="/imagotipo-white.png" alt="Avoqado" className="w-24 h-auto object-contain" />
+                         <span className="text-[10px] text-gray-500 mt-2 font-medium tracking-widest uppercase">Sistema Central</span>
+                    </motion.div>
+
+                    {/* Waterfall Streams */}
+                    <svg className="absolute inset-0 w-full h-full z-10 overflow-visible">
+                        {DATA_SOURCES.map((source, i) => {
+                             // Calculated positions for 2-column waterfall
+                             const isLeft = i % 2 === 0;
+                             const row = Math.floor(i / 2);
+                             const xPercent = isLeft ? 20 : 80;
+                             const yPercent = 10 + (row * 12); // Staggered down
+
+                             // Target: Bottom Center (50%, 85%) - approx where logo is
+                             return (
+                                <MobileWaterfallItem 
+                                    key={source.id}
+                                    source={source}
+                                    index={i}
+                                    scrollY={scrollYProgress}
+                                    xPercent={xPercent}
+                                    yPercent={yPercent}
+                                />
+                             );
+                        })}
+                    </svg>
+                 </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
+};
+
+// Sub-component for Mobile Items (Defined BEFORE usage or hoisted)
+const MobileWaterfallItem: React.FC<{
+    source: DataSource;
+    index: number;
+    scrollY: any;
+    xPercent: number;
+    yPercent: number;
+}> = ({ source, index, scrollY, xPercent, yPercent }) => {
+    // Staggered timing
+    const start = 0.15 + (index * 0.05);
+    const end = start + 0.15;
+    
+    // Opacity: Appears quickly
+    const opacity = useTransform(scrollY, [start, start + 0.05], [0, 1]);
+    const scale = useTransform(scrollY, [start, start + 0.05], [0.5, 1]);
+    
+    // Line Drawing: Takes longer, flows down
+    const drawProgress = useTransform(scrollY, [start + 0.02, end + 0.1], [0, 1]);
+    
+    return (
+        <g>
+            {/* The Card (HTML rendered inside ForeignObject for SVG) - OR just render SVG group */}
+            <foreignObject x={`${xPercent - 15}%`} y={`${yPercent - 5}%`} width="30%" height="80px" className="overflow-visible">
+                 <motion.div 
+                    style={{ opacity, scale }}
+                    className="flex flex-col items-center justify-center p-2 rounded-xl bg-neutral-900/90 border border-white/10 shadow-lg backdrop-blur"
+                 >
+                    <div className="scale-75 mb-1">{source.icon}</div>
+                    <span className="text-[9px] text-white font-medium text-center leading-none">{source.name}</span>
+                 </motion.div>
+            </foreignObject>
+
+            {/* The Wire */}
+            <MobileWire 
+                startX={`${xPercent}%`} 
+                startY={`${yPercent + 4}%`} // Bottom of card approx
+                endX="50%" 
+                endY="80%" // Top of Avoqado Logo approx
+                color={source.color} 
+                progress={drawProgress}
+            />
+        </g>
+    )
+}
+
+const MobileWire: React.FC<{
+    startX: string;
+    startY: string;
+    endX: string;
+    endY: string;
+    color: string;
+    progress: any;
+}> = ({ startX, startY, endX, endY, color, progress }) => {
+    // Generate a unique curved path
+    // Since coordinates are %, we might need coordinate conversion or use straight lines if SVG handles % paths (it doesn't well for control points)
+    // Hack: Use simple L for now or basic Bezier if we assume 100x100 viewbox?
+    // Actually, parent SVG doesn't have viewBox set to 0 0 100 100.
+    // Let's use generic percentage based curve if possible? No.
+    // Better: Render path with `vector-effect: non-scaling-stroke`?
+    // Let's stick to standard vertical drop + curve.
+    
+    // FIX: To use proper curves with percentages, use a nested SVG with viewBox 0 0 100 100
+    // But then stroke width varies. 
+    // ALTERNATIVE: Just use straight lines for mobile waterfall? Or simple Q curves.
+    // Let's assume the parent SVG container is responsive.
+    
+    return (
+        <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
+            <motion.path 
+                d={`M ${parseFloat(startX)} ${parseFloat(startY)} C ${parseFloat(startX)} ${parseFloat(startY) + 20}, 50 ${parseFloat(endY) - 20}, 50 ${parseFloat(endY)}`}
+                fill="none"
+                stroke={color}
+                strokeWidth="0.5" // Relative to 100x100 viewBox
+                strokeLinecap="round"
+                // opacity={progress} // Fade overlap
+                style={{ pathLength: progress }}
+            />
+        </svg>
+    );
 };
