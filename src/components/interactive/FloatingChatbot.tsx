@@ -117,6 +117,7 @@ const WELCOME_MESSAGE: Message = {
 export default function FloatingChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [messages, setMessages] = useState<Message[]>([WELCOME_MESSAGE]);
   const [inputValue, setInputValue] = useState('');
@@ -124,8 +125,34 @@ export default function FloatingChatbot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+
+  // Check mobile state
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Simple scroll lock for mobile - don't fight iOS keyboard behavior
+  useEffect(() => {
+    if (!isOpen || !isMobile) return;
+
+    // Simple approach: hide overflow on html and body
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+    const originalBodyOverflow = document.body.style.overflow;
+    
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.documentElement.style.overflow = originalHtmlOverflow;
+      document.body.style.overflow = originalBodyOverflow;
+    };
+  }, [isOpen, isMobile]);
 
   // Load chat state from localStorage on mount
   useEffect(() => {
@@ -329,11 +356,11 @@ export default function FloatingChatbot() {
     <>
       {/* Floating Button Container */}
       <div
-        className="fixed bottom-6 right-6 z-50 cursor-pointer"
+        className={`fixed bottom-6 right-6 z-50 cursor-pointer transition-opacity duration-300 ${isOpen && isMobile ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        {/* Hover Tooltip - appears above the button */}
+        {/* Hover Tooltip - appears above the button, HIDDEN on mobile */}
         <AnimatePresence>
           {isHovered && !isOpen && (
             <motion.div
@@ -341,7 +368,7 @@ export default function FloatingChatbot() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.9 }}
               transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-              className="absolute bottom-full right-0 mb-4 origin-bottom-right"
+              className="hidden lg:block absolute bottom-full right-0 mb-4 origin-bottom-right"
             >
               <div className="relative bg-gray-950/95 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl shadow-black/50 min-w-[240px] cursor-pointer" onClick={() => setIsOpen(true)}>
                 {/* Glow effect behind card */}
@@ -470,12 +497,20 @@ export default function FloatingChatbot() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            key="chat-window"
+            ref={chatContainerRef}
+            initial={isMobile ? { y: '100%' } : { opacity: 0, y: 20, scale: 0.95 }}
+            animate={isMobile ? { y: 0 } : { opacity: 1, y: 0, scale: 1 }}
+            exit={isMobile ? { y: '100%' } : { opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-24 right-4 left-4 sm:left-auto sm:right-6 sm:w-96 z-50 max-w-md bg-gray-950 border border-white/10 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden flex flex-col"
-            style={{ maxHeight: 'min(70vh, 500px)' }}
+            className={`
+              flex flex-col bg-gray-950 border border-white/10 shadow-2xl shadow-black/50 overflow-hidden z-[500]
+              ${isMobile 
+                ? 'fixed inset-0 w-full h-full rounded-none' 
+                : 'fixed bottom-24 right-4 left-4 sm:left-auto sm:right-6 sm:w-96 max-w-md rounded-2xl'
+              }
+            `}
+            style={!isMobile ? { maxHeight: 'min(70vh, 500px)' } : undefined}
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-avoqado-green/20 to-emerald-600/10 border-b border-white/10 px-4 py-3 flex items-center gap-3">
@@ -582,7 +617,12 @@ export default function FloatingChatbot() {
                   onKeyDown={handleKeyDown}
                   placeholder="Escribe tu pregunta..."
                   disabled={isLoading}
-                  className="flex-1 bg-transparent text-white text-sm placeholder-gray-500 focus:outline-none disabled:opacity-50"
+                  style={{
+                    fontSize: '16px',  // Prevents iOS zoom
+                    transform: 'scale(0.875)',  // Visually ~14px
+                    transformOrigin: 'left center',
+                  }}
+                  className="flex-1 bg-transparent text-white placeholder-gray-500 focus:outline-none disabled:opacity-50"
                 />
                 <button
                   onClick={() => sendMessage(inputValue)}
