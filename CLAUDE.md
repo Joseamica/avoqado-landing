@@ -165,6 +165,36 @@ Before considering any UI change complete:
 - [ ] Test pinch-zoom on mobile - no horizontal overflow should appear
 - [ ] Verify fixed elements (navbar, floating buttons) work correctly
 
+### 0.1 Modals/Dialogs - NEVER Break Scrollytelling
+
+**CRITICAL:** This project uses scroll-based animations (scrollytelling). Modals and dialogs MUST NOT interfere with scroll position or scroll-based animations.
+
+#### The Problem
+When opening a modal, the common approach is `document.body.style.overflow = 'hidden'`. **DO NOT USE THIS** - it resets internal scroll calculations and breaks all scroll-based animations (SquareHero, UnifiedPlatform, FAQ, etc.).
+
+#### The Solution - Use Position Fixed Pattern
+```tsx
+// Save scroll position and lock body in place
+const scrollY = window.scrollY;
+document.body.style.position = 'fixed';
+document.body.style.top = `-${scrollY}px`;
+document.body.style.left = '0';
+document.body.style.right = '0';
+
+// On close - restore scroll position
+const savedScrollY = document.body.style.top;
+document.body.style.position = '';
+document.body.style.top = '';
+document.body.style.left = '';
+document.body.style.right = '';
+window.scrollTo(0, parseInt(savedScrollY || '0') * -1);
+```
+
+#### Additional Modal Requirements
+1. **Use React Portal**: Render modals in `document.body` via `createPortal` to escape any parent `transform` that would break `position: fixed`.
+2. **Reference Implementation**: See `DemoDialog.tsx` for the correct pattern.
+3. **Test After Changes**: Open modal → close modal → verify scrollytelling animations still work correctly.
+
 ### 1. No Emojis
 
 **NEVER use emojis in code, UI, or content.** Keep the design clean and professional.

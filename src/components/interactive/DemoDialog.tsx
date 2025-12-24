@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 
 interface DemoDialogProps {
   isOpen: boolean;
@@ -6,26 +7,49 @@ interface DemoDialogProps {
 }
 
 export default function DemoDialog({ isOpen, onClose }: DemoDialogProps) {
-  // Close on escape key
+  const [mounted, setMounted] = useState(false);
+  const scrollYRef = useRef(0);
+
+  // Ensure we're in the browser before using portal
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Close on escape key and lock scroll without breaking scrollytelling
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
+    
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+      // Save current scroll position and lock body in place
+      scrollYRef.current = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollYRef.current}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+    } else {
+      // Restore scroll position when closing
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      if (scrollYRef.current > 0) {
+        window.scrollTo(0, scrollYRef.current);
+      }
     }
+    
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = '';
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  const dialogContent = (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
       onClick={onClose}
     >
       {/* Backdrop */}
@@ -129,4 +153,8 @@ export default function DemoDialog({ isOpen, onClose }: DemoDialogProps) {
       </div>
     </div>
   );
+
+  // Use portal to render outside of any parent with transform
+  return createPortal(dialogContent, document.body);
 }
+
