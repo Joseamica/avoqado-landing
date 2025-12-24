@@ -1,6 +1,24 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
+import img1 from '../../assets/hero/hero-tile-01.png';
+import img2 from '../../assets/hero/hero-tile-02.png';
+import img3 from '../../assets/hero/hero-tile-03.png';
+import img4 from '../../assets/hero/hero-tile-04.png';
+import img5 from '../../assets/hero/hero-tile-05.png';
+import img6 from '../../assets/hero/hero-tile-06.png';
+import img7 from '../../assets/hero/hero-tile-07.png';
+import img8 from '../../assets/hero/hero-tile-08.png';
+import img9 from '../../assets/hero/hero-tile-09.png';
+import img10 from '../../assets/hero/hero-tile-10.png';
+import img11 from '../../assets/hero/hero-tile-11.png';
+import img12 from '../../assets/hero/hero-tile-12.png';
+import img13 from '../../assets/hero/hero-tile-13.png';
+import img14 from '../../assets/hero/hero-tile-14.png';
+import img15 from '../../assets/hero/hero-tile-15.png';
+import img16 from '../../assets/hero/hero-tile-16.png';
+import img17 from '../../assets/hero/hero-tile-17.png';
+
 /**
  * Square-like Hero Animation - Mobile Responsive
  * 
@@ -11,26 +29,26 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 // mobilePos: position in 3-column mobile grid (col, row), null = hidden on mobile
 const gridItems = [
   // Row 1
-  { col: 2, row: 1, img: "/1.png", mobilePos: { col: 1, row: 1 } },
-  { col: 4, row: 1, img: "/2.png", mobilePos: { col: 2, row: 1 } },
-  { col: 6, row: 1, img: "/3.png", mobilePos: { col: 3, row: 1 } },
-  { col: 8, row: 1, img: "/4.png", mobilePos: null },
+  { col: 2, row: 1, img: img1.src, mobilePos: { col: 1, row: 1 } },
+  { col: 4, row: 1, img: img2.src, mobilePos: { col: 2, row: 1 } },
+  { col: 6, row: 1, img: img3.src, mobilePos: { col: 3, row: 1 } },
+  { col: 8, row: 1, img: img4.src, mobilePos: null },
   // Row 2 - center reserved for video on mobile (col 2)
-  { col: 1, row: 2, img: "/5.png", mobilePos: { col: 1, row: 2 } },
-  { col: 3, row: 2, img: "/6.png", mobilePos: null }, // Reserved for video
-  { col: 5, row: 2, img: "/7.png", mobilePos: { col: 3, row: 2 } },
-  { col: 7, row: 2, img: "/8.png", mobilePos: null },
-  { col: 9, row: 2, img: "/9.png", mobilePos: null },
+  { col: 1, row: 2, img: img5.src, mobilePos: { col: 1, row: 2 } },
+  { col: 3, row: 2, img: img6.src, mobilePos: null }, // Reserved for video
+  { col: 5, row: 2, img: img7.src, mobilePos: { col: 3, row: 2 } },
+  { col: 7, row: 2, img: img8.src, mobilePos: null },
+  { col: 9, row: 2, img: img9.src, mobilePos: null },
   // Row 4
-  { col: 1, row: 4, img: "/10.png", mobilePos: { col: 1, row: 4 } },
-  { col: 3, row: 4, img: "/11.png", mobilePos: { col: 2, row: 4 } },
-  { col: 7, row: 4, img: "/12.png", mobilePos: { col: 3, row: 4 } },
-  { col: 9, row: 4, img: "/13.png", mobilePos: null },
+  { col: 1, row: 4, img: img10.src, mobilePos: { col: 1, row: 4 } },
+  { col: 3, row: 4, img: img11.src, mobilePos: { col: 2, row: 4 } },
+  { col: 7, row: 4, img: img12.src, mobilePos: { col: 3, row: 4 } },
+  { col: 9, row: 4, img: img13.src, mobilePos: null },
   // Row 5
-  { col: 2, row: 5, img: "/14.png", mobilePos: { col: 1, row: 5 } },
-  { col: 4, row: 5, img: "/15.png", mobilePos: { col: 2, row: 5 } },
-  { col: 6, row: 5, img: "/16.png", mobilePos: { col: 3, row: 5 } },
-  { col: 8, row: 5, img: "/17.png", mobilePos: null },
+  { col: 2, row: 5, img: img14.src, mobilePos: { col: 1, row: 5 } },
+  { col: 4, row: 5, img: img15.src, mobilePos: { col: 2, row: 5 } },
+  { col: 6, row: 5, img: img16.src, mobilePos: { col: 3, row: 5 } },
+  { col: 8, row: 5, img: img17.src, mobilePos: null },
 ];
 
 export default function SquareHero() {
