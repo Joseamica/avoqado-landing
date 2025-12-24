@@ -185,15 +185,11 @@ const ElectricConnection: React.FC<{
   toPos: { x: number; y: number };
   color: string;
   id: string;
-  isDrawn: boolean;
-  showElectricity: boolean;
+  scrollY: any; 
   index: number;
-}> = ({ fromPos, toPos, color, id, isDrawn, showElectricity, index }) => {
+}> = ({ fromPos, toPos, color, id, scrollY, index }) => {
   // Cubic Bezier Logic
-  // Control points: 50% of the way horizontally, keeping y flat
   const dx = toPos.x - fromPos.x;
-  
-  // Stretch control points further for outer columns to smooth the curve
   const tension = 0.5; 
   const c1x = fromPos.x + dx * tension;
   const c1y = fromPos.y;
@@ -202,10 +198,15 @@ const ElectricConnection: React.FC<{
 
   const path = `M ${fromPos.x} ${fromPos.y} C ${c1x} ${c1y} ${c2x} ${c2y} ${toPos.x} ${toPos.y}`;
   
-  // Fixed pattern for seamless looping
   const dashSize = 12;
   const gapSize = 118;
   const patternLength = dashSize + gapSize;
+
+  // Optimizations: Use transforms instead of state
+  // Line appears after 0.55
+  const opacity = useTransform(scrollY, [0.55, 0.6], [0, 1]);
+  // Electricity appears after 0.75
+  const electricOpacity = useTransform(scrollY, [0.75, 0.8], [0, 0.8]);
 
   return (
     <g key={`connection-${id}`}>
@@ -217,47 +218,41 @@ const ElectricConnection: React.FC<{
       </defs>
       
       {/* Base line */}
-      <path
+      <motion.path
         d={path}
         fill="none"
         stroke={`url(#grad-${id})`}
         strokeWidth={1.5}
         strokeLinecap="round"
-        opacity={isDrawn ? 1 : 0}
-        style={{ transition: 'opacity 0.5s ease' }}
+        style={{ opacity, transition: 'opacity 0.5s ease' }}
       />
       
       {/* Electricity flow - animated dashes */}
-      {showElectricity && (
-        <>
-          {/* Flowing electricity effect */}
-          <path
-            d={path}
-            fill="none"
-            stroke={color}
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeDasharray={`${dashSize} ${gapSize}`}
-            opacity={0.8}
-            style={{
-              animation: `electricFlow 2s linear infinite`,
-              filter: `drop-shadow(0 0 3px ${color})`,
-            }}
-          />
-          <style>
-            {`
-              @keyframes electricFlow {
-                from {
-                  stroke-dashoffset: ${patternLength};
-                }
-                to {
-                  stroke-dashoffset: 0;
-                }
-              }
-            `}
-          </style>
-        </>
-      )}
+      <motion.path
+        d={path}
+        fill="none"
+        stroke={color}
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeDasharray={`${dashSize} ${gapSize}`}
+        style={{
+          opacity: electricOpacity,
+          animation: `electricFlow 2s linear infinite`,
+          filter: `drop-shadow(0 0 3px ${color})`,
+        }}
+      />
+      <style>
+        {`
+          @keyframes electricFlow {
+            from {
+              stroke-dashoffset: ${patternLength};
+            }
+            to {
+              stroke-dashoffset: 0;
+            }
+          }
+        `}
+      </style>
     </g>
   );
 };
@@ -266,14 +261,17 @@ const ElectricConnection: React.FC<{
 const CleanCard: React.FC<{
   source: DataSource;
   position: { x: number; y: number };
-  isVisible: boolean;
-}> = ({ source, position, isVisible }) => {
+  scrollY: any;
+  index: number;
+}> = ({ source, position, scrollY, index }) => {
+  // Stagger appearance based on index
+  const start = 0.2 + (index * 0.04);
+  const opacity = useTransform(scrollY, [start, start + 0.1], [0, 1]);
+  const scale = useTransform(scrollY, [start, start + 0.1], [0.8, 1]);
+
   return (
     <motion.div
       className="absolute flex flex-col items-center justify-center rounded-2xl cursor-pointer transition-all duration-300 hover:scale-110 group"
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={{ scale: isVisible ? 1 : 0.8, opacity: isVisible ? 1 : 0 }}
-      transition={{ duration: 0.4 }}
       style={{
         width: toPrecision(NODE_SIZE),
         height: toPrecision(NODE_SIZE),
@@ -284,6 +282,8 @@ const CleanCard: React.FC<{
         border: '1px solid rgba(255, 255, 255, 0.08)',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
         zIndex: 10,
+        opacity,
+        scale
       }}
       whileHover={{
         boxShadow: `0 12px 40px rgba(0, 0, 0, 0.4), 0 0 25px ${source.color}20`,
@@ -307,16 +307,15 @@ export const UnifiedPlatform: React.FC = () => {
     offset: ["start start", "end end"]
   });
 
-  const [scrollValue, setScrollValue] = useState(0);
-
-  useEffect(() => {
-    const unsubscribe = scrollYProgress.on('change', (v) => setScrollValue(v));
-    return () => unsubscribe();
-  }, [scrollYProgress]);
-
   const titleOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
   const titleY = useTransform(scrollYProgress, [0, 0.15], [30, 0]);
   const centerOpacity = useTransform(scrollYProgress, [0.1, 0.25], [0, 1]);
+  // Restore logo glow effect
+  const logoFilter = useTransform(
+    scrollYProgress, 
+    [0.75, 0.8], 
+    ["drop-shadow(0 0 0px rgba(105, 225, 133, 0))", "drop-shadow(0 0 10px rgba(105, 225, 133, 0.5))"]
+  );
 
   const containerWidth = 700;
   const containerHeight = 600;
@@ -324,6 +323,8 @@ export const UnifiedPlatform: React.FC = () => {
   // Right-side center for Avoqado
   const coreX = 580;
   const coreY = 300;
+  
+
 
   const getNodeCenter = (source: DataSource, index: number) => {
 
@@ -345,15 +346,6 @@ export const UnifiedPlatform: React.FC = () => {
 
     return { x, y };
   };
-
-  // Check visibility based on scroll
-  const isNodeVisible = (index: number) => {
-    const start = 0.2 + (index * 0.04);
-    return scrollValue >= start;
-  };
-
-  const areLinesDrawn = scrollValue >= 0.55;
-  const showElectricity = scrollValue >= 0.75;
 
   return (
     <div ref={containerRef} className="relative h-[300vh] bg-black z-0">
@@ -448,8 +440,7 @@ export const UnifiedPlatform: React.FC = () => {
                         fromPos={nodeCenter}
                         toPos={{ x: coreX - 60, y: coreY }}
                         color={source.color}
-                        isDrawn={areLinesDrawn}
-                        showElectricity={showElectricity}
+                        scrollY={scrollYProgress}
                         index={index}
                       />
                     );
@@ -470,16 +461,11 @@ export const UnifiedPlatform: React.FC = () => {
                 >
                   {/* Inner logo */}
                   <div className="relative w-[100%] h-[77%] flex items-center justify-center">
-                    <img
+                    <motion.img
                       src="/imagotipo-white.png"
                       alt="Avoqado"
                       className="w-full h-full object-contain"
-                      style={{ 
-                        filter: showElectricity 
-                          ? 'drop-shadow(0 0 10px rgba(105, 225, 133, 0.5))' 
-                          : 'none',
-                        transition: 'filter 0.5s ease',
-                      }}
+                      style={{ filter: logoFilter }}
                     />
                   </div>
                 </motion.div>
@@ -492,7 +478,8 @@ export const UnifiedPlatform: React.FC = () => {
                       key={source.id}
                       source={source}
                       position={nodeCenter}
-                      isVisible={isNodeVisible(index)}
+                      scrollY={scrollYProgress}
+                      index={index}
                     />
                   );
                 })}
