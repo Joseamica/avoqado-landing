@@ -266,44 +266,44 @@ interface DoodleConfig {
 // Configuracion de 28 doodles distribuidos por la pantalla
 const doodleConfigs: DoodleConfig[] = [
   // Fila superior
-  { id: 'd1', type: 'star4', x: '5%', y: '8%', rotation: 15, scale: 1, color: 'green', opacity: 0.3, parallaxSpeed: 0.3 },
-  { id: 'd2', type: 'dollar', x: '20%', y: '5%', rotation: -10, scale: 0.9, color: 'white', opacity: 0.25, parallaxSpeed: 0.5 },
-  { id: 'd3', type: 'twinkle', x: '35%', y: '12%', rotation: 20, scale: 1.1, color: 'green', opacity: 0.35, parallaxSpeed: 0.4 },
-  { id: 'd4', type: 'percent', x: '55%', y: '6%', rotation: -5, scale: 0.85, color: 'white', opacity: 0.2, parallaxSpeed: 0.6 },
-  { id: 'd5', type: 'starBurst', x: '75%', y: '10%', rotation: 30, scale: 1, color: 'green', opacity: 0.3, parallaxSpeed: 0.35 },
-  { id: 'd6', type: 'coin', x: '90%', y: '8%', rotation: -15, scale: 0.9, color: 'white', opacity: 0.25, parallaxSpeed: 0.45 },
+  { id: 'd1', type: 'star4', x: '5%', y: '8%', rotation: 15, scale: 1, color: 'green', opacity: 0.6, parallaxSpeed: 0.3 },
+  { id: 'd2', type: 'dollar', x: '20%', y: '5%', rotation: -10, scale: 0.9, color: 'white', opacity: 0.5, parallaxSpeed: 0.5 },
+  { id: 'd3', type: 'twinkle', x: '35%', y: '12%', rotation: 20, scale: 1.1, color: 'green', opacity: 0.7, parallaxSpeed: 0.4 },
+  { id: 'd4', type: 'percent', x: '55%', y: '6%', rotation: -5, scale: 0.85, color: 'white', opacity: 0.4, parallaxSpeed: 0.6 },
+  { id: 'd5', type: 'starBurst', x: '75%', y: '10%', rotation: 30, scale: 1, color: 'green', opacity: 0.6, parallaxSpeed: 0.35 },
+  { id: 'd6', type: 'coin', x: '90%', y: '8%', rotation: -15, scale: 0.9, color: 'white', opacity: 0.5, parallaxSpeed: 0.45 },
 
   // Segunda fila
-  { id: 'd7', type: 'card', x: '8%', y: '25%', rotation: -8, scale: 0.8, color: 'green', opacity: 0.25, parallaxSpeed: 0.5 },
-  { id: 'd8', type: 'spiral', x: '25%', y: '22%', rotation: 45, scale: 1, color: 'white', opacity: 0.2, parallaxSpeed: 0.3 },
-  { id: 'd9', type: 'lightning', x: '45%', y: '28%', rotation: 10, scale: 0.9, color: 'green', opacity: 0.3, parallaxSpeed: 0.55 },
-  { id: 'd10', type: 'star5', x: '65%', y: '20%', rotation: -20, scale: 1.1, color: 'white', opacity: 0.25, parallaxSpeed: 0.4 },
-  { id: 'd11', type: 'chartUp', x: '85%', y: '26%', rotation: 5, scale: 0.85, color: 'green', opacity: 0.3, parallaxSpeed: 0.35 },
+  { id: 'd7', type: 'card', x: '8%', y: '25%', rotation: -8, scale: 0.8, color: 'green', opacity: 0.5, parallaxSpeed: 0.5 },
+  { id: 'd8', type: 'spiral', x: '25%', y: '22%', rotation: 45, scale: 1, color: 'white', opacity: 0.4, parallaxSpeed: 0.3 },
+  { id: 'd9', type: 'lightning', x: '45%', y: '28%', rotation: 10, scale: 0.9, color: 'green', opacity: 0.6, parallaxSpeed: 0.55 },
+  { id: 'd10', type: 'star5', x: '65%', y: '20%', rotation: -20, scale: 1.1, color: 'white', opacity: 0.5, parallaxSpeed: 0.4 },
+  { id: 'd11', type: 'chartUp', x: '85%', y: '26%', rotation: 5, scale: 0.85, color: 'green', opacity: 0.6, parallaxSpeed: 0.35 },
 
   // Tercera fila (zona media)
-  { id: 'd12', type: 'avocado', x: '3%', y: '45%', rotation: -12, scale: 1, color: 'green', opacity: 0.35, parallaxSpeed: 0.45 },
-  { id: 'd13', type: 'heart', x: '18%', y: '50%', rotation: 15, scale: 0.8, color: 'white', opacity: 0.2, parallaxSpeed: 0.5 },
-  { id: 'd14', type: 'bills', x: '92%', y: '42%', rotation: -5, scale: 0.9, color: 'green', opacity: 0.25, parallaxSpeed: 0.4 },
-  { id: 'd15', type: 'twinkle', x: '82%', y: '55%', rotation: 25, scale: 1, color: 'white', opacity: 0.3, parallaxSpeed: 0.35 },
+  { id: 'd12', type: 'avocado', x: '3%', y: '45%', rotation: -12, scale: 1, color: 'green', opacity: 0.7, parallaxSpeed: 0.45 },
+  { id: 'd13', type: 'heart', x: '18%', y: '50%', rotation: 15, scale: 0.8, color: 'white', opacity: 0.4, parallaxSpeed: 0.5 },
+  { id: 'd14', type: 'bills', x: '92%', y: '42%', rotation: -5, scale: 0.9, color: 'green', opacity: 0.5, parallaxSpeed: 0.4 },
+  { id: 'd15', type: 'twinkle', x: '82%', y: '55%', rotation: 25, scale: 1, color: 'white', opacity: 0.6, parallaxSpeed: 0.35 },
 
   // Cuarta fila
-  { id: 'd16', type: 'check', x: '6%', y: '65%', rotation: -10, scale: 0.9, color: 'green', opacity: 0.3, parallaxSpeed: 0.55 },
-  { id: 'd17', type: 'star4', x: '22%', y: '70%', rotation: 35, scale: 1.1, color: 'white', opacity: 0.25, parallaxSpeed: 0.3 },
-  { id: 'd18', type: 'chip', x: '40%', y: '68%', rotation: 8, scale: 0.85, color: 'green', opacity: 0.25, parallaxSpeed: 0.5 },
-  { id: 'd19', type: 'waves', x: '60%', y: '72%', rotation: -3, scale: 1, color: 'white', opacity: 0.2, parallaxSpeed: 0.4 },
-  { id: 'd20', type: 'barChart', x: '78%', y: '65%', rotation: 12, scale: 0.9, color: 'green', opacity: 0.3, parallaxSpeed: 0.45 },
-  { id: 'd21', type: 'zigzag', x: '93%', y: '70%', rotation: -15, scale: 0.8, color: 'white', opacity: 0.25, parallaxSpeed: 0.35 },
+  { id: 'd16', type: 'check', x: '6%', y: '65%', rotation: -10, scale: 0.9, color: 'green', opacity: 0.6, parallaxSpeed: 0.55 },
+  { id: 'd17', type: 'star4', x: '22%', y: '70%', rotation: 35, scale: 1.1, color: 'white', opacity: 0.5, parallaxSpeed: 0.3 },
+  { id: 'd18', type: 'chip', x: '40%', y: '68%', rotation: 8, scale: 0.85, color: 'green', opacity: 0.5, parallaxSpeed: 0.5 },
+  { id: 'd19', type: 'waves', x: '60%', y: '72%', rotation: -3, scale: 1, color: 'white', opacity: 0.4, parallaxSpeed: 0.4 },
+  { id: 'd20', type: 'barChart', x: '78%', y: '65%', rotation: 12, scale: 0.9, color: 'green', opacity: 0.6, parallaxSpeed: 0.45 },
+  { id: 'd21', type: 'zigzag', x: '93%', y: '70%', rotation: -15, scale: 0.8, color: 'white', opacity: 0.5, parallaxSpeed: 0.35 },
 
   // Fila inferior
-  { id: 'd22', type: 'avocadoHalf', x: '10%', y: '85%', rotation: 20, scale: 0.9, color: 'green', opacity: 0.3, parallaxSpeed: 0.4 },
-  { id: 'd23', type: 'dollar', x: '28%', y: '88%', rotation: -8, scale: 1, color: 'white', opacity: 0.25, parallaxSpeed: 0.55 },
-  { id: 'd24', type: 'starBurst', x: '48%', y: '82%', rotation: 40, scale: 1.1, color: 'green', opacity: 0.35, parallaxSpeed: 0.3 },
-  { id: 'd25', type: 'circle', x: '68%', y: '90%', rotation: 0, scale: 1, color: 'white', opacity: 0.2, parallaxSpeed: 0.5 },
-  { id: 'd26', type: 'percent', x: '85%', y: '85%', rotation: -25, scale: 0.85, color: 'green', opacity: 0.3, parallaxSpeed: 0.45 },
+  { id: 'd22', type: 'avocadoHalf', x: '10%', y: '85%', rotation: 20, scale: 0.9, color: 'green', opacity: 0.6, parallaxSpeed: 0.4 },
+  { id: 'd23', type: 'dollar', x: '28%', y: '88%', rotation: -8, scale: 1, color: 'white', opacity: 0.5, parallaxSpeed: 0.55 },
+  { id: 'd24', type: 'starBurst', x: '48%', y: '82%', rotation: 40, scale: 1.1, color: 'green', opacity: 0.7, parallaxSpeed: 0.3 },
+  { id: 'd25', type: 'circle', x: '68%', y: '90%', rotation: 0, scale: 1, color: 'white', opacity: 0.4, parallaxSpeed: 0.5 },
+  { id: 'd26', type: 'percent', x: '85%', y: '85%', rotation: -25, scale: 0.85, color: 'green', opacity: 0.6, parallaxSpeed: 0.45 },
 
   // Extras dispersos
-  { id: 'd27', type: 'dots', x: '50%', y: '15%', rotation: 0, scale: 1, color: 'white', opacity: 0.15, parallaxSpeed: 0.6 },
-  { id: 'd28', type: 'arrow', x: '15%', y: '38%', rotation: 30, scale: 0.7, color: 'green', opacity: 0.2, parallaxSpeed: 0.35 },
+  { id: 'd27', type: 'dots', x: '50%', y: '15%', rotation: 0, scale: 1, color: 'white', opacity: 0.3, parallaxSpeed: 0.6 },
+  { id: 'd28', type: 'arrow', x: '15%', y: '38%', rotation: 30, scale: 0.7, color: 'green', opacity: 0.4, parallaxSpeed: 0.35 },
 ];
 
 const COLORS = {

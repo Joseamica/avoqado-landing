@@ -108,7 +108,64 @@ import HeroCarousel from '../components/interactive/HeroCarousel.tsx'
 
 ## Critical Development Practices
 
-### 0. No Emojis
+### 0. Responsive Design - ALWAYS Consider All Device Sizes
+
+**CRITICAL:** Every CSS change, fix, or new feature MUST be tested and considered across ALL device sizes. A fix that works on mobile can completely break desktop (and vice versa).
+
+#### The Golden Rule
+```
+Before applying ANY CSS change, ask:
+1. Does this affect mobile? (< 768px)
+2. Does this affect tablet? (768px - 1023px)
+3. Does this affect desktop? (>= 1024px)
+4. Should this change be scoped to specific breakpoints?
+```
+
+#### Use Tailwind Responsive Prefixes
+```tsx
+// BAD - Applies to ALL screen sizes
+className="overflow-hidden"
+
+// GOOD - Only applies overflow-hidden on mobile, visible on desktop
+className="overflow-hidden lg:overflow-visible"
+
+// GOOD - Different behavior per breakpoint
+className="w-full md:w-1/2 lg:w-1/3"
+```
+
+#### Use CSS Media Queries for Global Styles
+```css
+/* BAD - Affects all devices */
+body {
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* GOOD - Only affects mobile */
+@media (max-width: 1023px) {
+  body {
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+}
+```
+
+#### iOS-Specific Gotchas
+- `100vw` includes scrollbar width - can cause horizontal overflow
+- `position: relative` on body interferes with `fixed` children
+- `translate-x` transforms can create scrollable areas even with `overflow: hidden`
+- `visibility: hidden` is better than `translate` for hiding off-screen elements
+- Always test in Safari/Chrome on actual iOS devices
+
+#### Mandatory Testing Checklist
+Before considering any UI change complete:
+- [ ] Test on mobile (use Chrome DevTools, 375px width)
+- [ ] Test on tablet (768px width)
+- [ ] Test on desktop (1280px+ width)
+- [ ] Test pinch-zoom on mobile - no horizontal overflow should appear
+- [ ] Verify fixed elements (navbar, floating buttons) work correctly
+
+### 1. No Emojis
 
 **NEVER use emojis in code, UI, or content.** Keep the design clean and professional.
 

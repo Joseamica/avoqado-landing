@@ -46,12 +46,11 @@ export default function MobileMenu() {
 
 	// Menu content to be portaled
 	const menuContent = (
-		<>
+		<div className="fixed inset-0 overflow-hidden pointer-events-none lg:hidden" style={{ zIndex: 99998, clipPath: 'inset(0)' }}>
 			{/* Full screen backdrop */}
 			{isOpen && (
 				<div
-					className="fixed inset-0 bg-black/90 lg:hidden"
-					style={{ zIndex: 99998 }}
+					className="absolute inset-0 bg-black/90 pointer-events-auto"
 					onClick={closeMenu}
 					aria-hidden="true"
 				/>
@@ -59,8 +58,8 @@ export default function MobileMenu() {
 
 			{/* Mobile Menu Panel */}
 			<div
-				className={`fixed top-0 right-0 h-full w-[280px] border-l border-gray-700 shadow-2xl lg:hidden transition-transform duration-300 ease-out ${
-					isOpen ? 'translate-x-0' : 'translate-x-full'
+				className={`absolute top-0 right-0 h-full w-[280px] border-l border-gray-700 shadow-2xl transition-all duration-300 ease-out pointer-events-auto ${
+					isOpen ? 'translate-x-0 visible' : 'translate-x-full invisible'
 				}`}
 				style={{ 
 					zIndex: 99999,
@@ -122,7 +121,7 @@ export default function MobileMenu() {
 					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	);
 
 	return (

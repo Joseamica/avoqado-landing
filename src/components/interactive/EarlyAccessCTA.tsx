@@ -15,7 +15,7 @@ const AnimatedCounter: React.FC<{ value: number; className?: string }> = ({ valu
   return <span className={className}>{displayValue}</span>;
 };
 
-export const EarlyAccessCTA: React.FC = () => {
+const EarlyAccessCTA: React.FC = () => {
   const [hasTriggered, setHasTriggered] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -116,3 +116,5 @@ export const EarlyAccessCTA: React.FC = () => {
     </div>
   );
 };
+
+export default EarlyAccessCTA;

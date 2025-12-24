@@ -54,6 +54,51 @@ The project uses Astro's file-based routing and Islands Architecture to maximize
 
 ## Key Development Guidelines
 
+### 0. Responsive Design - ALWAYS Consider All Device Sizes
+
+**CRITICAL:** Every CSS change, fix, or new feature MUST be tested and considered across ALL device sizes. A fix that works on mobile can completely break desktop (and vice versa).
+
+#### The Golden Rule
+```
+Before applying ANY CSS change, ask:
+1. Does this affect mobile? (< 768px)
+2. Does this affect tablet? (768px - 1023px)
+3. Does this affect desktop? (>= 1024px)
+4. Should this change be scoped to specific breakpoints?
+```
+
+#### Use Tailwind Responsive Prefixes
+```tsx
+// BAD - Applies to ALL screen sizes
+className="overflow-hidden"
+
+// GOOD - Only applies overflow-hidden on mobile, visible on desktop
+className="overflow-hidden lg:overflow-visible"
+```
+
+#### Use CSS Media Queries for Global Styles
+```css
+/* BAD - Affects all devices */
+body { overflow-x: hidden; }
+
+/* GOOD - Only affects mobile */
+@media (max-width: 1023px) {
+  body { overflow-x: hidden; }
+}
+```
+
+#### iOS-Specific Gotchas
+- `100vw` includes scrollbar width - causes horizontal overflow
+- `position: relative` on body interferes with `fixed` children
+- `translate-x` transforms create scrollable areas even with `overflow: hidden`
+- Use `visibility: hidden` instead of just `translate` for hiding off-screen elements
+
+#### Mandatory Testing
+Before any UI change is complete:
+- Test on mobile (375px), tablet (768px), and desktop (1280px+)
+- Test pinch-zoom on mobile - no horizontal overflow should appear
+- Verify fixed elements (navbar, floating buttons) work correctly
+
 ### 1. Visual Design & "Show, Don't Tell"
 **CRITICAL:** When suggesting design changes or alternatives, **implement them visually** instead of describing them in text.
 -   **Do not ask:** "Would you prefer a dark mode?"

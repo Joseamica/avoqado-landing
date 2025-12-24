@@ -356,7 +356,7 @@ export const UnifiedPlatform: React.FC = () => {
   const showElectricity = scrollValue >= 0.75;
 
   return (
-    <div ref={containerRef} className="relative h-[120vh] bg-black z-0">
+    <div ref={containerRef} className="relative h-[300vh] bg-black z-0">
       <div className="sticky top-16 h-[calc(100vh-4rem)] flex items-start lg:items-center z-10 pt-4 lg:pt-0">
         <div className="max-w-7xl mx-auto px-4 lg:px-6 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start lg:items-center">
@@ -403,7 +403,7 @@ export const UnifiedPlatform: React.FC = () => {
             </div>
 
             {/* Right: Left-to-Right Flow Diagram - Responsive */}
-            <div className="flex justify-center lg:justify-end w-full overflow-visible">
+            <div className="flex justify-center lg:justify-end w-full overflow-hidden">
               {/* Wrapper that scales with the viewport */}
               <div
                 className="relative overflow-visible"
@@ -413,7 +413,7 @@ export const UnifiedPlatform: React.FC = () => {
                 }}
               >
                 <div
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.6] sm:scale-[0.8] md:scale-[0.9] lg:scale-[1.0] xl:scale-[1.0]"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.5] sm:scale-[0.8] md:scale-[0.9] lg:scale-[1.0] xl:scale-[1.0]"
                   style={{
                     width: containerWidth,
                     height: containerHeight,

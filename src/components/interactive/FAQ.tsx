@@ -60,8 +60,9 @@ export default function FAQ() {
   const startY = height / 2 + (isMobile ? 60 : 90);
 
   // Responsive end point (chatbot button position)
-  const endX = width - (isMobile ? 50 : 115);
-  const endY = height - (isMobile ? 50 : 70);
+  // Leave extra margin to prevent stroke from causing overflow
+  const endX = width - (isMobile ? 60 : 120);
+  const endY = height - (isMobile ? 60 : 75);
 
   // Control points for the curve - adjusted for mobile
   // On mobile: shorter, more direct curve
@@ -79,10 +80,11 @@ export default function FAQ() {
 
   // Circle around chatbot button - responsive position and size
   // Mobile: larger circle so button fits completely inside
-  const cx = width - (isMobile ? 58 : 54);
-  const cy = height - (isMobile ? 48 : 54);
-  const rx = isMobile ? 55 : 60;
-  const ry = isMobile ? 52 : 55;
+  // Keep safe margin from viewport edge to prevent overflow
+  const cx = width - (isMobile ? 65 : 60);
+  const cy = height - (isMobile ? 58 : 60);
+  const rx = isMobile ? 48 : 55;
+  const ry = isMobile ? 45 : 50;
   
   // Approximation of a hand-drawn double oval using Cubic Beziers
   // Loop 1 (Outer) -> Loop 2 (Inner/Offset)
@@ -151,9 +153,14 @@ export default function FAQ() {
       {mounted && createPortal(
         <motion.div
           style={{ opacity: overlayOpacity }}
-          className="fixed inset-0 pointer-events-none z-[40]"
+          className="fixed inset-0 pointer-events-none z-[40] overflow-hidden"
         >
-          <svg className="w-full h-full"> 
+          <svg
+            className="w-full h-full"
+            style={{ overflow: 'hidden' }}
+            viewBox={`0 0 ${width} ${height}`}
+            preserveAspectRatio="xMidYMid slice"
+          > 
              {/* Arrow Path using calculated coordinates */}
              <motion.path
                d={arrowPathD}

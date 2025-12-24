@@ -1003,7 +1003,7 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
 
 
   return (
-    <div ref={containerRef} className="relative h-auto lg:h-[250vh] z-0" style={{ backgroundColor: '#f6f9fc' }}>
+    <div ref={containerRef} className="relative h-auto lg:h-[300vh] z-0" style={{ backgroundColor: '#f6f9fc' }}>
       <div className="relative lg:sticky top-0 lg:top-16 h-auto lg:h-[calc(100vh-4rem)] flex items-start lg:items-center z-10 py-8 lg:py-0">
         <div className="max-w-7xl mx-auto px-4 lg:px-6 w-full h-full flex flex-col">
           <div className="flex flex-col lg:grid lg:grid-cols-[35%_65%] gap-2 lg:gap-8 items-start lg:items-center flex-1 h-full">
