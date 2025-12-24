@@ -1,23 +1,23 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-import img1 from '../../assets/hero/hero-tile-01.png';
-import img2 from '../../assets/hero/hero-tile-02.png';
-import img3 from '../../assets/hero/hero-tile-03.png';
-import img4 from '../../assets/hero/hero-tile-04.png';
-import img5 from '../../assets/hero/hero-tile-05.png';
-import img6 from '../../assets/hero/hero-tile-06.png';
-import img7 from '../../assets/hero/hero-tile-07.png';
-import img8 from '../../assets/hero/hero-tile-08.png';
-import img9 from '../../assets/hero/hero-tile-09.png';
-import img10 from '../../assets/hero/hero-tile-10.png';
-import img11 from '../../assets/hero/hero-tile-11.png';
-import img12 from '../../assets/hero/hero-tile-12.png';
-import img13 from '../../assets/hero/hero-tile-13.png';
-import img14 from '../../assets/hero/hero-tile-14.png';
-import img15 from '../../assets/hero/hero-tile-15.png';
-import img16 from '../../assets/hero/hero-tile-16.png';
-import img17 from '../../assets/hero/hero-tile-17.png';
+import img1 from '../../assets/hero/hero-tile-01.jpg';
+import img2 from '../../assets/hero/hero-tile-02.jpg';
+import img3 from '../../assets/hero/hero-tile-03.jpg';
+import img4 from '../../assets/hero/hero-tile-04.jpg';
+import img5 from '../../assets/hero/hero-tile-05.jpg';
+import img6 from '../../assets/hero/hero-tile-06.jpg';
+import img7 from '../../assets/hero/hero-tile-07.jpg';
+import img8 from '../../assets/hero/hero-tile-08.jpg';
+import img9 from '../../assets/hero/hero-tile-09.jpg';
+import img10 from '../../assets/hero/hero-tile-10.jpg';
+import img11 from '../../assets/hero/hero-tile-11.jpg';
+import img12 from '../../assets/hero/hero-tile-12.jpg';
+import img13 from '../../assets/hero/hero-tile-13.jpg';
+import img14 from '../../assets/hero/hero-tile-14.jpg';
+import img15 from '../../assets/hero/hero-tile-15.jpg';
+import img16 from '../../assets/hero/hero-tile-16.jpg';
+import img17 from '../../assets/hero/hero-tile-17.jpg';
 
 /**
  * Square-like Hero Animation - Mobile Responsive

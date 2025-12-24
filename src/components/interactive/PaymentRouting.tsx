@@ -35,7 +35,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'reportes',
     name: 'Reportes',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="rep-a" x1="5" y1="5" x2="35" y2="35" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient></defs><path d="M5 5v30h30" stroke="url(#rep-a)" strokeWidth="3" strokeLinecap="round"/><path d="M32 15l-9 9-6-6-9 9" stroke="#11EFE3" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="reportes-rep-a" x1="5" y1="5" x2="35" y2="35" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient></defs><path d="M5 5v30h30" stroke="url(#reportes-rep-a)" strokeWidth="3" strokeLinecap="round"/><path d="M32 15l-9 9-6-6-9 9" stroke="#11EFE3" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><path d="M5 5v30h30" stroke="#C4CCD8" strokeWidth="2" strokeLinecap="round"/><path d="M32 15l-9 9-6-6-9 9" stroke="#C4CCD8" strokeWidth="2" strokeLinecap="round"/></svg>),
     row: 0, col: 0,
     color: '#00D924',
@@ -49,7 +49,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'chatbot',
     name: 'Chatbot IA',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="chat-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient></defs><circle cx="20" cy="20" r="16" fill="url(#chat-a)"/><circle cx="13" cy="17" r="2" fill="white"/><circle cx="20" cy="17" r="2" fill="white"/><circle cx="27" cy="17" r="2" fill="white"/><path d="M13 26c3 3 11 3 14 0" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="chatbot-chat-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient></defs><circle cx="20" cy="20" r="16" fill="url(#chatbot-chat-a)"/><circle cx="13" cy="17" r="2" fill="white"/><circle cx="20" cy="17" r="2" fill="white"/><circle cx="27" cy="17" r="2" fill="white"/><path d="M13 26c3 3 11 3 14 0" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><circle cx="20" cy="20" r="16" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><circle cx="13" cy="17" r="2" stroke="#C4CCD8" strokeWidth="1" fill="none"/><circle cx="20" cy="17" r="2" stroke="#C4CCD8" strokeWidth="1" fill="none"/><circle cx="27" cy="17" r="2" stroke="#C4CCD8" strokeWidth="1" fill="none"/></svg>),
     row: 0, col: 5,
     color: '#9B66FF',
@@ -61,7 +61,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'inventario',
     name: 'Inventario',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="inv-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient><linearGradient id="inv-b" x1="20" y1="15" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#11EFE3"/><stop offset="1" stopColor="#21CFE0"/></linearGradient></defs><path d="M20 2l16 9v18l-16 9-16-9V11l16-9z" fill="url(#inv-a)"/><path d="M20 20v18l-16-9V11l16 9z" fill="url(#inv-b)"/><path d="M20 20l16-9" stroke="white" strokeWidth="1" strokeOpacity="0.5"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="inventario-inv-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient><linearGradient id="inventario-inv-b" x1="20" y1="15" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#11EFE3"/><stop offset="1" stopColor="#21CFE0"/></linearGradient></defs><path d="M20 2l16 9v18l-16 9-16-9V11l16-9z" fill="url(#inventario-inv-a)"/><path d="M20 20v18l-16-9V11l16 9z" fill="url(#inventario-inv-b)"/><path d="M20 20l16-9" stroke="white" strokeWidth="1" strokeOpacity="0.5"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><path d="M20 2l16 9v18l-16 9-16-9V11l16-9z" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><path d="M20 20v18M4 11l16 9 16-9" stroke="#C4CCD8" strokeWidth="1"/></svg>),
     row: 0, col: 4,
     color: '#00D924',
@@ -76,7 +76,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'mesas',
     name: 'Mesas',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="mesa-a" x1="20" y1="10" x2="20" y2="20" gradientUnits="userSpaceOnUse"><stop stopColor="#11EFE3"/><stop offset="1" stopColor="#21CFE0"/></linearGradient></defs><rect x="4" y="12" width="32" height="6" rx="2" fill="url(#mesa-a)"/><path d="M10 18v14M30 18v14" stroke="#0073E6" strokeWidth="3" strokeLinecap="round"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="mesas-mesa-a" x1="20" y1="10" x2="20" y2="20" gradientUnits="userSpaceOnUse"><stop stopColor="#11EFE3"/><stop offset="1" stopColor="#21CFE0"/></linearGradient></defs><rect x="4" y="12" width="32" height="6" rx="2" fill="url(#mesas-mesa-a)"/><path d="M10 18v14M30 18v14" stroke="#0073E6" strokeWidth="3" strokeLinecap="round"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><rect x="4" y="12" width="32" height="6" rx="2" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><path d="M10 18v14M30 18v14" stroke="#C4CCD8" strokeWidth="2" strokeLinecap="round"/></svg>),
     row: 1, col: 0,
     color: '#11EFE3',
@@ -91,17 +91,17 @@ const PRODUCTS: Product[] = [
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-8 h-8">
         <defs>
-          <linearGradient id="tpv-main" x1="20" y1="0" x2="20" y2="40" gradientUnits="userSpaceOnUse">
+          <linearGradient id="tpv-tpv-main" x1="20" y1="0" x2="20" y2="40" gradientUnits="userSpaceOnUse">
             <stop stopColor="#11EFE3" />
             <stop offset="1" stopColor="#21CFE0" />
           </linearGradient>
-          <linearGradient id="tpv-overlay" x1="20" y1="15" x2="20" y2="40" gradientUnits="userSpaceOnUse">
+          <linearGradient id="tpv-tpv-overlay" x1="20" y1="15" x2="20" y2="40" gradientUnits="userSpaceOnUse">
             <stop stopColor="#0048E5" />
             <stop offset="1" stopColor="#9B66FF" />
           </linearGradient>
         </defs>
-        <rect x="8" y="2" width="24" height="36" rx="4" fill="url(#tpv-main)" />
-        <rect x="8" y="20" width="24" height="18" rx="4" fill="url(#tpv-overlay)" />
+        <rect x="8" y="2" width="24" height="36" rx="4" fill="url(#tpv-tpv-main)" />
+        <rect x="8" y="20" width="24" height="18" rx="4" fill="url(#tpv-tpv-overlay)" />
         <rect x="12" y="6" width="16" height="12" rx="2" fill="white" fillOpacity="0.3" />
         <circle cx="20" cy="34" r="2" fill="white" />
       </svg>
@@ -124,7 +124,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'ordenes',
     name: 'Órdenes',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="ord-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FF8F17"/><stop offset="1" stopColor="#FF6B00"/></linearGradient></defs><path d="M14 8H10a4 4 0 00-4 4v20a4 4 0 004 4h20a4 4 0 004-4V12a4 4 0 00-4-4h-4" stroke="url(#ord-a)" strokeWidth="2.5"/><rect x="14" y="4" width="12" height="8" rx="2" fill="url(#ord-a)"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="ordenes-ord-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FF8F17"/><stop offset="1" stopColor="#FF6B00"/></linearGradient></defs><path d="M14 8H10a4 4 0 00-4 4v20a4 4 0 004 4h20a4 4 0 004-4V12a4 4 0 00-4-4h-4" stroke="url(#ordenes-ord-a)" strokeWidth="2.5"/><rect x="14" y="4" width="12" height="8" rx="2" fill="url(#ordenes-ord-a)"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><path d="M14 8H10a4 4 0 00-4 4v20a4 4 0 004 4h20a4 4 0 004-4V12a4 4 0 00-4-4h-4" stroke="#C4CCD8" strokeWidth="1.5"/><rect x="14" y="4" width="12" height="8" rx="2" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/></svg>),
     row: 1, col: 3,
     color: '#FF8F17',
@@ -138,7 +138,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'cocina',
     name: 'Cocina',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="coc-a" x1="20" y1="6" x2="20" y2="34" gradientUnits="userSpaceOnUse"><stop stopColor="#FF5091"/><stop offset="1" stopColor="#E03071"/></linearGradient></defs><rect x="4" y="10" width="32" height="20" rx="4" fill="url(#coc-a)"/><circle cx="12" cy="20" r="3" fill="white"/><circle cx="20" cy="20" r="3" fill="white"/><circle cx="28" cy="20" r="3" fill="white"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="cocina-coc-a" x1="20" y1="6" x2="20" y2="34" gradientUnits="userSpaceOnUse"><stop stopColor="#FF5091"/><stop offset="1" stopColor="#E03071"/></linearGradient></defs><rect x="4" y="10" width="32" height="20" rx="4" fill="url(#cocina-coc-a)"/><circle cx="12" cy="20" r="3" fill="white"/><circle cx="20" cy="20" r="3" fill="white"/><circle cx="28" cy="20" r="3" fill="white"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><rect x="4" y="10" width="32" height="20" rx="4" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><circle cx="12" cy="20" r="3" stroke="#C4CCD8" strokeWidth="1" fill="none"/><circle cx="20" cy="20" r="3" stroke="#C4CCD8" strokeWidth="1" fill="none"/><circle cx="28" cy="20" r="3" stroke="#C4CCD8" strokeWidth="1" fill="none"/></svg>),
     row: 1, col: 4,
     color: '#FF5091',
@@ -153,19 +153,19 @@ const PRODUCTS: Product[] = [
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-8 h-8">
         <defs>
-          <linearGradient id="qr-a" x1="10" y1="2" x2="10" y2="18" gradientUnits="userSpaceOnUse">
+          <linearGradient id="qr-qr-a" x1="10" y1="2" x2="10" y2="18" gradientUnits="userSpaceOnUse">
             <stop stopColor="#FF5091" />
             <stop offset="1" stopColor="#E03071" />
           </linearGradient>
-          <linearGradient id="qr-b" x1="30" y1="22" x2="30" y2="38" gradientUnits="userSpaceOnUse">
+          <linearGradient id="qr-qr-b" x1="30" y1="22" x2="30" y2="38" gradientUnits="userSpaceOnUse">
             <stop stopColor="#9A66FF" />
             <stop offset="1" stopColor="#6E00F5" />
           </linearGradient>
         </defs>
-        <rect x="2" y="2" width="16" height="16" rx="3" fill="url(#qr-a)" />
-        <rect x="22" y="2" width="16" height="16" rx="3" fill="url(#qr-a)" />
-        <rect x="2" y="22" width="16" height="16" rx="3" fill="url(#qr-a)" />
-        <rect x="22" y="22" width="16" height="16" rx="3" fill="url(#qr-b)" />
+        <rect x="2" y="2" width="16" height="16" rx="3" fill="url(#qr-qr-a)" />
+        <rect x="22" y="2" width="16" height="16" rx="3" fill="url(#qr-qr-a)" />
+        <rect x="2" y="22" width="16" height="16" rx="3" fill="url(#qr-qr-a)" />
+        <rect x="22" y="22" width="16" height="16" rx="3" fill="url(#qr-qr-b)" />
         <rect x="6" y="6" width="8" height="8" rx="1" fill="white" fillOpacity="0.4" />
         <rect x="26" y="6" width="8" height="8" rx="1" fill="white" fillOpacity="0.4" />
         <rect x="6" y="26" width="8" height="8" rx="1" fill="white" fillOpacity="0.4" />
@@ -189,7 +189,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'dinero',
     name: 'Dinero',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="din-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient></defs><circle cx="20" cy="20" r="16" fill="url(#din-a)"/><path d="M20 10v20M26 15h-8a3 3 0 000 6h4a3 3 0 010 6h-8" stroke="white" strokeWidth="2.5" strokeLinecap="round"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="dinero-din-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient></defs><circle cx="20" cy="20" r="16" fill="url(#dinero-din-a)"/><path d="M20 10v20M26 15h-8a3 3 0 000 6h4a3 3 0 010 6h-8" stroke="white" strokeWidth="2.5" strokeLinecap="round"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><circle cx="20" cy="20" r="16" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><path d="M20 10v20M26 15h-8a3 3 0 000 6h4a3 3 0 010 6h-8" stroke="#C4CCD8" strokeWidth="1.5" strokeLinecap="round"/></svg>),
     row: 2, col: 2,
     color: '#00D924',
@@ -202,7 +202,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'enrutamiento',
     name: 'Enrutamiento',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="enr-a" x1="4" y1="20" x2="36" y2="20" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#0073E6"/></linearGradient></defs><path d="M4 20h6l5-14 10 28 5-14h6" stroke="url(#enr-a)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="enrutamiento-enr-a" x1="4" y1="20" x2="36" y2="20" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#0073E6"/></linearGradient></defs><path d="M4 20h6l5-14 10 28 5-14h6" stroke="url(#enrutamiento-enr-a)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><path d="M4 20h6l5-14 10 28 5-14h6" stroke="#C4CCD8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>),
     row: 3, col: 2,
     color: '#9B66FF',
@@ -214,7 +214,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'pagos',
     name: 'Pagos',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="pag-a" x1="20" y1="6" x2="20" y2="34" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient></defs><rect x="2" y="8" width="36" height="24" rx="4" fill="url(#pag-a)"/><path d="M2 16h36" stroke="white" strokeWidth="3"/><rect x="6" y="24" width="10" height="4" rx="1" fill="white" fillOpacity="0.5"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="pagos-pag-a" x1="20" y1="6" x2="20" y2="34" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient></defs><rect x="2" y="8" width="36" height="24" rx="4" fill="url(#pagos-pag-a)"/><path d="M2 16h36" stroke="white" strokeWidth="3"/><rect x="6" y="24" width="10" height="4" rx="1" fill="white" fillOpacity="0.5"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><rect x="2" y="8" width="36" height="24" rx="4" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><path d="M2 16h36" stroke="#C4CCD8" strokeWidth="1.5"/></svg>),
     row: 1, col: 2,
     color: '#00D924',
@@ -228,7 +228,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'propinas',
     name: 'Propinas',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="prop-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FFD748"/><stop offset="1" stopColor="#FFC148"/></linearGradient></defs><circle cx="20" cy="20" r="16" fill="url(#prop-a)"/><path d="M20 10v20M26 15h-8a3 3 0 000 6h4a3 3 0 010 6h-8" stroke="white" strokeWidth="2.5" strokeLinecap="round"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="propinas-prop-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FFD748"/><stop offset="1" stopColor="#FFC148"/></linearGradient></defs><circle cx="20" cy="20" r="16" fill="url(#propinas-prop-a)"/><path d="M20 10v20M26 15h-8a3 3 0 000 6h4a3 3 0 010 6h-8" stroke="white" strokeWidth="2.5" strokeLinecap="round"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><circle cx="20" cy="20" r="16" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><path d="M20 10v20M26 15h-8a3 3 0 000 6h4a3 3 0 010 6h-8" stroke="#C4CCD8" strokeWidth="1.5" strokeLinecap="round"/></svg>),
     row: 2, col: 3,
     color: '#FFD748',
@@ -240,7 +240,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'split',
     name: 'Split',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="spl-a" x1="12" y1="8" x2="12" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient><linearGradient id="spl-b" x1="28" y1="8" x2="28" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#FF5091"/><stop offset="1" stopColor="#E03071"/></linearGradient></defs><circle cx="12" cy="20" r="10" fill="url(#spl-a)" fillOpacity="0.8"/><circle cx="28" cy="20" r="10" fill="url(#spl-b)" fillOpacity="0.8"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="split-spl-a" x1="12" y1="8" x2="12" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient><linearGradient id="split-spl-b" x1="28" y1="8" x2="28" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#FF5091"/><stop offset="1" stopColor="#E03071"/></linearGradient></defs><circle cx="12" cy="20" r="10" fill="url(#split-spl-a)" fillOpacity="0.8"/><circle cx="28" cy="20" r="10" fill="url(#split-spl-b)" fillOpacity="0.8"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><circle cx="12" cy="20" r="10" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><circle cx="28" cy="20" r="10" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/></svg>),
     row: 2, col: 4,
     color: '#9B66FF',
@@ -249,7 +249,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'resenas',
     name: 'Reseñas',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="res-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FFD748"/><stop offset="1" stopColor="#FFC148"/></linearGradient></defs><path d="M20 3l5.5 11 12 1.7-8.7 8.5 2 12L20 31l-10.8 5.2 2-12L2.5 15.7l12-1.7L20 3z" fill="url(#res-a)"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="resenas-res-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FFD748"/><stop offset="1" stopColor="#FFC148"/></linearGradient></defs><path d="M20 3l5.5 11 12 1.7-8.7 8.5 2 12L20 31l-10.8 5.2 2-12L2.5 15.7l12-1.7L20 3z" fill="url(#resenas-res-a)"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><path d="M20 3l5.5 11 12 1.7-8.7 8.5 2 12L20 31l-10.8 5.2 2-12L2.5 15.7l12-1.7L20 3z" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/></svg>),
     row: 2, col: 5,
     color: '#FFD748',
@@ -258,7 +258,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'clientes',
     name: 'Clientes',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="cli-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#0073E6"/><stop offset="1" stopColor="#00299C"/></linearGradient></defs><circle cx="20" cy="14" r="6" fill="url(#cli-a)"/><path d="M8 32c0-6 6-10 12-10s12 4 12 10" stroke="url(#cli-a)" strokeWidth="3" strokeLinecap="round"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="clientes-cli-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#0073E6"/><stop offset="1" stopColor="#00299C"/></linearGradient></defs><circle cx="20" cy="14" r="6" fill="url(#clientes-cli-a)"/><path d="M8 32c0-6 6-10 12-10s12 4 12 10" stroke="url(#clientes-cli-a)" strokeWidth="3" strokeLinecap="round"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><circle cx="20" cy="14" r="6" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><path d="M8 32c0-6 6-10 12-10s12 4 12 10" stroke="#C4CCD8" strokeWidth="1.5" strokeLinecap="round"/></svg>),
     row: 2, col: 0,
     color: '#0073E6',
@@ -271,7 +271,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'promos',
     name: 'Promos',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="pro-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FF5091"/><stop offset="1" stopColor="#E03071"/></linearGradient></defs><path d="M20 4l4 8 8 2-6 6 2 9-8-4-8 4 2-9-6-6 8-2 4-8z" fill="url(#pro-a)"/><rect x="14" y="14" width="12" height="12" rx="2" fill="white" fillOpacity="0.3"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="promos-pro-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FF5091"/><stop offset="1" stopColor="#E03071"/></linearGradient></defs><path d="M20 4l4 8 8 2-6 6 2 9-8-4-8 4 2-9-6-6 8-2 4-8z" fill="url(#promos-pro-a)"/><rect x="14" y="14" width="12" height="12" rx="2" fill="white" fillOpacity="0.3"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><path d="M20 4l4 8 8 2-6 6 2 9-8-4-8 4 2-9-6-6 8-2 4-8z" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/></svg>),
     row: 2, col: 1,
     color: '#FF5091',
@@ -321,7 +321,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'staff',
     name: 'Personal',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="staff-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FF5091"/><stop offset="1" stopColor="#E03071"/></linearGradient></defs><circle cx="14" cy="12" r="6" fill="url(#staff-a)"/><circle cx="28" cy="12" r="5" fill="url(#staff-a)" fillOpacity="0.6"/><path d="M4 36v-4a8 8 0 018-8h8a8 8 0 018 8v4" fill="url(#staff-a)"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="staff-staff-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FF5091"/><stop offset="1" stopColor="#E03071"/></linearGradient></defs><circle cx="14" cy="12" r="6" fill="url(#staff-staff-a)"/><circle cx="28" cy="12" r="5" fill="url(#staff-staff-a)" fillOpacity="0.6"/><path d="M4 36v-4a8 8 0 018-8h8a8 8 0 018 8v4" fill="url(#staff-staff-a)"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><circle cx="14" cy="12" r="6" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><circle cx="28" cy="12" r="5" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/></svg>),
     row: 3, col: 3,
     color: '#FF5091',
@@ -334,7 +334,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'turnos',
     name: 'Turnos',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="turn-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FFD748"/><stop offset="1" stopColor="#FF8F17"/></linearGradient></defs><circle cx="20" cy="20" r="16" stroke="url(#turn-a)" strokeWidth="3"/><path d="M20 10v10l6 6" stroke="url(#turn-a)" strokeWidth="3" strokeLinecap="round"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="turnos-turn-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FFD748"/><stop offset="1" stopColor="#FF8F17"/></linearGradient></defs><circle cx="20" cy="20" r="16" stroke="url(#turnos-turn-a)" strokeWidth="3"/><path d="M20 10v10l6 6" stroke="url(#turnos-turn-a)" strokeWidth="3" strokeLinecap="round"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><circle cx="20" cy="20" r="16" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><path d="M20 10v10l6 6" stroke="#C4CCD8" strokeWidth="1.5" strokeLinecap="round"/></svg>),
     row: 3, col: 4,
     color: '#FFD748',
@@ -346,7 +346,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'impresora',
     name: 'Impresora',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="imp-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient></defs><rect x="10" y="4" width="20" height="10" rx="2" fill="url(#imp-a)" fillOpacity="0.3"/><rect x="4" y="14" width="32" height="14" rx="3" fill="url(#imp-a)"/><rect x="10" y="28" width="20" height="10" rx="2" fill="url(#imp-a)" fillOpacity="0.3"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="impresora-imp-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient></defs><rect x="10" y="4" width="20" height="10" rx="2" fill="url(#impresora-imp-a)" fillOpacity="0.3"/><rect x="4" y="14" width="32" height="14" rx="3" fill="url(#impresora-imp-a)"/><rect x="10" y="28" width="20" height="10" rx="2" fill="url(#impresora-imp-a)" fillOpacity="0.3"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><rect x="10" y="4" width="20" height="10" rx="2" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><rect x="4" y="14" width="32" height="14" rx="3" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><rect x="10" y="28" width="20" height="10" rx="2" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/></svg>),
     row: 3, col: 5,
     color: '#9B66FF',
@@ -360,7 +360,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'analytics',
     name: 'Analytics',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="ana-a" x1="20" y1="6" x2="20" y2="36" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient></defs><rect x="6" y="20" width="8" height="14" rx="2" fill="url(#ana-a)"/><rect x="16" y="14" width="8" height="20" rx="2" fill="url(#ana-a)"/><rect x="26" y="6" width="8" height="28" rx="2" fill="url(#ana-a)"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="analytics-ana-a" x1="20" y1="6" x2="20" y2="36" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient></defs><rect x="6" y="20" width="8" height="14" rx="2" fill="url(#analytics-ana-a)"/><rect x="16" y="14" width="8" height="20" rx="2" fill="url(#analytics-ana-a)"/><rect x="26" y="6" width="8" height="28" rx="2" fill="url(#analytics-ana-a)"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><rect x="6" y="20" width="8" height="14" rx="2" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><rect x="16" y="14" width="8" height="20" rx="2" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><rect x="26" y="6" width="8" height="28" rx="2" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/></svg>),
     row: 4, col: 0,
     color: '#9B66FF',
@@ -375,19 +375,19 @@ const PRODUCTS: Product[] = [
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-8 h-8">
         <defs>
-          <linearGradient id="dash-a" x1="10" y1="2" x2="10" y2="18" gradientUnits="userSpaceOnUse">
+          <linearGradient id="dashboard-dash-a" x1="10" y1="2" x2="10" y2="18" gradientUnits="userSpaceOnUse">
             <stop stopColor="#0073E6" />
             <stop offset="1" stopColor="#00299C" />
           </linearGradient>
-          <linearGradient id="dash-b" x1="30" y1="2" x2="30" y2="38" gradientUnits="userSpaceOnUse">
+          <linearGradient id="dashboard-dash-b" x1="30" y1="2" x2="30" y2="38" gradientUnits="userSpaceOnUse">
             <stop stopColor="#9B66FF" />
             <stop offset="1" stopColor="#0048E5" />
           </linearGradient>
         </defs>
-        <rect x="2" y="2" width="16" height="16" rx="3" fill="url(#dash-a)" />
-        <rect x="22" y="2" width="16" height="10" rx="3" fill="url(#dash-b)" />
-        <rect x="22" y="16" width="16" height="22" rx="3" fill="url(#dash-b)" />
-        <rect x="2" y="22" width="16" height="16" rx="3" fill="url(#dash-a)" />
+        <rect x="2" y="2" width="16" height="16" rx="3" fill="url(#dashboard-dash-a)" />
+        <rect x="22" y="2" width="16" height="10" rx="3" fill="url(#dashboard-dash-b)" />
+        <rect x="22" y="16" width="16" height="22" rx="3" fill="url(#dashboard-dash-b)" />
+        <rect x="2" y="22" width="16" height="16" rx="3" fill="url(#dashboard-dash-a)" />
       </svg>
     ),
     iconDimmed: (
@@ -409,7 +409,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'saldos',
     name: 'Saldos',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="sal-a" x1="20" y1="8" x2="20" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient></defs><rect x="4" y="10" width="32" height="20" rx="4" fill="url(#sal-a)"/><path d="M4 16h32" stroke="white" strokeWidth="2"/><circle cx="30" cy="24" r="3" fill="white"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="saldos-sal-a" x1="20" y1="8" x2="20" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient></defs><rect x="4" y="10" width="32" height="20" rx="4" fill="url(#saldos-sal-a)"/><path d="M4 16h32" stroke="white" strokeWidth="2"/><circle cx="30" cy="24" r="3" fill="white"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><rect x="4" y="10" width="32" height="20" rx="4" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><path d="M4 16h32" stroke="#C4CCD8" strokeWidth="1.5"/></svg>),
     row: 4, col: 4,
     color: '#00D924',
@@ -421,7 +421,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'offline',
     name: 'Offline',
-    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="off-a" x1="20" y1="6" x2="20" y2="34" gradientUnits="userSpaceOnUse"><stop stopColor="#11EFE3"/><stop offset="1" stopColor="#21CFE0"/></linearGradient></defs><path d="M6 20a14 14 0 0128 0" stroke="url(#off-a)" strokeWidth="3" strokeLinecap="round"/><path d="M12 25a7 7 0 0116 0" stroke="url(#off-a)" strokeWidth="3" strokeLinecap="round"/><circle cx="20" cy="32" r="3" fill="url(#off-a)"/></svg>),
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><defs><linearGradient id="offline-off-a" x1="20" y1="6" x2="20" y2="34" gradientUnits="userSpaceOnUse"><stop stopColor="#11EFE3"/><stop offset="1" stopColor="#21CFE0"/></linearGradient></defs><path d="M6 20a14 14 0 0128 0" stroke="url(#offline-off-a)" strokeWidth="3" strokeLinecap="round"/><path d="M12 25a7 7 0 0116 0" stroke="url(#offline-off-a)" strokeWidth="3" strokeLinecap="round"/><circle cx="20" cy="32" r="3" fill="url(#offline-off-a)"/></svg>),
     iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-6 h-6"><path d="M6 20a14 14 0 0128 0" stroke="#C4CCD8" strokeWidth="2" strokeLinecap="round"/><path d="M12 25a7 7 0 0116 0" stroke="#C4CCD8" strokeWidth="2" strokeLinecap="round"/></svg>),
     row: 4, col: 5,
     color: '#11EFE3',
@@ -1004,6 +1004,62 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
 
   return (
     <div ref={containerRef} className="relative h-auto lg:h-[300vh] z-0" style={{ backgroundColor: '#f6f9fc' }}>
+      {/* Global SVG Defs - Chrome bug workaround: gradients don't work inside transform containers */}
+      <svg width="0" height="0" style={{ position: 'absolute' }}>
+        <defs>
+          {/* Reportes */}
+          <linearGradient id="reportes-rep-a" x1="5" y1="5" x2="35" y2="35" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient>
+          {/* Chatbot */}
+          <linearGradient id="chatbot-chat-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient>
+          {/* Inventario */}
+          <linearGradient id="inventario-inv-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient>
+          <linearGradient id="inventario-inv-b" x1="20" y1="15" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#11EFE3"/><stop offset="1" stopColor="#21CFE0"/></linearGradient>
+          {/* Mesas */}
+          <linearGradient id="mesas-mesa-a" x1="20" y1="10" x2="20" y2="20" gradientUnits="userSpaceOnUse"><stop stopColor="#11EFE3"/><stop offset="1" stopColor="#21CFE0"/></linearGradient>
+          {/* TPV */}
+          <linearGradient id="tpv-tpv-main" x1="20" y1="0" x2="20" y2="40" gradientUnits="userSpaceOnUse"><stop stopColor="#11EFE3"/><stop offset="1" stopColor="#21CFE0"/></linearGradient>
+          <linearGradient id="tpv-tpv-overlay" x1="20" y1="15" x2="20" y2="40" gradientUnits="userSpaceOnUse"><stop stopColor="#0048E5"/><stop offset="1" stopColor="#9B66FF"/></linearGradient>
+          {/* Ordenes */}
+          <linearGradient id="ordenes-ord-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FF8F17"/><stop offset="1" stopColor="#FF6B00"/></linearGradient>
+          {/* Cocina */}
+          <linearGradient id="cocina-coc-a" x1="20" y1="6" x2="20" y2="34" gradientUnits="userSpaceOnUse"><stop stopColor="#FF5091"/><stop offset="1" stopColor="#E03071"/></linearGradient>
+          {/* QR */}
+          <linearGradient id="qr-qr-a" x1="10" y1="2" x2="10" y2="18" gradientUnits="userSpaceOnUse"><stop stopColor="#FF5091"/><stop offset="1" stopColor="#E03071"/></linearGradient>
+          <linearGradient id="qr-qr-b" x1="30" y1="22" x2="30" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#9A66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient>
+          {/* Dinero */}
+          <linearGradient id="dinero-din-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient>
+          {/* Enrutamiento */}
+          <linearGradient id="enrutamiento-enr-a" x1="4" y1="20" x2="36" y2="20" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#0073E6"/></linearGradient>
+          {/* Pagos */}
+          <linearGradient id="pagos-pag-a" x1="20" y1="6" x2="20" y2="34" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient>
+          {/* Propinas */}
+          <linearGradient id="propinas-prop-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FFD748"/><stop offset="1" stopColor="#FFC148"/></linearGradient>
+          {/* Split */}
+          <linearGradient id="split-spl-a" x1="12" y1="8" x2="12" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient>
+          <linearGradient id="split-spl-b" x1="28" y1="8" x2="28" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#FF5091"/><stop offset="1" stopColor="#E03071"/></linearGradient>
+          {/* Resenas */}
+          <linearGradient id="resenas-res-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FFD748"/><stop offset="1" stopColor="#FFC148"/></linearGradient>
+          {/* Clientes */}
+          <linearGradient id="clientes-cli-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#0073E6"/><stop offset="1" stopColor="#00299C"/></linearGradient>
+          {/* Promos */}
+          <linearGradient id="promos-pro-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FF5091"/><stop offset="1" stopColor="#E03071"/></linearGradient>
+          {/* Staff */}
+          <linearGradient id="staff-staff-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FF5091"/><stop offset="1" stopColor="#E03071"/></linearGradient>
+          {/* Turnos */}
+          <linearGradient id="turnos-turn-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FFD748"/><stop offset="1" stopColor="#FF8F17"/></linearGradient>
+          {/* Impresora */}
+          <linearGradient id="impresora-imp-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient>
+          {/* Analytics */}
+          <linearGradient id="analytics-ana-a" x1="20" y1="6" x2="20" y2="36" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient>
+          {/* Dashboard */}
+          <linearGradient id="dashboard-dash-a" x1="10" y1="2" x2="10" y2="18" gradientUnits="userSpaceOnUse"><stop stopColor="#0073E6"/><stop offset="1" stopColor="#00299C"/></linearGradient>
+          <linearGradient id="dashboard-dash-b" x1="30" y1="2" x2="30" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#0048E5"/></linearGradient>
+          {/* Saldos */}
+          <linearGradient id="saldos-sal-a" x1="20" y1="8" x2="20" y2="32" gradientUnits="userSpaceOnUse"><stop stopColor="#00D924"/><stop offset="1" stopColor="#00A600"/></linearGradient>
+          {/* Offline */}
+          <linearGradient id="offline-off-a" x1="20" y1="6" x2="20" y2="34" gradientUnits="userSpaceOnUse"><stop stopColor="#11EFE3"/><stop offset="1" stopColor="#21CFE0"/></linearGradient>
+        </defs>
+      </svg>
       <div className="relative lg:sticky top-0 lg:top-16 h-auto lg:h-[calc(100vh-4rem)] flex items-start lg:items-center z-10 py-8 lg:py-0">
         <div className="max-w-7xl mx-auto px-4 lg:px-6 w-full h-full flex flex-col">
           <div className="flex flex-col lg:grid lg:grid-cols-[35%_65%] gap-2 lg:gap-8 items-start lg:items-center flex-1 h-full">

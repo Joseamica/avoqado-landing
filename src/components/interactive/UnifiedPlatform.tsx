@@ -349,6 +349,43 @@ export const UnifiedPlatform: React.FC = () => {
 
   return (
     <div ref={containerRef} className="relative h-[300vh] bg-black z-0">
+      {/* Global SVG Defs - Chrome bug workaround: gradients don't work inside transform containers */}
+      <svg width="0" height="0" style={{ position: 'absolute' }}>
+        <defs>
+          <linearGradient id="tpv-grad" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#69E185" />
+            <stop offset="1" stopColor="#22C55E" />
+          </linearGradient>
+          <linearGradient id="dash-grad" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#60A5FA" />
+            <stop offset="1" stopColor="#3B82F6" />
+          </linearGradient>
+          <linearGradient id="term1-grad" x1="20" y1="8" x2="20" y2="34" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#A78BFA" />
+            <stop offset="1" stopColor="#8B5CF6" />
+          </linearGradient>
+          <linearGradient id="term2-grad" x1="20" y1="8" x2="20" y2="34" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#C084FC" />
+            <stop offset="1" stopColor="#A855F7" />
+          </linearGradient>
+          <linearGradient id="pos-grad" x1="20" y1="10" x2="20" y2="30" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#F472B6" />
+            <stop offset="1" stopColor="#EC4899" />
+          </linearGradient>
+          <linearGradient id="cash-grad" x1="20" y1="6" x2="20" y2="34" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#FCD34D" />
+            <stop offset="1" stopColor="#FBBF24" />
+          </linearGradient>
+          <linearGradient id="qr-grad" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#F9A8D4" />
+            <stop offset="1" stopColor="#F472B6" />
+          </linearGradient>
+          <linearGradient id="int-grad" x1="20" y1="6" x2="20" y2="34" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#2DD4BF" />
+            <stop offset="1" stopColor="#14B8A6" />
+          </linearGradient>
+        </defs>
+      </svg>
       <div className="sticky top-16 h-[calc(100vh-4rem)] flex items-start lg:items-center z-10 pt-4 lg:pt-0">
         <div className="max-w-7xl mx-auto px-4 lg:px-6 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start lg:items-center">

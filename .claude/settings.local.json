@@ -18,7 +18,8 @@
       "Bash(grep:*)",
       "mcp__ide__getDiagnostics",
       "WebFetch(domain:www.fffuel.co)",
-      "WebFetch(domain:svgdoodles.com)"
+      "WebFetch(domain:svgdoodles.com)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": [],
     "ask": [],
