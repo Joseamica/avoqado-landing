@@ -525,41 +525,10 @@ export const UnifiedPlatform: React.FC = () => {
             </div>
 
             {/* Mobile Waterfall Diagram (lg:hidden) */}
-            <div className="lg:hidden absolute inset-0 w-full h-[85vh] top-24 pointer-events-none">
-                 <div className="relative w-full h-full"> 
-                    {/* Avoqado Goal Node (Bottom Center) */}
-                    <motion.div 
-                        style={{ opacity: centerOpacity }}
-                        className="absolute bottom-20 left-1/2 -translate-x-1/2 p-4 rounded-3xl bg-black/80 border border-white/10 backdrop-blur-md z-20 flex flex-col items-center shadow-2xl"
-                    >
-                         <img src="/imagotipo-white.png" alt="Avoqado" className="w-24 h-auto object-contain" />
-                         <span className="text-[10px] text-gray-500 mt-2 font-medium tracking-widest uppercase">Sistema Central</span>
-                    </motion.div>
-
-                    {/* Waterfall Streams */}
-                    <svg className="absolute inset-0 w-full h-full z-10 overflow-visible">
-                        {DATA_SOURCES.map((source, i) => {
-                             // Calculated positions for 2-column waterfall
-                             const isLeft = i % 2 === 0;
-                             const row = Math.floor(i / 2);
-                             const xPercent = isLeft ? 20 : 80;
-                             const yPercent = 10 + (row * 12); // Staggered down
-
-                             // Target: Bottom Center (50%, 85%) - approx where logo is
-                             return (
-                                <MobileWaterfallItem 
-                                    key={source.id}
-                                    source={source}
-                                    index={i}
-                                    scrollY={scrollYProgress}
-                                    xPercent={xPercent}
-                                    yPercent={yPercent}
-                                />
-                             );
-                        })}
-                    </svg>
-                 </div>
-            </div>
+            <MobileWaterfallDiagram
+              centerOpacity={centerOpacity}
+              scrollYProgress={scrollYProgress}
+            />
           </div>
         </div>
       </div>
@@ -567,7 +536,200 @@ export const UnifiedPlatform: React.FC = () => {
   );
 };
 
-// Sub-component for Mobile Items (Defined BEFORE usage or hoisted)
+// Waterfall Card - appears and draws line sequentially
+const WaterfallCard: React.FC<{
+  source: DataSource;
+  index: number;
+  totalCards: number;
+  scrollYProgress: any;
+  side: 'left' | 'right';
+  logoPosition: { x: number; y: number } | null;
+  containerWidth: number;
+  yPosition: number;
+  onRef: (el: HTMLDivElement | null) => void;
+}> = ({ source, index, totalCards, scrollYProgress, side, logoPosition, containerWidth, yPosition, onRef }) => {
+  // Calculate timing for this card - spread across the full scroll
+  // Each card gets a slice of the scroll progress
+  const sliceSize = 0.7 / totalCards; // Use 70% of scroll for cards (0.1 to 0.8)
+  const cardStart = 0.1 + (index * sliceSize);
+  const cardEnd = cardStart + sliceSize;
+
+  // Card appears in the first 30% of its slice
+  const appearStart = cardStart;
+  const appearEnd = cardStart + (sliceSize * 0.3);
+
+  // Line draws from 20% to 100% of its slice (overlaps with next card appearing)
+  const lineStart = cardStart + (sliceSize * 0.2);
+  const lineEnd = cardEnd;
+
+  const opacity = useTransform(scrollYProgress, [appearStart, appearEnd], [0, 1]);
+  const scale = useTransform(scrollYProgress, [appearStart, appearEnd], [0.7, 1]);
+  const lineProgress = useTransform(scrollYProgress, [lineStart, lineEnd], [0, 1]);
+
+  // Card position
+  const xPos = side === 'left' ? '15%' : '85%';
+  const cardWidth = 80;
+
+  // Calculate line path to logo
+  const cardCenterX = side === 'left' ? containerWidth * 0.15 : containerWidth * 0.85;
+  const cardBottomY = yPosition + 50; // approximate card height
+
+  let linePath = '';
+  if (logoPosition) {
+    const midY = cardBottomY + (logoPosition.y - cardBottomY) * 0.5;
+    linePath = `M ${cardCenterX} ${cardBottomY} C ${cardCenterX} ${midY}, ${logoPosition.x} ${midY}, ${logoPosition.x} ${logoPosition.y}`;
+  }
+
+  return (
+    <>
+      {/* The Card */}
+      <motion.div
+        ref={onRef}
+        style={{
+          opacity,
+          scale,
+          position: 'absolute',
+          left: side === 'left' ? '10%' : 'auto',
+          right: side === 'right' ? '10%' : 'auto',
+          top: yPosition,
+          width: cardWidth,
+          zIndex: 10,
+        }}
+        className="flex flex-col items-center justify-center p-2 rounded-xl bg-neutral-900/90 border border-white/10 shadow-lg backdrop-blur"
+      >
+        <div className="scale-90 mb-1">{source.icon}</div>
+        <span className="text-[9px] text-white font-medium text-center leading-tight">{source.name}</span>
+      </motion.div>
+
+      {/* The Line */}
+      {logoPosition && (
+        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 5 }}>
+          <motion.path
+            d={linePath}
+            fill="none"
+            stroke={source.color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            style={{
+              pathLength: lineProgress,
+              filter: `drop-shadow(0 0 6px ${source.color})`,
+            }}
+          />
+        </svg>
+      )}
+    </>
+  );
+};
+
+// Intelligent Mobile Waterfall Diagram - Full screen cascading animation
+const MobileWaterfallDiagram: React.FC<{
+  centerOpacity: any;
+  scrollYProgress: any;
+}> = ({ centerOpacity, scrollYProgress }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [logoPosition, setLogoPosition] = useState<{ x: number; y: number } | null>(null);
+
+  // Calculate positions based on actual DOM elements
+  const calculateDimensions = () => {
+    if (!containerRef.current) return;
+
+    const containerRect = containerRef.current.getBoundingClientRect();
+    setDimensions({ width: containerRect.width, height: containerRect.height });
+
+    if (logoRef.current) {
+      const logoRect = logoRef.current.getBoundingClientRect();
+      setLogoPosition({
+        x: logoRect.left + logoRect.width / 2 - containerRect.left,
+        y: logoRect.top + logoRect.height / 2 - containerRect.top,
+      });
+    }
+  };
+
+  useEffect(() => {
+    calculateDimensions();
+
+    const handleResize = () => {
+      requestAnimationFrame(calculateDimensions);
+    };
+
+    window.addEventListener('resize', handleResize);
+    const observer = new ResizeObserver(handleResize);
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      observer.disconnect();
+    };
+  }, []);
+
+  // Recalculate after initial render
+  useEffect(() => {
+    const timer = setTimeout(calculateDimensions, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Calculate card Y positions to fill the vertical space
+  // Leave space at bottom for logo
+  const availableHeight = dimensions.height - 160; // Reserve more space for logo
+  const cardSpacing = availableHeight / (DATA_SOURCES.length + 1);
+
+  // Logo opacity - appears after most cards have drawn lines
+  const logoOpacity = useTransform(scrollYProgress, [0.6, 0.75], [0, 1]);
+  const logoScale = useTransform(scrollYProgress, [0.6, 0.75], [0.8, 1]);
+  const logoGlow = useTransform(
+    scrollYProgress,
+    [0.75, 0.9],
+    ['drop-shadow(0 0 0px rgba(105, 225, 133, 0))', 'drop-shadow(0 0 20px rgba(105, 225, 133, 0.8))']
+  );
+
+  return (
+    <div
+      ref={containerRef}
+      className="lg:hidden relative w-full flex flex-col items-center"
+      style={{ height: 'calc(100vh - 200px)', minHeight: '500px' }}
+    >
+      {/* Waterfall Cards - alternating left/right */}
+      {DATA_SOURCES.map((source, index) => (
+        <WaterfallCard
+          key={source.id}
+          source={source}
+          index={index}
+          totalCards={DATA_SOURCES.length}
+          scrollYProgress={scrollYProgress}
+          side={index % 2 === 0 ? 'left' : 'right'}
+          logoPosition={logoPosition}
+          containerWidth={dimensions.width}
+          yPosition={cardSpacing * (index + 0.5)}
+          onRef={(el) => { cardRefs.current[index] = el; }}
+        />
+      ))}
+
+      {/* Avoqado Logo at bottom - appears after all lines connect */}
+      <motion.div
+        ref={logoRef}
+        style={{
+          opacity: logoOpacity,
+          scale: logoScale,
+        }}
+        className="absolute bottom-16 left-1/2 -translate-x-1/2 flex items-center justify-center z-20"
+      >
+        <motion.img
+          src="/imagotipo-white.png"
+          alt="Avoqado"
+          className="w-28 h-auto object-contain"
+          style={{ filter: logoGlow }}
+        />
+      </motion.div>
+    </div>
+  );
+};
+
+// Sub-component for Mobile Items (Legacy - keeping for reference)
 const MobileWaterfallItem: React.FC<{
     source: DataSource;
     index: number;
@@ -600,12 +762,12 @@ const MobileWaterfallItem: React.FC<{
             </foreignObject>
 
             {/* The Wire */}
-            <MobileWire 
-                startX={`${xPercent}%`} 
+            <MobileWire
+                startX={`${xPercent}%`}
                 startY={`${yPercent + 4}%`} // Bottom of card approx
-                endX="50%" 
-                endY="80%" // Top of Avoqado Logo approx
-                color={source.color} 
+                endX="50%"
+                endY="95%" // Top of Avoqado Logo - extended to reach it
+                color={source.color}
                 progress={drawProgress}
             />
         </g>
@@ -634,14 +796,13 @@ const MobileWire: React.FC<{
     // Let's assume the parent SVG container is responsive.
     
     return (
-        <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
-            <motion.path 
-                d={`M ${parseFloat(startX)} ${parseFloat(startY)} C ${parseFloat(startX)} ${parseFloat(startY) + 20}, 50 ${parseFloat(endY) - 20}, 50 ${parseFloat(endY)}`}
+        <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full pointer-events-none overflow-visible" preserveAspectRatio="none">
+            <motion.path
+                d={`M ${parseFloat(startX)} ${parseFloat(startY)} C ${parseFloat(startX)} ${parseFloat(startY) + 30}, 50 ${parseFloat(endY) - 15}, 50 ${parseFloat(endY)}`}
                 fill="none"
                 stroke={color}
-                strokeWidth="0.5" // Relative to 100x100 viewBox
+                strokeWidth="0.4"
                 strokeLinecap="round"
-                // opacity={progress} // Fade overlap
                 style={{ pathLength: progress }}
             />
         </svg>
