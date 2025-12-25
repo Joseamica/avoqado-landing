@@ -38,14 +38,14 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
     subtitle: 'Soluciones completas para restaurantes, cafes y bares',
     plans: [
       {
-        name: 'QR Pagos',
+        name: 'Básico',
         price: '$0',
         period: '/mes',
         description: 'Ideal para empezar',
         tierDiscount: 0,
         features: [
           'Pagos con QR ilimitados',
-          'Menu digital basico',
+          'Menu digital básico',
           'Dashboard de reportes',
           'Propinas digitales',
           'Soporte por email',
@@ -62,7 +62,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
           'Todo de QR Pagos +',
           'TPV Movil completo',
           'Gestion de mesas',
-          'Inventario basico',
+          'Inventario básico',
           'Integraciones POS',
           'Soporte prioritario 24/7',
         ],
@@ -92,7 +92,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
     subtitle: 'Punto de venta y gestion para comercios',
     plans: [
       {
-        name: 'Basico',
+        name: 'Básico',
         price: '$0',
         period: '/mes',
         description: 'Para pequenos comercios',
@@ -100,7 +100,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         features: [
           'Pagos con tarjeta',
           'Catalogo de productos',
-          'Reportes basicos',
+          'Reportes básicos',
           'Recibos digitales',
           'Soporte por email',
         ],
@@ -113,7 +113,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         description: 'Para tiendas en crecimiento',
         tierDiscount: PRO_DISCOUNT,
         features: [
-          'Todo de Basico +',
+          'Todo de Básico +',
           'Control de inventario',
           'Gestion de empleados',
           'Programa de lealtad',
@@ -146,7 +146,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
     subtitle: 'Gestion de citas y pagos para profesionales',
     plans: [
       {
-        name: 'Basico',
+        name: 'Básico',
         price: '$0',
         period: '/mes',
         description: 'Para profesionales independientes',
@@ -167,7 +167,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         description: 'Para equipos pequenos',
         tierDiscount: PRO_DISCOUNT,
         features: [
-          'Todo de Basico +',
+          'Todo de Básico +',
           'Multiples calendarios',
           'Gestion de clientes',
           'Facturacion automatica',
@@ -200,7 +200,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
     subtitle: 'Software para salones, spas y esteticas',
     plans: [
       {
-        name: 'Basico',
+        name: 'Básico',
         price: '$0',
         period: '/mes',
         description: 'Para estilistas independientes',
@@ -221,7 +221,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         description: 'Para salones',
         tierDiscount: PRO_DISCOUNT,
         features: [
-          'Todo de Basico +',
+          'Todo de Básico +',
           'Gestion de empleados',
           'Control de comisiones',
           'Inventario de productos',
@@ -287,29 +287,31 @@ export default function BusinessTypePricing() {
         </div>
 
         {/* Tabs */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`relative px-6 py-3 rounded-full font-medium text-sm md:text-base transition-all ${
-                activeTab === tab.id
-                  ? 'text-white'
-                  : 'text-gray-600 hover:text-black hover:bg-gray-100'
-              }`}
-            >
-              {activeTab === tab.id && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute inset-0 bg-black rounded-full"
-                  transition={{ type: 'spring', duration: 0.5 }}
-                />
-              )}
-              <span className="relative">
-                {tab.label}
-              </span>
-            </button>
-          ))}
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex bg-[#1a1a1a] rounded-full p-1.5">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`relative px-6 py-2.5 rounded-full font-medium text-sm md:text-base transition-all ${
+                  activeTab === tab.id
+                    ? 'text-black'
+                    : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                {activeTab === tab.id && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute inset-0 bg-white rounded-full"
+                    transition={{ type: 'spring', duration: 0.5 }}
+                  />
+                )}
+                <span className="relative">
+                  {tab.label}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Content */}
@@ -331,9 +333,9 @@ export default function BusinessTypePricing() {
               {currentPricing.plans.map((plan) => (
                 <div
                   key={plan.name}
-                  className={`relative rounded-3xl p-8 transition-all ${
+                  className={`relative rounded-3xl p-8 transition-all flex flex-col ${
                     plan.highlighted
-                      ? 'bg-black text-white shadow-2xl scale-[1.02]'
+                      ? 'bg-white text-black border-2 border-black shadow-2xl scale-[1.02]'
                       : 'bg-white text-black border border-gray-200 hover:shadow-lg'
                   }`}
                 >
@@ -345,7 +347,7 @@ export default function BusinessTypePricing() {
 
                   <div className="mb-6">
                     <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
-                    <p className={plan.highlighted ? 'text-gray-400' : 'text-gray-500'}>
+                    <p className="text-gray-500">
                       {plan.description}
                     </p>
                   </div>
@@ -353,16 +355,16 @@ export default function BusinessTypePricing() {
                   <div className="mb-6">
                     <div className="flex items-baseline">
                       <span className="text-4xl font-bold">{plan.price}</span>
-                      <span className={`text-lg ${plan.highlighted ? 'text-gray-400' : 'text-gray-500'}`}>
+                      <span className="text-lg text-gray-500">
                         {plan.period}
                       </span>
                     </div>
-                    <p className={`text-sm mt-1 ${plan.highlighted ? 'text-gray-400' : 'text-gray-500'}`}>
+                    <p className="text-sm mt-1 text-gray-500">
                       + {getTransactionFee(activeTab, plan.tierDiscount)} por transaccion
                     </p>
                   </div>
 
-                  <ul className="space-y-3 mb-8">
+                  <ul className="space-y-3 mb-8 flex-grow">
                     {plan.features.map((feature, i) => (
                       <li key={i} className="flex items-start gap-3">
                         <svg
@@ -377,7 +379,7 @@ export default function BusinessTypePricing() {
                             clipRule="evenodd"
                           />
                         </svg>
-                        <span className={plan.highlighted ? 'text-gray-300' : 'text-gray-600'}>
+                        <span className="text-gray-600">
                           {feature}
                         </span>
                       </li>
@@ -386,11 +388,7 @@ export default function BusinessTypePricing() {
 
                   <a
                     href="/contact"
-                    className={`block w-full text-center py-3 px-6 rounded-full font-semibold transition-all ${
-                      plan.highlighted
-                        ? 'bg-white text-black hover:bg-gray-100'
-                        : 'bg-black text-white hover:bg-gray-800'
-                    }`}
+                    className="block w-full text-center py-3 px-6 rounded-full font-semibold transition-all mt-auto bg-black text-white hover:bg-gray-800"
                   >
                     {plan.cta}
                   </a>
