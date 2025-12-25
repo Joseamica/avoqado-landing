@@ -132,7 +132,7 @@ export default function SquareHero() {
           className="absolute top-0 left-0 z-20 w-full h-full overflow-hidden bg-black shadow-2xl origin-top-left"
         >
           <video
-            src="/video2.webm"
+            src="/video3.webm"
             autoPlay
             loop
             muted
