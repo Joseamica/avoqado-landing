@@ -2,126 +2,143 @@
 import Icon from '../ui/Icon.astro';
 ---
 
-<section class="py-20 bg-gradient-to-br from-avoqado-dark-surface via-avoqado-dark-bg to-avoqado-dark-surface">
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="py-32 bg-black text-white">
+	<div class="max-w-[1400px] mx-auto px-6">
 		<!-- Header -->
-		<div class="text-center mb-16">
-			<h2 class="text-4xl md:text-5xl font-bold mb-4">
-				No solo <span class="text-avoqado-green">restaurantes</span>
-			</h2>
-			<p class="text-xl text-gray-300 max-w-3xl mx-auto">
-				Avoqado funciona para cualquier negocio que cobre. Enrutamiento inteligente y unificación de pagos sin importar tu sector.
-			</p>
+		<div class="mb-24 md:flex md:justify-between md:items-end">
+			<div class="max-w-3xl">
+				<h2 class="text-5xl md:text-6xl font-light mb-8 font-baby leading-tight">
+					Una sola plataforma <br/>
+					para todo tu negocio.
+				</h2>
+				<p class="text-xl text-gray-400 font-light max-w-2xl">
+					Olvídate de contratar cinco proveedores diferentes. Avoqado unifica pagos, software y hardware en un sistema elegante.
+				</p>
+			</div>
+			
+			<div class="hidden md:block">
+				<a href="/contact" class="text-white border-b border-white pb-1 hover:text-gray-300 hover:border-gray-300 transition-colors">
+					Hablar con ventas →
+				</a>
+			</div>
 		</div>
 
-		<!-- Grid de Sectores -->
-		<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+		<!-- Grid de Sectores - Monochrome Premium -->
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-32">
 			<!-- Restaurantes -->
-			<div class="bg-avoqado-dark-surface rounded-2xl p-8 border-2 border-avoqado-green/30 hover:border-avoqado-green transition-all shadow-xl">
-				<div class="w-16 h-16 bg-avoqado-green/10 border-2 border-avoqado-green/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-				<svg class="w-8 h-8 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3v7c0 1.657 1.343 3 3 3s3-1.343 3-3V3m0 18V11m9-8v7a3 3 0 01-3 3m3-3a3 3 0 003-3V3M18 21V11"></path>
-				</svg>
-			</div>
-				<h3 class="text-2xl font-bold text-white mb-3 text-center">Restaurantes</h3>
-				<ul class="space-y-3 text-gray-300">
-					<li class="flex items-start gap-2">
-						<Icon name="check" size="sm" class="text-avoqado-green mt-1 flex-shrink-0" />
-						<span>Gestión de mesas y órdenes en tiempo real</span>
+			<div class="group relative bg-[#111] rounded-3xl p-10 hover:bg-[#1a1a1a] transition-colors duration-300">
+				<div class="mb-8">
+					<svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3v7c0 1.657 1.343 3 3 3s3-1.343 3-3V3m0 18V11m9-8v7a3 3 0 01-3 3m3-3a3 3 0 003-3V3M18 21V11"></path>
+					</svg>
+				</div>
+				<h3 class="text-2xl font-medium text-white mb-4">Restaurantes</h3>
+				<p class="text-gray-500 mb-8 font-light">
+					Desde food trucks hasta franquicias. Gestión de mesas, cocina y pedidos online.
+				</p>
+				<ul class="space-y-4 text-gray-400 text-sm font-light">
+					<li class="flex items-center gap-3">
+						<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+						Gestión de mesas en vivo
 					</li>
-					<li class="flex items-start gap-2">
-						<Icon name="check" size="sm" class="text-avoqado-green mt-1 flex-shrink-0" />
-						<span>Propinas optimizadas y división de cuentas</span>
+					<li class="flex items-center gap-3">
+						<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+						Pedidos a cocina (KDS)
 					</li>
-					<li class="flex items-start gap-2">
-						<Icon name="check" size="sm" class="text-avoqado-green mt-1 flex-shrink-0" />
-						<span>QR en mesa para pago en 30 segundos</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<Icon name="check" size="sm" class="text-avoqado-green mt-1 flex-shrink-0" />
-						<span>Integración POS automática</span>
+					<li class="flex items-center gap-3">
+						<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+						Menú digital QR
 					</li>
 				</ul>
 			</div>
 
 			<!-- Retail / Tiendas -->
-			<div class="bg-avoqado-dark-surface rounded-2xl p-8 border-2 border-avoqado-orange/30 hover:border-avoqado-orange transition-all shadow-xl">
-				<div class="w-16 h-16 bg-avoqado-orange/10 border-2 border-avoqado-orange/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-				<svg class="w-8 h-8 text-avoqado-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-				</svg>
-			</div>
-				<h3 class="text-2xl font-bold text-white mb-3 text-center">Retail</h3>
-				<ul class="space-y-3 text-gray-300">
-					<li class="flex items-start gap-2">
-						<Icon name="check" size="sm" class="text-avoqado-orange mt-1 flex-shrink-0" />
-						<span>Cobro rápido con múltiples procesadores</span>
+			<div class="group relative bg-[#111] rounded-3xl p-10 hover:bg-[#1a1a1a] transition-colors duration-300">
+				<div class="mb-8">
+					<svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+					</svg>
+				</div>
+				<h3 class="text-2xl font-medium text-white mb-4">Retail</h3>
+				<p class="text-gray-500 mb-8 font-light">
+					Vende en tienda y en línea. Inventario sincronizado y perfiles de clientes.
+				</p>
+				<ul class="space-y-4 text-gray-400 text-sm font-light">
+					<li class="flex items-center gap-3">
+						<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+						Inventario multi-ubicación
 					</li>
-					<li class="flex items-start gap-2">
-						<Icon name="check" size="sm" class="text-avoqado-orange mt-1 flex-shrink-0" />
-						<span>Control de inventario en tiempo real</span>
+					<li class="flex items-center gap-3">
+						<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+						E-commerce integrado
 					</li>
-					<li class="flex items-start gap-2">
-						<Icon name="check" size="sm" class="text-avoqado-orange mt-1 flex-shrink-0" />
-						<span>Analytics de ventas por producto</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<Icon name="check" size="sm" class="text-avoqado-orange mt-1 flex-shrink-0" />
-						<span>Conciliación automática multi-canal</span>
+					<li class="flex items-center gap-3">
+						<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+						Programas de lealtad
 					</li>
 				</ul>
 			</div>
 
 			<!-- Servicios -->
-			<div class="bg-avoqado-dark-surface rounded-2xl p-8 border-2 border-blue-500/30 hover:border-blue-500 transition-all shadow-xl">
-				<div class="w-16 h-16 bg-blue-500/10 border-2 border-blue-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-				<svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-				</svg>
-			</div>
-				<h3 class="text-2xl font-bold text-white mb-3 text-center">Servicios</h3>
-				<ul class="space-y-3 text-gray-300">
-					<li class="flex items-start gap-2">
-						<Icon name="check" size="sm" class="text-blue-500 mt-1 flex-shrink-0" />
-						<span>Cobro flexible por proyecto o suscripción</span>
+			<div class="group relative bg-[#111] rounded-3xl p-10 hover:bg-[#1a1a1a] transition-colors duration-300">
+				<div class="mb-8">
+					<svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+					</svg>
+				</div>
+				<h3 class="text-2xl font-medium text-white mb-4">Servicios</h3>
+				<p class="text-gray-500 mb-8 font-light">
+					Citas, facturación y pagos recurrentes. Todo lo que necesitas para tu consultorio o salón.
+				</p>
+				<ul class="space-y-4 text-gray-400 text-sm font-light">
+					<li class="flex items-center gap-3">
+						<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+						Agendamiento online
 					</li>
-					<li class="flex items-start gap-2">
-						<Icon name="check" size="sm" class="text-blue-500 mt-1 flex-shrink-0" />
-						<span>Enrutamiento por tipo de cliente</span>
+					<li class="flex items-center gap-3">
+						<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+						Cobros recurrentes
 					</li>
-					<li class="flex items-start gap-2">
-						<Icon name="check" size="sm" class="text-blue-500 mt-1 flex-shrink-0" />
-						<span>Reportes automáticos para clientes</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<Icon name="check" size="sm" class="text-blue-500 mt-1 flex-shrink-0" />
-						<span>Dashboard de métricas en tiempo real</span>
+					<li class="flex items-center gap-3">
+						<span class="w-1.5 h-1.5 bg-white rounded-full"></span>
+						Recordatorios automáticos
 					</li>
 				</ul>
 			</div>
 		</div>
 
-		<!-- Valor Universal -->
-		<div class="bg-linear-to-r from-avoqado-green/20 to-avoqado-orange/20 rounded-3xl p-8 md:p-12 border border-avoqado-green/30 text-center">
-			<h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
-				El Poder del Enrutamiento Inteligente
-			</h3>
-			<p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-6">
-				Sin importar tu industria, el problema es el mismo: <strong class="text-white">estás atado a un procesador</strong>. Avoqado rompe esa cadena.
-			</p>
-			<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-				<div>
-					<div class="text-3xl font-bold text-avoqado-green mb-2">100%</div>
-					<p class="text-gray-300">Flexibilidad de procesadores</p>
+		<!-- Feature Highlight - Clean Layout -->
+		<div class="bg-[#111] rounded-3xl p-12 md:p-20 relative overflow-hidden">
+			<div class="relative z-10 max-w-2xl">
+				<h3 class="text-4xl md:text-5xl font-light text-white mb-8 font-baby">
+					Enrutamiento Inteligente
+				</h3>
+				<p class="text-xl text-gray-400 font-light leading-relaxed mb-10">
+					Avoqado te libera de los procesadores tradicionales. Nuestra tecnología dirige cada transacción al banco que más te conviene, reduciendo comisiones y tiempos de espera.
+				</p>
+				
+				<div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+					<div>
+						<div class="text-4xl font-light text-white mb-2">100%</div>
+						<p class="text-sm text-gray-500 uppercase tracking-widest">Flexible</p>
+					</div>
+					<div>
+						<div class="text-4xl font-light text-white mb-2">0</div>
+						<p class="text-sm text-gray-500 uppercase tracking-widest">Ataduras</p>
+					</div>
+					<div>
+						<div class="text-4xl font-light text-white mb-2">Real-time</div>
+						<p class="text-sm text-gray-500 uppercase tracking-widest">Reporting</p>
+					</div>
 				</div>
-				<div>
-					<div class="text-3xl font-bold text-avoqado-green mb-2">5 Pilares</div>
-					<p class="text-gray-300">Todo unificado automáticamente</p>
-				</div>
-				<div>
-					<div class="text-3xl font-bold text-avoqado-green mb-2">0 Horas</div>
-					<p class="text-gray-300">Perdidas en conciliaciones</p>
-				</div>
+			</div>
+			
+			<!-- Decorative Circle (Subtle) -->
+			<div class="absolute -right-20 -bottom-40 w-96 h-96 rounded-full border border-gray-800 opacity-50 z-0"></div>
+			<div class="absolute top-10 right-10 opacity-20 hidden lg:block">
+				<svg class="w-64 h-64 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+				</svg>
 			</div>
 		</div>
 	</div>

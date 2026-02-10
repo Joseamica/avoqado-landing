@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/layout/Navbar.astro';
+import Footer from '../../components/layout/Footer.astro';
+import IndustryHero from '../../components/sections/IndustryHero.astro';
+import MultiSector from '../../components/sections/MultiSector.astro';
+---
+
+<Layout title="Avoqado Hardware | Terminales y Lectores">
+  <body class="bg-black min-h-screen">
+    <Navbar position="fixed" transparentOnTop={true} />
+
+    <IndustryHero 
+        title="Hardware que trabaja tan duro como tú."
+        subtitle="Terminales Android profesionales, lectores móviles y accesorios diseñados para el comercio moderno."
+    />
+
+    <!-- TODO: Add specific hardware showcase section -->
+    <MultiSector />
+
+    <Footer />
+  </body>
+</Layout>

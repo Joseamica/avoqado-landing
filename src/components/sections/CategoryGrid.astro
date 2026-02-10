@@ -1,0 +1,57 @@
+---
+/**
+ * CategoryGrid - Square-style category cards
+ * Clean cards with rounded corners and text overlay in bottom-left
+ */
+
+interface Category {
+    name: string;
+    image: string;
+    href: string;
+}
+
+interface Props {
+    title: string;
+    categories: Category[];
+}
+
+const { title, categories } = Astro.props;
+---
+
+<section class="py-20 lg:py-28 px-6 bg-white">
+    <div class="max-w-7xl mx-auto">
+        <!-- Section Title - Serif italic like Square -->
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif italic text-center mb-12 lg:mb-16 text-gray-900">
+            {title}
+        </h2>
+        
+        <!-- Square-style Category Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+            {categories.map((category) => (
+                <a 
+                    href={category.href} 
+                    class="group relative aspect-[4/5] rounded-xl overflow-hidden"
+                >
+                    <img 
+                        src={category.image} 
+                        alt={category.name}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                    />
+                    <!-- Simple gradient overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    
+                    <!-- Label with arrow - Square style -->
+                    <div class="absolute bottom-3 left-3 right-3">
+                        <span class="text-white font-medium text-sm flex items-center gap-1">
+                            {category.name}
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+            ))}
+        </div>
+    </div>
+</section>

@@ -27,9 +27,7 @@ export default defineConfig({
   },
 
   integrations: [
-    react({
-      include: ['**/react/*', '**/*.tsx'],
-    }),
+    react(),
     sitemap(),
     sentry(),
     spotlightjs()

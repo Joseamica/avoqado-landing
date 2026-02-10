@@ -1,0 +1,103 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/layout/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
+import IndustryHero from '../components/sections/IndustryHero.astro';
+import CategoryGrid from '../components/sections/CategoryGrid.astro';
+import CategoryPills from '../components/interactive/CategoryPills';
+import FeatureAccordion from '../components/interactive/FeatureAccordion';
+
+// Hero image - high quality lifestyle shot like Square
+const heroImage = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80";
+
+// Retail categories - Based on actual VenueTypes in Avoqado
+const categories = [
+    { name: "Ropa", image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400&q=80", href: "#features" },
+    { name: "Hogar y regalos", image: "https://images.unsplash.com/photo-1513519245088-0e12902e35a6?w=400&q=80", href: "#features" },
+    { name: "Vino y licor", image: "https://images.unsplash.com/photo-1516594915307-8f71f0f4b693?w=400&q=80", href: "#features" },
+    { name: "Comestibles", image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&q=80", href: "#features" },
+    { name: "Plantas y jardín", image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80", href: "#features" }
+];
+
+// Sub-category pills - Real VenueTypes from avoqado-server
+const subcategories = [
+    "Artículos deportivos", "Artesanías y manualidades", "Para todos los vendedores",
+    "Artículos de belleza", "Tiendas de mascotas", "Librerías", "Joyas",
+    "Comida especializada", "Tiendas de música"
+];
+
+// Feature accordion items - COMPLETE Avoqado features
+const features = [
+    {
+        title: "Acepta pagos",
+        description: "Acepta cualquier tipo de pago principal con un TPV diseñado para tiendas. Cada venta se sincroniza en todas tus sucursales.",
+        image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80"
+    },
+    {
+        title: "Administra el inventario",
+        description: "Sistema FIFO para rotación óptima. Alertas de bajo stock, auto-reorden configurable, y órdenes de compra integradas con proveedores.",
+        image: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&q=80"
+    },
+    {
+        title: "Vende en cualquier lugar",
+        description: "App para iOS y Android. Revisa ventas, recibe notificaciones push, y gestiona tu equipo. Todo desde tu bolsillo.",
+        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80"
+    },
+    {
+        title: "Crece como quieras",
+        description: "Programa de lealtad integrado, comisiones automáticas para empleados, y chatbot con IA para analizar tu negocio.",
+        image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80"
+    }
+];
+---
+
+<Layout title="Avoqado para Retail | Soluciones para Tiendas">
+  <body class="bg-white m-0 p-0 w-full">
+    <Navbar position="fixed" transparentOnTop={true} />
+
+    <!-- Hero -->
+    <IndustryHero 
+        title="Soluciones personalizadas para tiendas"
+        heroImage={heroImage}
+    />
+
+    <!-- Category Grid -->
+    <div class="opacity-0 translate-y-10 transition-all duration-700 ease-out" data-animate-on-scroll>
+        <CategoryGrid 
+            title="Creado para todo tipo de productos locales"
+            categories={categories}
+        />
+    </div>
+
+    <!-- Category Pills -->
+    <CategoryPills client:visible categories={subcategories} />
+
+    <!-- Feature Accordion -->
+    <div id="features">
+        <FeatureAccordion client:visible features={features} />
+    </div>
+
+    <Footer />
+
+    <!-- Scroll Animation Script -->
+    <script>
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                }
+            });
+        }, observerOptions);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-animate-on-scroll]').forEach(el => observer.observe(el));
+        });
+    </script>
+  </body>
+</Layout>

@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/layout/Navbar.astro';
+import Footer from '../../components/layout/Footer.astro';
+import IndustryHero from '../../components/sections/IndustryHero.astro';
+import MultiSector from '../../components/sections/MultiSector.astro';
+---
+
+<Layout title="Avoqado Clientes | Lealtad y CRM">
+  <body class="bg-black min-h-screen">
+    <Navbar position="fixed" transparentOnTop={true} />
+
+    <IndustryHero 
+        title="Convierte visitantes en clientes frecuentes."
+        subtitle="Programas de lealtad, tarjetas de regalo y directorio de clientes integrado en tu punto de venta."
+    />
+
+    <MultiSector />
+
+    <Footer />
+  </body>
+</Layout>

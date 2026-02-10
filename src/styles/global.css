@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @font-face {
@@ -31,6 +33,8 @@
   /* Font Families */
   --font-family-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
   --font-family-baby: 'BabyDoll', 'DM Sans', sans-serif;
+  --font-family-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-family-inter: 'Inter', system-ui, -apple-system, sans-serif;
 
   /* Custom Animations */
   --animate-fade-in: fade-in 0.6s ease-in-out;
@@ -105,6 +109,14 @@ h1, h2, h3, h4, h5, h6 {
 /* Utility classes */
 .font-baby {
   font-family: var(--font-family-baby);
+}
+
+.font-serif {
+  font-family: var(--font-family-serif);
+}
+
+.font-inter {
+  font-family: var(--font-family-inter);
 }
 
 /* Screen reader only - Hidden visually but readable by screen readers and AI agents */

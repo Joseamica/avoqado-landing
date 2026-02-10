@@ -1,0 +1,100 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/layout/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
+import IndustryHero from '../components/sections/IndustryHero.astro';
+import CategoryGrid from '../components/sections/CategoryGrid.astro';
+import CategoryPills from '../components/interactive/CategoryPills';
+import FeatureAccordion from '../components/interactive/FeatureAccordion';
+
+// Hero image - high quality lifestyle shot
+const heroImage = "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1600&q=80";
+
+// Categories - Square style
+const categories = [
+    { name: "Salones", image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&q=80", href: "#features" },
+    { name: "Spas", image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400&q=80", href: "#features" },
+    { name: "Gimnasios", image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&q=80", href: "#features" },
+    { name: "Clínicas", image: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=400&q=80", href: "#features" },
+    { name: "Veterinarias", image: "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=400&q=80", href: "#features" }
+];
+
+// Sub-category pills
+const subcategories = [
+    "Salones de Belleza", "Spas", "Gimnasios", "Clínicas Médicas", 
+    "Veterinarias", "Talleres Mecánicos", "Lavanderías", "Reparación"
+];
+
+// Feature accordion - simplified Square style
+const features = [
+    {
+        title: "Cobra al finalizar el servicio",
+        description: "Terminales PAX con NFC, chip y banda. Propinas digitales, pagos parciales, y recibos por email automáticos.",
+        image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80"
+    },
+    {
+        title: "Comisiones por estilista",
+        description: "Porcentajes de comisión por empleado o servicio. Tiers progresivos por volumen. Pagos automáticos.",
+        image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80"
+    },
+    {
+        title: "Gestiona desde el celular",
+        description: "App iOS y Android. Revisa ventas, notificaciones push, y monitorea la asistencia de tu equipo.",
+        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80"
+    },
+    {
+        title: "Crece con lealtad",
+        description: "Puntos por visita. Programa de lealtad integrado. Fideliza clientes sin apps externas.",
+        image: "https://images.unsplash.com/photo-1556742111-a301076d9d18?w=800&q=80"
+    }
+];
+---
+
+<Layout title="Avoqado para Belleza | Salones, Spas y Clínicas">
+  <body class="bg-white m-0 p-0 w-full">
+    <Navbar position="fixed" transparentOnTop={true} />
+
+    <!-- Hero -->
+    <IndustryHero 
+        title="Soluciones personalizadas para salones"
+        heroImage={heroImage}
+    />
+
+    <!-- Category Grid -->
+    <CategoryGrid 
+        title="Creado para todo tipo de servicios"
+        categories={categories}
+    />
+
+    <!-- Category Pills -->
+    <CategoryPills client:visible categories={subcategories} />
+
+    <!-- Feature Accordion -->
+    <div id="features">
+        <FeatureAccordion client:visible features={features} />
+    </div>
+
+    <Footer />
+
+    <!-- Scroll Animation Script -->
+    <script>
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                }
+            });
+        }, observerOptions);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-animate-on-scroll]').forEach(el => observer.observe(el));
+        });
+    </script>
+  </body>
+</Layout>

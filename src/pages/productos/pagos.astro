@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/layout/Navbar.astro';
+import Footer from '../../components/layout/Footer.astro';
+import IndustryHero from '../../components/sections/IndustryHero.astro';
+import MultiSector from '../../components/sections/MultiSector.astro';
+---
+
+<Layout title="Avoqado Pagos | Procesamiento en Línea y QR">
+  <body class="bg-black min-h-screen">
+    <Navbar position="fixed" transparentOnTop={true} />
+
+    <IndustryHero 
+        title="Acepta pagos en cualquier lugar."
+        subtitle="Links de pago, Checkout para e-commerce y códigos QR. Vende en redes sociales o en tu sitio web."
+    />
+
+    <MultiSector />
+
+    <Footer />
+  </body>
+</Layout>

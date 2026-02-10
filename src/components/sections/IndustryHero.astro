@@ -1,0 +1,47 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  heroImage: string;
+}
+
+const { title, subtitle, heroImage } = Astro.props;
+---
+
+<section class="relative min-h-screen flex flex-col">
+    <!-- Top: Title and CTAs -->
+    <div class="flex-shrink-0 pt-32 pb-8 px-6 text-center bg-white">
+        <!-- Elegant Serif Headline - Square style italic -->
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif italic tracking-tight mb-8 text-gray-900 max-w-4xl mx-auto leading-[1.1]">
+            {title}
+        </h1>
+        
+        <!-- CTAs - Square style -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a 
+                href="/contact" 
+                class="bg-black text-white px-8 py-3.5 rounded-full font-medium text-sm hover:bg-gray-800 transition-colors duration-200"
+            >
+                Comenzar
+            </a>
+            <a 
+                href="#demo" 
+                class="border border-gray-300 bg-white text-gray-900 px-8 py-3.5 rounded-full font-medium text-sm hover:border-gray-400 hover:bg-gray-50 transition-colors duration-200"
+            >
+                Contactar ventas
+            </a>
+        </div>
+    </div>
+    
+    <!-- Bottom: Full-width Hero Image -->
+    <div class="flex-1 w-full relative overflow-hidden">
+        <img 
+            src={heroImage} 
+            alt={title} 
+            class="w-full h-full object-cover min-h-[50vh]"
+            loading="eager"
+        />
+        <!-- Subtle gradient overlay at top -->
+        <div class="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-white to-transparent"></div>
+    </div>
+</section>

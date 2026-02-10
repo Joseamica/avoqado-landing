@@ -1,0 +1,100 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/layout/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
+import IndustryHero from '../components/sections/IndustryHero.astro';
+import CategoryGrid from '../components/sections/CategoryGrid.astro';
+import CategoryPills from '../components/interactive/CategoryPills';
+import FeatureAccordion from '../components/interactive/FeatureAccordion';
+
+// Hero image - high quality lifestyle shot
+const heroImage = "https://images.unsplash.com/photo-1504222490345-c075b6008014?w=1600&q=80";
+
+// Categories - Square style
+const categories = [
+    { name: "Talleres", image: "https://images.unsplash.com/photo-1504222490345-c075b6008014?w=400&q=80", href: "#features" },
+    { name: "Lavanderías", image: "https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?w=400&q=80", href: "#features" },
+    { name: "Reparación", image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&q=80", href: "#features" },
+    { name: "Limpieza", image: "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=400&q=80", href: "#features" },
+    { name: "Consultoría", image: "https://images.unsplash.com/photo-1553028826-f4804a6dba3b?w=400&q=80", href: "#features" }
+];
+
+// Sub-category pills
+const subcategories = [
+    "Talleres Mecánicos", "Lavanderías", "Reparación de Electrodomésticos",
+    "Servicios de Limpieza", "Consultoría", "Fotografía", "Diseño"
+];
+
+// Feature accordion - simplified Square style
+const features = [
+    {
+        title: "Cobra por tus servicios",
+        description: "Terminales PAX con NFC, chip y banda. Propinas digitales, pagos parciales y recibos por email.",
+        image: "https://images.unsplash.com/photo-1504222490345-c075b6008014?w=800&q=80"
+    },
+    {
+        title: "Inventario de refacciones",
+        description: "Sistema FIFO para rotación. Alertas de bajo stock y auto-reorden. Perfecto para talleres.",
+        image: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&q=80"
+    },
+    {
+        title: "Gestiona desde el celular",
+        description: "App iOS y Android. Revisa ventas, notificaciones push, y gestiona tu equipo remotamente.",
+        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80"
+    },
+    {
+        title: "Comisiones por técnico",
+        description: "Porcentajes por empleado o servicio. Tiers progresivos. Pagos automáticos.",
+        image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80"
+    }
+];
+---
+
+<Layout title="Avoqado para Servicios | Talleres y Profesionales">
+  <body class="bg-white m-0 p-0 w-full">
+    <Navbar position="fixed" transparentOnTop={true} />
+
+    <!-- Hero -->
+    <IndustryHero 
+        title="Soluciones personalizadas para servicios"
+        heroImage={heroImage}
+    />
+
+    <!-- Category Grid -->
+    <CategoryGrid 
+        title="Creado para todo tipo de servicios profesionales"
+        categories={categories}
+    />
+
+    <!-- Category Pills -->
+    <CategoryPills client:visible categories={subcategories} />
+
+    <!-- Feature Accordion -->
+    <div id="features">
+        <FeatureAccordion client:visible features={features} />
+    </div>
+
+    <Footer />
+
+    <!-- Scroll Animation Script -->
+    <script>
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                }
+            });
+        }, observerOptions);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-animate-on-scroll]').forEach(el => observer.observe(el));
+        });
+    </script>
+  </body>
+</Layout>

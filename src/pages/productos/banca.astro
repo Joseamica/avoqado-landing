@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/layout/Navbar.astro';
+import Footer from '../../components/layout/Footer.astro';
+import IndustryHero from '../../components/sections/IndustryHero.astro';
+import MultiSector from '../../components/sections/MultiSector.astro';
+---
+
+<Layout title="Avoqado Banca | Tarjetas y Cuentas">
+  <body class="bg-black min-h-screen">
+    <Navbar position="fixed" transparentOnTop={true} />
+
+    <IndustryHero 
+        title="Tu dinero, disponible al instante."
+        subtitle="Cuenta de negocios y tarjeta de débito Avoqado. Accede a tus ventas al momento."
+    />
+
+    <MultiSector />
+
+    <Footer />
+  </body>
+</Layout>

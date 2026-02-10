@@ -1,0 +1,100 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/layout/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
+import IndustryHero from '../components/sections/IndustryHero.astro';
+import CategoryGrid from '../components/sections/CategoryGrid.astro';
+import CategoryPills from '../components/interactive/CategoryPills';
+import FeatureAccordion from '../components/interactive/FeatureAccordion';
+
+// Hero image - high quality lifestyle shot
+const heroImage = "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1600&q=80";
+
+// Categories - Square style
+const categories = [
+    { name: "Bares", image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=400&q=80", href: "#features" },
+    { name: "Antros", image: "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=400&q=80", href: "#features" },
+    { name: "Eventos", image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=80", href: "#features" },
+    { name: "Karaokes", image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&q=80", href: "#features" },
+    { name: "Estadios", image: "https://images.unsplash.com/photo-1522158637959-30385a09e0da?w=400&q=80", href: "#features" }
+];
+
+// Sub-category pills
+const subcategories = [
+    "Bares", "Antros", "Eventos", "Karaokes", 
+    "Estadios", "Teatros", "Cines", "Centros de Entretenimiento"
+];
+
+// Feature accordion - simplified Square style
+const features = [
+    {
+        title: "Cobra rápido en noches ocupadas",
+        description: "Terminales PAX con NFC. División de cuentas, propinas digitales, y pagos parciales. Diseñado para alto volumen.",
+        image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800&q=80"
+    },
+    {
+        title: "Inventario de bebidas",
+        description: "Sistema FIFO para rotación de botellas. Alertas de bajo stock y auto-reorden para nunca quedarte sin producto.",
+        image: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&q=80"
+    },
+    {
+        title: "Comisiones para bartenders",
+        description: "Porcentajes por empleado o producto. Tiers progresivos por ventas. Reportes por noche.",
+        image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80"
+    },
+    {
+        title: "Cortes de caja por noche",
+        description: "Efectivo esperado vs. contado. Cierra turno con confianza. Historial completo de cortes.",
+        image: "https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=800&q=80"
+    }
+];
+---
+
+<Layout title="Avoqado para Entretenimiento | Bares, Antros y Eventos">
+  <body class="bg-white m-0 p-0 w-full">
+    <Navbar position="fixed" transparentOnTop={true} />
+
+    <!-- Hero -->
+    <IndustryHero 
+        title="Soluciones personalizadas para entretenimiento"
+        heroImage={heroImage}
+    />
+
+    <!-- Category Grid -->
+    <CategoryGrid 
+        title="Creado para la vida nocturna"
+        categories={categories}
+    />
+
+    <!-- Category Pills -->
+    <CategoryPills client:visible categories={subcategories} />
+
+    <!-- Feature Accordion -->
+    <div id="features">
+        <FeatureAccordion client:visible features={features} />
+    </div>
+
+    <Footer />
+
+    <!-- Scroll Animation Script -->
+    <script>
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                }
+            });
+        }, observerOptions);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-animate-on-scroll]').forEach(el => observer.observe(el));
+        });
+    </script>
+  </body>
+</Layout>

@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/layout/Navbar.astro';
+import Footer from '../../components/layout/Footer.astro';
+import IndustryHero from '../../components/sections/IndustryHero.astro';
+import MultiSector from '../../components/sections/MultiSector.astro';
+---
+
+<Layout title="Avoqado Personal | Gestión de Equipos y Nómina">
+  <body class="bg-black min-h-screen">
+    <Navbar position="fixed" transparentOnTop={true} />
+
+    <IndustryHero 
+        title="Gestiona tu equipo sin dolor de cabeza."
+        subtitle="Control de asistencia, turnos, permisos y cálculo de propinas automático."
+    />
+
+    <MultiSector />
+
+    <Footer />
+  </body>
+</Layout>
