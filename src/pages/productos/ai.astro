@@ -1,0 +1,738 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/layout/Navbar.astro';
+import Footer from '../../components/layout/Footer.astro';
+import FloatingChatbot from '../../components/interactive/FloatingChatbot';
+
+const TEAL = 'oklch(0.75 0.14 195)';
+const GREEN = '#69E185';
+const AMBER = 'oklch(0.78 0.14 75)';
+const RED = 'oklch(0.65 0.20 25)';
+const BLUE = 'oklch(0.72 0.14 240)';
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Asistente IA | Avoqado</title>
+		<meta name="description" content="Asistente de inteligencia artificial con Text-to-SQL. Pregunta en lenguaje natural, genera graficas, exporta reportes Excel y toma acciones directas sobre tu negocio." />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+	</head>
+	<body class="bg-black m-0 p-0 w-full">
+		<Navbar position="fixed" transparentOnTop={true} />
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- HERO                                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="min-h-screen flex items-center pt-24 md:pt-32 pb-16 px-6">
+			<div class="max-w-[1400px] mx-auto w-full">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+					<!-- Text -->
+					<div>
+						<div class="flex items-center gap-3 mb-6">
+							<span class="text-5xl font-light text-white/10">05</span>
+							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${TEAL};`}>Asistente IA</span>
+						</div>
+						<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-white mb-8">
+							Pregunta lo que sea.<br/>
+							Obten respuestas reales.
+						</h1>
+						<p class="text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-10">
+							Text-to-SQL sobre tus datos reales. Haz preguntas en espanol, genera graficas, exporta reportes y toma acciones — todo desde una conversacion.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4">
+							<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 bg-white">
+								Probar demo gratis
+							</a>
+							<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200">
+								Hablar con ventas
+							</a>
+						</div>
+					</div>
+
+					<!-- Hero chat mockup -->
+					<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center gap-2 mb-5">
+							<div class="w-7 h-7 rounded-full flex items-center justify-center" style={`background: oklch(0.20 0.02 195);`}>
+								<div class="w-3 h-3 rounded-full" style={`background: ${TEAL};`}></div>
+							</div>
+							<span class="text-[11px] text-gray-500">Avoqado AI — Conectado a tus datos</span>
+						</div>
+						<div class="space-y-3">
+							<!-- User message -->
+							<div class="flex justify-end">
+								<div class="px-4 py-2.5 rounded-2xl rounded-br-sm max-w-[80%]" style="background: oklch(0.22 0.005 155);">
+									<span class="text-sm text-gray-300">Cuanto vendi esta semana vs la anterior?</span>
+								</div>
+							</div>
+							<!-- AI response -->
+							<div class="flex gap-2.5">
+								<div class="w-6 h-6 rounded-full shrink-0 flex items-center justify-center mt-0.5" style={`background: oklch(0.20 0.02 195);`}>
+									<div class="w-2.5 h-2.5 rounded-full" style={`background: ${TEAL};`}></div>
+								</div>
+								<div class="px-4 py-2.5 rounded-2xl rounded-bl-sm max-w-[85%]" style="background: oklch(0.16 0.005 155);">
+									<span class="text-sm text-gray-300">
+										Esta semana: <span class="text-white font-medium">$187,400</span>. Semana anterior: $162,100. Eso es un <span style={`color: ${GREEN};`} class="font-medium">+15.6%</span> de crecimiento. El pico fue el viernes con $42,800.
+									</span>
+								</div>
+							</div>
+							<!-- User message 2 -->
+							<div class="flex justify-end">
+								<div class="px-4 py-2.5 rounded-2xl rounded-br-sm max-w-[80%]" style="background: oklch(0.22 0.005 155);">
+									<span class="text-sm text-gray-300">Generame la grafica de ventas por dia</span>
+								</div>
+							</div>
+							<!-- AI chart response -->
+							<div class="flex gap-2.5">
+								<div class="w-6 h-6 rounded-full shrink-0 flex items-center justify-center mt-0.5" style={`background: oklch(0.20 0.02 195);`}>
+									<div class="w-2.5 h-2.5 rounded-full" style={`background: ${TEAL};`}></div>
+								</div>
+								<div class="rounded-2xl rounded-bl-sm max-w-[85%] overflow-hidden" style="background: oklch(0.16 0.005 155);">
+									<div class="px-4 pt-2.5 pb-2">
+										<span class="text-sm text-gray-300">Aqui tienes el desglose diario:</span>
+									</div>
+									<!-- Mini chart -->
+									<div class="px-4 pb-3">
+										<div class="flex items-end gap-1 h-16">
+											<div class="flex-1 flex flex-col items-center gap-0.5">
+												<div class="w-full rounded-t" style={`height: 50%; background: ${TEAL}; opacity: 0.5;`}></div>
+												<span class="text-[7px] text-gray-600">Lun</span>
+											</div>
+											<div class="flex-1 flex flex-col items-center gap-0.5">
+												<div class="w-full rounded-t" style={`height: 60%; background: ${TEAL}; opacity: 0.6;`}></div>
+												<span class="text-[7px] text-gray-600">Mar</span>
+											</div>
+											<div class="flex-1 flex flex-col items-center gap-0.5">
+												<div class="w-full rounded-t" style={`height: 45%; background: ${TEAL}; opacity: 0.5;`}></div>
+												<span class="text-[7px] text-gray-600">Mie</span>
+											</div>
+											<div class="flex-1 flex flex-col items-center gap-0.5">
+												<div class="w-full rounded-t" style={`height: 70%; background: ${TEAL}; opacity: 0.7;`}></div>
+												<span class="text-[7px] text-gray-600">Jue</span>
+											</div>
+											<div class="flex-1 flex flex-col items-center gap-0.5">
+												<div class="w-full rounded-t" style={`height: 95%; background: ${TEAL};`}></div>
+												<span class="text-[7px] text-gray-600">Vie</span>
+											</div>
+											<div class="flex-1 flex flex-col items-center gap-0.5">
+												<div class="w-full rounded-t" style={`height: 85%; background: ${TEAL}; opacity: 0.85;`}></div>
+												<span class="text-[7px] text-gray-600">Sab</span>
+											</div>
+											<div class="flex-1 flex flex-col items-center gap-0.5">
+												<div class="w-full rounded-t" style={`height: 55%; background: ${TEAL}; opacity: 0.55;`}></div>
+												<span class="text-[7px] text-gray-600">Dom</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Input bar -->
+						<div class="flex items-center gap-2 mt-4 px-4 py-2.5 rounded-full" style="background: oklch(0.18 0.005 155); border: 1px solid oklch(0.25 0.005 155);">
+							<div class="w-4 h-4 rounded-full opacity-50" style={`background: ${TEAL};`}></div>
+							<span class="text-sm text-gray-600">Pregunta lo que sea...</span>
+							<div class="ml-auto w-6 h-6 rounded-full flex items-center justify-center" style={`background: ${TEAL};`}>
+								<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 1. LENGUAJE NATURAL                         -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${TEAL};`}>Lenguaje natural</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Pregunta como le preguntarias a un experto.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							No necesitas saber SQL, ni filtros, ni navegar reportes. Escribe tu pregunta en espanol y el asistente consulta directamente tus datos reales — ventas, inventario, clientes, empleados, ordenes.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${TEAL};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Schema-aware:</span> entiende la estructura exacta de tu base de datos</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${GREEN};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Intent routing:</span> detecta automaticamente que tipo de consulta necesitas</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Feedback loop:</span> correcto, incorrecto o parcial — el modelo aprende de ti</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Example questions mockup -->
+					<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="text-[11px] text-gray-500 mb-4">Preguntas frecuentes</div>
+						<div class="space-y-3">
+							<!-- Question 1 -->
+							<div class="rounded-xl p-4" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-start gap-3 mb-2.5">
+									<svg class="w-4 h-4 mt-0.5 shrink-0" style={`color: ${TEAL};`} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+									<span class="text-sm text-white">Cual fue mi producto mas vendido este mes?</span>
+								</div>
+								<div class="pl-7">
+									<div class="text-[10px] text-gray-500 mb-1">Respuesta</div>
+									<span class="text-[11px] text-gray-400"><span class="text-white font-medium">Tacos al Pastor</span> — 1,247 unidades, $118,465 en ventas. 23% del total.</span>
+								</div>
+							</div>
+							<!-- Question 2 -->
+							<div class="rounded-xl p-4" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-start gap-3 mb-2.5">
+									<svg class="w-4 h-4 mt-0.5 shrink-0" style={`color: ${TEAL};`} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+									<span class="text-sm text-white">Cuantos clientes nuevos tuve esta semana?</span>
+								</div>
+								<div class="pl-7">
+									<div class="text-[10px] text-gray-500 mb-1">Respuesta</div>
+									<span class="text-[11px] text-gray-400"><span class="font-medium" style={`color: ${TEAL};`}>47 clientes nuevos</span>. Martes fue el dia con mas registros (14). Ticket promedio de nuevos: $385.</span>
+								</div>
+							</div>
+							<!-- Question 3 -->
+							<div class="rounded-xl p-4" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-start gap-3 mb-2.5">
+									<svg class="w-4 h-4 mt-0.5 shrink-0" style={`color: ${TEAL};`} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+									<span class="text-sm text-white">Que ingredientes necesito comprar para manana?</span>
+								</div>
+								<div class="pl-7">
+									<div class="text-[10px] text-gray-500 mb-1">Respuesta</div>
+									<span class="text-[11px] text-gray-400">Basado en proyeccion de demanda: <span style={`color: ${AMBER};`}>Limon (stock al 12%)</span>, <span style={`color: ${RED};`}>Queso (stock al 8%)</span>, Aguacate (stock al 22%).</span>
+								</div>
+							</div>
+							<!-- Question 4 -->
+							<div class="rounded-xl p-4" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-start gap-3 mb-2.5">
+									<svg class="w-4 h-4 mt-0.5 shrink-0" style={`color: ${TEAL};`} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+									<span class="text-sm text-white">Quien genero mas propinas el fin de semana?</span>
+								</div>
+								<div class="pl-7">
+									<div class="text-[10px] text-gray-500 mb-1">Respuesta</div>
+									<span class="text-[11px] text-gray-400"><span class="text-white font-medium">Maria G.</span> — $3,240 en propinas (18.4% de sus ventas). Promedio del equipo: 12.1%.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 2. GRAFICAS Y VISUALIZACION — WHITE BG       -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="text-center max-w-2xl mx-auto mb-12">
+					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${TEAL};`}>Visualizacion</span>
+					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+						Visualiza tus datos al instante.
+					</h2>
+					<p class="text-gray-600 text-lg leading-relaxed">
+						El asistente genera graficas automaticamente cuando la respuesta lo amerita. Barras, lineas, pastel — el formato que mejor cuente la historia de tus datos.
+					</p>
+				</div>
+
+				<!-- Large chart mockup centered -->
+				<div class="max-w-3xl mx-auto rounded-2xl overflow-hidden border border-white/5 p-6" style="background: oklch(0.12 0.005 155);">
+					<!-- Chart header -->
+					<div class="flex items-center justify-between mb-6">
+						<div>
+							<span class="text-sm text-white font-medium">Ventas por categoria — Ultima semana</span>
+							<span class="text-[10px] text-gray-600 block mt-0.5">Generado por AI a las 14:32</span>
+						</div>
+						<div class="flex gap-2">
+							<span class="text-[9px] px-2 py-1 rounded-full" style={`background: oklch(0.18 0.02 195); color: ${TEAL};`}>Excel</span>
+							<span class="text-[9px] px-2 py-1 rounded-full" style="background: oklch(0.16 0.005 155); color: oklch(0.40 0.005 155);">PNG</span>
+						</div>
+					</div>
+
+					<!-- Bar chart -->
+					<div class="rounded-xl p-5 mb-4" style="background: oklch(0.14 0.005 155);">
+						<!-- Y axis labels + bars -->
+						<div class="flex gap-4">
+							<!-- Y axis -->
+							<div class="flex flex-col justify-between text-[8px] text-gray-600 py-1 shrink-0 w-8 text-right">
+								<span>$50k</span>
+								<span>$40k</span>
+								<span>$30k</span>
+								<span>$20k</span>
+								<span>$10k</span>
+								<span>$0</span>
+							</div>
+							<!-- Bars -->
+							<div class="flex-1 flex items-end gap-3 h-48 md:h-56">
+								<div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+									<div class="w-full rounded-t" style={`height: 85%; background: ${TEAL};`}></div>
+									<span class="text-[9px] text-gray-500">Alimentos</span>
+									<span class="text-[9px] text-white">$42,800</span>
+								</div>
+								<div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+									<div class="w-full rounded-t" style={`height: 58%; background: ${TEAL}; opacity: 0.75;`}></div>
+									<span class="text-[9px] text-gray-500">Bebidas</span>
+									<span class="text-[9px] text-white">$29,100</span>
+								</div>
+								<div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+									<div class="w-full rounded-t" style={`height: 32%; background: ${TEAL}; opacity: 0.55;`}></div>
+									<span class="text-[9px] text-gray-500">Postres</span>
+									<span class="text-[9px] text-white">$16,200</span>
+								</div>
+								<div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+									<div class="w-full rounded-t" style={`height: 22%; background: ${TEAL}; opacity: 0.45;`}></div>
+									<span class="text-[9px] text-gray-500">Entradas</span>
+									<span class="text-[9px] text-white">$11,400</span>
+								</div>
+								<div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+									<div class="w-full rounded-t" style={`height: 14%; background: ${TEAL}; opacity: 0.35;`}></div>
+									<span class="text-[9px] text-gray-500">Extras</span>
+									<span class="text-[9px] text-white">$7,100</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Trend line chart -->
+					<div class="rounded-xl p-5" style="background: oklch(0.14 0.005 155);">
+						<div class="text-[10px] text-gray-500 mb-3">Tendencia semanal — Alimentos vs Bebidas</div>
+						<div class="relative h-20">
+							<!-- Grid lines -->
+							<div class="absolute inset-0 flex flex-col justify-between">
+								<div class="border-t border-white/5"></div>
+								<div class="border-t border-white/5"></div>
+								<div class="border-t border-white/5"></div>
+								<div class="border-t border-white/5"></div>
+							</div>
+							<!-- SVG trend lines -->
+							<svg class="w-full h-full" viewBox="0 0 300 80" preserveAspectRatio="none">
+								<!-- Alimentos line -->
+								<polyline
+									points="0,60 50,45 100,50 150,35 200,20 250,15 300,25"
+									fill="none"
+									stroke={TEAL}
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+								<!-- Bebidas line -->
+								<polyline
+									points="0,70 50,65 100,60 150,55 200,40 250,45 300,50"
+									fill="none"
+									stroke={TEAL}
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									opacity="0.4"
+								/>
+							</svg>
+						</div>
+						<div class="flex gap-4 mt-2">
+							<div class="flex items-center gap-1.5">
+								<div class="w-3 h-0.5 rounded-full" style={`background: ${TEAL};`}></div>
+								<span class="text-[9px] text-gray-500">Alimentos</span>
+							</div>
+							<div class="flex items-center gap-1.5">
+								<div class="w-3 h-0.5 rounded-full" style={`background: ${TEAL}; opacity: 0.4;`}></div>
+								<span class="text-[9px] text-gray-500">Bebidas</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Prompt that generated this -->
+					<div class="mt-4 pt-4 border-t border-white/5">
+						<div class="flex items-center gap-2">
+							<div class="w-4 h-4 rounded-full shrink-0 flex items-center justify-center" style="background: oklch(0.22 0.005 155);">
+								<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="2.5" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+							</div>
+							<span class="text-[10px] text-gray-600 italic">"Muestrame las ventas por categoria de esta semana con grafica"</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 3. EXPORTAR REPORTES                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Report files mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="text-[11px] text-gray-500 mb-4">Reportes generados por AI</div>
+						<div class="space-y-2.5">
+							<!-- File 1 -->
+							<div class="flex items-center justify-between p-4 rounded-xl" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style="background: oklch(0.14 0.04 155);">
+										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GREEN} stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+									</div>
+									<div>
+										<span class="text-sm text-white font-medium">Reporte_Ventas_Semanal.xlsx</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">2.4 MB</span>
+											<span class="text-[9px]" style={`color: ${TEAL};`}>Hace 2 min</span>
+										</div>
+									</div>
+								</div>
+								<span class="text-[9px] px-2.5 py-1 rounded-full font-medium" style={`background: oklch(0.18 0.02 195); color: ${TEAL};`}>Descargar</span>
+							</div>
+							<!-- File 2 -->
+							<div class="flex items-center justify-between p-4 rounded-xl" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style="background: oklch(0.14 0.04 155);">
+										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GREEN} stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+									</div>
+									<div>
+										<span class="text-sm text-white font-medium">Inventario_Completo.xlsx</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">1.8 MB</span>
+											<span class="text-[9px]" style={`color: ${TEAL};`}>Hace 15 min</span>
+										</div>
+									</div>
+								</div>
+								<span class="text-[9px] px-2.5 py-1 rounded-full font-medium" style={`background: oklch(0.18 0.02 195); color: ${TEAL};`}>Descargar</span>
+							</div>
+							<!-- File 3 -->
+							<div class="flex items-center justify-between p-4 rounded-xl" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style="background: oklch(0.14 0.04 155);">
+										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GREEN} stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+									</div>
+									<div>
+										<span class="text-sm text-white font-medium">Cierre_Caja_Mar15.xlsx</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">890 KB</span>
+											<span class="text-[9px] text-gray-600">Ayer 23:45</span>
+										</div>
+									</div>
+								</div>
+								<span class="text-[9px] px-2.5 py-1 rounded-full" style="background: oklch(0.16 0.005 155); color: oklch(0.40 0.005 155);">Descargar</span>
+							</div>
+							<!-- File 4 -->
+							<div class="flex items-center justify-between p-4 rounded-xl" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style="background: oklch(0.14 0.04 155);">
+										<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={GREEN} stroke-width="1.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+									</div>
+									<div>
+										<span class="text-sm text-white font-medium">Comisiones_Empleados_Feb.xlsx</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">1.2 MB</span>
+											<span class="text-[9px] text-gray-600">2 mar, 09:15</span>
+										</div>
+									</div>
+								</div>
+								<span class="text-[9px] px-2.5 py-1 rounded-full" style="background: oklch(0.16 0.005 155); color: oklch(0.40 0.005 155);">Descargar</span>
+							</div>
+						</div>
+						<!-- Generation info -->
+						<div class="mt-4 pt-3 border-t border-white/5 flex items-center gap-2">
+							<div class="w-2 h-2 rounded-full" style={`background: ${TEAL};`}></div>
+							<span class="text-[9px] text-gray-600">Todos generados con una sola pregunta al asistente</span>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${TEAL};`}>Exportar</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Reportes en Excel con una pregunta.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							Pide un reporte de ventas, inventario, comisiones o cierre de caja — el asistente genera el archivo Excel listo para descargar. Con formulas, tablas formateadas y datos actualizados al momento.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${TEAL};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Ventas:</span> desglose por periodo, metodo de pago, sucursal, empleado</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${GREEN};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Inventario:</span> stock actual, materias primas, alertas de escasez, proyeccion</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Personal:</span> comisiones, propinas, turnos, asistencia, rendimiento</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Caja:</span> cierre diario, varianza, depositos, comparativa semanal</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 4. ACCIONES DIRECTAS — WHITE BG              -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${TEAL};`}>Acciones</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							No solo responde. Actua.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							El asistente no se limita a mostrar datos. Puede ejecutar acciones reales en tu negocio: crear promociones, ajustar precios, enviar notificaciones, modificar inventario y mas. Todo con confirmacion antes de aplicar.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${TEAL};`}></div>
+								<span class="text-sm text-gray-600">Crear y activar promociones en TPV, QR y Web al instante</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${GREEN};`}></div>
+								<span class="text-sm text-gray-600">Ajustar precios y disponibilidad de productos sin navegar menus</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-600">Enviar notificaciones al equipo o a clientes especificos</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Action flow mockup -->
+					<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="text-[11px] text-gray-500 mb-4">Accion ejecutada</div>
+						<div class="space-y-3">
+							<!-- User request -->
+							<div class="flex justify-end">
+								<div class="px-4 py-2.5 rounded-2xl rounded-br-sm max-w-[85%]" style="background: oklch(0.22 0.005 155);">
+									<span class="text-sm text-gray-300">Crea promo 2x1 para guacamole hoy</span>
+								</div>
+							</div>
+							<!-- AI confirmation -->
+							<div class="flex gap-2.5">
+								<div class="w-6 h-6 rounded-full shrink-0 flex items-center justify-center mt-0.5" style={`background: oklch(0.20 0.02 195);`}>
+									<div class="w-2.5 h-2.5 rounded-full" style={`background: ${TEAL};`}></div>
+								</div>
+								<div class="rounded-2xl rounded-bl-sm max-w-[85%] overflow-hidden" style="background: oklch(0.16 0.005 155);">
+									<div class="px-4 py-2.5">
+										<span class="text-sm text-gray-300">Listo. Promocion <span style={`color: ${AMBER};`} class="font-medium">"2x1 Guacamole"</span> creada y activada.</span>
+									</div>
+									<!-- Confirmation badges -->
+									<div class="px-4 pb-3 space-y-1.5">
+										<div class="flex items-center gap-2 p-2 rounded-lg" style="background: oklch(0.14 0.02 155);">
+											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={GREEN} stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+											<span class="text-[11px] text-white">TPV — Aplicada en todas las terminales</span>
+										</div>
+										<div class="flex items-center gap-2 p-2 rounded-lg" style="background: oklch(0.14 0.02 155);">
+											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={GREEN} stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+											<span class="text-[11px] text-white">QR — Visible en menu digital</span>
+										</div>
+										<div class="flex items-center gap-2 p-2 rounded-lg" style="background: oklch(0.14 0.02 155);">
+											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={GREEN} stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+											<span class="text-[11px] text-white">Web — Publicada en pagina de reservas</span>
+										</div>
+									</div>
+									<!-- Details -->
+									<div class="px-4 pb-3">
+										<div class="grid grid-cols-3 gap-2">
+											<div class="text-center p-2 rounded-lg" style="background: oklch(0.13 0.005 155);">
+												<div class="text-[9px] text-gray-600">Inicio</div>
+												<div class="text-[10px] text-white">Hoy 00:00</div>
+											</div>
+											<div class="text-center p-2 rounded-lg" style="background: oklch(0.13 0.005 155);">
+												<div class="text-[9px] text-gray-600">Fin</div>
+												<div class="text-[10px] text-white">Hoy 23:59</div>
+											</div>
+											<div class="text-center p-2 rounded-lg" style="background: oklch(0.13 0.005 155);">
+												<div class="text-[9px] text-gray-600">Tipo</div>
+												<div class="text-[10px] text-white">2x1</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Follow-up -->
+							<div class="flex justify-end">
+								<div class="px-4 py-2.5 rounded-2xl rounded-br-sm max-w-[85%]" style="background: oklch(0.22 0.005 155);">
+									<span class="text-sm text-gray-300">Manda noti al equipo avisando de la promo</span>
+								</div>
+							</div>
+							<div class="flex gap-2.5">
+								<div class="w-6 h-6 rounded-full shrink-0 flex items-center justify-center mt-0.5" style={`background: oklch(0.20 0.02 195);`}>
+									<div class="w-2.5 h-2.5 rounded-full" style={`background: ${TEAL};`}></div>
+								</div>
+								<div class="px-4 py-2.5 rounded-2xl rounded-bl-sm max-w-[85%]" style="background: oklch(0.16 0.005 155);">
+									<span class="text-sm text-gray-300">
+										Notificacion enviada a <span class="text-white font-medium">8 empleados</span> via push y WhatsApp. Confirmaron lectura: 5 de 8.
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 5. TEMPLATES POR INDUSTRIA                   -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="max-w-2xl mb-12">
+					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${TEAL};`}>Templates</span>
+					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+						Preguntas listas para tu industria.
+					</h2>
+					<p class="text-gray-400 text-lg leading-relaxed">
+						No tienes que inventar que preguntar. El asistente incluye templates especializados por industria con las preguntas mas utiles, listas para usar desde el primer dia.
+					</p>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+					<!-- Restaurantes -->
+					<div class="rounded-2xl overflow-hidden border border-white/5 p-6" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center gap-3 mb-5">
+							<div class="w-10 h-10 rounded-xl flex items-center justify-center" style={`background: oklch(0.18 0.02 195);`}>
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={TEAL} stroke-width="1.5" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+							</div>
+							<div>
+								<h3 class="text-white font-medium text-base">Restaurantes</h3>
+								<span class="text-[10px] text-gray-600">12 templates</span>
+							</div>
+						</div>
+						<div class="space-y-2">
+							<div class="p-3 rounded-lg text-sm text-gray-400" style="background: oklch(0.16 0.005 155);">
+								"Cual es mi platillo mas rentable?"
+							</div>
+							<div class="p-3 rounded-lg text-sm text-gray-400" style="background: oklch(0.16 0.005 155);">
+								"Cuanto desperdicio tengo esta semana?"
+							</div>
+							<div class="p-3 rounded-lg text-sm text-gray-400" style="background: oklch(0.16 0.005 155);">
+								"Que mesero vende mas bebidas?"
+							</div>
+							<div class="p-3 rounded-lg text-sm text-gray-400" style="background: oklch(0.16 0.005 155);">
+								"Comparativa viernes vs sabado"
+							</div>
+						</div>
+					</div>
+
+					<!-- Retail -->
+					<div class="rounded-2xl overflow-hidden border border-white/5 p-6" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center gap-3 mb-5">
+							<div class="w-10 h-10 rounded-xl flex items-center justify-center" style={`background: oklch(0.18 0.02 195);`}>
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={TEAL} stroke-width="1.5" stroke-linecap="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+							</div>
+							<div>
+								<h3 class="text-white font-medium text-base">Retail</h3>
+								<span class="text-[10px] text-gray-600">10 templates</span>
+							</div>
+						</div>
+						<div class="space-y-2">
+							<div class="p-3 rounded-lg text-sm text-gray-400" style="background: oklch(0.16 0.005 155);">
+								"Que productos debo re-stockear?"
+							</div>
+							<div class="p-3 rounded-lg text-sm text-gray-400" style="background: oklch(0.16 0.005 155);">
+								"Cual es mi margen por categoria?"
+							</div>
+							<div class="p-3 rounded-lg text-sm text-gray-400" style="background: oklch(0.16 0.005 155);">
+								"Que dia de la semana vendo mas?"
+							</div>
+							<div class="p-3 rounded-lg text-sm text-gray-400" style="background: oklch(0.16 0.005 155);">
+								"Productos sin movimiento en 30 dias"
+							</div>
+						</div>
+					</div>
+
+					<!-- Servicios -->
+					<div class="rounded-2xl overflow-hidden border border-white/5 p-6" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center gap-3 mb-5">
+							<div class="w-10 h-10 rounded-xl flex items-center justify-center" style={`background: oklch(0.18 0.02 195);`}>
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={TEAL} stroke-width="1.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+							</div>
+							<div>
+								<h3 class="text-white font-medium text-base">Servicios</h3>
+								<span class="text-[10px] text-gray-600">8 templates</span>
+							</div>
+						</div>
+						<div class="space-y-2">
+							<div class="p-3 rounded-lg text-sm text-gray-400" style="background: oklch(0.16 0.005 155);">
+								"Cuantas citas se cancelaron esta semana?"
+							</div>
+							<div class="p-3 rounded-lg text-sm text-gray-400" style="background: oklch(0.16 0.005 155);">
+								"Quien es mi mejor empleado por ingresos?"
+							</div>
+							<div class="p-3 rounded-lg text-sm text-gray-400" style="background: oklch(0.16 0.005 155);">
+								"Tasa de retencion de clientes mensual"
+							</div>
+							<div class="p-3 rounded-lg text-sm text-gray-400" style="background: oklch(0.16 0.005 155);">
+								"Horarios con mayor demanda de citas"
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 6. NUMEROS CLAVE — WHITE BG                  -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+					<div class="border-t pt-6" style={`border-color: ${TEAL};`}>
+						<div class="text-3xl md:text-4xl font-light text-black mb-1">&lt;3s</div>
+						<div class="text-sm text-gray-500">Tiempo promedio de respuesta</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${TEAL};`}>
+						<div class="text-3xl md:text-4xl font-light text-black mb-1">35+</div>
+						<div class="text-sm text-gray-500">Templates especializados por industria</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${TEAL};`}>
+						<div class="text-3xl md:text-4xl font-light text-black mb-1">3</div>
+						<div class="text-sm text-gray-500">Idiomas soportados: ES, EN, FR</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${TEAL};`}>
+						<div class="text-3xl md:text-4xl font-light text-black mb-1">600+</div>
+						<div class="text-sm text-gray-500">Datos accesibles via endpoints</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- CTA                                         -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-avoqado-dark-surface border-t border-white/5">
+			<div class="max-w-3xl mx-auto text-center">
+				<h2 class="text-3xl md:text-5xl font-light tracking-tight text-white mb-4">
+					Prueba el asistente ahora.
+				</h2>
+				<p class="text-lg text-gray-500 mb-12 max-w-xl mx-auto">
+					Preguntale algo a la demo. Sin tarjeta, sin compromiso, sin instalar nada.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 text-lg" style={`background: ${TEAL};`}>
+						Probar demo gratis
+					</a>
+					<a href="/contact" class="px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200 text-lg">
+						Hablar con ventas
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<FloatingChatbot client:idle />
+		<Footer />
+	</body>
+</html>

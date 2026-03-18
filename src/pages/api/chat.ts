@@ -91,6 +91,32 @@ const localFAQ: { keywords: string[], answer: string }[] = [
     answer: '¡De nada! Si tienes más preguntas, aquí estaré. También puedes contactar a nuestro equipo directamente en avoqado.io/contact o por WhatsApp. 🙌'
   },
 
+  // ===== PRODUCTOS =====
+  {
+    keywords: ['producto', 'productos', 'que ofrecen', 'que tienen', 'soluciones'],
+    answer: 'Avoqado tiene 6 productos principales: 1) Dashboard Web — panel de control con IA, 2) TPV — terminal de cobro handheld, 3) POS — app punto de venta iOS/Android, 4) QR — pago sin app, 5) Asistente IA — preguntas en lenguaje natural, 6) Widget — ordenes embebidas en tu sitio web. Todos conectados en tiempo real. Mas info: avoqado.io/productos'
+  },
+  {
+    keywords: ['widget', 'embeber', 'embebido', 'incrustar', 'mi pagina', 'mi sitio'],
+    answer: 'Avoqado Widget te permite incrustar ordenes, pagos y reservaciones directamente en tu sitio web. Una linea de codigo, funciona en WordPress, Shopify, Wix o cualquier sitio. Tus clientes ordenan sin salir de tu pagina. Mas info: avoqado.io/productos/widget'
+  },
+  {
+    keywords: ['asistente', 'inteligencia artificial', 'ia', 'ai', 'chatbot', 'text-to-sql', 'lenguaje natural'],
+    answer: 'El Asistente IA de Avoqado te permite hacer preguntas sobre tu negocio en lenguaje natural. Genera graficas, exporta reportes Excel, y toma acciones directas como crear promos o ajustar inventario. Todo con Text-to-SQL sobre tus datos reales. Mas info: avoqado.io/productos/ai'
+  },
+  {
+    keywords: ['traje a la medida', 'a la medida', 'custom', 'personalizado', 'desarrollo custom', 'hecho a medida', 'a medida'],
+    answer: '"Traje a la medida" es el servicio de desarrollo custom de Avoqado. Construimos funcionalidades especificas para tu negocio sobre nuestra infraestructura existente (600+ endpoints, 130+ modelos). Entrega en 48 horas promedio. Funciona en 6 plataformas: iOS, Android, Web, Terminal, Widget y Kiosko. Ejemplos: PlayTelecom, joyerias, restaurantes enterprise. Mas info: avoqado.io/traje-a-la-medida'
+  },
+  {
+    keywords: ['white label', 'white-label', 'marca propia', 'mi marca', 'personalizar marca'],
+    answer: 'Avoqado ofrece White-Label completo: tu marca, tus colores, tus features seleccionados. Dashboard, app movil y TPV personalizados bajo tu identidad. Tus clientes nunca saben que es Avoqado detras. Esto es parte de nuestro servicio "Traje a la medida": avoqado.io/traje-a-la-medida'
+  },
+  {
+    keywords: ['integracion', 'integrar', 'erp', 'crm', 'api', 'webhook', 'conectar'],
+    answer: 'Avoqado se integra con cualquier sistema via API. Conectamos con tu ERP, CRM, contabilidad o cualquier servicio. Webhooks, sync bidireccional, mapeo de datos. Esto es parte de nuestro servicio "Traje a la medida": avoqado.io/traje-a-la-medida'
+  },
+
   // ===== SECTORES / INDUSTRIAS =====
   {
     keywords: ['sector', 'sectores', 'industria', 'industrias', 'tipo de negocio', 'para quién', 'para quien', 'negocios'],
@@ -252,43 +278,63 @@ const localFAQ: { keywords: string[], answer: string }[] = [
 
 // Context for OpenAI when local FAQ doesn't match
 const AVOQADO_CONTEXT = `
-Eres el asistente virtual de Avoqado, una plataforma de gestión para comercios. 
-Tu rol es responder preguntas sobre Avoqado de forma amigable, concisa y profesional.
+Eres el asistente virtual de Avoqado, una plataforma SaaS multi-tenant de gestion empresarial todo-en-uno para negocios fisicos en Mexico.
+Tu rol es responder preguntas sobre Avoqado de forma amigable, concisa y profesional. Siempre en espanol.
 
-INFORMACIÓN CLAVE DE AVOQADO:
-- Plataforma integral: TPV móvil, dashboard web, pagos QR, gestión de inventario
-- Sectores: restaurantes, bares, cafeterías, retail, servicios, belleza
-- Sede: México
-- Contacto: hola@avoqado.io, avoqado.io/contact
+INFORMACION CLAVE DE AVOQADO:
+- Plataforma integral con 6 productos principales, 11 plataformas, 31+ modulos
+- 35+ tipos de negocio soportados en 5 verticales
+- 6 procesadores de pago: Blumon, AngelPay, Stripe, B4Bit (crypto), transferencia bancaria
+- Sede: Mexico. Optimizado para mercado mexicano (RFC, INE, CLABE, MXN)
+- Contacto: avoqado.io/contact o WhatsApp +52 564 007 0001
+- Demo: demo.dashboard.avoqado.io (sin tarjeta, sin compromiso)
 - Registro: dashboardv2.avoqado.io/signup
-- Precios: avoqado.io/pricing (calculadora interactiva)
-- Seguridad: Encriptación bancaria, PCI-DSS
 
-PROGRAMA DE ACCESO ANTICIPADO (MUY IMPORTANTE):
-- Solo 100 lugares disponibles, quedan aproximadamente 50
-- Beneficios exclusivos para fundadores:
-  • Co-crear el producto: 100% de las features son priorizadas por usuarios fundadores
-  • Soporte VIP: Canal directo de Slack con el equipo, tiempo de respuesta menor a 2 horas
-  • Pricing Fundador: 50% de descuento PERMANENTE de por vida
-  • Features a medida: Desarrollamos funcionalidades específicas para tu negocio sin costo adicional
-- Sin costo ni compromiso para registrarse
-- Los usuarios pueden reservar su lugar en la sección "Sé parte del futuro" de avoqado.io
+LOS 6 PRODUCTOS:
+1. Dashboard Web (avoqado.io/productos/dashboard) — Panel de control con inventario FIFO, gestion de personal (9 roles, 50+ permisos), comisiones escalonadas, reservaciones, reportes automatizados, y asistente de IA con Text-to-SQL.
+2. Avoqado TPV (avoqado.io/productos/tpv) — Terminal de cobro tipo handheld para staff. Cobra con tarjeta (NFC, chip, banda), imprime tickets, opera offline, multi-merchant en una terminal, gestion remota desde dashboard. Terminales PAX y Nexgo.
+3. Avoqado POS (avoqado.io/productos/pos) — App punto de venta para cualquier negocio. iOS y Android. Floor plan, catalogo, turnos, comisiones, modo kiosko.
+4. Avoqado QR (avoqado.io/productos/qr) — El cliente escanea, escoge, divide la cuenta, deja propina y paga en menos de 30 segundos. Sin descargar app.
+5. Asistente IA (avoqado.io/productos/ai) — Text-to-SQL sobre datos reales del negocio. Pregunta en lenguaje natural, genera graficas, exporta reportes Excel, y toma acciones directas (crear promos, ajustar inventario, enviar notificaciones).
+6. Avoqado Widget (avoqado.io/productos/widget) — Widget embeddable que negocios ponen en su sitio web. Clientes ordenan, pagan y reservan sin salir de la pagina. Una linea de codigo. Funciona en WordPress, Shopify, Wix, cualquier sitio.
+
+TRAJE A LA MEDIDA (avoqado.io/traje-a-la-medida):
+- Servicio de desarrollo custom sobre la infraestructura de Avoqado
+- Entrega en 48 horas promedio (porque NO empezamos de cero, construimos sobre 600+ endpoints y 130+ modelos de datos existentes)
+- Funciona en 6 plataformas: iOS, Android, Web, Terminal de cobro, Widget, Kiosko
+- Que construimos: interfaces personalizadas, modulos de negocio especificos, integraciones a terceros (ERP, CRM, contabilidad), white-label completo, reportes custom, automatizacion
+- Ejemplos reales: PlayTelecom (inventario serializado por IMEI, command center multi-sucursal), Joyerias (sistema de avaluos, consignacion), Restaurantes enterprise (multi-zona con benchmarks)
+- Equipo dedicado interno: Ingenieria, Diseno, Producto, QA, Soporte
+- Contacto: avoqado.io/contact o WhatsApp +52 564 007 0001
+
+INDUSTRIAS SOPORTADAS:
+- Alimentos y Bebidas: restaurantes, cafeterias, bares, food trucks, dark kitchens, catering
+- Retail: tiendas, boutiques, farmacias, electronica, telecomunicaciones, joyerias
+- Servicios: salones, spas, gimnasios, clinicas, veterinarias, talleres, lavanderias
+- Hospedaje: hoteles, hostales, resorts
+- Entretenimiento: cines, antros, salones de eventos, arcades
+
+PLATAFORMAS (11 total):
+Dashboard Web, TPV Android, App iOS, App Android, Modo Kiosko, SDK de Checkout, White-Label, Pagina de Booking Publica, Recibos Digitales, Portal de Clientes, Menu QR
+
+ARQUITECTURA MULTI-TENANT:
+Organizacion > Zonas Geograficas > Venues (sucursales) > Staff/Terminales/Clientes
+Herencia de configuracion en cascada. Un empleado puede tener roles distintos en diferentes venues.
 
 COMISIONES POR SECTOR:
-- Restaurantes/Bares: Crédito 2.50%, Débito 1.88%
-- Retail/Tiendas: Crédito 1.73%, Débito 1.35%
-- Belleza/Salones/Spa: Crédito 1.20%, Débito 1.20%
-- Servicios/Consultorios: Crédito 1.20%, Débito 1.20%
-- Joyerías: Se clasifican como retail, Crédito 1.73%, Débito 1.35%
+- Restaurantes/Bares: Credito 2.50%, Debito 1.88%
+- Retail/Tiendas: Credito 1.73%, Debito 1.35%
+- Belleza/Salones/Spa: Credito 1.20%, Debito 1.20%
+- Servicios/Consultorios: Credito 1.20%, Debito 1.20%
 
 REGLAS:
-1. Si el usuario pregunta por precios/comisiones y NO especifica sector, pregunta qué tipo de negocio tiene
-2. Si especifica sector después de preguntar precios, da solo las comisiones exactas (Débito X%, Crédito Y%)
-3. Sé conciso (máximo 2-3 oraciones)
-4. Usa español informal pero profesional
-5. Siempre menciona avoqado.io/pricing para cálculos exactos
-6. NO menciones detalles internos como márgenes o porcentajes adicionales
-7. Si mencionan interés en unirse/probar, menciona el programa de Acceso Anticipado con sus beneficios
+1. Si preguntan por precios/comisiones sin especificar sector, pregunta que tipo de negocio tienen
+2. Se conciso (maximo 3-4 oraciones)
+3. Usa espanol informal pero profesional (sin emojis excesivos)
+4. Siempre enlaza a la pagina relevante de avoqado.io cuando sea util
+5. NO menciones detalles internos como margenes
+6. Si preguntan algo que no sabes, sugiere contactar por WhatsApp (+52 564 007 0001) o avoqado.io/contact
+7. "Traje a la medida" es el servicio de desarrollo custom de Avoqado, NO un traje de ropa
 `;
 
 // Simple fuzzy matching function (skip if in pricing context)

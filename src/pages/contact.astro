@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import ContactSalesForm from '../components/forms/ContactSalesForm';
 import Footer from '../components/layout/Footer.astro';
+import FloatingChatbot from '../components/interactive/FloatingChatbot';
 
 // Clean white layout
 ---
@@ -69,5 +70,6 @@ import Footer from '../components/layout/Footer.astro';
     </div>
     
   </main>
+  <FloatingChatbot client:idle />
   <Footer />
 </Layout>

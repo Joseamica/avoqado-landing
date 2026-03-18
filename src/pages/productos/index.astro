@@ -7,6 +7,9 @@ import DashboardProductSection from '../../components/interactive/DashboardProdu
 import TpvProductSection from '../../components/interactive/TpvProductSection';
 import PosProductSection from '../../components/interactive/PosProductSection';
 import QrProductSection from '../../components/interactive/QrProductSection';
+import AiProductSection from '../../components/interactive/AiProductSection';
+import WidgetProductSection from '../../components/interactive/WidgetProductSection';
+import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 ---
 
 <!doctype html>
@@ -15,7 +18,7 @@ import QrProductSection from '../../components/interactive/QrProductSection';
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Productos | Avoqado</title>
-		<meta name="description" content="TPV, Dashboard y QR — tres productos integrados que transforman como operas tu negocio. 11 plataformas conectadas en tiempo real." />
+		<meta name="description" content="Dashboard, TPV, POS, QR, Asistente IA y Widget — seis productos integrados que transforman como operas tu negocio. 11 plataformas conectadas en tiempo real." />
 		<link rel="icon" type="image/png" href="/favicon.png" />
 	</head>
 	<body class="bg-black m-0 p-0 w-full">
@@ -28,11 +31,11 @@ import QrProductSection from '../../components/interactive/QrProductSection';
 					Productos
 				</p>
 				<h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[0.95] text-white max-w-4xl mb-8">
-					Cuatro productos.<br/>
+					Seis productos.<br/>
 					Un ecosistema.
 				</h1>
 				<p class="text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-12">
-					Terminal de cobro, punto de venta, dashboard con IA y pagos QR — todo sincronizado en tiempo real.
+					Dashboard, TPV, POS, QR, asistente IA y widget embeddable — todo sincronizado en tiempo real.
 				</p>
 				<div class="flex flex-col sm:flex-row gap-4 mb-12">
 					<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors">
@@ -59,6 +62,14 @@ import QrProductSection from '../../components/interactive/QrProductSection';
 						<span class="text-xs font-mono" style="color: oklch(0.78 0.14 75);">04</span>
 						<span class="text-white text-sm font-medium group-hover:text-avoqado-green transition-colors">QR</span>
 					</a>
+					<a href="#product-05" class="flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-white/20 transition-colors group">
+						<span class="text-xs font-mono" style="color: oklch(0.75 0.14 195);">05</span>
+						<span class="text-white text-sm font-medium group-hover:text-avoqado-green transition-colors">IA</span>
+					</a>
+					<a href="#product-06" class="flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-white/20 transition-colors group">
+						<span class="text-xs font-mono" style="color: oklch(0.72 0.15 340);">06</span>
+						<span class="text-white text-sm font-medium group-hover:text-avoqado-green transition-colors">Widget</span>
+					</a>
 				</div>
 			</div>
 		</section>
@@ -74,6 +85,29 @@ import QrProductSection from '../../components/interactive/QrProductSection';
 
 		<!-- PRODUCT 4: QR — Living Preview -->
 		<QrProductSection client:visible />
+
+		<!-- PRODUCT 5: AI — Living Preview -->
+		<AiProductSection client:visible />
+
+		<!-- PRODUCT 6: WIDGET — Living Preview -->
+		<WidgetProductSection client:visible />
+
+
+		<!-- BRIDGE BANNER — Links to /traje-a-la-medida -->
+		<section class="px-6 py-16 md:py-20 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<a href="/traje-a-la-medida" class="group flex items-center justify-between p-6 md:p-8 rounded-2xl transition-all duration-300 hover:-translate-y-0.5" style="background: oklch(0.14 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+					<div class="flex items-center gap-4">
+						<div class="w-2 h-2 rounded-full bg-avoqado-green animate-pulse shrink-0"></div>
+						<div>
+							<h3 class="text-white font-medium text-lg mb-1">Necesitas algo que no ves aqui?</h3>
+							<p class="text-gray-500 text-sm">Construimos funcionalidades a la medida sobre la infraestructura de Avoqado. Entrega en 48 horas.</p>
+						</div>
+					</div>
+					<svg class="w-5 h-5 text-gray-500 group-hover:text-avoqado-green group-hover:translate-x-1 transition-all shrink-0 ml-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+				</a>
+			</div>
+		</section>
 
 
 		<!-- EXTENDED PLATFORMS — White bg, numbered, visual distinction -->
@@ -189,14 +223,6 @@ import QrProductSection from '../../components/interactive/QrProductSection';
 				</div>
 			</div>
 		</section>
-					</div>
-					<div class="border-t border-white/10 pt-6">
-						<h3 class="text-white font-medium text-sm mb-2">Gestion remota de terminales</h3>
-						<p class="text-gray-600 text-sm leading-relaxed">OTA updates, geofencing, comandos programados, monitoreo en vivo.</p>
-					</div>
-				</div>
-			</div>
-		</section>
 
 
 		<!-- CTA -->
@@ -219,6 +245,7 @@ import QrProductSection from '../../components/interactive/QrProductSection';
 			</div>
 		</section>
 
+		<FloatingChatbot client:idle />
 		<Footer />
 	</body>
 </html>

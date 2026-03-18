@@ -2,6 +2,7 @@
 import '../../styles/global.css';
 import Navbar from '../../components/layout/Navbar.astro';
 import Footer from '../../components/layout/Footer.astro';
+import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 
 const BLUE = 'oklch(0.72 0.14 240)';
 const GREEN = '#69E185';
@@ -757,6 +758,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 			</div>
 		</section>
 
+		<FloatingChatbot client:idle />
 		<Footer />
 	</body>
 </html>

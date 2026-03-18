@@ -356,6 +356,25 @@ Venue owners and operators across Mexico — restaurants, hotels, gyms, retail s
 4. **Trust through craft** — Pixel-perfect alignment, smooth 60fps animations, consistent tokens.
 5. **Accessible premium** — WCAG-compliant contrast, focus-visible styles, reduced-motion support.
 
+### Section Background Alternation Pattern
+
+Product pages and detail pages MUST alternate section backgrounds between dark and light to create visual rhythm and prevent monotony:
+
+- **Odd sections** (1st, 3rd, 5th): Dark background (`bg-black` or dark surface)
+- **Even sections** (2nd, 4th, 6th): White background (`bg-white`) with `light={true}` and `reversed={true}` on ProductSection
+
+On `/productos`, the 6 products follow this pattern:
+| Product | BG | Layout |
+|---|---|---|
+| 01 Dashboard | Dark | text-left, mockup-right |
+| 02 TPV | White | reversed (mockup-left, text-right) |
+| 03 POS | Dark | text-left, mockup-right |
+| 04 QR | White | reversed |
+| 05 IA | Dark | text-left, mockup-right |
+| 06 Widget | White | reversed |
+
+Detail pages (`/productos/dashboard`, `/productos/tpv`, etc.) also alternate section backgrounds using `border-t border-white/5` (dark) or `border-t border-black/5` (light) as separators.
+
 ### Anti-References
 - Generic SaaS templates with stock photos
 - Enterprise/corporate stiff blue-gray software

@@ -1,0 +1,584 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/layout/Navbar.astro';
+import Footer from '../../components/layout/Footer.astro';
+import FloatingChatbot from '../../components/interactive/FloatingChatbot';
+import WidgetTimeline from '../../components/interactive/WidgetTimeline';
+
+const MAGENTA = 'oklch(0.72 0.15 340)';
+const GREEN = '#69E185';
+const BLUE = 'oklch(0.72 0.14 240)';
+const AMBER = 'oklch(0.78 0.14 75)';
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Avoqado Widget | Avoqado</title>
+		<meta name="description" content="Incrusta ordenes, pagos y reservaciones en cualquier sitio web con una linea de codigo." />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+	</head>
+	<body class="bg-black m-0 p-0 w-full">
+		<Navbar position="fixed" transparentOnTop={true} />
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- HERO                                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="min-h-screen flex items-center pt-24 md:pt-32 pb-16 px-6">
+			<div class="max-w-[1400px] mx-auto w-full">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+					<!-- Text -->
+					<div>
+						<div class="flex items-center gap-3 mb-6">
+							<span class="text-5xl font-light text-white/10">06</span>
+							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${MAGENTA};`}>Avoqado Widget</span>
+						</div>
+						<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-white mb-8">
+							Tu negocio.<br/>En cualquier sitio web.
+						</h1>
+						<p class="text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-10">
+							Una linea de codigo. Tus clientes ordenan, pagan y reservan sin salir de tu pagina. Funciona en cualquier sitio — WordPress, Shopify, o tu sitio custom.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4">
+							<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${MAGENTA};`}>
+								Probar demo gratis
+							</a>
+							<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200">
+								Hablar con ventas
+							</a>
+						</div>
+					</div>
+
+					<!-- Code snippet mockup -->
+					<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<!-- Title bar -->
+						<div class="flex items-center gap-2 mb-4">
+							<div class="w-3 h-3 rounded-full" style="background: oklch(0.30 0.005 155);"></div>
+							<div class="w-3 h-3 rounded-full" style="background: oklch(0.30 0.005 155);"></div>
+							<div class="w-3 h-3 rounded-full" style="background: oklch(0.30 0.005 155);"></div>
+							<span class="text-[10px] text-gray-600 ml-2">index.html</span>
+						</div>
+						<!-- Code block -->
+						<div class="rounded-lg p-4 font-mono text-sm leading-relaxed" style="background: oklch(0.10 0.005 155);">
+							<div class="text-gray-600 mb-2">&lt;!-- Agrega antes de &lt;/body&gt; --&gt;</div>
+							<div>
+								<span class="text-gray-500">&lt;</span><span style={`color: ${MAGENTA};`}>script</span>
+							</div>
+							<div class="pl-4">
+								<span style={`color: ${AMBER};`}>src</span><span class="text-gray-500">=</span><span class="text-avoqado-green">"https://widget.avoqado.io/v1.js"</span>
+							</div>
+							<div class="pl-4">
+								<span style={`color: ${AMBER};`}>data-venue</span><span class="text-gray-500">=</span><span class="text-avoqado-green">"tu-negocio"</span>
+							</div>
+							<div class="pl-4">
+								<span style={`color: ${AMBER};`}>data-theme</span><span class="text-gray-500">=</span><span class="text-avoqado-green">"dark"</span>
+							</div>
+							<div>
+								<span class="text-gray-500">&gt;&lt;/</span><span style={`color: ${MAGENTA};`}>script</span><span class="text-gray-500">&gt;</span>
+							</div>
+						</div>
+						<!-- Floating widget preview below code -->
+						<div class="mt-4 flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+							<div class="flex items-center gap-2">
+								<div class="w-2 h-2 rounded-full bg-avoqado-green animate-pulse"></div>
+								<span class="text-[10px] text-gray-400">Widget activo en tu-negocio.com</span>
+							</div>
+							<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>v1.0</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- 1. FACIL DE INTEGRAR — Scrollytelling Timeline -->
+		<WidgetTimeline client:visible />
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 2. ORDENES ONLINE — WHITE BG                -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Widget menu mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center justify-between mb-4">
+							<div class="flex items-center gap-2">
+								<div class="w-6 h-6 rounded-full flex items-center justify-center" style={`background: ${MAGENTA};`}>
+									<span class="text-[8px] font-bold text-white">A</span>
+								</div>
+								<span class="text-[11px] text-white font-medium">La Terraza Rooftop</span>
+							</div>
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="oklch(0.40 0.005 155)" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+						</div>
+						<!-- Categories -->
+						<div class="flex gap-1.5 mb-4">
+							<div class="px-3 py-1 rounded-full text-[9px] text-white" style={`background: ${MAGENTA};`}>Todo</div>
+							<div class="px-3 py-1 rounded-full text-[9px] text-gray-500" style="background: oklch(0.16 0.005 155);">Entradas</div>
+							<div class="px-3 py-1 rounded-full text-[9px] text-gray-500" style="background: oklch(0.16 0.005 155);">Platos</div>
+							<div class="px-3 py-1 rounded-full text-[9px] text-gray-500" style="background: oklch(0.16 0.005 155);">Bebidas</div>
+						</div>
+						<!-- Products -->
+						<div class="space-y-2 mb-4">
+							<div class="flex items-center justify-between p-3 rounded-lg" style={`background: oklch(0.16 0.005 155); border: 1px solid oklch(0.25 0.02 340);`}>
+								<div class="flex items-center gap-3">
+									<div class="w-10 h-10 rounded-lg" style="background: oklch(0.20 0.005 155);"></div>
+									<div>
+										<span class="text-xs text-white">Tacos al Pastor x3</span>
+										<span class="text-[9px] text-gray-600 block">Con cilantro y cebolla</span>
+									</div>
+								</div>
+								<div class="flex items-center gap-2">
+									<span class="text-xs text-white">$165</span>
+									<div class="w-5 h-5 rounded-full flex items-center justify-center" style={`background: ${MAGENTA};`}>
+										<span class="text-[8px] font-bold text-white">2</span>
+									</div>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-10 h-10 rounded-lg" style="background: oklch(0.20 0.005 155);"></div>
+									<div>
+										<span class="text-xs text-white">Guacamole Clasico</span>
+										<span class="text-[9px] text-gray-600 block">Con totopos artesanales</span>
+									</div>
+								</div>
+								<div class="flex items-center gap-2">
+									<span class="text-xs text-gray-400">$120</span>
+									<div class="w-5 h-5 rounded-full flex items-center justify-center" style="background: oklch(0.22 0.005 155);">
+										<span class="text-[10px] text-gray-500">+</span>
+									</div>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-10 h-10 rounded-lg" style="background: oklch(0.20 0.005 155);"></div>
+									<div>
+										<span class="text-xs text-white">Michelada Clasica</span>
+										<span class="text-[9px] text-gray-600 block">Con cerveza artesanal</span>
+									</div>
+								</div>
+								<div class="flex items-center gap-2">
+									<span class="text-xs text-gray-400">$95</span>
+									<div class="w-5 h-5 rounded-full flex items-center justify-center" style="background: oklch(0.22 0.005 155);">
+										<span class="text-[10px] text-gray-500">+</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Cart bar -->
+						<div class="h-10 rounded-xl flex items-center justify-between px-4" style={`background: ${MAGENTA};`}>
+							<span class="text-[11px] font-semibold text-white">2 items — $330</span>
+							<span class="text-sm font-semibold text-white">Pagar</span>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${MAGENTA};`}>Ordenes</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Menu completo dentro de tu pagina.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Tus clientes navegan tu catalogo completo, agregan al carrito y pagan sin salir de tu sitio web. Categorias, modificadores, fotos — todo sincronizado con tu dashboard.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${MAGENTA};`}></div>
+								<span class="text-sm text-gray-600">Catalogo completo con categorias, fotos y modificadores</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-600">Carrito persistente con cantidades y notas por producto</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-600">Sync en tiempo real — cambios en el menu se reflejan al instante</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 3. PAGOS INTEGRADOS                         -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="text-center max-w-2xl mx-auto mb-12">
+					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${MAGENTA};`}>Pagos</span>
+					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+						Cobra directo desde tu sitio.
+					</h2>
+					<p class="text-gray-400 text-lg leading-relaxed">
+						Tus clientes pagan sin redirecciones ni pop-ups externos. Cuatro metodos de pago integrados en el widget, con el mismo nivel de seguridad de tu terminal fisica.
+					</p>
+				</div>
+
+				<!-- Checkout mockup — full width centered -->
+				<div class="max-w-2xl mx-auto rounded-2xl overflow-hidden border border-white/5 p-5 mb-12" style="background: oklch(0.12 0.005 155);">
+					<!-- Order summary -->
+					<div class="flex items-center justify-between mb-4 p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+						<div>
+							<span class="text-[10px] text-gray-500">Total a pagar</span>
+							<div class="text-lg text-white font-light">$1,247.00</div>
+						</div>
+						<div class="text-right">
+							<span class="text-[10px] text-gray-500">5 productos</span>
+							<div class="text-[10px] text-avoqado-green">Propina incluida</div>
+						</div>
+					</div>
+					<!-- Payment methods -->
+					<div class="text-[10px] text-gray-500 mb-3">Selecciona metodo de pago</div>
+					<div class="grid grid-cols-2 gap-2 mb-4">
+						<div class="p-3 rounded-xl text-center" style={`background: oklch(0.16 0.005 155); border: 1px solid oklch(0.30 0.02 340);`}>
+							<div class="w-8 h-8 rounded-lg mx-auto mb-2 flex items-center justify-center" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+							</div>
+							<span class="text-xs text-white">Tarjeta</span>
+							<span class="text-[8px] text-gray-600 block">Credito / Debito</span>
+						</div>
+						<div class="p-3 rounded-xl text-center" style="background: oklch(0.16 0.005 155);">
+							<div class="w-8 h-8 rounded-lg mx-auto mb-2 flex items-center justify-center" style="background: oklch(0.18 0.005 155); color: oklch(0.50 0.005 155);">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h.01"/><path d="M17 7h.01"/><path d="M7 17h.01"/><path d="M17 17h.01"/><rect x="7" y="7" width="3" height="3"/><rect x="14" y="7" width="3" height="3"/><rect x="7" y="14" width="3" height="3"/></svg>
+							</div>
+							<span class="text-xs text-white">QR Code</span>
+							<span class="text-[8px] text-gray-600 block">Escanear y pagar</span>
+						</div>
+						<div class="p-3 rounded-xl text-center" style="background: oklch(0.16 0.005 155);">
+							<div class="w-8 h-8 rounded-lg mx-auto mb-2 flex items-center justify-center" style="background: oklch(0.18 0.005 155); color: oklch(0.50 0.005 155);">
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 1 0 0 4h4v-4Z"/></svg>
+							</div>
+							<span class="text-xs text-white">Transferencia</span>
+							<span class="text-[8px] text-gray-600 block">SPEI / CLABE</span>
+						</div>
+						<div class="p-3 rounded-xl text-center" style="background: oklch(0.16 0.005 155);">
+							<div class="w-8 h-8 rounded-lg mx-auto mb-2 flex items-center justify-center" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>
+								<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+							</div>
+							<span class="text-xs text-white">Crypto</span>
+							<span class="text-[8px] text-gray-600 block">BTC, ETH, USDT</span>
+						</div>
+					</div>
+					<!-- Card form preview -->
+					<div class="rounded-xl p-4" style="background: oklch(0.16 0.005 155);">
+						<div class="space-y-2 mb-3">
+							<div class="h-9 rounded-lg px-3 flex items-center" style="background: oklch(0.20 0.005 155);">
+								<span class="text-[10px] text-gray-500">4821 **** **** ****</span>
+							</div>
+							<div class="grid grid-cols-2 gap-2">
+								<div class="h-9 rounded-lg px-3 flex items-center" style="background: oklch(0.20 0.005 155);">
+									<span class="text-[10px] text-gray-500">MM / AA</span>
+								</div>
+								<div class="h-9 rounded-lg px-3 flex items-center" style="background: oklch(0.20 0.005 155);">
+									<span class="text-[10px] text-gray-500">CVV</span>
+								</div>
+							</div>
+						</div>
+						<div class="h-10 rounded-xl flex items-center justify-center" style={`background: ${MAGENTA};`}>
+							<span class="text-sm font-semibold text-white">Pagar $1,247.00</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Features row -->
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+					<div class="text-center">
+						<h3 class="text-base text-white font-medium mb-1">Sin redirecciones</h3>
+						<p class="text-sm text-gray-500">El pago sucede dentro de tu sitio. Tu cliente nunca sale de tu dominio.</p>
+					</div>
+					<div class="text-center">
+						<h3 class="text-base text-white font-medium mb-1">PCI Compliant</h3>
+						<p class="text-sm text-gray-500">Tokenizacion de tarjetas. Los datos sensibles nunca tocan tu servidor.</p>
+					</div>
+					<div class="text-center">
+						<h3 class="text-base text-white font-medium mb-1">Confirmacion inmediata</h3>
+						<p class="text-sm text-gray-500">Recibo digital al instante. La orden llega a tu dashboard en tiempo real.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 4. RESERVACIONES — WHITE BG                 -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${MAGENTA};`}>Reservaciones</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Reservaciones sin salir de tu pagina.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Calendario de reservaciones embebido en tu sitio web. Mesas, citas, clases, eventos — tus clientes eligen horario, confirman y reciben notificacion. Con deposito opcional via Stripe.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${MAGENTA};`}></div>
+								<span class="text-sm text-gray-600">Mesas, citas, clases grupales y eventos — un solo sistema</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-600">Depositos opcionales con Stripe para reducir no-shows</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-600">Confirmacion por WhatsApp y email automatica</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Booking widget mockup -->
+					<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-white font-medium">Reservar mesa</span>
+							<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>Widget</span>
+						</div>
+						<!-- Calendar header -->
+						<div class="rounded-xl p-4 mb-3" style="background: oklch(0.16 0.005 155);">
+							<div class="flex items-center justify-between mb-3">
+								<span class="text-xs text-white">Marzo 2026</span>
+								<div class="flex gap-1">
+									<div class="w-6 h-6 rounded flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+										<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+									</div>
+									<div class="w-6 h-6 rounded flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+										<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+									</div>
+								</div>
+							</div>
+							<!-- Calendar grid -->
+							<div class="grid grid-cols-7 gap-1 text-center mb-2">
+								<span class="text-[8px] text-gray-600">L</span>
+								<span class="text-[8px] text-gray-600">M</span>
+								<span class="text-[8px] text-gray-600">M</span>
+								<span class="text-[8px] text-gray-600">J</span>
+								<span class="text-[8px] text-gray-600">V</span>
+								<span class="text-[8px] text-gray-600">S</span>
+								<span class="text-[8px] text-gray-600">D</span>
+							</div>
+							<div class="grid grid-cols-7 gap-1 text-center">
+								<span class="text-[9px] text-gray-600 py-1.5"></span>
+								<span class="text-[9px] text-gray-600 py-1.5"></span>
+								<span class="text-[9px] text-gray-600 py-1.5"></span>
+								<span class="text-[9px] text-gray-600 py-1.5"></span>
+								<span class="text-[9px] text-gray-600 py-1.5"></span>
+								<span class="text-[9px] text-gray-600 py-1.5"></span>
+								<span class="text-[9px] text-gray-500 py-1.5">1</span>
+								<span class="text-[9px] text-gray-500 py-1.5">2</span>
+								<span class="text-[9px] text-gray-500 py-1.5">3</span>
+								<span class="text-[9px] text-gray-500 py-1.5">4</span>
+								<span class="text-[9px] text-gray-500 py-1.5">5</span>
+								<span class="text-[9px] text-gray-500 py-1.5">6</span>
+								<span class="text-[9px] text-gray-500 py-1.5">7</span>
+								<span class="text-[9px] text-gray-500 py-1.5">8</span>
+								<span class="text-[9px] text-gray-500 py-1.5">9</span>
+								<span class="text-[9px] text-gray-500 py-1.5">10</span>
+								<span class="text-[9px] text-gray-500 py-1.5">11</span>
+								<span class="text-[9px] text-gray-500 py-1.5">12</span>
+								<span class="text-[9px] text-gray-500 py-1.5">13</span>
+								<span class="text-[9px] text-gray-500 py-1.5">14</span>
+								<span class="text-[9px] text-gray-500 py-1.5">15</span>
+								<span class="text-[9px] text-gray-500 py-1.5">16</span>
+								<span class="text-[9px] text-gray-500 py-1.5">17</span>
+								<span class="text-[9px] text-white py-1.5 rounded-lg" style={`background: ${MAGENTA};`}>18</span>
+								<span class="text-[9px] text-gray-500 py-1.5">19</span>
+								<span class="text-[9px] text-gray-500 py-1.5">20</span>
+								<span class="text-[9px] text-gray-500 py-1.5">21</span>
+								<span class="text-[9px] text-gray-500 py-1.5">22</span>
+								<span class="text-[9px] text-gray-500 py-1.5">23</span>
+								<span class="text-[9px] text-gray-500 py-1.5">24</span>
+								<span class="text-[9px] text-gray-500 py-1.5">25</span>
+								<span class="text-[9px] text-gray-500 py-1.5">26</span>
+								<span class="text-[9px] text-gray-500 py-1.5">27</span>
+								<span class="text-[9px] text-gray-500 py-1.5">28</span>
+								<span class="text-[9px] text-gray-500 py-1.5">29</span>
+								<span class="text-[9px] text-gray-500 py-1.5">30</span>
+								<span class="text-[9px] text-gray-500 py-1.5">31</span>
+							</div>
+						</div>
+						<!-- Time slots -->
+						<div class="text-[10px] text-gray-500 mb-2">Horarios disponibles — 18 mar</div>
+						<div class="grid grid-cols-4 gap-1.5 mb-4">
+							<div class="py-2 rounded-lg text-center text-[10px] text-gray-500" style="background: oklch(0.16 0.005 155);">13:00</div>
+							<div class="py-2 rounded-lg text-center text-[10px] text-gray-500" style="background: oklch(0.16 0.005 155);">14:00</div>
+							<div class="py-2 rounded-lg text-center text-[10px] text-gray-500" style="background: oklch(0.16 0.005 155);">15:00</div>
+							<div class="py-2 rounded-lg text-center text-[10px] text-gray-500" style="background: oklch(0.16 0.005 155);">18:00</div>
+							<div class="py-2 rounded-lg text-center text-[10px] text-white" style={`background: ${MAGENTA};`}>19:00</div>
+							<div class="py-2 rounded-lg text-center text-[10px] text-gray-500" style="background: oklch(0.16 0.005 155);">20:00</div>
+							<div class="py-2 rounded-lg text-center text-[10px] text-gray-500" style="background: oklch(0.16 0.005 155);">21:00</div>
+							<div class="py-2 rounded-lg text-center text-[10px] text-gray-600" style="background: oklch(0.13 0.005 155);">22:00</div>
+						</div>
+						<!-- Guest count -->
+						<div class="flex items-center justify-between p-3 rounded-lg mb-3" style="background: oklch(0.16 0.005 155);">
+							<span class="text-[10px] text-gray-400">Personas</span>
+							<div class="flex items-center gap-2">
+								<div class="w-6 h-6 rounded flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+									<span class="text-[10px] text-gray-500">-</span>
+								</div>
+								<span class="text-sm text-white">4</span>
+								<div class="w-6 h-6 rounded flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+									<span class="text-[10px] text-gray-500">+</span>
+								</div>
+							</div>
+						</div>
+						<!-- Confirm button -->
+						<div class="h-10 rounded-xl flex items-center justify-center" style={`background: ${MAGENTA};`}>
+							<span class="text-sm font-semibold text-white">Reservar — 18 mar, 19:00, 4 pax</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 5. PERSONALIZA TU WIDGET                    -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Widget variants -->
+					<div class="order-2 lg:order-1 grid grid-cols-3 gap-3">
+						<!-- Dark variant -->
+						<div class="rounded-xl overflow-hidden border border-white/5 p-3" style="background: oklch(0.10 0.005 155);">
+							<div class="flex items-center gap-1.5 mb-3">
+								<div class="w-4 h-4 rounded-full" style={`background: ${MAGENTA};`}></div>
+								<span class="text-[8px] text-white">Dark</span>
+							</div>
+							<div class="space-y-1.5">
+								<div class="h-2 rounded-full w-full" style="background: oklch(0.18 0.005 155);"></div>
+								<div class="h-2 rounded-full w-3/4" style="background: oklch(0.18 0.005 155);"></div>
+								<div class="h-6 rounded-md mt-2" style={`background: ${MAGENTA};`}></div>
+							</div>
+							<div class="flex items-center gap-1 mt-2">
+								<div class="h-1.5 rounded-full flex-1" style="background: oklch(0.18 0.005 155);"></div>
+								<div class="h-1.5 rounded-full flex-1" style="background: oklch(0.18 0.005 155);"></div>
+							</div>
+						</div>
+						<!-- Light variant -->
+						<div class="rounded-xl overflow-hidden border border-black/10 p-3" style="background: #F8F8F8;">
+							<div class="flex items-center gap-1.5 mb-3">
+								<div class="w-4 h-4 rounded-full" style={`background: ${MAGENTA};`}></div>
+								<span class="text-[8px] text-black">Light</span>
+							</div>
+							<div class="space-y-1.5">
+								<div class="h-2 rounded-full w-full" style="background: oklch(0.92 0.005 155);"></div>
+								<div class="h-2 rounded-full w-3/4" style="background: oklch(0.92 0.005 155);"></div>
+								<div class="h-6 rounded-md mt-2" style={`background: ${MAGENTA};`}></div>
+							</div>
+							<div class="flex items-center gap-1 mt-2">
+								<div class="h-1.5 rounded-full flex-1" style="background: oklch(0.92 0.005 155);"></div>
+								<div class="h-1.5 rounded-full flex-1" style="background: oklch(0.92 0.005 155);"></div>
+							</div>
+						</div>
+						<!-- Custom brand variant -->
+						<div class="rounded-xl overflow-hidden border border-white/5 p-3" style="background: oklch(0.12 0.02 240);">
+							<div class="flex items-center gap-1.5 mb-3">
+								<div class="w-4 h-4 rounded-full" style={`background: ${BLUE};`}></div>
+								<span class="text-[8px] text-white">Custom</span>
+							</div>
+							<div class="space-y-1.5">
+								<div class="h-2 rounded-full w-full" style="background: oklch(0.18 0.02 240);"></div>
+								<div class="h-2 rounded-full w-3/4" style="background: oklch(0.18 0.02 240);"></div>
+								<div class="h-6 rounded-md mt-2" style={`background: ${BLUE};`}></div>
+							</div>
+							<div class="flex items-center gap-1 mt-2">
+								<div class="h-1.5 rounded-full flex-1" style="background: oklch(0.18 0.02 240);"></div>
+								<div class="h-1.5 rounded-full flex-1" style="background: oklch(0.18 0.02 240);"></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${MAGENTA};`}>Personalizacion</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Tu marca. Tu estilo.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							Personaliza colores, logo y posicion del widget para que se vea nativo en tu sitio web. Modo dark, light, o con los colores exactos de tu marca. Tu cliente nunca sabe que es un widget externo.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${MAGENTA};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Colores:</span> Primario, fondo, texto y acentos personalizables</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Logo:</span> Tu logotipo en el header del widget</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Posicion:</span> Boton flotante a la derecha, izquierda, o embebido inline</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">CSS Override:</span> Control total via custom CSS si lo necesitas</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 6. NUMEROS CLAVE — WHITE BG                 -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+					<div class="border-t pt-6" style={`border-color: ${MAGENTA};`}>
+						<div class="text-3xl md:text-4xl font-light text-black mb-1">1</div>
+						<div class="text-sm text-gray-500">Linea de codigo para integrarlo</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${MAGENTA};`}>
+						<div class="text-3xl md:text-4xl font-light text-black mb-1">4</div>
+						<div class="text-sm text-gray-500">Metodos de pago integrados</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${MAGENTA};`}>
+						<div class="text-3xl md:text-4xl font-light text-black mb-1">100%</div>
+						<div class="text-sm text-gray-500">Compatible con cualquier sitio</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${MAGENTA};`}>
+						<div class="text-3xl md:text-4xl font-light text-black mb-1">Sync</div>
+						<div class="text-sm text-gray-500">En tiempo real con tu dashboard</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- CTA                                         -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-avoqado-dark-surface border-t border-white/5">
+			<div class="max-w-3xl mx-auto text-center">
+				<h2 class="text-3xl md:text-5xl font-light tracking-tight text-white mb-8">
+					Lleva tu negocio a cualquier pagina.
+				</h2>
+				<p class="text-lg text-gray-500 mb-12 max-w-xl mx-auto">
+					Prueba el widget en tu sitio. Sin tarjeta, sin compromiso. Integra en minutos y empieza a recibir ordenes hoy.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="/contact" class="px-8 py-4 text-white font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 text-lg" style={`background: ${MAGENTA};`}>
+						Probar demo gratis
+					</a>
+					<a href="/contact" class="px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200 text-lg">
+						Hablar con ventas
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<FloatingChatbot client:idle />
+		<Footer />
+	</body>
+</html>

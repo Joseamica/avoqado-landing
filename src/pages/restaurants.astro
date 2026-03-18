@@ -5,6 +5,7 @@ import Navbar from '../components/layout/Navbar.astro';
 import RestaurantHero from '../components/sections/RestaurantHero.astro';
 import RestaurantFeatures from '../components/interactive/RestaurantFeatures';
 import MobileMenu from '../components/interactive/MobileMenu';
+import FloatingChatbot from '../components/interactive/FloatingChatbot';
 ---
 
 <Layout title="Avoqado para Restaurantes | El TPV todo en uno">
@@ -87,6 +88,7 @@ import MobileMenu from '../components/interactive/MobileMenu';
         </section>
     </div>
 
+    <FloatingChatbot client:idle />
     <Footer />
 
     <script>

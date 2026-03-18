@@ -57,6 +57,8 @@
   --color-product-tpv: oklch(0.78 0.18 155);
   --color-product-pos: oklch(0.68 0.15 290);
   --color-product-qr: oklch(0.78 0.14 75);
+  --color-product-ai: oklch(0.75 0.14 195);
+  --color-product-widget: oklch(0.72 0.15 340);
 
   /* Mockup surface colors (green-tinted neutrals, hue 155) */
   --color-mockup-bg: oklch(0.12 0.005 155);
