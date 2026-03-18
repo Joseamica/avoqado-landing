@@ -19,15 +19,16 @@ try {
   const config = JSON.parse(raw);
 
   // Keep only the fields Pages V3 understands
+  // CRITICAL: pages_build_output_dir must be present for Pages V3 to recognize this as valid
   const clean = {
     name: config.name,
+    pages_build_output_dir: ".",
     main: config.main,
     compatibility_date: config.compatibility_date,
     compatibility_flags: config.compatibility_flags,
     assets: config.assets ? { directory: config.assets.directory } : undefined,
     rules: config.rules,
     no_bundle: config.no_bundle,
-    // Bindings that we actually use (add IDs from env if needed)
     vars: config.vars,
   };
 
