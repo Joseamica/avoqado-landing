@@ -418,6 +418,37 @@ const PRODUCTS: Product[] = [
       dashboard: { row: 5, col: 4 }, // Bottom Right Outer
     },
   },
+  // === NEW PILLARS: POS, IA, Widget ===
+  {
+    id: 'pos',
+    name: 'POS',
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-8 h-8"><defs><linearGradient id="pos-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#9B66FF"/><stop offset="1" stopColor="#6E00F5"/></linearGradient></defs><rect x="4" y="6" width="32" height="28" rx="4" fill="url(#pos-a)"/><rect x="8" y="10" width="24" height="16" rx="2" fill="white" fillOpacity="0.3"/><circle cx="20" cy="32" r="2" fill="white"/></svg>),
+    iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-8 h-8"><rect x="4" y="6" width="32" height="28" rx="4" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/><rect x="8" y="10" width="24" height="16" rx="2" stroke="#C4CCD8" strokeWidth="1" fill="none"/></svg>),
+    row: 2, col: 0,
+    color: '#9B66FF',
+    isPillar: true,
+    sendsTo: ['mesas', 'ordenes', 'inventario', 'pagos', 'staff'],
+  },
+  {
+    id: 'ia',
+    name: 'Asistente IA',
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-8 h-8"><defs><linearGradient id="ia-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#11EFE3"/><stop offset="1" stopColor="#0073E6"/></linearGradient></defs><circle cx="20" cy="20" r="16" fill="url(#ia-a)"/><path d="M14 16l3 3-3 3M19 22h6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>),
+    iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-8 h-8"><circle cx="20" cy="20" r="16" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/></svg>),
+    row: 2, col: 5,
+    color: '#11EFE3',
+    isPillar: true,
+    sendsTo: ['chatbot', 'reportes', 'analytics'],
+  },
+  {
+    id: 'widget',
+    name: 'Widget',
+    icon: (<svg viewBox="0 0 40 40" fill="none" className="w-8 h-8"><defs><linearGradient id="widget-a" x1="20" y1="2" x2="20" y2="38" gradientUnits="userSpaceOnUse"><stop stopColor="#FF6B9D"/><stop offset="1" stopColor="#C850C0"/></linearGradient></defs><rect x="6" y="4" width="28" height="32" rx="4" fill="url(#widget-a)"/><polyline points="14,18 22,12 14,6" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" transform="translate(0,12)"/></svg>),
+    iconDimmed: (<svg viewBox="0 0 40 40" fill="none" className="w-8 h-8"><rect x="6" y="4" width="28" height="32" rx="4" stroke="#C4CCD8" strokeWidth="1.5" fill="none"/></svg>),
+    row: 3, col: 0,
+    color: '#FF6B9D',
+    isPillar: true,
+    sendsTo: ['ordenes', 'pagos'],
+  },
   {
     id: 'offline',
     name: 'Offline',
@@ -798,7 +829,7 @@ export const PaymentRouting: React.FC = () => {
   const titleY = useTransform(scrollYProgress, [0, 0.1], [30, 0]);
   const gridOpacity = useTransform(scrollYProgress, [0.1, 0.2], [0, 1]);
 
-  const pillars = ['todo', 'tpv', 'qr', 'dashboard'];
+  const pillars = ['todo', 'tpv', 'pos', 'qr', 'dashboard', 'ia', 'widget'];
   
   // Removed auto-scroll rotation to respect user choice "Todo" as default
   
@@ -1087,8 +1118,8 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
                 <div className="inline-flex p-1 rounded-full border border-white/10" style={{ backgroundColor: '#1a1a1a' }}>
                   {pillars.map((p) => {
                     const isActive = hoveredCard === p || (!hoveredCard && activePillar === p);
-                    const pillarNames = { todo: 'Todo', tpv: 'TPV', qr: 'QR', dashboard: 'Dashboard' };
-                    const pillarNamesLong = { todo: 'Todo', tpv: 'TPV Móvil', qr: 'Pagos QR', dashboard: 'Dashboard' };
+                    const pillarNames: Record<string, string> = { todo: 'Todo', tpv: 'TPV', pos: 'POS', qr: 'QR', dashboard: 'Dashboard', ia: 'IA', widget: 'Widget' };
+                    const pillarNamesLong: Record<string, string> = { todo: 'Todo', tpv: 'TPV Movil', pos: 'Avoqado POS', qr: 'Pagos QR', dashboard: 'Dashboard', ia: 'Asistente IA', widget: 'Widget' };
                     return (
                       <button
                         key={p}
@@ -1151,9 +1182,8 @@ const FEATURE_DESCRIPTIONS: Record<string, string> = {
                      </div>
                      <div className="flex-1 min-w-0">
                         <h3 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight mb-2">
-                            {hoveredCard ? PRODUCTS.find(p => p.id === hoveredCard)?.name : 
-                             activePillar === 'tpv' ? 'TPV Móvil' : 
-                             activePillar === 'qr' ? 'Pagos QR' : 'Dashboard'}
+                            {hoveredCard ? PRODUCTS.find(p => p.id === hoveredCard)?.name :
+                             ({ tpv: 'TPV Movil', pos: 'Avoqado POS', qr: 'Pagos QR', dashboard: 'Dashboard', ia: 'Asistente IA', widget: 'Widget' } as Record<string,string>)[activePillar || 'tpv']}
                         </h3>
                         <p className="text-base md:text-lg text-gray-600 leading-relaxed">
                             {selectedDescription}
