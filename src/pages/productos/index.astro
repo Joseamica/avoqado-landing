@@ -1,93 +1,224 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import '../../styles/global.css';
 import Navbar from '../../components/layout/Navbar.astro';
 import Footer from '../../components/layout/Footer.astro';
+import ProductSection from '../../components/interactive/ProductSection';
+import DashboardProductSection from '../../components/interactive/DashboardProductSection';
+import TpvProductSection from '../../components/interactive/TpvProductSection';
+import PosProductSection from '../../components/interactive/PosProductSection';
+import QrProductSection from '../../components/interactive/QrProductSection';
 ---
 
-<Layout title="Productos - Avoqado" description="Descubre el ecosistema completo de Avoqado: TPV móvil, Dashboard Web con IA, y sistema de pagos QR.">
-	<Navbar />
-	<main>
-		<!-- Hero Section -->
-		<section class="relative min-h-[60vh] flex items-center pt-16 bg-gradient-to-br from-black to-gray-900">
-			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-				<h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
-					El ecosistema completo para tu comercio
-				</h1>
-				<p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
-					Tres productos integrados que transforman la forma en que operas tu negocio
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Productos | Avoqado</title>
+		<meta name="description" content="TPV, Dashboard y QR — tres productos integrados que transforman como operas tu negocio. 11 plataformas conectadas en tiempo real." />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+	</head>
+	<body class="bg-black m-0 p-0 w-full">
+		<Navbar position="fixed" transparentOnTop={true} />
+
+		<!-- HERO — Static, visible immediately -->
+		<section class="flex flex-col min-h-screen justify-center pt-24 md:pt-32 pb-16 md:pb-24 px-6">
+			<div class="max-w-[1400px] mx-auto w-full">
+				<p class="text-avoqado-green text-sm font-semibold tracking-widest uppercase mb-6">
+					Productos
 				</p>
-			</div>
-		</section>
-
-		<!-- Products Grid -->
-		<section class="py-20 bg-avoqado-dark-bg">
-			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-					<!-- Avoqado TPV -->
-					<a href="/productos/tpv" class="group">
-						<div class="bg-avoqado-dark-surface rounded-3xl p-8 hover:bg-gray-800 transition-all hover:scale-105">
-							<div class="w-16 h-16 bg-avoqado-green/20 rounded-2xl flex items-center justify-center mb-6">
-								<span class="text-4xl">📱</span>
-							</div>
-							<h3 class="text-2xl font-bold text-white mb-4">Avoqado TPV</h3>
-							<p class="text-gray-300 mb-6">
-								Terminal móvil para personal con pagos inteligentes
-							</p>
-							<span class="text-avoqado-green group-hover:underline">
-								Ver detalles →
-							</span>
-						</div>
+				<h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[0.95] text-white max-w-4xl mb-8">
+					Cuatro productos.<br/>
+					Un ecosistema.
+				</h1>
+				<p class="text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-12">
+					Terminal de cobro, punto de venta, dashboard con IA y pagos QR — todo sincronizado en tiempo real.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 mb-12">
+					<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors">
+						Agendar demo
 					</a>
-
-					<!-- Dashboard Web -->
-					<a href="/productos/dashboard" class="group">
-						<div class="bg-avoqado-dark-surface rounded-3xl p-8 hover:bg-gray-800 transition-all hover:scale-105">
-							<div class="w-16 h-16 bg-avoqado-green/20 rounded-2xl flex items-center justify-center mb-6">
-								<span class="text-4xl">📊</span>
-							</div>
-							<h3 class="text-2xl font-bold text-white mb-4">Dashboard Web</h3>
-							<p class="text-gray-300 mb-6">
-								Plataforma integral con consultor IA integrado
-							</p>
-							<span class="text-avoqado-green group-hover:underline">
-								Ver detalles →
-							</span>
-						</div>
+					<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 transition-colors">
+						Probar gratis
 					</a>
-
-					<!-- Avoqado QR -->
-					<a href="/productos/qr" class="group">
-						<div class="bg-avoqado-dark-surface rounded-3xl p-8 hover:bg-gray-800 transition-all hover:scale-105">
-							<div class="w-16 h-16 bg-avoqado-green/20 rounded-2xl flex items-center justify-center mb-6">
-								<span class="text-4xl">⚡</span>
-							</div>
-							<h3 class="text-2xl font-bold text-white mb-4">Avoqado QR</h3>
-							<p class="text-gray-300 mb-6">
-								El cliente escanea, escoge y paga en menos de 30 segundos
-							</p>
-							<span class="text-avoqado-green group-hover:underline">
-								Ver detalles →
-							</span>
-						</div>
+				</div>
+				<div class="flex flex-wrap gap-3">
+					<a href="#product-01" class="flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-white/20 transition-colors group">
+						<span class="text-xs font-mono" style="color: oklch(0.72 0.14 240);">01</span>
+						<span class="text-white text-sm font-medium group-hover:text-avoqado-green transition-colors">Dashboard</span>
+					</a>
+					<a href="#product-02" class="flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-white/20 transition-colors group">
+						<span class="text-xs font-mono text-avoqado-green">02</span>
+						<span class="text-white text-sm font-medium group-hover:text-avoqado-green transition-colors">TPV</span>
+					</a>
+					<a href="#product-03" class="flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-white/20 transition-colors group">
+						<span class="text-xs font-mono" style="color: oklch(0.68 0.15 290);">03</span>
+						<span class="text-white text-sm font-medium group-hover:text-avoqado-green transition-colors">POS</span>
+					</a>
+					<a href="#product-04" class="flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-white/20 transition-colors group">
+						<span class="text-xs font-mono" style="color: oklch(0.78 0.14 75);">04</span>
+						<span class="text-white text-sm font-medium group-hover:text-avoqado-green transition-colors">QR</span>
 					</a>
 				</div>
 			</div>
 		</section>
 
-		<!-- Integration Section -->
-		<section class="py-20 bg-avoqado-dark-surface">
-			<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-				<h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
-					Todo conectado, todo sincronizado
-				</h2>
-				<p class="text-xl text-gray-300 mb-12">
-					Los tres productos trabajan juntos en tiempo real para darte el control total de tu operación
-				</p>
-				<a href="/#contact" class="inline-block px-8 py-4 bg-avoqado-green text-white text-lg font-semibold rounded-full hover:opacity-90 hover:scale-105 transition-all shadow-glow-green">
-					Agendar demo
-				</a>
+		<!-- PRODUCT 1: DASHBOARD — Living Preview -->
+		<DashboardProductSection client:visible />
+
+		<!-- PRODUCT 2: TPV — Living Preview -->
+		<TpvProductSection client:visible />
+
+		<!-- PRODUCT 3: POS — Living Preview -->
+		<PosProductSection client:visible />
+
+		<!-- PRODUCT 4: QR — Living Preview -->
+		<QrProductSection client:visible />
+
+
+		<!-- EXTENDED PLATFORMS — White bg, numbered, visual distinction -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="max-w-2xl mb-16">
+					<p class="text-avoqado-green text-sm uppercase tracking-widest font-semibold mb-4">Ecosistema completo</p>
+					<h2 class="text-3xl md:text-4xl font-light tracking-tight text-black leading-tight">
+						+8 plataformas que completan tu operacion.
+					</h2>
+				</div>
+
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+					<div class="group p-6 rounded-2xl border border-black/5 hover:border-avoqado-green/30 transition-all duration-200 hover:-translate-y-0.5">
+						<div class="text-2xl font-light text-black/10 mb-3">01</div>
+						<h3 class="text-black text-base font-medium mb-2">App iOS</h3>
+						<p class="text-gray-500 text-sm leading-relaxed">App nativa para iPhone y iPad con todas las funciones del ecosistema.</p>
+					</div>
+					<div class="group p-6 rounded-2xl border border-black/5 hover:border-avoqado-green/30 transition-all duration-200 hover:-translate-y-0.5">
+						<div class="text-2xl font-light text-black/10 mb-3">02</div>
+						<h3 class="text-black text-base font-medium mb-2">App Android</h3>
+						<p class="text-gray-500 text-sm leading-relaxed">App movil separada del TPV para staff y gestion en campo.</p>
+					</div>
+					<div class="group p-6 rounded-2xl border border-black/5 hover:border-avoqado-green/30 transition-all duration-200 hover:-translate-y-0.5">
+						<div class="text-2xl font-light text-black/10 mb-3">03</div>
+						<h3 class="text-black text-base font-medium mb-2">SDK Checkout</h3>
+						<p class="text-gray-500 text-sm leading-relaxed">API keys, tokenizacion y webhooks para integrar pagos en tu sitio web.</p>
+					</div>
+					<div class="group p-6 rounded-2xl border border-black/5 hover:border-avoqado-green/30 transition-all duration-200 hover:-translate-y-0.5">
+						<div class="text-2xl font-light text-black/10 mb-3">04</div>
+						<h3 class="text-black text-base font-medium mb-2">White-Label</h3>
+						<p class="text-gray-500 text-sm leading-relaxed">Tu marca, tus colores, features seleccionados. Dashboard propio.</p>
+					</div>
+					<div class="group p-6 rounded-2xl border border-black/5 hover:border-avoqado-green/30 transition-all duration-200 hover:-translate-y-0.5">
+						<div class="text-2xl font-light text-black/10 mb-3">05</div>
+						<h3 class="text-black text-base font-medium mb-2">Booking</h3>
+						<p class="text-gray-500 text-sm leading-relaxed">Pagina de reservaciones publica embeddable, sin login para clientes.</p>
+					</div>
+					<div class="group p-6 rounded-2xl border border-black/5 hover:border-avoqado-green/30 transition-all duration-200 hover:-translate-y-0.5">
+						<div class="text-2xl font-light text-black/10 mb-3">06</div>
+						<h3 class="text-black text-base font-medium mb-2">Recibos Digitales</h3>
+						<p class="text-gray-500 text-sm leading-relaxed">Tickets accesibles via link publico con opcion de dejar review.</p>
+					</div>
+					<div class="group p-6 rounded-2xl border border-black/5 hover:border-avoqado-green/30 transition-all duration-200 hover:-translate-y-0.5">
+						<div class="text-2xl font-light text-black/10 mb-3">07</div>
+						<h3 class="text-black text-base font-medium mb-2">Ligas de Pago</h3>
+						<p class="text-gray-500 text-sm leading-relaxed">Links compartibles via WhatsApp con montos fijos o abiertos.</p>
+					</div>
+					<div class="group p-6 rounded-2xl border border-black/5 hover:border-avoqado-green/30 transition-all duration-200 hover:-translate-y-0.5">
+						<div class="text-2xl font-light text-black/10 mb-3">08</div>
+						<h3 class="text-black text-base font-medium mb-2">Portal Clientes</h3>
+						<p class="text-gray-500 text-sm leading-relaxed">Registro, historial de ordenes, credit packs y datos personales.</p>
+					</div>
+				</div>
 			</div>
 		</section>
-	</main>
-	<Footer />
-</Layout>
+
+
+		<!-- DIFFERENTIATORS — Dark, big statement, horizontal scroll feel -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+					<!-- Left: Big statement, sticky -->
+					<div class="lg:sticky lg:top-32">
+						<h2 class="text-4xl md:text-6xl font-light tracking-tight text-white leading-tight mb-6">
+							No es otro POS.<br/>
+							No es otro dashboard.<br/>
+							<span class="text-avoqado-green">Es todo, conectado.</span>
+						</h2>
+						<p class="text-gray-500 text-lg max-w-md">
+							Cada pieza del ecosistema habla con las demas en tiempo real.
+						</p>
+					</div>
+
+					<!-- Right: Differentiators stacked -->
+					<div class="space-y-6">
+						<div class="p-6 rounded-2xl" style="background: oklch(0.14 0.005 155);">
+							<div class="flex items-center gap-3 mb-3">
+								<div class="w-2 h-2 rounded-full bg-avoqado-green"></div>
+								<h3 class="text-white font-medium text-base">Multi-tenant real</h3>
+							</div>
+							<p class="text-gray-400 text-sm leading-relaxed">Organizacion > Zonas > Sucursales > Staff. Herencia de configuracion en cascada. Un empleado puede tener roles distintos en diferentes venues.</p>
+						</div>
+						<div class="p-6 rounded-2xl" style="background: oklch(0.14 0.005 155);">
+							<div class="flex items-center gap-3 mb-3">
+								<div class="w-2 h-2 rounded-full" style="background: oklch(0.72 0.14 240);"></div>
+								<h3 class="text-white font-medium text-base">Hecho para Mexico</h3>
+							</div>
+							<p class="text-gray-400 text-sm leading-relaxed">KYC mexicano (RFC, INE, CLABE), moneda MXN, timezone por sucursal, compliance con leyes de retencion de datos. Persona Fisica y Moral.</p>
+						</div>
+						<div class="p-6 rounded-2xl" style="background: oklch(0.14 0.005 155);">
+							<div class="flex items-center gap-3 mb-3">
+								<div class="w-2 h-2 rounded-full" style="background: oklch(0.78 0.14 75);"></div>
+								<h3 class="text-white font-medium text-base">IA integrada</h3>
+							</div>
+							<p class="text-gray-400 text-sm leading-relaxed">Text-to-SQL sobre tus datos reales. Pregunta en lenguaje natural, obtiene respuestas de tu inventario, ventas, personal y clientes.</p>
+						</div>
+						<div class="p-6 rounded-2xl" style="background: oklch(0.14 0.005 155);">
+							<div class="flex items-center gap-3 mb-3">
+								<div class="w-2 h-2 rounded-full" style="background: oklch(0.68 0.15 290);"></div>
+								<h3 class="text-white font-medium text-base">5 procesadores de pago</h3>
+							</div>
+							<p class="text-gray-400 text-sm leading-relaxed">Blumon, AngelPay, Stripe, B4Bit crypto, transferencia bancaria. Enrutamiento a diferentes cuentas CLABE por sucursal.</p>
+						</div>
+						<div class="p-6 rounded-2xl" style="background: oklch(0.14 0.005 155);">
+							<div class="flex items-center gap-3 mb-3">
+								<div class="w-2 h-2 rounded-full bg-avoqado-green"></div>
+								<h3 class="text-white font-medium text-base">Gestion remota de terminales</h3>
+							</div>
+							<p class="text-gray-400 text-sm leading-relaxed">OTA updates, geofencing, comandos programados, monitoreo de salud en tiempo real. Todo desde el dashboard.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+					</div>
+					<div class="border-t border-white/10 pt-6">
+						<h3 class="text-white font-medium text-sm mb-2">Gestion remota de terminales</h3>
+						<p class="text-gray-600 text-sm leading-relaxed">OTA updates, geofencing, comandos programados, monitoreo en vivo.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- CTA -->
+		<section class="px-6 py-24 md:py-32 bg-avoqado-dark-surface border-t border-white/5">
+			<div class="max-w-3xl mx-auto text-center">
+				<h2 class="text-3xl md:text-5xl font-light tracking-tight text-white mb-8">
+					Prueba el ecosistema completo.
+				</h2>
+				<p class="text-lg text-gray-500 mb-12 max-w-xl mx-auto">
+					Demo interactiva disponible al instante. Sin tarjeta, sin compromiso.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-avoqado-green text-black font-semibold rounded-full hover:bg-green-400 transition-colors text-lg">
+						Probar demo gratis
+					</a>
+					<a href="/contact" class="px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 transition-colors text-lg">
+						Hablar con ventas
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<Footer />
+	</body>
+</html>

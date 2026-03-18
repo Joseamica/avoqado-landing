@@ -155,7 +155,7 @@ export default function InteractiveHero({
             style={{ opacity: heroTextOpacity }}
             className="absolute inset-0 flex flex-col items-center justify-center z-30 px-4 md:px-8 text-center"
           >
-            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-white tracking-tight mb-4 md:mb-8 text-center max-w-5xl font-light font-baby leading-none">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-white tracking-tight mb-4 md:mb-8 text-center max-w-5xl font-light leading-none">
               {title}
             </h1>
             {subtitle && (
@@ -217,7 +217,7 @@ export default function InteractiveHero({
               >
                 <div className="relative">
                   <div className="absolute inset-0 -inset-x-6 -inset-y-3 bg-white/90 backdrop-blur-sm rounded-xl" />
-                  <h2 className="relative text-2xl lg:text-4xl xl:text-5xl text-center text-black leading-snug font-light font-baby">
+                  <h2 className="relative text-2xl lg:text-4xl xl:text-5xl text-center text-black leading-snug font-light tracking-tight">
                     <motion.span
                       style={{ opacity: textLine1Opacity, y: textLine1Y, filter: textLine1Blur, display: 'inline-block' }}
                     >
@@ -278,7 +278,7 @@ export default function InteractiveHero({
               >
                 <div className="relative">
                   <div className="absolute inset-0 -inset-x-4 -inset-y-2 bg-white/90 backdrop-blur-sm rounded-lg" />
-                  <h2 className="relative text-xl text-center text-black leading-snug font-light font-baby">
+                  <h2 className="relative text-xl text-center text-black leading-snug font-light tracking-tight">
                     <motion.span
                       style={{ opacity: textLine1Opacity, y: textLine1Y, filter: textLine1Blur, display: 'inline-block' }}
                     >

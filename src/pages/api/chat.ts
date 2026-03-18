@@ -53,7 +53,7 @@ function getPricingForBusiness(businessType: string): string | null {
       const debito = (rates.debito + AVOQADO_MARGIN).toFixed(2);
       const amex = (rates.amex + AMEX_MARGIN).toFixed(2);
       
-      return `Para ${businessType}, las comisiones son:\n• Débito: ${debito}%\n• Crédito: ${credito}%\n• AMEX: ${amex}%\n\n💡 Para más información: [avoqado.io/pricing](/pricing)`;
+      return `Para ${businessType}, las comisiones son:\n• Débito: ${debito}%\n• Crédito: ${credito}%\n• AMEX: ${amex}%\n\nTip: Para más información: [avoqado.io/pricing](/pricing)`;
     }
   }
   return null;
@@ -68,11 +68,11 @@ const localFAQ: { keywords: string[], answer: string }[] = [
   },
   {
     keywords: ['cuánto cuesta', 'cuanto cuesta', 'precio', 'precios', 'costo', 'costos', 'plan', 'planes', 'tarifa', 'mensualidad', 'cuota'],
-    answer: '¡Buena pregunta! 💡 Los precios dependen de tu tipo de negocio. ¿Qué tipo de negocio tienes? (restaurante, retail, belleza, servicios, etc.)'
+    answer: '¡Buena pregunta! Tip: Los precios dependen de tu tipo de negocio. ¿Qué tipo de negocio tienes? (restaurante, retail, belleza, servicios, etc.)'
   },
   {
     keywords: ['comision', 'comisiones', 'fee', 'porcentaje', 'cargo', 'cargos ocultos', 'tasa', 'tasas'],
-    answer: '¡Buena pregunta! 💡 Las comisiones dependen de tu tipo de negocio. ¿Qué tipo de negocio tienes? (restaurante, tienda, spa, etc.)'
+    answer: '¡Buena pregunta! Tip: Las comisiones dependen de tu tipo de negocio. ¿Qué tipo de negocio tienes? (restaurante, tienda, spa, etc.)'
   },
   {
     keywords: ['prueba', 'trial', 'gratis', 'gratuito', 'probar', 'demo', 'demostración'],
@@ -84,7 +84,7 @@ const localFAQ: { keywords: string[], answer: string }[] = [
   },
   {
     keywords: ['hola', 'buenos días', 'buenos dias', 'buenas tardes', 'buenas noches', 'hey', 'hi', 'ola'],
-    answer: '¡Hola! 👋 Soy el asistente de Avoqado. Puedo responder tus preguntas sobre nuestra plataforma, precios, funcionalidades, y más. ¿En qué puedo ayudarte?'
+    answer: '¡Hola! Soy el asistente de Avoqado. Puedo responder tus preguntas sobre nuestra plataforma, precios, funcionalidades, y mas. ¿En que puedo ayudarte?'
   },
   {
     keywords: ['gracias', 'perfecto', 'genial', 'excelente', 'ok', 'entendido'],
@@ -232,21 +232,21 @@ const localFAQ: { keywords: string[], answer: string }[] = [
   },
   {
     keywords: ['adios', 'adiós', 'bye', 'chao', 'hasta luego', 'nos vemos'],
-    answer: '¡Hasta pronto! 👋 Si necesitas más ayuda, estaré aquí. También puedes visitar avoqado.io o contactar a nuestro equipo directamente. ¡Éxito con tu negocio!'
+    answer: '¡Hasta pronto! Si necesitas mas ayuda, estare aqui. Tambien puedes visitar avoqado.io o contactar a nuestro equipo directamente.'
   },
 
   // ===== ACCESO ANTICIPADO / EARLY ACCESS =====
   {
     keywords: ['acceso anticipado', 'early access', 'lugares', 'spots', 'fundador', 'fundadores', 'primeros 100', 'reservar lugar'],
-    answer: '🚀 ¡Tenemos Acceso Anticipado! Solo quedan ~50 lugares de los 100 disponibles. Los beneficios incluyen: \n• **Co-crear el producto** - 100% de features priorizadas por usuarios\n• **Soporte VIP** - Canal directo vía Slack, <2h respuesta\n• **Pricing Fundador** - 50% descuento permanente de por vida\n• **Features a medida** - Personalizaciones sin costo\n\n¿Te interesa? Puedes registrarte directamente en la sección "Sé parte del futuro" de nuestra página.'
+    answer: '¡Tenemos Acceso Anticipado! Solo quedan ~50 lugares de los 100 disponibles. Los beneficios incluyen: \n- **Co-crear el producto** - 100% de features priorizadas por usuarios\n- **Soporte VIP** - Canal directo via Slack, <2h respuesta\n- **Pricing Fundador** - 50% descuento permanente de por vida\n- **Features a medida** - Personalizaciones sin costo\n\n¿Te interesa? Puedes registrarte directamente en la seccion "Se parte del futuro" de nuestra pagina.'
   },
   {
     keywords: ['descuento', 'oferta', 'promoción', 'promocion', 'beneficios', 'ventajas'],
-    answer: '¡Tenemos algo especial! 🎉 Nuestro programa de Acceso Anticipado ofrece **50% de descuento permanente** para los primeros 100 negocios. También incluye soporte VIP, co-creación del producto, y features personalizadas. Solo quedan ~50 lugares.'
+    answer: '¡Tenemos algo especial! Nuestro programa de Acceso Anticipado ofrece **50% de descuento permanente** para los primeros 100 negocios. Tambien incluye soporte VIP, co-creacion del producto, y features personalizadas. Solo quedan ~50 lugares.'
   },
   {
     keywords: ['registrar', 'registrarse', 'inscribir', 'unirse', 'apuntar'],
-    answer: 'Puedes registrarte de dos formas: 1) En la sección "Sé parte del futuro" al final de avoqado.io, 2) En dashboardv2.avoqado.io/signup. Si quieres ser parte del programa de Acceso Anticipado, ¡date prisa! Solo quedan ~50 lugares con 50% de descuento permanente. 🚀'
+    answer: 'Puedes registrarte de dos formas: 1) En la seccion "Se parte del futuro" al final de avoqado.io, 2) En dashboardv2.avoqado.io/signup. Si quieres ser parte del programa de Acceso Anticipado, solo quedan ~50 lugares con 50% de descuento permanente.'
   }
 ];
 

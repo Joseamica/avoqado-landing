@@ -20,11 +20,9 @@ export default function GlobalSearch() {
     }
 
     const openSearch = () => {
-        console.log('GlobalSearch: Event received')
         setOpen(true)
     }
 
-    console.log('GlobalSearch: Mounted')
     document.addEventListener('keydown', down)
     document.addEventListener('open-global-search', openSearch)
     

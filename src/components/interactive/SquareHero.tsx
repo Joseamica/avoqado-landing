@@ -59,6 +59,10 @@ export default function SquareHero() {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
+
+    // Signal that the hero is hydrated and ready
+    window.dispatchEvent(new CustomEvent('avoqado-ready'));
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 

@@ -51,6 +51,27 @@
   --radius-5xl: 2.5rem;
 }
 
+/* Product accent colors (used in /productos pages) */
+:root {
+  --color-product-dashboard: oklch(0.72 0.14 240);
+  --color-product-tpv: oklch(0.78 0.18 155);
+  --color-product-pos: oklch(0.68 0.15 290);
+  --color-product-qr: oklch(0.78 0.14 75);
+
+  /* Mockup surface colors (green-tinted neutrals, hue 155) */
+  --color-mockup-bg: oklch(0.12 0.005 155);
+  --color-mockup-surface: oklch(0.16 0.005 155);
+  --color-mockup-elevated: oklch(0.18 0.005 155);
+  --color-mockup-subtle: oklch(0.14 0.005 155);
+  --color-mockup-border: oklch(0.22 0.005 155);
+  --color-mockup-muted: oklch(0.30 0.005 155);
+  --color-mockup-dim: oklch(0.20 0.005 155);
+
+  /* Semantic alert colors */
+  --color-alert-red: oklch(0.65 0.20 25);
+  --color-alert-amber: oklch(0.78 0.14 75);
+}
+
 @keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -144,4 +165,24 @@ html {
   outline: none;
   box-shadow: 0 0 0 2px var(--color-avoqado-dark-bg), 0 0 0 4px var(--color-avoqado-green);
   border-radius: 0.25rem;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Interactive element focus states for links and cards */
+a:focus-visible,
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-avoqado-dark-bg), 0 0 0 4px var(--color-avoqado-green);
+  border-radius: 0.5rem;
 }

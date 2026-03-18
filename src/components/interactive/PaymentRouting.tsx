@@ -755,23 +755,25 @@ const AnimatedConnection: React.FC<{
           }
         `}</style>
       </defs>
-      <motion.path 
-        d={d} 
-        fill="none" 
-        stroke={`url(#grad-${id})`} 
-        strokeWidth="4" 
+      <motion.path
+        d={d}
+        fill="none"
+        stroke={`url(#grad-${id})`}
+        strokeWidth="4"
         opacity={isActive ? 0.3 : 0}
+        initial={false}
         animate={{ d }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
       />
       {/* Animated flow */}
-      <motion.path 
-        d={d} 
-        fill="none" 
-        stroke={`url(#grad-${id})`} 
-        strokeWidth="4" 
+      <motion.path
+        d={d}
+        fill="none"
+        stroke={`url(#grad-${id})`}
+        strokeWidth="4"
         strokeLinecap="round"
         strokeLinejoin="round"
+        initial={false}
         animate={{ d }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         style={{

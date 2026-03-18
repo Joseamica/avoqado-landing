@@ -67,7 +67,7 @@ export default function CookieConsent() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex-1">
                 <h3 className="text-white font-semibold mb-1">
-                  🍪 Usamos cookies
+                  Usamos cookies
                 </h3>
                 <p className="text-gray-300 text-sm">
                   Utilizamos cookies para mejorar tu experiencia, analizar el tráfico del sitio y personalizar el contenido.

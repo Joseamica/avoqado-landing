@@ -74,7 +74,7 @@ export default function ContactSalesForm() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                     </div>
-                    <h3 className="text-3xl font-medium text-black mb-4 font-baby">¡Mensaje enviado!</h3>
+                    <h3 className="text-3xl font-medium text-black mb-4 tracking-tight">¡Mensaje enviado!</h3>
                     <p className="text-gray-600 max-w-xs mx-auto mb-8 text-lg">
                         Gracias por escribirnos. Nuestro equipo revisará tu solicitud y te contactará pronto.
                     </p>

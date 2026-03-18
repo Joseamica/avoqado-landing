@@ -1,134 +1,762 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import '../../styles/global.css';
 import Navbar from '../../components/layout/Navbar.astro';
 import Footer from '../../components/layout/Footer.astro';
+
+const BLUE = 'oklch(0.72 0.14 240)';
+const GREEN = '#69E185';
+const AMBER = 'oklch(0.78 0.14 75)';
+const RED = 'oklch(0.65 0.20 25)';
+const INDIGO = 'oklch(0.68 0.15 290)';
 ---
 
-<Layout title="Dashboard Web - Avoqado" description="Plataforma integral con consultor IA integrado. Analytics, reportes y control total de tu negocio.">
-	<Navbar />
-	<main>
-		<!-- Hero Section -->
-		<section class="relative min-h-screen flex items-center pt-16">
-			<div class="absolute top-1/4 left-0 w-96 h-96 bg-avoqado-orange rounded-full opacity-20 blur-3xl"></div>
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Dashboard Web | Avoqado</title>
+		<meta name="description" content="Panel de control integral con 31 modulos: reportes, ligas de pago, gestion de terminales, CRM, inventario, asistente IA y mas." />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+	</head>
+	<body class="bg-black m-0 p-0 w-full">
+		<Navbar position="fixed" transparentOnTop={true} />
 
-			<div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-20">
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-					<!-- Left Column - Content -->
-					<div class="space-y-8">
-						<div class="inline-block px-4 py-2 bg-avoqado-orange/20 rounded-full text-avoqado-orange text-sm font-semibold mb-4">
-							Dashboard Web
-						</div>
-						<h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-							Tu restaurante en un dashboard inteligente
-						</h1>
-						<p class="text-xl text-gray-300 max-w-lg">
-							Analytics en tiempo real, reportes automáticos y un consultor IA que te ayuda a tomar mejores decisiones.
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- HERO                                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="min-h-screen flex items-center pt-24 md:pt-32 pb-16 px-6">
+			<div class="max-w-[1400px] mx-auto w-full">
+				<div class="max-w-3xl">
+					<div class="flex items-center gap-3 mb-6">
+						<span class="text-5xl font-light text-white/10">01</span>
+						<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${BLUE};`}>Dashboard Web</span>
+					</div>
+					<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-white mb-8">
+						31 modulos.<br/>
+						Un solo panel.
+					</h1>
+					<p class="text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-10">
+						Reportes detallados, ligas de pago, gestion remota de terminales, CRM con programa de lealtad, asistente de IA y mucho mas — todo conectado en tiempo real.
+					</p>
+					<div class="flex flex-col sm:flex-row gap-4">
+						<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${BLUE};`}>
+							Probar demo gratis
+						</a>
+						<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200">
+							Agendar demo
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 1. REPORTES DETALLADOS                      -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Reportes</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Datos que si sirven para decidir.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							No son graficas bonitas sin contexto. Cada reporte cruza datos de ventas, pagos, inventario y personal para darte respuestas que puedes actuar hoy.
 						</p>
-
-						<div class="flex flex-col sm:flex-row gap-4">
-							<a
-								href="#contact"
-								class="inline-block px-8 py-4 bg-avoqado-green text-white text-lg font-semibold rounded-full hover:opacity-90 transition-opacity text-center"
-							>
-								Solicitar demo
-							</a>
-							<a
-								href="#features"
-								class="inline-block px-8 py-4 border-2 border-avoqado-green text-avoqado-green text-lg font-semibold rounded-full hover:bg-avoqado-green hover:text-white transition-all text-center"
-							>
-								Ver características
-							</a>
+						<div class="space-y-4">
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Sales Summary</h3>
+								<p class="text-sm text-gray-500">Ventas por periodo con desglose por metodo de pago, canal, y empleado. Compara dia vs dia, semana vs semana.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Sales by Item</h3>
+								<p class="text-sm text-gray-500">Que se vende, que no, margenes por producto, variacion vs periodo anterior.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Payment Analytics</h3>
+								<p class="text-sm text-gray-500">Profit metrics, comparativa entre procesadores de pago, time series, export a Excel.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Closing Report</h3>
+								<p class="text-sm text-gray-500">Reporte de cierre diario: ventas, devoluciones, propinas, corte de caja, varianza.</p>
+							</div>
 						</div>
 					</div>
 
-					<!-- Right Column - Image/Video Placeholder -->
-					<div class="relative">
-						<div class="aspect-video bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl flex items-center justify-center">
-							<span class="text-6xl">📊</span>
+					<!-- Reports mockup -->
+					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Sales Summary — Ultima semana</span>
+							<div class="flex gap-2">
+								<span class="text-[9px] px-2 py-1 rounded-full" style={`background: oklch(0.18 0.02 240); color: ${BLUE};`}>Excel</span>
+								<span class="text-[9px] px-2 py-1 rounded-full" style="background: oklch(0.16 0.005 155); color: oklch(0.40 0.005 155);">PDF</span>
+							</div>
+						</div>
+						<!-- KPIs -->
+						<div class="grid grid-cols-3 gap-2 mb-4">
+							<div class="rounded-lg p-3 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-lg font-light text-white">$142,800</div>
+								<div class="text-[9px] text-gray-600">Ventas totales</div>
+								<div class="text-[9px] text-avoqado-green mt-1">+14% vs anterior</div>
+							</div>
+							<div class="rounded-lg p-3 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-lg font-light text-white">312</div>
+								<div class="text-[9px] text-gray-600">Transacciones</div>
+								<div class="text-[9px]" style={`color: ${BLUE};`}>$457 prom.</div>
+							</div>
+							<div class="rounded-lg p-3 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-lg font-light text-white">$12,450</div>
+								<div class="text-[9px] text-gray-600">Propinas</div>
+								<div class="text-[9px] text-avoqado-green">8.7% del total</div>
+							</div>
+						</div>
+						<!-- Chart -->
+						<div class="rounded-lg p-3 mb-3" style="background: oklch(0.14 0.005 155);">
+							<div class="flex items-end gap-1 h-20">
+								<div class="flex-1 flex flex-col items-center gap-0.5">
+									<div class="w-full rounded-t" style={`height: 40%; background: ${BLUE}; opacity: 0.5;`}></div>
+									<span class="text-[7px] text-gray-600">Lun</span>
+								</div>
+								<div class="flex-1 flex flex-col items-center gap-0.5">
+									<div class="w-full rounded-t" style={`height: 55%; background: ${BLUE}; opacity: 0.6;`}></div>
+									<span class="text-[7px] text-gray-600">Mar</span>
+								</div>
+								<div class="flex-1 flex flex-col items-center gap-0.5">
+									<div class="w-full rounded-t" style={`height: 45%; background: ${BLUE}; opacity: 0.55;`}></div>
+									<span class="text-[7px] text-gray-600">Mie</span>
+								</div>
+								<div class="flex-1 flex flex-col items-center gap-0.5">
+									<div class="w-full rounded-t" style={`height: 65%; background: ${BLUE}; opacity: 0.7;`}></div>
+									<span class="text-[7px] text-gray-600">Jue</span>
+								</div>
+								<div class="flex-1 flex flex-col items-center gap-0.5">
+									<div class="w-full rounded-t" style={`height: 90%; background: ${BLUE}; opacity: 0.9;`}></div>
+									<span class="text-[7px] text-gray-600">Vie</span>
+								</div>
+								<div class="flex-1 flex flex-col items-center gap-0.5">
+									<div class="w-full rounded-t" style={`height: 95%; background: ${BLUE};`}></div>
+									<span class="text-[7px] text-gray-600">Sab</span>
+								</div>
+								<div class="flex-1 flex flex-col items-center gap-0.5">
+									<div class="w-full rounded-t" style={`height: 70%; background: ${BLUE}; opacity: 0.75;`}></div>
+									<span class="text-[7px] text-gray-600">Dom</span>
+								</div>
+							</div>
+						</div>
+						<!-- Payment breakdown -->
+						<div class="space-y-1.5">
+							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(0.15 0.005 155);">
+								<div class="flex items-center gap-2">
+									<div class="w-2 h-2 rounded-full" style={`background: ${BLUE};`}></div>
+									<span class="text-[10px] text-gray-300">Tarjeta</span>
+								</div>
+								<span class="text-[10px] text-white">$98,400 (69%)</span>
+							</div>
+							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(0.15 0.005 155);">
+								<div class="flex items-center gap-2">
+									<div class="w-2 h-2 rounded-full bg-avoqado-green"></div>
+									<span class="text-[10px] text-gray-300">Efectivo</span>
+								</div>
+								<span class="text-[10px] text-white">$32,100 (22%)</span>
+							</div>
+							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(0.15 0.005 155);">
+								<div class="flex items-center gap-2">
+									<div class="w-2 h-2 rounded-full" style={`background: ${AMBER};`}></div>
+									<span class="text-[10px] text-gray-300">Transferencia</span>
+								</div>
+								<span class="text-[10px] text-white">$12,300 (9%)</span>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</section>
 
-		<!-- Features Section -->
-		<section id="features" class="py-20 bg-avoqado-dark-surface">
-			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div class="text-center mb-16">
-					<h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
-						Características principales
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 2. LIGAS DE PAGO                            -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Payment link mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="text-[11px] text-gray-500 mb-4">Liga de pago activa</div>
+						<!-- Link card -->
+						<div class="rounded-xl p-4 mb-4" style="background: oklch(0.16 0.005 155);">
+							<div class="flex items-center justify-between mb-3">
+								<span class="text-sm text-white font-medium">Cena privada — Mesa VIP</span>
+								<span class="text-[9px] px-2 py-0.5 rounded-full bg-avoqado-green text-black font-medium">Activa</span>
+							</div>
+							<div class="flex items-center gap-2 mb-3 p-2 rounded-lg" style="background: oklch(0.13 0.005 155);">
+								<span class="text-[10px] text-gray-400 truncate flex-1">avoqado.io/pay/xK3mN8p2</span>
+								<span class="text-[9px] px-2 py-0.5 rounded" style={`background: oklch(0.18 0.02 240); color: ${BLUE};`}>Copiar</span>
+							</div>
+							<div class="grid grid-cols-2 gap-3">
+								<div>
+									<div class="text-[9px] text-gray-600 mb-1">Monto</div>
+									<div class="text-sm text-white">$2,500.00</div>
+								</div>
+								<div>
+									<div class="text-[9px] text-gray-600 mb-1">Propina</div>
+									<div class="text-sm text-white">10%, 15%, 20%</div>
+								</div>
+								<div>
+									<div class="text-[9px] text-gray-600 mb-1">Expira</div>
+									<div class="text-sm text-white">24 mar, 23:59</div>
+								</div>
+								<div>
+									<div class="text-[9px] text-gray-600 mb-1">Recolectado</div>
+									<div class="text-sm text-avoqado-green">$7,500 / 3 pagos</div>
+								</div>
+							</div>
+						</div>
+						<!-- Share options -->
+						<div class="flex gap-2">
+							<div class="flex-1 h-9 rounded-lg flex items-center justify-center gap-1.5" style="background: oklch(0.16 0.005 155);">
+								<div class="w-3.5 h-3.5 rounded-full bg-avoqado-green"></div>
+								<span class="text-[10px] text-white">WhatsApp</span>
+							</div>
+							<div class="flex-1 h-9 rounded-lg flex items-center justify-center gap-1.5" style="background: oklch(0.16 0.005 155);">
+								<div class="w-3.5 h-3.5 rounded-full" style={`background: ${BLUE};`}></div>
+								<span class="text-[10px] text-white">Email</span>
+							</div>
+							<div class="flex-1 h-9 rounded-lg flex items-center justify-center gap-1.5" style="background: oklch(0.16 0.005 155);">
+								<div class="w-3.5 h-3.5 rounded-full" style={`background: ${AMBER};`}></div>
+								<span class="text-[10px] text-white">QR</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Cobra sin terminal</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Un link. Cualquier lugar.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							Genera ligas de pago en segundos y comparte via WhatsApp, email o QR. Montos fijos o abiertos, reusables o de un solo uso, con propinas configurables y fecha de expiracion. Cada pago se sincroniza automaticamente con tu dashboard.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-400">Montos fijos, abiertos, o con producto vinculado (descuenta inventario)</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-400">Links reusables o de un solo uso con shortcode de 8 caracteres</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-400">Branding personalizable por venue, campos custom, tracking de monto recolectado</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 3. ASISTENTE IA                             -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="text-center max-w-2xl mx-auto mb-12">
+					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Inteligencia artificial</span>
+					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+						Preguntale a tu negocio lo que quieras.
 					</h2>
-					<p class="text-xl text-gray-300">
-						Toma el control total de tu negocio
+					<p class="text-gray-600 text-lg leading-relaxed">
+						Text-to-SQL que convierte preguntas en lenguaje natural a consultas sobre tus datos reales. No es un chatbot generico — entiende la estructura de TU negocio, con templates especializados por industria.
 					</p>
 				</div>
 
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
-						<div class="text-4xl mb-4">🤖</div>
-						<h3 class="text-2xl font-bold text-white mb-3">Consultor IA</h3>
-						<p class="text-gray-300">
-							Asistente inteligente que analiza tus datos y te da recomendaciones
-						</p>
+				<!-- Chat mockup - full width -->
+				<div class="max-w-3xl mx-auto rounded-2xl overflow-hidden border border-black/5 p-5 mb-12" style="background: #0A0A0A;">
+					<div class="space-y-3">
+						<div class="flex justify-end">
+							<div class="px-4 py-2.5 rounded-2xl rounded-br-sm max-w-[80%]" style="background: oklch(0.22 0.005 155);">
+								<span class="text-sm text-gray-300">Que empleado genero mas ventas el viernes?</span>
+							</div>
+						</div>
+						<div class="flex gap-2.5">
+							<div class="w-7 h-7 rounded-full shrink-0 flex items-center justify-center" style="background: oklch(0.20 0.02 155);">
+								<div class="w-3 h-3 rounded-full bg-avoqado-green"></div>
+							</div>
+							<div class="px-4 py-2.5 rounded-2xl rounded-bl-sm max-w-[85%]" style="background: oklch(0.16 0.005 155);">
+								<span class="text-sm text-gray-300">
+									<span class="text-avoqado-green font-medium">Maria G.</span> con $18,450 en 34 ordenes. Ticket promedio $542. Su comision acumulada esta semana: $1,845.
+								</span>
+							</div>
+						</div>
+						<div class="flex justify-end">
+							<div class="px-4 py-2.5 rounded-2xl rounded-br-sm max-w-[80%]" style="background: oklch(0.22 0.005 155);">
+								<span class="text-sm text-gray-300">Crea una promo 2x1 para el guacamole hasta el domingo</span>
+							</div>
+						</div>
+						<div class="flex gap-2.5">
+							<div class="w-7 h-7 rounded-full shrink-0 flex items-center justify-center" style="background: oklch(0.20 0.02 155);">
+								<div class="w-3 h-3 rounded-full bg-avoqado-green"></div>
+							</div>
+							<div class="px-4 py-2.5 rounded-2xl rounded-bl-sm max-w-[85%]" style="background: oklch(0.16 0.005 155);">
+								<span class="text-sm text-gray-300">
+									Listo. Promo <span style={`color: ${AMBER};`}>"2x1 Guacamole"</span> activa desde hoy hasta domingo 23:59. Aplicada automaticamente en TPV y QR.
+								</span>
+							</div>
+						</div>
+						<div class="flex items-center gap-2 mt-2 px-4 py-2.5 rounded-full" style="background: oklch(0.18 0.005 155); border: 1px solid oklch(0.25 0.005 155);">
+							<div class="w-4 h-4 rounded-full bg-avoqado-green opacity-50"></div>
+							<span class="text-sm text-gray-600">Pregunta lo que sea...</span>
+							<div class="ml-auto w-6 h-6 rounded-full bg-avoqado-green flex items-center justify-center">
+								<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+							</div>
+						</div>
 					</div>
+				</div>
 
-					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
-						<div class="text-4xl mb-4">📈</div>
-						<h3 class="text-2xl font-bold text-white mb-3">Analytics en tiempo real</h3>
-						<p class="text-gray-300">
-							Ve tus ventas, clientes y performance al instante
-						</p>
+				<!-- Features as horizontal row -->
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+					<div class="text-center">
+						<h3 class="text-base text-black font-medium mb-1">Text-to-SQL</h3>
+						<p class="text-sm text-gray-500">Convierte preguntas en consultas SQL sobre tus datos reales.</p>
 					</div>
-
-					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
-						<div class="text-4xl mb-4">📊</div>
-						<h3 class="text-2xl font-bold text-white mb-3">Reportes automáticos</h3>
-						<p class="text-gray-300">
-							Reportes diarios, semanales y mensuales listos para ti
-						</p>
+					<div class="text-center">
+						<h3 class="text-base text-black font-medium mb-1">Schema-aware</h3>
+						<p class="text-sm text-gray-500">Entiende tus productos, empleados, clientes y ordenes.</p>
 					</div>
-
-					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
-						<div class="text-4xl mb-4">👥</div>
-						<h3 class="text-2xl font-bold text-white mb-3">Gestión de personal</h3>
-						<p class="text-gray-300">
-							Control de horarios, propinas y performance de tu equipo
-						</p>
-					</div>
-
-					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
-						<div class="text-4xl mb-4">📱</div>
-						<h3 class="text-2xl font-bold text-white mb-3">Multi-dispositivo</h3>
-						<p class="text-gray-300">
-							Accede desde cualquier lugar: PC, tablet o móvil
-						</p>
-					</div>
-
-					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
-						<div class="text-4xl mb-4">🔐</div>
-						<h3 class="text-2xl font-bold text-white mb-3">Seguridad empresarial</h3>
-						<p class="text-gray-300">
-							Tus datos protegidos con encriptación de nivel bancario
-						</p>
+					<div class="text-center">
+						<h3 class="text-base text-black font-medium mb-1">Templates por industria</h3>
+						<p class="text-sm text-gray-500">Preguntas sugeridas adaptadas a tu vertical.</p>
 					</div>
 				</div>
 			</div>
 		</section>
 
-		<!-- CTA Section -->
-		<section class="py-20 bg-gradient-to-br from-avoqado-green to-green-600">
-			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-				<h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
-					Toma decisiones basadas en datos
-				</h2>
-				<p class="text-xl text-white/90 mb-8">
-					Descubre insights que no sabías que existían en tu negocio
-				</p>
-				<a href="/#contact" class="inline-block px-8 py-4 bg-black text-white text-lg font-semibold rounded-full hover:bg-gray-900 transition-colors">
-					Solicitar demo gratuita
-				</a>
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 4. GESTION DE TERMINALES                    -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Terminal management mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="text-[11px] text-gray-500 mb-4">Terminales — 4 activas</div>
+						<div class="space-y-2 mb-4">
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-2 h-2 rounded-full bg-avoqado-green"></div>
+									<div>
+										<span class="text-xs text-white">PAX A910S — Caja 1</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">v3.2.1</span>
+											<span class="text-[9px] text-gray-600">98% bat</span>
+											<span class="text-[9px] text-avoqado-green">Online</span>
+										</div>
+									</div>
+								</div>
+								<span class="text-[9px] px-2 py-0.5 rounded" style={`background: oklch(0.18 0.02 240); color: ${BLUE};`}>Comandos</span>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-2 h-2 rounded-full bg-avoqado-green"></div>
+									<div>
+										<span class="text-xs text-white">PAX A910S — Caja 2</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">v3.2.1</span>
+											<span class="text-[9px] text-gray-600">72% bat</span>
+											<span class="text-[9px] text-avoqado-green">Online</span>
+										</div>
+									</div>
+								</div>
+								<span class="text-[9px] px-2 py-0.5 rounded" style="background: oklch(0.16 0.005 155); color: oklch(0.40 0.005 155);">Comandos</span>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style={`background: oklch(0.16 0.005 155); border: 1px solid oklch(0.25 0.03 75);`}>
+								<div class="flex items-center gap-3">
+									<div class="w-2 h-2 rounded-full" style={`background: ${AMBER};`}></div>
+									<div>
+										<span class="text-xs text-white">Ingenico D220 — Terraza</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px]" style={`color: ${AMBER};`}>v3.1.0 — Update disponible</span>
+										</div>
+									</div>
+								</div>
+								<span class="text-[9px] px-2 py-0.5 rounded bg-avoqado-green text-black font-medium">Actualizar</span>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-2 h-2 rounded-full" style={`background: ${RED};`}></div>
+									<div>
+										<span class="text-xs text-white">PAX A920 — Sucursal Norte</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px]" style={`color: ${RED};`}>Offline hace 23 min</span>
+										</div>
+									</div>
+								</div>
+								<span class="text-[9px] px-2 py-0.5 rounded" style={`background: oklch(0.15 0.02 25); color: ${RED};`}>Reiniciar</span>
+							</div>
+						</div>
+						<!-- Command options -->
+						<div class="grid grid-cols-4 gap-1.5">
+							<div class="rounded-lg p-2 text-center" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[8px] text-gray-500">Lock</span>
+							</div>
+							<div class="rounded-lg p-2 text-center" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[8px] text-gray-500">Restart</span>
+							</div>
+							<div class="rounded-lg p-2 text-center" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[8px] text-gray-500">OTA Update</span>
+							</div>
+							<div class="rounded-lg p-2 text-center" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[8px] text-gray-500">Sync</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Control remoto</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Tus terminales, desde cualquier lugar.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							Monitoreo en tiempo real con heartbeat cada 5 minutos. Comandos remotos, actualizaciones OTA, geofencing, comandos programados y auditoria completa de cada accion.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Comandos remotos:</span> Lock, Unlock, Restart, Shutdown, Factory reset, Sync forzado</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">OTA Updates:</span> Force update, rollback, install version especifica</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Geofencing:</span> Reglas por ubicacion, alertas si terminal sale de zona</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${INDIGO};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Cron:</span> Comandos programados (restart diario a las 3am)</span>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</section>
-	</main>
-	<Footer />
-</Layout>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 5. CRM + LEALTAD                            -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Clientes</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Conoce a quien te compra.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Base de datos de clientes con historial completo, grupos automaticos, programa de lealtad basado en puntos, tags personalizados y tracking de visitas. Cada interaccion — ordenes, cupones, reviews — queda registrada.
+						</p>
+						<div class="space-y-3">
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Grupos automaticos</h3>
+								<p class="text-sm text-gray-500">VIP, frecuentes, inactivos — reglas de auto-asignacion basadas en gasto y visitas.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Programa de lealtad</h3>
+								<p class="text-sm text-gray-500">Puntos por compra, canje por productos o descuentos, niveles de membresia.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Tags y notas</h3>
+								<p class="text-sm text-gray-500">"Alergico a nueces", "Cumple en diciembre", "Prefiere mesa terraza" — cualquier dato relevante.</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- CRM mockup -->
+					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="text-[11px] text-gray-500 mb-4">Cliente — Perfil</div>
+						<!-- Client header -->
+						<div class="flex items-center gap-3 mb-4 p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+							<div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold" style={`background: oklch(0.20 0.02 240); color: ${BLUE};`}>JG</div>
+							<div class="flex-1">
+								<div class="text-sm text-white font-medium">Juan Garcia</div>
+								<div class="text-[10px] text-gray-500">VIP — 142 visitas — $48,200 total</div>
+							</div>
+							<div class="text-right">
+								<div class="text-sm text-avoqado-green font-medium">2,840 pts</div>
+								<div class="text-[9px] text-gray-600">Nivel Gold</div>
+							</div>
+						</div>
+						<!-- Tags -->
+						<div class="flex flex-wrap gap-1.5 mb-4">
+							<span class="text-[9px] px-2 py-1 rounded-full" style={`background: oklch(0.18 0.02 240); color: ${BLUE};`}>VIP</span>
+							<span class="text-[9px] px-2 py-1 rounded-full" style="background: oklch(0.16 0.005 155); color: oklch(0.50 0.005 155);">Prefiere terraza</span>
+							<span class="text-[9px] px-2 py-1 rounded-full" style={`background: oklch(0.18 0.02 25); color: ${RED};`}>Alergico: nueces</span>
+							<span class="text-[9px] px-2 py-1 rounded-full" style="background: oklch(0.16 0.005 155); color: oklch(0.50 0.005 155);">Cumple: 15 dic</span>
+						</div>
+						<!-- History -->
+						<div class="space-y-1.5">
+							<div class="text-[10px] text-gray-600 mb-1">Historial reciente</div>
+							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(0.15 0.005 155);">
+								<span class="text-[10px] text-gray-300">Orden #1,247 — 4 items</span>
+								<span class="text-[10px] text-white">$685</span>
+							</div>
+							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(0.15 0.005 155);">
+								<span class="text-[10px] text-gray-300">Cupon canjeado: "2x1 Viernes"</span>
+								<span class="text-[10px] text-avoqado-green">-$95</span>
+							</div>
+							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(0.15 0.005 155);">
+								<span class="text-[10px] text-gray-300">Review 5 estrellas</span>
+								<span class="text-[10px]" style={`color: ${AMBER};`}>Google</span>
+							</div>
+							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(0.15 0.005 155);">
+								<span class="text-[10px] text-gray-300">Reservacion — 6 pax</span>
+								<span class="text-[10px]" style={`color: ${BLUE};`}>Confirmada</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 6. MENUMAKER                                -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Menu mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="text-[11px] text-gray-500 mb-4">MenuMaker — 7 tipos de producto</div>
+						<div class="space-y-2">
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${GREEN};`}>
+								<div>
+									<span class="text-xs text-white">Tacos al Pastor</span>
+									<span class="text-[9px] text-gray-600 block">Food & Beverage — 3 modificadores</span>
+								</div>
+								<span class="text-xs text-white">$95</span>
+							</div>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${BLUE};`}>
+								<div>
+									<span class="text-xs text-white">Corte de cabello</span>
+									<span class="text-[9px] text-gray-600 block">Appointment/Service — 45 min</span>
+								</div>
+								<span class="text-xs text-white">$250</span>
+							</div>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${INDIGO};`}>
+								<div>
+									<span class="text-xs text-white">Clase de Yoga</span>
+									<span class="text-[9px] text-gray-600 block">Class — 15/20 cupos</span>
+								</div>
+								<span class="text-xs text-white">$180</span>
+							</div>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${AMBER};`}>
+								<div>
+									<span class="text-xs text-white">Pack 10 clases</span>
+									<span class="text-[9px] text-gray-600 block">Credit Pack — 10 creditos</span>
+								</div>
+								<span class="text-xs text-white">$1,500</span>
+							</div>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style="background: oklch(0.16 0.005 155); border-left: 3px solid oklch(0.65 0.15 330);">
+								<div>
+									<span class="text-xs text-white">Noche VIP</span>
+									<span class="text-[9px] text-gray-600 block">Event — Ticket, 200 cupos</span>
+								</div>
+								<span class="text-xs text-white">$850</span>
+							</div>
+						</div>
+						<div class="mt-4 pt-3 border-t border-white/5">
+							<div class="text-[9px] text-gray-600">Tipos: Regular, Food & Bev, Service, Class, Event, Digital, Donation</div>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Productos</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							7 tipos de producto. Un solo catalogo.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							No importa si vendes tacos, cortes de cabello, clases de yoga o tickets de eventos — MenuMaker maneja todo. Categorias, modificadores, credit packs, importacion masiva y multi-menu por sucursal.
+						</p>
+						<div class="flex flex-wrap gap-2">
+							<span class="px-3 py-1.5 text-xs rounded-full border border-white/10 text-gray-400">Regular</span>
+							<span class="px-3 py-1.5 text-xs rounded-full border border-white/10 text-gray-400">Food & Bev</span>
+							<span class="px-3 py-1.5 text-xs rounded-full border border-white/10 text-gray-400">Servicio/Cita</span>
+							<span class="px-3 py-1.5 text-xs rounded-full border border-white/10 text-gray-400">Clase grupal</span>
+							<span class="px-3 py-1.5 text-xs rounded-full border border-white/10 text-gray-400">Evento</span>
+							<span class="px-3 py-1.5 text-xs rounded-full border border-white/10 text-gray-400">Digital</span>
+							<span class="px-3 py-1.5 text-xs rounded-full border border-white/10 text-gray-400">Donacion</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 7. NOTIFICACIONES + CORTES DE CAJA           -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+					<!-- Notificaciones -->
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Notificaciones</span>
+						<h2 class="text-3xl font-light tracking-tight text-black mb-4 leading-tight">
+							30+ alertas automaticas.
+						</h2>
+						<p class="text-gray-600 text-base leading-relaxed mb-6">
+							WhatsApp, email, push e in-app. Pago recibido, review negativa, inventario bajo, terminal desconectada, turno terminado — todo llega sin configurar nada.
+						</p>
+						<div class="space-y-2">
+							<div class="flex items-center gap-3 p-3 rounded-lg border border-black/5">
+								<div class="w-2 h-2 rounded-full bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-700">Pago de $547 recibido — Visa *4821</span>
+							</div>
+							<div class="flex items-center gap-3 p-3 rounded-lg border border-black/5">
+								<div class="w-2 h-2 rounded-full shrink-0" style={`background: ${RED};`}></div>
+								<span class="text-sm text-gray-700">Review negativa en Google — Mesa 3</span>
+							</div>
+							<div class="flex items-center gap-3 p-3 rounded-lg border border-black/5">
+								<div class="w-2 h-2 rounded-full shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-700">Stock bajo: Limon (12%), Queso (8%)</span>
+							</div>
+							<div class="flex items-center gap-3 p-3 rounded-lg border border-black/5">
+								<div class="w-2 h-2 rounded-full shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-700">Resumen diario: $18,450 en ventas</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Cortes de caja -->
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Caja</span>
+						<h2 class="text-3xl font-light tracking-tight text-black mb-4 leading-tight">
+							Cortes sin sorpresas.
+						</h2>
+						<p class="text-gray-600 text-base leading-relaxed mb-6">
+							El sistema sabe cuanto deberia haber en caja. Tu cuentas cuanto hay. Si no cuadra, se detecta al instante con auditoria por empleado.
+						</p>
+						<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+							<div class="flex items-center justify-between mb-3">
+								<span class="text-[11px] text-gray-500">Corte — Turno vespertino</span>
+								<span class="text-[9px] text-avoqado-green">Cuadrado</span>
+							</div>
+							<div class="space-y-2">
+								<div class="flex justify-between p-2 rounded" style="background: oklch(0.15 0.005 155);">
+									<span class="text-[10px] text-gray-400">Efectivo esperado</span>
+									<span class="text-[10px] text-white">$4,230.00</span>
+								</div>
+								<div class="flex justify-between p-2 rounded" style="background: oklch(0.15 0.005 155);">
+									<span class="text-[10px] text-gray-400">Efectivo contado</span>
+									<span class="text-[10px] text-white">$4,230.00</span>
+								</div>
+								<div class="flex justify-between p-2 rounded" style="background: oklch(0.15 0.02 155);">
+									<span class="text-[10px] text-gray-400">Varianza</span>
+									<span class="text-[10px] text-avoqado-green">$0.00</span>
+								</div>
+								<div class="flex justify-between p-2 rounded" style="background: oklch(0.15 0.005 155);">
+									<span class="text-[10px] text-gray-400">Deposito</span>
+									<span class="text-[10px] text-white">Caja fuerte</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- KEY NUMBERS                                 -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+					<div class="border-t pt-6" style={`border-color: ${BLUE};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">31</div>
+						<div class="text-sm text-gray-500">Modulos integrados</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${BLUE};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">35+</div>
+						<div class="text-sm text-gray-500">Tipos de negocio</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${BLUE};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">30+</div>
+						<div class="text-sm text-gray-500">Alertas automaticas</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${BLUE};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">7</div>
+						<div class="text-sm text-gray-500">Tipos de producto</div>
+					</div>
+				</div>
+
+				<!-- Additional modules -->
+				<div class="max-w-2xl mb-10">
+					<h2 class="text-2xl md:text-3xl font-light tracking-tight text-white leading-tight mb-2">
+						Y tambien incluye...
+					</h2>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-6">
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1">Inventario FIFO</h3>
+						<p class="text-gray-600 text-sm">Materias primas, recetas, alertas, lotes con expiracion, ordenes de compra a proveedores.</p>
+					</div>
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1">Personal + Comisiones</h3>
+						<p class="text-gray-600 text-sm">9 roles, 50+ permisos, comisiones escalonadas con milestones, turnos y asistencia.</p>
+					</div>
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1">Reservaciones</h3>
+						<p class="text-gray-600 text-sm">Calendario, waitlist, booking publico, depositos Stripe, Google Reserve, clases grupales.</p>
+					</div>
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1">Reviews</h3>
+						<p class="text-gray-600 text-sm">Google, TripAdvisor, Facebook, Yelp — sync automatico, alertas de reviews negativas, respuestas.</p>
+					</div>
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1">Training</h3>
+						<p class="text-gray-600 text-sm">Modulos de capacitacion con videos y quizzes. Tracking de progreso por empleado.</p>
+					</div>
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1">White-Label</h3>
+						<p class="text-gray-600 text-sm">Tu marca, tus colores, features seleccionados. Presets para Telecom, Joyeria, Retail.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- CTA                                         -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-avoqado-dark-surface border-t border-white/5">
+			<div class="max-w-3xl mx-auto text-center">
+				<h2 class="text-3xl md:text-5xl font-light tracking-tight text-white mb-8">
+					Prueba los 31 modulos.
+				</h2>
+				<p class="text-lg text-gray-500 mb-12 max-w-xl mx-auto">
+					Demo interactiva con datos reales. Sin tarjeta, sin compromiso. Explora cada modulo a tu ritmo.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 text-lg" style={`background: ${BLUE};`}>
+						Probar demo gratis
+					</a>
+					<a href="/contact" class="px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200 text-lg">
+						Hablar con ventas
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<Footer />
+	</body>
+</html>

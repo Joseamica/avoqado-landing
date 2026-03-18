@@ -38,7 +38,6 @@ export default function NavigationMenu() {
   };
   
   const openSearch = () => {
-    console.log('Dispatching open-global-search');
     window.dispatchEvent(new CustomEvent('open-global-search'));
   };
 

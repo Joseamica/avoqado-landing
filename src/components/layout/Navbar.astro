@@ -13,7 +13,7 @@ const { position = 'fixed', transparentOnTop = false } = Astro.props;
 const baseClasses = "top-0 left-0 right-0 z-[300] transition-all duration-300";
 
 // Classes for the "solid/scrolled" state
-const solidClasses = "bg-[#0A0A0A] md:bg-black/80 md:backdrop-blur-md border-b border-gray-800";
+const solidClasses = "bg-avoqado-dark-bg md:bg-black/80 md:backdrop-blur-md border-b border-gray-800";
 
 // Classes for the "transparent/top" state
 const transparentClasses = "bg-transparent border-transparent";
@@ -100,12 +100,9 @@ const initialClasses = transparentOnTop ? transparentClasses : solidClasses;
         const searchTrigger = document.getElementById('global-search-trigger');
         if (searchTrigger) {
             searchTrigger.addEventListener('click', () => {
-                console.log('Navbar: Search trigger clicked');
                 const event = new CustomEvent('open-global-search');
                 document.dispatchEvent(event);
             });
-        } else {
-            console.error('Navbar: Search trigger not found');
         }
 
         // Run once on load

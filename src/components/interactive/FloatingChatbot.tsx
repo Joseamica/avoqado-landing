@@ -109,7 +109,7 @@ const SUGGESTED_QUESTIONS = [
 
 const WELCOME_MESSAGE: Message = {
   id: 'welcome',
-  content: '¡Hola! 👋 Pregúntame lo que quieras sobre Avoqado: qué hace la plataforma, precios, funcionalidades, sectores, y más.',
+  content: '¡Hola! Preguntame lo que quieras sobre Avoqado: que hace la plataforma, precios, funcionalidades, sectores, y mas.',
   role: 'assistant',
   source: 'local'
 };
@@ -570,7 +570,7 @@ export default function FloatingChatbot() {
                   >
                     {renderMessageContent(msg.content, msg.role)}
                     {msg.role === 'assistant' && msg.source === 'ai' && (
-                      <span className="block text-[10px] text-gray-500 mt-1 opacity-60">✨ IA</span>
+                      <span className="block text-[10px] text-gray-500 mt-1 opacity-60">IA</span>
                     )}
                   </div>
                 </motion.div>

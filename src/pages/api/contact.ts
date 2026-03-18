@@ -25,8 +25,6 @@ export const POST: APIRoute = async ({ request }) => {
 		const smtpHost = import.meta.env.SMTP_HOST || 'smtpout.secureserver.net';
 		const smtpPort = parseInt(import.meta.env.SMTP_PORT || '587');
 
-		console.log('Env check - User exists:', !!smtpUser, 'Pass exists:', !!smtpPass);
-
 		if (!smtpUser || !smtpPass) {
 			console.error('Missing SMTP credentials in environment variables');
 			return new Response(

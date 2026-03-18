@@ -92,14 +92,23 @@ import HeroCarousel from '../components/interactive/HeroCarousel.tsx'
 ## Design System
 
 ### Fonts
-- **Primary:** Urbanist (body text, UI elements)
-- **Display:** Baby Doll (hero titles, special headings)
-  - Use `font-baby` Tailwind class
+- **Primary:** DM Sans — used for ALL text: headings, body, UI elements
+  - Headings: light/medium weight (300-500), large sizes, tight tracking — Square-style
+  - Body: regular weight (400), relaxed line-height
+- **Editorial accent:** Playfair Display italic — used sparingly for special editorial moments only
+- **Brand mark only:** Baby Doll (`font-baby` class) — reserved EXCLUSIVELY for the Avoqado logo/brand mark. NEVER use for page headings or section titles.
   - Font files: `/public/fonts/Baby Doll.otf`, `/public/fonts/Baby Doll.ttf`
-  - Does NOT force uppercase
+- **DO NOT USE:** Urbanist (legacy, not loaded), Inter (removed from primary use)
 
-### Colors
-- Brand green: `#69E185` (use `text-avoqado-green` class)
+### Colors — OKLCH System (defined in global.css)
+- **Primary green**: `oklch(0.78 0.18 155)` — 5 shades (light, base, muted, dark, subtle)
+- **Neutrals**: Green-tinted (hue 155, chroma 0.005-0.007) — 11 stops from 950 to 50
+- **Surfaces**: 4 elevation levels (surface-0 through surface-3)
+- **Semantic**: success (green), error (coral), warning (amber), info (blue)
+- **Product accents**: dashboard (blue 240), tpv (green 155), pos (indigo 290), qr (amber 75)
+- Use Tailwind classes: `text-avoqado-green`, `bg-avoqado-dark-bg`, `bg-avoqado-dark-surface`
+- For new elements, prefer CSS custom properties: `var(--color-neutral-600)`, `var(--color-surface-2)`
+- NEVER use pure gray (chroma 0) or pure black (#000) — always tint toward hue 155
 
 ### Styling
 - Tailwind CSS 4.x utility classes
@@ -264,81 +273,57 @@ When adding new images, follow this pattern and create subdirectories as needed.
 
 ## Scrollytelling Animation Pattern
 
-**CRITICAL:** When creating scroll-linked animations, follow this exact pattern used throughout the landing page.
+**CRITICAL:** Full documentation in [`docs/scrollytelling-guide.md`](docs/scrollytelling-guide.md). Read it before creating or modifying any scroll-linked animation.
 
-### Required Structure
+### Quick Reference
 
 ```tsx
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+const containerRef = useRef<HTMLDivElement>(null);
+const { scrollYProgress } = useScroll({
+  target: containerRef,
+  offset: ["start start", "end end"]  // ALWAYS this exact offset
+});
+const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
 
-export default function ScrollytellingComponent() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // 1. Setup scroll tracking
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]  // IMPORTANT: This exact offset
-  });
-
-  // 2. Create transforms linked to scroll progress (0 to 1)
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
-  const titleY = useTransform(scrollYProgress, [0, 0.15], [50, 0]);
-
-  // Staggered animations for multiple items
-  const card0Y = useTransform(scrollYProgress, [0.2, 0.35], [80, 0]);
-  const card1Y = useTransform(scrollYProgress, [0.25, 0.4], [80, 0]);
-  const card2Y = useTransform(scrollYProgress, [0.3, 0.45], [80, 0]);
-
-  return (
-    // 3. TALL container (150vh-200vh) for scroll space
-    <div ref={containerRef} className="relative h-[180vh] bg-black z-0">
-
-      {/* 4. STICKY viewport that stays in view while scrolling */}
-      <div className="sticky top-0 h-screen overflow-hidden flex items-center">
-
-        {/* 5. Animated content using style prop with transforms */}
-        <motion.div style={{ opacity: titleOpacity, y: titleY }}>
-          <h2>Title animates on scroll</h2>
-        </motion.div>
-
-        {cards.map((card, i) => (
-          <motion.div
-            key={i}
-            style={{ y: cardTransforms[i].y, opacity: cardTransforms[i].opacity }}
-          >
-            {card.content}
-          </motion.div>
-        ))}
-
-      </div>
-    </div>
-  );
-}
+<div ref={containerRef} className="relative h-[200vh] bg-black">
+  <div className="sticky top-16 h-[calc(100vh-4rem)] flex items-center justify-center">
+    <motion.div style={{ opacity }}>Content</motion.div>
+  </div>
+</div>
 ```
 
 ### Key Rules
 
-1. **Container height**: Must be tall (`h-[150vh]` to `h-[200vh]`) to provide scroll space
-2. **Sticky inner div**: `sticky top-0 h-screen` keeps content visible while scrolling
-3. **useScroll offset**: Always use `["start start", "end end"]` for predictable behavior
-4. **useTransform ranges**: Map scroll progress (0-1) to animation values
-5. **Stagger animations**: Offset the scroll ranges for sequential reveals (e.g., 0.2-0.35, 0.25-0.4, 0.3-0.45)
+1. **framer-motion MUST be pinned to `12.23.26`** — newer versions have WAAPI ScrollTimeline bug that breaks `useScroll({ target })`
+2. **Container**: `relative h-[Xvh]` — height 150-300vh. More height = slower/cinematic scroll
+3. **Sticky viewport**: `sticky top-16 h-[calc(100vh-4rem)]` — stays visible below navbar
+4. **useScroll offset**: Always `["start start", "end end"]`
+5. **Stagger**: Offset ranges by +0.015 to +0.05 per item for sequential reveals
+6. **Never use** `whileInView` for scroll-linked animations (only triggers once)
+7. **Never use** `overflow: hidden` on body for modals (breaks scroll calculations)
+8. **SVG animate={{ d }}**: Always add `initial={false}` to prevent `<path d="undefined">` errors
 
-### Examples in Codebase
+### Existing Scrollytelling Components
 
-- `SquareHero.tsx` - Hero with grid animation
-- `ChatbotCTA.tsx` - Input expansion animation
-- `PaymentRouting.tsx` - Product grid with connections
-- `UnifiedPlatform.tsx` - Radial diagram with electric flow
-- `EarlyAccessCTA.tsx` - Staggered card reveals
+| Component | Height | Key Animation |
+|---|---|---|
+| `SquareHero.tsx` | 180vh | Video shrinks to grid, items stagger in |
+| `ChatbotCTA.tsx` | 300vh | Title, input expands, suggestion chips |
+| `PaymentRouting.tsx` | 300vh | Cards stagger, connection lines draw |
+| `UnifiedPlatform.tsx` | 300vh | Radial diagram with electric connections |
+| `EarlyAccessCTA.tsx` | 200vh | Counter, benefits, CTA sequential reveal |
+| `FAQ.tsx` | 300vh | Text writes in, arrow draws, circle scribbles |
 
-### Common Mistakes
+### Animation Recipes (see full guide for code)
 
-**DON'T** use `whileInView` for scroll-linked animations - it only triggers once
-**DON'T** use `min-h-screen` - not enough scroll space for animations
-**DON'T** forget the `sticky` class on the inner viewport
-**DON'T** use `offset: ["start end", "end start"]` - this tracks viewport entry/exit, not scroll-through
+- **Fade + Slide Up** — opacity + y transform
+- **Staggered List** — index-based offset per item
+- **Width Expansion** — width + scale + opacity
+- **SVG Path Drawing** — pathLength + opacity
+- **Text Writing Reveal** — width mask over hidden text
+- **Blur Fade (Cinematic)** — opacity + y + filter blur chain
+- **Animated Counter** — useMotionValue + useSpring
+- **Hero Shrink-to-Grid** — scale + x + y + borderRadius
 
 ## Performance & Bundle Size
 
@@ -346,6 +331,36 @@ export default function ScrollytellingComponent() {
 - Import images from `src/assets/` (processed and optimized by Astro)
 - Keep JavaScript minimal - Astro ships 0 KB by default
 - Test performance on real devices
+
+## Design Context
+
+### Users
+Venue owners and operators across Mexico — restaurants, hotels, gyms, retail stores, and entertainment businesses. They are business-focused, not technical. They visit avoqado.io to evaluate a payments and management platform. Their context: they're busy, often on mobile, comparing options, and need to quickly understand what Avoqado does and why it's better than their current setup.
+
+### Brand Personality
+**Modern, Premium, Approachable**
+
+- **Modern**: Dark-first aesthetic, scroll-driven animations, cinematic product reveals
+- **Premium**: Stripe/Square-tier polish. Every pixel earns trust. No shortcuts, no stock photos, no template energy
+- **Approachable**: Warm enough for a restaurant owner who isn't technical. Clear language (Spanish), intuitive hierarchy, never intimidating
+
+### Emotional Goals
+1. **Excitement & possibility** — "This will transform how I run my business"
+2. **Confidence & trust** — "This is serious, reliable technology"
+3. **Relief & simplicity** — "Finally, something that just works"
+
+### Design Principles
+1. **Show, don't tell** — Demonstrate through animation and real imagery, not text blocks
+2. **Cinematic scroll** — Scroll-linked animations build narrative. Each section is a scene.
+3. **Premium simplicity** — Every element earns its place. Generous spacing, clear hierarchy, no clutter.
+4. **Trust through craft** — Pixel-perfect alignment, smooth 60fps animations, consistent tokens.
+5. **Accessible premium** — WCAG-compliant contrast, focus-visible styles, reduced-motion support.
+
+### Anti-References
+- Generic SaaS templates with stock photos
+- Enterprise/corporate stiff blue-gray software
+- Overly playful/cartoon with mascots
+- Cluttered/information-heavy layouts
 
 ## Related Projects
 
