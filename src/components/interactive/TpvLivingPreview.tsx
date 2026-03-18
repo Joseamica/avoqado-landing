@@ -50,7 +50,7 @@ export default function TpvLivingPreview({ scrollYProgress }: Props) {
 
   return (
     <div className="flex justify-center w-full">
-      <div className="relative w-full max-w-[600px] md:max-w-[700px]">
+      <div className="relative w-full max-w-[420px] md:max-w-[480px]">
 
         {/* Labels — above the terminal */}
         <div className="absolute -top-3 left-0 right-0 z-30 flex justify-center pointer-events-none">
@@ -75,8 +75,8 @@ export default function TpvLivingPreview({ scrollYProgress }: Props) {
         {/* Real PAX A910S image as frame */}
         <div className="relative">
           <img
-            src="/pax-no-screen.png"
-            alt="Terminal PAX A910S"
+            src="/pax-frontal.png"
+            alt="Terminal PAX A920 Pro"
             className="w-full h-auto relative z-[15] pointer-events-none select-none"
             draggable="false"
           />
@@ -85,11 +85,11 @@ export default function TpvLivingPreview({ scrollYProgress }: Props) {
           <div className="absolute z-[5] overflow-hidden"
             style={{
               top: '25%',
-              left: '29%',
-              width: '28%',
-              height: '58.5%',
+              left: '31.5%',
+              width: '37%',
+              height: '75%',
               background: '#0A0A0A',
-              borderRadius: '3px',
+              borderRadius: '4px',
             }}
           >
             <div className="relative w-full h-full p-2 sm:p-2.5">
