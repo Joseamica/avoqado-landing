@@ -82,5 +82,8 @@ export default defineConfig({
     sitemap(),
     sentry()
   ],
-  adapter: cloudflare()
+  adapter: cloudflare({
+    imageService: 'passthrough',
+    platformProxy: { enabled: false },
+  })
 });
