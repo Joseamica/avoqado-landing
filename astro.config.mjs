@@ -54,7 +54,7 @@ export default defineConfig({
   site: 'https://avoqado.io',
   output: 'server',
   vite: {
-    plugins: [tailwindcss(), reactSsrSingletonPlugin()],
+    plugins: [tailwindcss()],
     resolve: {
       dedupe: ['react', 'react-dom'],
     },
@@ -82,7 +82,5 @@ export default defineConfig({
     sitemap(),
     sentry()
   ],
-  adapter: cloudflare({
-    imageService: 'passthrough',
-  })
+  adapter: cloudflare()
 });
