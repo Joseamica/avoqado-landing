@@ -1,18 +1,26 @@
 /**
- * Post-build script: replaces the Astro-generated wrangler.json with a
- * minimal Pages-compatible config. Pages V3 only wants pages_build_output_dir
- * and rejects Worker fields like main, rules, assets, no_bundle.
+ * Post-build: clean the Astro-generated dist/server/wrangler.json
+ *
+ * Pages V3 redirects from our root wrangler.jsonc to this file.
+ * Astro generates fields that Pages rejects:
+ * - "ASSETS" binding (reserved name)
+ * - "kv_namespaces" without IDs
+ * - "triggers" empty object
+ * - Various unsupported fields
+ *
+ * We keep ONLY what Astro's worker needs to run.
  */
-import { writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 
-const configPath = 'dist/server/wrangler.json';
+const path = 'dist/server/wrangler.json';
+const config = JSON.parse(readFileSync(path, 'utf-8'));
 
-const pagesConfig = {
-  name: "avoqado-landing",
-  pages_build_output_dir: ".",
-  compatibility_date: "2025-03-14",
-  compatibility_flags: ["nodejs_compat"],
-};
+writeFileSync(path, JSON.stringify({
+  name: config.name,
+  main: config.main,
+  compatibility_date: config.compatibility_date,
+  compatibility_flags: config.compatibility_flags,
+  no_bundle: config.no_bundle,
+}, null, 2));
 
-writeFileSync(configPath, JSON.stringify(pagesConfig, null, 2));
-console.log('✓ Replaced dist/server/wrangler.json with Pages V3 config');
+console.log('✓ Cleaned dist/server/wrangler.json');
