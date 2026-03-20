@@ -12,11 +12,11 @@ const products = [
 ];
 
 const industries = [
-  { name: 'Restaurantes', desc: 'Full-service, quick-service, bares, cafes', href: '/restaurants', icon: 'utensils' },
-  { name: 'Retail', desc: 'Tiendas, boutiques, farmacias, electronica', href: '/industrias/retail', icon: 'store' },
-  { name: 'Servicios', desc: 'Salones, spas, clinicas, gimnasios', href: '/industrias/traje-a-la-medida', icon: 'scissors' },
-  { name: 'Hospedaje', desc: 'Hoteles, hostales, resorts', href: '/industrias/hospedaje', icon: 'bed' },
-  { name: 'Entretenimiento', desc: 'Cines, eventos, centros de juegos', href: '/industrias/entretenimiento', icon: 'ticket' },
+  { name: 'Restaurantes y Bares', desc: 'Full-service, quick-service, cafeterias, food trucks', href: '/restaurants', icon: 'utensils' },
+  { name: 'Retail', desc: 'Tiendas, boutiques, farmacias, conveniencia', href: '/retail', icon: 'store' },
+  { name: 'Belleza y Bienestar', desc: 'Salones, spas, barberias, esteticas', href: '/beauty', icon: 'scissors' },
+  { name: 'Servicios', desc: 'Consultorios, gimnasios, talleres, veterinarias', href: '/services', icon: 'briefcase' },
+  { name: 'Entretenimiento', desc: 'Cines, antros, eventos, salones de fiestas', href: '/entertainment', icon: 'ticket' },
 ];
 
 const resources = [
@@ -34,6 +34,7 @@ function IndustryIcon({ type, className }: { type: string; className?: string })
     case 'utensils': return <svg {...props} className={cn}><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>;
     case 'store': return <svg {...props} className={cn}><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/></svg>;
     case 'scissors': return <svg {...props} className={cn}><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>;
+    case 'briefcase': return <svg {...props} className={cn}><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>;
     case 'bed': return <svg {...props} className={cn}><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>;
     case 'ticket': return <svg {...props} className={cn}><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>;
     case 'tag': return <svg {...props} className={cn}><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><path d="M7 7h.01"/></svg>;
@@ -341,10 +342,10 @@ function IndustriesDropdown() {
       <div className="col-span-4">
         <div className="rounded-2xl p-6 h-full" style={{ background: 'oklch(0.97 0.005 155)' }}>
           <div className="text-[10px] uppercase tracking-widest text-avoqado-green font-semibold mb-3">Multi-sector</div>
-          <h4 className="text-base font-semibold text-gray-900 mb-2">No solo restaurantes</h4>
-          <p className="text-sm text-gray-600 leading-relaxed mb-4">Avoqado funciona para retail, servicios, hospedaje y entretenimiento. Modulos especializados por industria.</p>
-          <a href="/restaurants" className="text-sm font-semibold text-avoqado-green hover:underline inline-flex items-center gap-1">
-            Ver caso restaurantes <ArrowRight className="w-3.5 h-3.5" />
+          <h4 className="text-base font-semibold text-gray-900 mb-2">35+ tipos de negocio</h4>
+          <p className="text-sm text-gray-600 leading-relaxed mb-4">Un ecosistema que se adapta a tu industria. Modulos especializados, flujos personalizados, y soporte para operaciones unicas.</p>
+          <a href="/traje-a-la-medida" className="text-sm font-semibold text-avoqado-green hover:underline inline-flex items-center gap-1">
+            Traje a la medida <ArrowRight className="w-3.5 h-3.5" />
           </a>
         </div>
       </div>

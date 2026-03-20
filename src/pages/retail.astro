@@ -1,103 +1,900 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
 import Navbar from '../components/layout/Navbar.astro';
 import Footer from '../components/layout/Footer.astro';
-import IndustryHero from '../components/sections/IndustryHero.astro';
-import CategoryGrid from '../components/sections/CategoryGrid.astro';
-import CategoryPills from '../components/interactive/CategoryPills';
-import FeatureAccordion from '../components/interactive/FeatureAccordion';
+import FloatingChatbot from '../components/interactive/FloatingChatbot';
 
-// Hero image - high quality lifestyle shot like Square
-const heroImage = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80";
-
-// Retail categories - Based on actual VenueTypes in Avoqado
-const categories = [
-    { name: "Ropa", image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400&q=80", href: "#features" },
-    { name: "Hogar y regalos", image: "https://images.unsplash.com/photo-1513519245088-0e12902e35a6?w=400&q=80", href: "#features" },
-    { name: "Vino y licor", image: "https://images.unsplash.com/photo-1516594915307-8f71f0f4b693?w=400&q=80", href: "#features" },
-    { name: "Comestibles", image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&q=80", href: "#features" },
-    { name: "Plantas y jardín", image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80", href: "#features" }
-];
-
-// Sub-category pills - Real VenueTypes from avoqado-server
-const subcategories = [
-    "Artículos deportivos", "Artesanías y manualidades", "Para todos los vendedores",
-    "Artículos de belleza", "Tiendas de mascotas", "Librerías", "Joyas",
-    "Comida especializada", "Tiendas de música"
-];
-
-// Feature accordion items - COMPLETE Avoqado features
-const features = [
-    {
-        title: "Acepta pagos",
-        description: "Acepta cualquier tipo de pago principal con un TPV diseñado para tiendas. Cada venta se sincroniza en todas tus sucursales.",
-        image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80"
-    },
-    {
-        title: "Administra el inventario",
-        description: "Sistema FIFO para rotación óptima. Alertas de bajo stock, auto-reorden configurable, y órdenes de compra integradas con proveedores.",
-        image: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&q=80"
-    },
-    {
-        title: "Vende en cualquier lugar",
-        description: "App para iOS y Android. Revisa ventas, recibe notificaciones push, y gestiona tu equipo. Todo desde tu bolsillo.",
-        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80"
-    },
-    {
-        title: "Crece como quieras",
-        description: "Programa de lealtad integrado, comisiones automáticas para empleados, y chatbot con IA para analizar tu negocio.",
-        image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80"
-    }
-];
+const ACCENT = '#69E185';
+const BLUE = 'oklch(0.72 0.14 240)';
+const AMBER = 'oklch(0.78 0.14 75)';
+const RED = 'oklch(0.65 0.20 25)';
 ---
 
-<Layout title="Avoqado para Retail | Soluciones para Tiendas">
-  <body class="bg-white m-0 p-0 w-full">
-    <Navbar position="fixed" transparentOnTop={true} />
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Avoqado para Retail | Gestion integral para tiendas</title>
+		<meta name="description" content="Plataforma de gestion para tiendas: inventario FIFO, punto de venta, multi-sucursal, lealtad y e-commerce. Para ropa, farmacias, electronica, mascotas y mas." />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+	</head>
+	<body class="bg-black m-0 p-0 w-full">
+		<Navbar position="fixed" transparentOnTop={true} />
 
-    <!-- Hero -->
-    <IndustryHero 
-        title="Soluciones personalizadas para tiendas"
-        heroImage={heroImage}
-    />
 
-    <!-- Category Grid -->
-    <div class="opacity-0 translate-y-10 transition-all duration-700 ease-out" data-animate-on-scroll>
-        <CategoryGrid 
-            title="Creado para todo tipo de productos locales"
-            categories={categories}
-        />
-    </div>
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- HERO                                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="min-h-screen flex items-center pt-24 md:pt-32 pb-16 px-6">
+			<div class="max-w-[1400px] mx-auto w-full">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+					<!-- Text -->
+					<div>
+						<div class="flex items-center gap-3 mb-6">
+							<span class="text-5xl font-light text-white/10">R</span>
+							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${ACCENT};`}>Avoqado Retail</span>
+						</div>
+						<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-white mb-8">
+							Vende mas.<br/>Gestiona menos.
+						</h1>
+						<p class="text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-10">
+							Inventario, personal, ventas y clientes en una sola plataforma. Para tiendas de ropa, farmacias, electronica, mascotas, librerias, joyerias y mas.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4">
+							<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${ACCENT};`}>
+								Probar demo gratis
+							</a>
+							<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200">
+								Hablar con ventas
+							</a>
+						</div>
+					</div>
 
-    <!-- Category Pills -->
-    <CategoryPills client:visible categories={subcategories} />
+					<!-- Stripe-style floating mockups with depth -->
+					<div class="hidden lg:block relative" style="min-height: 520px;">
+						<!-- Subtle gradient glow behind mockups -->
+						<div class="absolute inset-0 -inset-x-10" style="background: radial-gradient(ellipse at 60% 40%, oklch(0.20 0.06 155) 0%, transparent 60%); filter: blur(40px);"></div>
 
-    <!-- Feature Accordion -->
-    <div id="features">
-        <FeatureAccordion client:visible features={features} />
-    </div>
+						<!-- LAYER 1 (back): Dashboard analytics panel — rotated, partially hidden -->
+						<div class="absolute top-0 right-0 w-[320px] rounded-2xl p-4" style="background: oklch(0.10 0.005 155); border: 1px solid oklch(0.18 0.005 155); box-shadow: 0 20px 60px rgba(0,0,0,0.4); transform: rotate(2deg) translateX(30px);">
+							<div class="flex items-center justify-between mb-3">
+								<span class="text-[10px] text-white font-medium">Dashboard — Hoy</span>
+								<span class="text-[8px]" style="color: oklch(0.50 0.005 155);">Mar 19, 2026</span>
+							</div>
+							<div class="flex gap-2 mb-3">
+								<div class="flex-1 p-2.5 rounded-lg" style="background: oklch(0.14 0.005 155);">
+									<div class="text-[7px]" style="color: oklch(0.50 0.005 155);">Ventas hoy</div>
+									<div class="text-sm font-semibold" style={`color: ${ACCENT};`}>$47,280</div>
+									<div class="text-[7px]" style={`color: ${ACCENT};`}>+18% vs ayer</div>
+								</div>
+								<div class="flex-1 p-2.5 rounded-lg" style="background: oklch(0.14 0.005 155);">
+									<div class="text-[7px]" style="color: oklch(0.50 0.005 155);">Transacciones</div>
+									<div class="text-sm font-semibold text-white">84</div>
+									<div class="text-[7px]" style="color: oklch(0.50 0.005 155);">Ticket prom: $563</div>
+								</div>
+							</div>
+							<div class="rounded-lg p-2.5" style="background: oklch(0.14 0.005 155);">
+								<div class="text-[7px] mb-2" style="color: oklch(0.50 0.005 155);">Ventas por hora</div>
+								<div class="flex items-end gap-1 h-[50px]">
+									{[15,25,40,65,55,80,70,90,60,45,30,20].map((h, i) => (
+										<div class="flex-1 rounded-t" style={`height: ${h}%; background: ${ACCENT}; opacity: ${0.3 + i * 0.05};`}></div>
+									))}
+								</div>
+							</div>
+						</div>
 
-    <Footer />
+						<!-- LAYER 2 (mid): Inventory alert — small floating card -->
+						<div class="absolute top-[280px] right-[20px] w-[200px] rounded-xl p-3 z-10" style="background: oklch(0.10 0.005 155); border: 1px solid oklch(0.65 0.20 25 / 0.3); box-shadow: 0 12px 40px rgba(0,0,0,0.5); transform: rotate(-1deg);">
+							<div class="flex items-center gap-2 mb-2">
+								<div class="w-2 h-2 rounded-full animate-pulse" style="background: oklch(0.65 0.20 25);"></div>
+								<span class="text-[9px] font-medium" style="color: oklch(0.65 0.20 25);">Alerta de stock</span>
+							</div>
+							<div class="space-y-1.5">
+								<div class="flex items-center justify-between">
+									<span class="text-[8px] text-white">Playera Basica M</span>
+									<span class="text-[8px] font-medium" style="color: oklch(0.65 0.20 25);">3 uds</span>
+								</div>
+								<div class="flex items-center justify-between">
+									<span class="text-[8px] text-white">Jeans Slim 30</span>
+									<span class="text-[8px] font-medium" style="color: oklch(0.78 0.14 75);">7 uds</span>
+								</div>
+							</div>
+							<div class="mt-2 text-center text-[8px] py-1 rounded-lg" style={`background: oklch(0.18 0.02 25); color: oklch(0.65 0.20 25);`}>Crear orden de compra</div>
+						</div>
 
-    <!-- Scroll Animation Script -->
-    <script>
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+						<!-- LAYER 3 (front): POS terminal — main, largest, slight tilt -->
+						<div class="absolute top-[40px] left-0 w-[360px] rounded-2xl p-4 z-20" style="background: oklch(0.09 0.005 155); border: 1px solid oklch(0.20 0.005 155); box-shadow: 0 25px 80px rgba(0,0,0,0.6), 0 0 0 1px oklch(0.15 0.005 155); transform: rotate(-1.5deg);">
+							<!-- POS header -->
+							<div class="flex items-center justify-between mb-3">
+								<div class="flex items-center gap-2">
+									<div class="w-5 h-5 rounded-md flex items-center justify-center" style={`background: oklch(0.16 0.02 155);`}>
+										<div class="w-2.5 h-2.5 rounded-sm" style={`background: ${ACCENT};`}></div>
+									</div>
+									<span class="text-[10px] text-white font-medium">Boutique Roma — POS</span>
+								</div>
+								<span class="text-[7px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 155); color: ${ACCENT};`}>En linea</span>
+							</div>
+							<!-- Category pills -->
+							<div class="flex gap-1 mb-3">
+								<div class="px-2.5 py-1 rounded-full text-[8px] font-medium text-black" style={`background: ${ACCENT};`}>Todo</div>
+								<div class="px-2.5 py-1 rounded-full text-[8px]" style="background: oklch(0.14 0.005 155); color: oklch(0.55 0.005 155);">Ropa</div>
+								<div class="px-2.5 py-1 rounded-full text-[8px]" style="background: oklch(0.14 0.005 155); color: oklch(0.55 0.005 155);">Accesorios</div>
+								<div class="px-2.5 py-1 rounded-full text-[8px]" style="background: oklch(0.14 0.005 155); color: oklch(0.55 0.005 155);">Calzado</div>
+							</div>
+							<!-- Product grid — 3x2 with realistic names -->
+							<div class="grid grid-cols-3 gap-1.5 mb-3">
+								{[
+									{ name: 'Playera Basica', price: '$349', sku: 'SKU-001', active: true },
+									{ name: 'Jeans Slim Fit', price: '$899', sku: 'SKU-045', active: true },
+									{ name: 'Sudadera Oversize', price: '$1,250', sku: 'SKU-078', active: false },
+									{ name: 'Gorra Logo MX', price: '$450', sku: 'SKU-112', active: false },
+									{ name: 'Tenis Runner Pro', price: '$2,190', sku: 'SKU-203', active: false },
+									{ name: 'Bolsa Tote Piel', price: '$780', sku: 'SKU-156', active: false },
+								].map((p) => (
+									<div class="rounded-lg p-2" style={`background: oklch(0.13 0.005 155); ${p.active ? `border: 1px solid ${ACCENT}40;` : 'border: 1px solid oklch(0.18 0.005 155);'}`}>
+										<div class="w-full aspect-square rounded-md mb-1.5" style="background: oklch(0.18 0.005 155);"></div>
+										<div class="text-[8px] text-white truncate">{p.name}</div>
+										<div class="flex items-center justify-between mt-0.5">
+											<span class="text-[8px]" style={`color: ${p.active ? ACCENT : 'oklch(0.50 0.005 155)'};`}>{p.price}</span>
+											{p.active && <div class="w-3 h-3 rounded-full flex items-center justify-center text-[6px] font-bold text-black" style={`background: ${ACCENT};`}>1</div>}
+										</div>
+									</div>
+								))}
+							</div>
+							<!-- Cart bar -->
+							<div class="rounded-xl flex items-center justify-between px-4 py-2.5" style={`background: ${ACCENT};`}>
+								<span class="text-[10px] font-semibold text-black">2 items — $1,248.00</span>
+								<span class="text-[11px] font-bold text-black">Cobrar →</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.remove('opacity-0', 'translate-y-10');
-                    entry.target.classList.add('opacity-100', 'translate-y-0');
-                }
-            });
-        }, observerOptions);
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('[data-animate-on-scroll]').forEach(el => observer.observe(el));
-        });
-    </script>
-  </body>
-</Layout>
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 1. INVENTARIO                               -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Inventario</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Control total de tu stock.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Sistema FIFO para rotacion optima de productos. Alertas de bajo stock, ordenes de compra automaticas y gestion de proveedores integrada. Cada unidad trackeada desde que entra al almacen hasta que se vende.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${ACCENT};`}></div>
+								<span class="text-sm text-gray-600">Rotacion FIFO automatica — primero en entrar, primero en salir</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-600">Alertas de bajo stock y auto-reorden configurable por producto</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-600">Ordenes de compra integradas con directorio de proveedores</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${RED};`}></div>
+								<span class="text-sm text-gray-600">Variantes por talla, color y SKU con stock independiente</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Inventory mockup -->
+					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Inventario — 342 productos</span>
+							<div class="flex gap-1.5">
+								<span class="text-[8px] px-2 py-0.5 rounded-full bg-avoqado-green text-black">285 en stock</span>
+								<span class="text-[8px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>12 bajo</span>
+							</div>
+						</div>
+						<!-- Inventory list -->
+						<div class="space-y-2 mb-4">
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+										<div class="w-5 h-5 rounded" style="background: oklch(0.25 0.005 155);"></div>
+									</div>
+									<div>
+										<span class="text-xs text-white">Playera Basica — Negra M</span>
+										<span class="text-[9px] text-gray-600 block">SKU-001-BLK-M</span>
+									</div>
+								</div>
+								<div class="text-right flex items-center gap-3">
+									<div class="w-16 h-1.5 rounded-full overflow-hidden" style="background: oklch(0.20 0.005 155);">
+										<div class="h-full rounded-full" style={`width: 82%; background: ${ACCENT};`}></div>
+									</div>
+									<span class="text-xs text-white w-6 text-right">48</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+										<div class="w-5 h-5 rounded" style="background: oklch(0.25 0.005 155);"></div>
+									</div>
+									<div>
+										<span class="text-xs text-white">Jeans Slim — Azul 32</span>
+										<span class="text-[9px] text-gray-600 block">SKU-045-BLU-32</span>
+									</div>
+								</div>
+								<div class="text-right flex items-center gap-3">
+									<div class="w-16 h-1.5 rounded-full overflow-hidden" style="background: oklch(0.20 0.005 155);">
+										<div class="h-full rounded-full" style={`width: 35%; background: ${AMBER};`}></div>
+									</div>
+									<span class="text-xs" style={`color: ${AMBER};`}>7</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+										<div class="w-5 h-5 rounded" style="background: oklch(0.25 0.005 155);"></div>
+									</div>
+									<div>
+										<span class="text-xs text-white">Tenis Runner — Blanco 27</span>
+										<span class="text-[9px] text-gray-600 block">SKU-203-WHT-27</span>
+									</div>
+								</div>
+								<div class="text-right flex items-center gap-3">
+									<div class="w-16 h-1.5 rounded-full overflow-hidden" style="background: oklch(0.20 0.005 155);">
+										<div class="h-full rounded-full" style={`width: 12%; background: ${RED};`}></div>
+									</div>
+									<span class="text-xs" style={`color: ${RED};`}>2</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+										<div class="w-5 h-5 rounded" style="background: oklch(0.25 0.005 155);"></div>
+									</div>
+									<div>
+										<span class="text-xs text-white">Sudadera Over — Gris L</span>
+										<span class="text-[9px] text-gray-600 block">SKU-078-GRY-L</span>
+									</div>
+								</div>
+								<div class="text-right flex items-center gap-3">
+									<div class="w-16 h-1.5 rounded-full overflow-hidden" style="background: oklch(0.20 0.005 155);">
+										<div class="h-full rounded-full" style={`width: 60%; background: ${ACCENT};`}></div>
+									</div>
+									<span class="text-xs text-white w-6 text-right">24</span>
+								</div>
+							</div>
+						</div>
+						<!-- Purchase order alert -->
+						<div class="rounded-lg p-3 flex items-center justify-between" style={`background: oklch(0.14 0.02 75); border: 1px solid oklch(0.25 0.04 75);`}>
+							<div>
+								<span class="text-[10px] text-white">Orden de compra sugerida</span>
+								<span class="text-[9px] block" style={`color: ${AMBER};`}>3 productos bajo minimo — Proveedor: TextilMX</span>
+							</div>
+							<span class="text-[9px] px-2 py-0.5 rounded font-medium" style={`background: ${AMBER}; color: black;`}>Revisar</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 2. PUNTO DE VENTA                           -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Payment mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Cobro — Venta #1847</span>
+							<span class="text-[9px] px-2 py-0.5 rounded-full bg-avoqado-green text-black font-medium">Terminal lista</span>
+						</div>
+						<!-- Amount display -->
+						<div class="text-center py-6 mb-4 rounded-xl" style="background: oklch(0.16 0.005 155);">
+							<div class="text-[10px] text-gray-500 mb-1">Total a cobrar</div>
+							<div class="text-4xl font-light text-white">$1,248<span class="text-lg text-gray-500">.00</span></div>
+							<div class="text-[10px] text-gray-600 mt-1">2 articulos — IVA incluido</div>
+						</div>
+						<!-- Payment methods -->
+						<div class="grid grid-cols-2 gap-2 mb-4">
+							<div class="rounded-xl p-3 text-center" style={`background: oklch(0.14 0.02 155); border: 1px solid oklch(0.25 0.04 155);`}>
+								<svg class="mx-auto mb-1.5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={ACCENT} stroke-width="1.5" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+								<span class="text-[10px] text-white block">Tarjeta</span>
+								<span class="text-[8px] text-gray-600">NFC / Chip / Banda</span>
+							</div>
+							<div class="rounded-xl p-3 text-center" style="background: oklch(0.16 0.005 155);">
+								<svg class="mx-auto mb-1.5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h3v3H7z"/><path d="M14 7h3v3h-3z"/><path d="M7 14h3v3H7z"/></svg>
+								<span class="text-[10px] text-white block">QR</span>
+								<span class="text-[8px] text-gray-600">CoDi / Transferencia</span>
+							</div>
+							<div class="rounded-xl p-3 text-center" style="background: oklch(0.16 0.005 155);">
+								<svg class="mx-auto mb-1.5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="1.5" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+								<span class="text-[10px] text-white block">Efectivo</span>
+								<span class="text-[8px] text-gray-600">Calculo de cambio</span>
+							</div>
+							<div class="rounded-xl p-3 text-center" style="background: oklch(0.16 0.005 155);">
+								<svg class="mx-auto mb-1.5" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="1.5" stroke-linecap="round"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+								<span class="text-[10px] text-white block">Multi-pago</span>
+								<span class="text-[8px] text-gray-600">Split en 2+ metodos</span>
+							</div>
+						</div>
+						<!-- Receipt options -->
+						<div class="flex items-center gap-2">
+							<div class="flex-1 py-2 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.16 0.005 155);">Ticket impreso</div>
+							<div class="flex-1 py-2 rounded-lg text-center text-[9px] text-white" style={`background: oklch(0.18 0.03 155);`}>WhatsApp</div>
+							<div class="flex-1 py-2 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.16 0.005 155);">Email</div>
+						</div>
+					</div>
+
+					<!-- Payment Link mockup — browser style like Stripe -->
+					<div class="order-3 lg:col-span-2 mt-8">
+						<div class="max-w-3xl mx-auto">
+							<div class="text-center mb-4">
+								<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${ACCENT};`}>Ligas de pago</span>
+								<h3 class="text-2xl md:text-3xl font-light text-white mt-2">Cobra sin que el cliente este en tienda.</h3>
+								<p class="text-sm text-gray-500 mt-2">Comparte un link por WhatsApp y cobra al instante. Montos fijos o abiertos, un solo uso o reutilizables.</p>
+							</div>
+							<!-- Browser mockup -->
+							<div class="rounded-2xl overflow-hidden" style="border: 1px solid oklch(0.22 0.005 155); box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+								<!-- Browser chrome -->
+								<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.14 0.005 155); border-bottom: 1px solid oklch(0.20 0.005 155);">
+									<div class="flex gap-1.5">
+										<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.40 0.15 25);"></div>
+										<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.60 0.15 85);"></div>
+										<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.55 0.15 145);"></div>
+									</div>
+									<div class="flex-1 mx-4 px-3 py-1 rounded-lg text-[10px] flex items-center gap-2" style="background: oklch(0.10 0.005 155); color: oklch(0.50 0.005 155);">
+										<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+										pay.avoqado.io/l/boutique-roma-x8k2
+									</div>
+								</div>
+								<!-- Page content — white bg like a real checkout -->
+								<div class="p-6 md:p-8" style="background: oklch(0.98 0.003 155);">
+									<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+										<!-- Left: Payment form -->
+										<div>
+											<div class="flex items-center gap-3 mb-6">
+												<div class="w-10 h-10 rounded-xl flex items-center justify-center" style={`background: ${ACCENT}20;`}>
+													<div class="w-5 h-5 rounded-md" style={`background: ${ACCENT};`}></div>
+												</div>
+												<div>
+													<div class="text-sm font-semibold text-gray-900">Boutique Roma</div>
+													<div class="text-[10px] text-gray-500">Liga de pago</div>
+												</div>
+											</div>
+
+											<div class="text-3xl font-light text-gray-900 mb-1">$2,450.00 <span class="text-sm text-gray-400">MXN</span></div>
+											<div class="text-xs text-gray-500 mb-6">Pedido especial — Vestido bordado talla M</div>
+
+											<!-- Form fields -->
+											<div class="space-y-3">
+												<div>
+													<label class="text-[10px] text-gray-500 block mb-1">Nombre</label>
+													<div class="h-9 rounded-lg px-3 flex items-center text-[11px] text-gray-400" style="background: white; border: 1px solid oklch(0.88 0.005 155);">Maria Garcia Lopez</div>
+												</div>
+												<div>
+													<label class="text-[10px] text-gray-500 block mb-1">Metodo de pago</label>
+													<div class="grid grid-cols-2 gap-2">
+														<div class="h-9 rounded-lg flex items-center justify-center gap-1.5 text-[10px] font-medium" style={`background: white; border: 2px solid ${ACCENT};`}>
+															<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={ACCENT} stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+															Tarjeta
+														</div>
+														<div class="h-9 rounded-lg flex items-center justify-center gap-1.5 text-[10px] text-gray-400" style="background: white; border: 1px solid oklch(0.88 0.005 155);">
+															Transferencia
+														</div>
+													</div>
+												</div>
+												<div class="grid grid-cols-2 gap-2">
+													<div>
+														<label class="text-[10px] text-gray-500 block mb-1">Numero de tarjeta</label>
+														<div class="h-9 rounded-lg px-3 flex items-center text-[11px] text-gray-400" style="background: white; border: 1px solid oklch(0.88 0.005 155);">4821 •••• •••• ••••</div>
+													</div>
+													<div class="grid grid-cols-2 gap-2">
+														<div>
+															<label class="text-[10px] text-gray-500 block mb-1">Exp</label>
+															<div class="h-9 rounded-lg px-3 flex items-center text-[11px] text-gray-400" style="background: white; border: 1px solid oklch(0.88 0.005 155);">08/27</div>
+														</div>
+														<div>
+															<label class="text-[10px] text-gray-500 block mb-1">CVV</label>
+															<div class="h-9 rounded-lg px-3 flex items-center text-[11px] text-gray-400" style="background: white; border: 1px solid oklch(0.88 0.005 155);">•••</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<div class="h-11 rounded-xl flex items-center justify-center mt-5 text-sm font-semibold text-black" style={`background: ${ACCENT};`}>
+												Pagar $2,450.00
+											</div>
+
+											<div class="flex items-center justify-center gap-2 mt-3">
+												<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="oklch(0.55 0.005 155)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+												<span class="text-[9px]" style="color: oklch(0.55 0.005 155);">Pago seguro via Avoqado</span>
+											</div>
+										</div>
+
+										<!-- Right: Order summary -->
+										<div class="rounded-xl p-5" style="background: oklch(0.96 0.005 155);">
+											<div class="text-xs font-semibold text-gray-700 mb-4">Resumen del pedido</div>
+											<div class="space-y-3 mb-4">
+												<div class="flex items-start gap-3">
+													<div class="w-14 h-14 rounded-lg shrink-0" style="background: oklch(0.90 0.005 155);"></div>
+													<div class="flex-1">
+														<div class="text-[11px] text-gray-900 font-medium">Vestido Bordado</div>
+														<div class="text-[10px] text-gray-500">Talla M — Color marfil</div>
+														<div class="text-[10px] text-gray-500">Bordado personalizado</div>
+													</div>
+													<span class="text-[11px] text-gray-900">$2,450</span>
+												</div>
+											</div>
+											<div class="border-t pt-3 space-y-1.5" style="border-color: oklch(0.88 0.005 155);">
+												<div class="flex justify-between text-[10px]">
+													<span class="text-gray-500">Subtotal</span>
+													<span class="text-gray-700">$2,112.07</span>
+												</div>
+												<div class="flex justify-between text-[10px]">
+													<span class="text-gray-500">IVA (16%)</span>
+													<span class="text-gray-700">$337.93</span>
+												</div>
+												<div class="flex justify-between text-xs font-semibold pt-2 border-t" style="border-color: oklch(0.88 0.005 155);">
+													<span class="text-gray-900">Total</span>
+													<span class="text-gray-900">$2,450.00</span>
+												</div>
+											</div>
+											<div class="mt-4 p-2.5 rounded-lg flex items-center gap-2" style="background: oklch(0.92 0.005 155);">
+												<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={ACCENT} stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+												<span class="text-[9px] text-gray-600">Link compartido via WhatsApp — expira en 48h</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Punto de venta</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Cobra rapido, cobra facil.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							Terminal de cobro, ligas de pago por WhatsApp, QR, efectivo y multi-pago. Recibos digitales automaticos. Opera incluso sin internet.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${ACCENT};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Terminal:</span> NFC, chip, banda — acepta cualquier tarjeta</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Ligas de pago:</span> Cobra por WhatsApp sin que el cliente visite la tienda</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Multi-pago:</span> Divide en 2+ metodos en la misma transaccion</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${RED};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Offline:</span> Sigue cobrando sin internet, sincroniza al reconectar</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 3. MULTI-SUCURSAL                           -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Multi-sucursal</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Una vista, todas tus tiendas.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Estructura jerarquica: Organizacion, Zonas, Sucursales. Configura precios, horarios y permisos a nivel de zona y hereda a cada sucursal. Reportes consolidados o por tienda individual.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${ACCENT};`}></div>
+								<span class="text-sm text-gray-600">Org > Zonas > Sucursales — jerarquia flexible con herencia de configuracion</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-600">Precios diferenciados por zona geografica o tipo de sucursal</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-600">Reportes consolidados con desglose por sucursal en un solo dashboard</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${RED};`}></div>
+								<span class="text-sm text-gray-600">Transferencia de inventario entre sucursales con tracking en tiempo real</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Multi-store dashboard mockup -->
+					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Mis Sucursales — 3 activas</span>
+							<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 155); color: ${ACCENT};`}>Zona CDMX</span>
+						</div>
+						<!-- Store cards -->
+						<div class="space-y-2 mb-4">
+							<div class="rounded-lg p-3" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${ACCENT};`}>
+								<div class="flex items-center justify-between mb-2">
+									<div class="flex items-center gap-2">
+										<div class="w-7 h-7 rounded-lg flex items-center justify-center text-[9px] font-bold" style={`background: oklch(0.18 0.02 155); color: ${ACCENT};`}>C</div>
+										<div>
+											<span class="text-xs text-white">Sucursal Centro</span>
+											<span class="text-[9px] text-gray-600 block">Reforma 222, CDMX</span>
+										</div>
+									</div>
+									<span class="text-[8px] px-1.5 py-0.5 rounded bg-avoqado-green text-black">Abierta</span>
+								</div>
+								<div class="grid grid-cols-3 gap-2">
+									<div class="text-center rounded-md p-1.5" style="background: oklch(0.20 0.005 155);">
+										<div class="text-[10px] text-white font-medium">$47,230</div>
+										<div class="text-[7px] text-gray-600">Venta hoy</div>
+									</div>
+									<div class="text-center rounded-md p-1.5" style="background: oklch(0.20 0.005 155);">
+										<div class="text-[10px] text-white font-medium">89</div>
+										<div class="text-[7px] text-gray-600">Transacciones</div>
+									</div>
+									<div class="text-center rounded-md p-1.5" style="background: oklch(0.20 0.005 155);">
+										<div class="text-[10px] text-avoqado-green font-medium">$531</div>
+										<div class="text-[7px] text-gray-600">Ticket prom</div>
+									</div>
+								</div>
+							</div>
+							<div class="rounded-lg p-3" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${BLUE};`}>
+								<div class="flex items-center justify-between mb-2">
+									<div class="flex items-center gap-2">
+										<div class="w-7 h-7 rounded-lg flex items-center justify-center text-[9px] font-bold" style={`background: oklch(0.18 0.02 240); color: ${BLUE};`}>S</div>
+										<div>
+											<span class="text-xs text-white">Sucursal Sur</span>
+											<span class="text-[9px] text-gray-600 block">Coapa 4512, CDMX</span>
+										</div>
+									</div>
+									<span class="text-[8px] px-1.5 py-0.5 rounded bg-avoqado-green text-black">Abierta</span>
+								</div>
+								<div class="grid grid-cols-3 gap-2">
+									<div class="text-center rounded-md p-1.5" style="background: oklch(0.20 0.005 155);">
+										<div class="text-[10px] text-white font-medium">$31,890</div>
+										<div class="text-[7px] text-gray-600">Venta hoy</div>
+									</div>
+									<div class="text-center rounded-md p-1.5" style="background: oklch(0.20 0.005 155);">
+										<div class="text-[10px] text-white font-medium">62</div>
+										<div class="text-[7px] text-gray-600">Transacciones</div>
+									</div>
+									<div class="text-center rounded-md p-1.5" style="background: oklch(0.20 0.005 155);">
+										<div class="text-[10px] text-white font-medium">$514</div>
+										<div class="text-[7px] text-gray-600">Ticket prom</div>
+									</div>
+								</div>
+							</div>
+							<div class="rounded-lg p-3" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${AMBER};`}>
+								<div class="flex items-center justify-between mb-2">
+									<div class="flex items-center gap-2">
+										<div class="w-7 h-7 rounded-lg flex items-center justify-center text-[9px] font-bold" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>P</div>
+										<div>
+											<span class="text-xs text-white">Sucursal Polanco</span>
+											<span class="text-[9px] text-gray-600 block">Masaryk 340, CDMX</span>
+										</div>
+									</div>
+									<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>Cierra 21:00</span>
+								</div>
+								<div class="grid grid-cols-3 gap-2">
+									<div class="text-center rounded-md p-1.5" style="background: oklch(0.20 0.005 155);">
+										<div class="text-[10px] text-white font-medium">$58,410</div>
+										<div class="text-[7px] text-gray-600">Venta hoy</div>
+									</div>
+									<div class="text-center rounded-md p-1.5" style="background: oklch(0.20 0.005 155);">
+										<div class="text-[10px] text-white font-medium">71</div>
+										<div class="text-[7px] text-gray-600">Transacciones</div>
+									</div>
+									<div class="text-center rounded-md p-1.5" style="background: oklch(0.20 0.005 155);">
+										<div class="text-[10px] text-avoqado-green font-medium">$823</div>
+										<div class="text-[7px] text-gray-600">Ticket prom</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Consolidated bar -->
+						<div class="rounded-lg p-3" style={`background: oklch(0.14 0.02 155); border: 1px solid oklch(0.25 0.03 155);`}>
+							<div class="flex items-center justify-between">
+								<div>
+									<span class="text-[10px] text-white">Total consolidado hoy</span>
+									<span class="text-[9px] text-avoqado-green block">3 sucursales — 222 transacciones</span>
+								</div>
+								<span class="text-sm text-white font-light">$137,530</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 4. CLIENTES Y LEALTAD                       -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Lealtad</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Haz que regresen.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							CRM integrado con programa de lealtad, grupos de clientes y historial de compras completo. Cada visita suma puntos. Cada punto se canjea. Conoce a tus clientes mejor que nadie.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${ACCENT};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Puntos por compra:</span> Configura cuantos puntos por cada peso gastado</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Grupos de clientes:</span> VIP, frecuente, nuevo — con descuentos por grupo</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Historial completo:</span> Cada compra, devolucion y canje registrado</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${RED};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Notificaciones:</span> Recordatorios de puntos por vencer y promociones</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Customer card mockup -->
+					<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Ficha de cliente</span>
+							<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 155); color: ${ACCENT};`}>VIP</span>
+						</div>
+						<!-- Customer profile -->
+						<div class="flex items-center gap-3 mb-4 p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+							<div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold" style={`background: oklch(0.18 0.03 155); color: ${ACCENT};`}>ML</div>
+							<div>
+								<span class="text-sm text-white">Maria Lopez</span>
+								<span class="text-[9px] text-gray-500 block">maria.lopez@email.com — Tel: *7834</span>
+							</div>
+						</div>
+						<!-- Loyalty stats -->
+						<div class="grid grid-cols-3 gap-2 mb-4">
+							<div class="rounded-lg p-3 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-lg font-light" style={`color: ${ACCENT};`}>2,340</div>
+								<div class="text-[8px] text-gray-600">Puntos</div>
+							</div>
+							<div class="rounded-lg p-3 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-lg font-light text-white">47</div>
+								<div class="text-[8px] text-gray-600">Visitas</div>
+							</div>
+							<div class="rounded-lg p-3 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-lg font-light text-white">$890</div>
+								<div class="text-[8px] text-gray-600">Ticket prom</div>
+							</div>
+						</div>
+						<!-- Recent purchases -->
+						<div class="mb-4">
+							<div class="text-[10px] text-gray-500 mb-2">Ultimas compras</div>
+							<div class="space-y-1.5">
+								<div class="flex items-center justify-between p-2 rounded" style="background: oklch(0.16 0.005 155);">
+									<div class="flex items-center gap-2">
+										<span class="text-[9px] text-gray-500">19 mar</span>
+										<span class="text-[9px] text-white">Jeans + Playera</span>
+									</div>
+									<div class="flex items-center gap-2">
+										<span class="text-[9px] text-gray-400">$1,248</span>
+										<span class="text-[8px]" style={`color: ${ACCENT};`}>+62 pts</span>
+									</div>
+								</div>
+								<div class="flex items-center justify-between p-2 rounded" style="background: oklch(0.16 0.005 155);">
+									<div class="flex items-center gap-2">
+										<span class="text-[9px] text-gray-500">12 mar</span>
+										<span class="text-[9px] text-white">Sudadera Over</span>
+									</div>
+									<div class="flex items-center gap-2">
+										<span class="text-[9px] text-gray-400">$1,250</span>
+										<span class="text-[8px]" style={`color: ${ACCENT};`}>+63 pts</span>
+									</div>
+								</div>
+								<div class="flex items-center justify-between p-2 rounded" style="background: oklch(0.16 0.005 155);">
+									<div class="flex items-center gap-2">
+										<span class="text-[9px] text-gray-500">28 feb</span>
+										<span class="text-[9px] text-white">Tenis Runner</span>
+									</div>
+									<div class="flex items-center gap-2">
+										<span class="text-[9px] text-gray-400">$2,190</span>
+										<span class="text-[8px]" style={`color: ${ACCENT};`}>+110 pts</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Redeem bar -->
+						<div class="rounded-lg p-3 flex items-center justify-between" style={`background: oklch(0.14 0.02 155); border: 1px solid oklch(0.25 0.03 155);`}>
+							<div>
+								<span class="text-[10px] text-white">Canje disponible</span>
+								<span class="text-[9px] text-avoqado-green block">2,340 pts = $234 en descuento</span>
+							</div>
+							<span class="text-[9px] px-2 py-0.5 rounded bg-avoqado-green text-black font-medium">Canjear</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 5. E-COMMERCE                               -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- E-commerce mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<!-- Browser chrome -->
+						<div class="flex items-center gap-2 mb-3 pb-3 border-b border-white/5">
+							<div class="flex gap-1.5">
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.65 0.20 25);"></div>
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.78 0.14 75);"></div>
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.65 0.15 155);"></div>
+							</div>
+							<div class="flex-1 h-5 rounded-md flex items-center px-3" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[8px] text-gray-500">tutienda.avoqado.io</span>
+							</div>
+						</div>
+						<!-- Widget content -->
+						<div class="rounded-xl p-4" style="background: oklch(0.16 0.005 155);">
+							<div class="flex items-center justify-between mb-4">
+								<span class="text-xs text-white font-medium">Tu Tienda</span>
+								<div class="flex items-center gap-1.5">
+									<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+									<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="1.5" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+								</div>
+							</div>
+							<!-- Product showcase -->
+							<div class="grid grid-cols-2 gap-2 mb-3">
+								<div class="rounded-lg overflow-hidden" style="background: oklch(0.20 0.005 155);">
+									<div class="aspect-square" style="background: oklch(0.22 0.005 155);"></div>
+									<div class="p-2">
+										<span class="text-[10px] text-white">Playera Basica</span>
+										<div class="flex items-center justify-between mt-1">
+											<span class="text-[9px]" style={`color: ${ACCENT};`}>$349</span>
+											<span class="text-[8px] text-gray-600">4 colores</span>
+										</div>
+									</div>
+								</div>
+								<div class="rounded-lg overflow-hidden" style="background: oklch(0.20 0.005 155);">
+									<div class="aspect-square" style="background: oklch(0.22 0.005 155);"></div>
+									<div class="p-2">
+										<span class="text-[10px] text-white">Sudadera Over</span>
+										<div class="flex items-center justify-between mt-1">
+											<span class="text-[9px]" style={`color: ${ACCENT};`}>$1,250</span>
+											<span class="text-[8px] text-gray-600">3 tallas</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Payment link -->
+							<div class="rounded-lg p-2.5 flex items-center justify-between" style={`background: oklch(0.14 0.02 155); border: 1px solid oklch(0.25 0.03 155);`}>
+								<div class="flex items-center gap-2">
+									<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={ACCENT} stroke-width="1.5" stroke-linecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+									<div>
+										<span class="text-[9px] text-white">Link de pago</span>
+										<span class="text-[8px] text-gray-600 block">pay.avoqado.io/abc123</span>
+									</div>
+								</div>
+								<span class="text-[8px] px-2 py-0.5 rounded bg-avoqado-green text-black font-medium">Copiar</span>
+							</div>
+						</div>
+						<!-- QR section -->
+						<div class="mt-3 rounded-xl p-3 flex items-center gap-3" style="background: oklch(0.16 0.005 155);">
+							<div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background: white;">
+								<div class="grid grid-cols-3 gap-0.5 w-8 h-8">
+									<div class="bg-black rounded-sm"></div><div class="bg-white"></div><div class="bg-black rounded-sm"></div>
+									<div class="bg-white"></div><div class="bg-black rounded-sm"></div><div class="bg-white"></div>
+									<div class="bg-black rounded-sm"></div><div class="bg-white"></div><div class="bg-black rounded-sm"></div>
+								</div>
+							</div>
+							<div>
+								<span class="text-[10px] text-white">QR para tienda fisica</span>
+								<span class="text-[9px] text-gray-500 block">El cliente escanea y navega tu catalogo</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>E-commerce</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Tu tienda, tambien online.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Widget embeddable para tu sitio web, links de pago para redes sociales y QR para que el cliente explore tu catalogo en tienda. Todo sincronizado con tu inventario en tiempo real.
+						</p>
+						<div class="space-y-3">
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Widget embeddable</h3>
+								<p class="text-sm text-gray-500">Agrega tu catalogo a cualquier sitio web con una linea de codigo. Mismo inventario, mismos precios.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Links de pago</h3>
+								<p class="text-sm text-gray-500">Genera links para compartir por WhatsApp, Instagram o email. El cliente paga sin descargar nada.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">QR en tienda</h3>
+								<p class="text-sm text-gray-500">El cliente escanea, navega el catalogo y puede pagar desde su celular sin hacer fila.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- KEY NUMBERS                                 -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+					<div class="border-t pt-6" style={`border-color: ${ACCENT};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">35+</div>
+						<div class="text-sm text-gray-500">Tipos de retail soportados</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${ACCENT};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">6</div>
+						<div class="text-sm text-gray-500">Procesadores de pago</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${ACCENT};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">FIFO</div>
+						<div class="text-sm text-gray-500">Inventario con rotacion inteligente</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${ACCENT};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">Multi</div>
+						<div class="text-sm text-gray-500">Sucursal con reportes consolidados</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- CTA                                         -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-3xl mx-auto text-center">
+				<h2 class="text-3xl md:text-5xl font-light tracking-tight text-black mb-8">
+					Empieza a vender con Avoqado.
+				</h2>
+				<p class="text-lg text-gray-500 mb-12 max-w-xl mx-auto">
+					Demo interactiva con datos reales. Sin tarjeta, sin compromiso. Explora el inventario, las ventas y todo lo demas a tu ritmo.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 text-lg" style={`background: ${ACCENT};`}>
+						Probar demo gratis
+					</a>
+					<a href="/contact" class="px-8 py-4 border border-black/20 text-black font-medium rounded-full hover:bg-black/5 hover:-translate-y-0.5 transition-all duration-200 text-lg">
+						Hablar con ventas
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<FloatingChatbot client:idle />
+		<Footer />
+	</body>
+</html>

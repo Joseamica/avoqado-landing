@@ -64,9 +64,12 @@ export default function PosLivingPreview({ scrollYProgress }: Props) {
         </motion.span>
       </div>
 
-      {/* Tablet frame — landscape aspect ratio */}
-      <div className="relative rounded-2xl overflow-hidden border aspect-[4/3] w-full"
-        style={{ background: '#0A0A0A', borderColor: 'oklch(0.28 0.005 155)' }}>
+      {/* iPad-style tablet frame */}
+      <div className="rounded-[1.2rem] sm:rounded-[1.6rem] p-[6px] sm:p-[8px]" style={{ background: 'linear-gradient(145deg, oklch(0.82 0.005 155), oklch(0.70 0.005 155) 30%, oklch(0.75 0.005 155) 70%, oklch(0.68 0.005 155))', boxShadow: '0 8px 40px rgba(0,0,0,0.3), inset 0 1px 0 oklch(0.85 0.005 155)' }}>
+      <div className="rounded-[0.8rem] sm:rounded-[1.1rem] p-[3px] sm:p-[4px] relative" style={{ background: 'oklch(0.12 0.005 155)' }}>
+      <div className="absolute top-[7px] left-1/2 -translate-x-1/2 w-[5px] h-[5px] rounded-full z-20" style={{ background: 'oklch(0.22 0.005 155)', boxShadow: 'inset 0 1px 1px oklch(0.08 0.005 155)' }} />
+      <div className="relative rounded-[0.5rem] sm:rounded-[0.7rem] overflow-hidden border aspect-[4/3] w-full"
+        style={{ background: '#0A0A0A', borderColor: 'oklch(0.18 0.005 155)' }}>
         <div className="absolute inset-0 p-3 sm:p-4 flex flex-col">
 
           {/* Tab bar (persistent) */}
@@ -308,6 +311,8 @@ export default function PosLivingPreview({ scrollYProgress }: Props) {
 
           </div>
         </div>
+      </div>
+      </div>
       </div>
     </div>
   );

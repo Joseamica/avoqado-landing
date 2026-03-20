@@ -1,100 +1,833 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
 import Navbar from '../components/layout/Navbar.astro';
 import Footer from '../components/layout/Footer.astro';
-import IndustryHero from '../components/sections/IndustryHero.astro';
-import CategoryGrid from '../components/sections/CategoryGrid.astro';
-import CategoryPills from '../components/interactive/CategoryPills';
-import FeatureAccordion from '../components/interactive/FeatureAccordion';
+import FloatingChatbot from '../components/interactive/FloatingChatbot';
 
-// Hero image - high quality lifestyle shot
-const heroImage = "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1600&q=80";
-
-// Categories - Square style
-const categories = [
-    { name: "Bares", image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=400&q=80", href: "#features" },
-    { name: "Antros", image: "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=400&q=80", href: "#features" },
-    { name: "Eventos", image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=80", href: "#features" },
-    { name: "Karaokes", image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&q=80", href: "#features" },
-    { name: "Estadios", image: "https://images.unsplash.com/photo-1522158637959-30385a09e0da?w=400&q=80", href: "#features" }
-];
-
-// Sub-category pills
-const subcategories = [
-    "Bares", "Antros", "Eventos", "Karaokes", 
-    "Estadios", "Teatros", "Cines", "Centros de Entretenimiento"
-];
-
-// Feature accordion - simplified Square style
-const features = [
-    {
-        title: "Cobra rápido en noches ocupadas",
-        description: "Terminales PAX con NFC. División de cuentas, propinas digitales, y pagos parciales. Diseñado para alto volumen.",
-        image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800&q=80"
-    },
-    {
-        title: "Inventario de bebidas",
-        description: "Sistema FIFO para rotación de botellas. Alertas de bajo stock y auto-reorden para nunca quedarte sin producto.",
-        image: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&q=80"
-    },
-    {
-        title: "Comisiones para bartenders",
-        description: "Porcentajes por empleado o producto. Tiers progresivos por ventas. Reportes por noche.",
-        image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80"
-    },
-    {
-        title: "Cortes de caja por noche",
-        description: "Efectivo esperado vs. contado. Cierra turno con confianza. Historial completo de cortes.",
-        image: "https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=800&q=80"
-    }
-];
+const ACCENT = 'oklch(0.78 0.14 75)'; // amber for entertainment
+const GREEN = '#69E185';
+const BLUE = 'oklch(0.72 0.14 240)';
+const RED = 'oklch(0.65 0.20 25)';
 ---
 
-<Layout title="Avoqado para Entretenimiento | Bares, Antros y Eventos">
-  <body class="bg-white m-0 p-0 w-full">
-    <Navbar position="fixed" transparentOnTop={true} />
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Avoqado para Entretenimiento | Cines, Antros, Eventos y Mas</title>
+		<meta name="description" content="Gestion integral para venues de entretenimiento. Boletos, consumo en barra, reservaciones VIP, control de acceso y pagos de alto volumen en una sola plataforma." />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+	</head>
+	<body class="bg-black m-0 p-0 w-full">
+		<Navbar position="fixed" transparentOnTop={true} />
 
-    <!-- Hero -->
-    <IndustryHero 
-        title="Soluciones personalizadas para entretenimiento"
-        heroImage={heroImage}
-    />
 
-    <!-- Category Grid -->
-    <CategoryGrid 
-        title="Creado para la vida nocturna"
-        categories={categories}
-    />
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- HERO                                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="min-h-screen flex items-center pt-24 md:pt-32 pb-16 px-6">
+			<div class="max-w-[1400px] mx-auto w-full">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+					<!-- Text -->
+					<div>
+						<div class="flex items-center gap-3 mb-6">
+							<span class="text-5xl font-light text-white/10">05</span>
+							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${ACCENT};`}>Avoqado Entertainment</span>
+						</div>
+						<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-white mb-8">
+							Experiencias que se pagan solas.
+						</h1>
+						<p class="text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-10">
+							Venta de boletos, consumo en barra, control de acceso y pagos de alto volumen. Todo desde una sola plataforma para cines, antros, eventos, arcades, boliches y salones de fiestas.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4">
+							<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${ACCENT};`}>
+								Probar demo gratis
+							</a>
+							<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200">
+								Hablar con ventas
+							</a>
+						</div>
+					</div>
 
-    <!-- Category Pills -->
-    <CategoryPills client:visible categories={subcategories} />
+					<!-- Mockup: Event ticket / admission card -->
+					<div class="hidden lg:block">
+						<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+							<!-- Header -->
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center gap-2">
+									<div class="w-6 h-6 rounded-lg flex items-center justify-center" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>
+										<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 10s3-3 3-8"/><path d="M22 10s-3-3-3-8"/><path d="M10 2c0 4.4-3.6 8-8 8"/><path d="M14 2c0 4.4 3.6 8 8 8"/><path d="M2 10s2 2 2 5"/><path d="M22 10s-2 2-2 5"/><path d="M8 15h8"/><path d="M2 22h20"/><path d="M12 15v7"/></svg>
+									</div>
+									<span class="text-[11px] text-white font-medium">Eventos Activos — Hoy</span>
+								</div>
+								<span class="text-[8px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>3 eventos</span>
+							</div>
 
-    <!-- Feature Accordion -->
-    <div id="features">
-        <FeatureAccordion client:visible features={features} />
-    </div>
+							<!-- Main ticket card -->
+							<div class="rounded-xl p-4 mb-3 relative overflow-hidden" style={`background: linear-gradient(135deg, oklch(0.20 0.04 75), oklch(0.14 0.02 75)); border: 1px solid oklch(0.30 0.06 75);`}>
+								<div class="flex items-start justify-between mb-3">
+									<div>
+										<span class="text-sm text-white font-medium block">Noche Electronica Vol. 12</span>
+										<span class="text-[10px] text-gray-400">Sabado 22 Mar — 22:00 a 04:00</span>
+									</div>
+									<span class="text-[9px] px-2 py-0.5 rounded-full bg-avoqado-green text-black font-medium">En venta</span>
+								</div>
+								<div class="grid grid-cols-3 gap-2 mb-3">
+									<div class="rounded-lg p-2 text-center" style="background: oklch(0.16 0.005 155);">
+										<div class="text-sm font-light text-white">342</div>
+										<div class="text-[7px] text-gray-500">Vendidos</div>
+									</div>
+									<div class="rounded-lg p-2 text-center" style="background: oklch(0.16 0.005 155);">
+										<div class="text-sm font-light" style={`color: ${ACCENT};`}>158</div>
+										<div class="text-[7px] text-gray-500">Disponibles</div>
+									</div>
+									<div class="rounded-lg p-2 text-center" style="background: oklch(0.16 0.005 155);">
+										<div class="text-sm font-light text-avoqado-green">$171k</div>
+										<div class="text-[7px] text-gray-500">Recaudado</div>
+									</div>
+								</div>
+								<!-- Ticket types -->
+								<div class="space-y-1.5">
+									<div class="flex items-center justify-between px-2 py-1.5 rounded-lg" style="background: oklch(0.16 0.005 155);">
+										<div class="flex items-center gap-2">
+											<div class="w-1.5 h-1.5 rounded-full" style={`background: ${ACCENT};`}></div>
+											<span class="text-[10px] text-white">General</span>
+										</div>
+										<div class="flex items-center gap-3">
+											<span class="text-[9px] text-gray-500">280/400</span>
+											<span class="text-[10px]" style={`color: ${ACCENT};`}>$350</span>
+										</div>
+									</div>
+									<div class="flex items-center justify-between px-2 py-1.5 rounded-lg" style="background: oklch(0.16 0.005 155);">
+										<div class="flex items-center gap-2">
+											<div class="w-1.5 h-1.5 rounded-full" style={`background: ${BLUE};`}></div>
+											<span class="text-[10px] text-white">VIP</span>
+										</div>
+										<div class="flex items-center gap-3">
+											<span class="text-[9px] text-gray-500">52/80</span>
+											<span class="text-[10px]" style={`color: ${BLUE};`}>$750</span>
+										</div>
+									</div>
+									<div class="flex items-center justify-between px-2 py-1.5 rounded-lg" style="background: oklch(0.16 0.005 155);">
+										<div class="flex items-center gap-2">
+											<div class="w-1.5 h-1.5 rounded-full bg-avoqado-green"></div>
+											<span class="text-[10px] text-white">Mesa VIP (10 pax)</span>
+										</div>
+										<div class="flex items-center gap-3">
+											<span class="text-[9px] text-gray-500">10/20</span>
+											<span class="text-[10px] text-avoqado-green">$5,000</span>
+										</div>
+									</div>
+								</div>
+							</div>
 
-    <Footer />
+							<!-- QR validation preview -->
+							<div class="flex items-center justify-between p-3 rounded-xl" style="background: oklch(0.16 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>
+										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M20 14v3h-3"/><path d="M14 20h3"/><path d="M20 20h0"/></svg>
+									</div>
+									<div>
+										<span class="text-[11px] text-white">Escanear boleto QR</span>
+										<span class="text-[9px] text-gray-600 block">Validacion instantanea en puerta</span>
+									</div>
+								</div>
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>Listo</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-    <!-- Scroll Animation Script -->
-    <script>
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.remove('opacity-0', 'translate-y-10');
-                    entry.target.classList.add('opacity-100', 'translate-y-0');
-                }
-            });
-        }, observerOptions);
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 1. EVENTOS Y BOLETOS                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Boletos</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Vende entradas sin complicarte.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Crea eventos con multiples tipos de boleto, precios early-bird y limites de capacidad. Cada entrada genera un QR unico que se valida en puerta al instante. Sin apps de terceros, sin comisiones ocultas.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${ACCENT};`}></div>
+								<span class="text-sm text-gray-600">Crea eventos con fecha, hora, descripcion y imagen desde el dashboard</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-600">General, VIP, mesa, early-bird — cada tipo con precio y stock independiente</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-600">QR unico por boleto con validacion instantanea en puerta</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${RED};`}></div>
+								<span class="text-sm text-gray-600">Control de aforo en tiempo real — sabe cuantos estan adentro ahora</span>
+							</div>
+						</div>
+					</div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('[data-animate-on-scroll]').forEach(el => observer.observe(el));
-        });
-    </script>
-  </body>
-</Layout>
+					<!-- Event cards mockup -->
+					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Proximos eventos — 3</span>
+							<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>+ Crear evento</span>
+						</div>
+						<div class="space-y-2.5">
+							<!-- Event 1 -->
+							<div class="rounded-xl p-3.5" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${ACCENT};`}>
+								<div class="flex items-start justify-between mb-2">
+									<div>
+										<span class="text-xs text-white font-medium">Noche Electronica Vol. 12</span>
+										<span class="text-[9px] text-gray-500 block mt-0.5">Sab 22 Mar — 22:00 a 04:00</span>
+									</div>
+									<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>En venta</span>
+								</div>
+								<div class="flex items-center gap-4">
+									<div class="flex items-center gap-1.5">
+										<div class="w-full bg-gray-800 rounded-full h-1.5 w-20">
+											<div class="h-1.5 rounded-full" style={`background: ${ACCENT}; width: 68%;`}></div>
+										</div>
+										<span class="text-[9px] text-gray-500">342/500</span>
+									</div>
+									<span class="text-[9px] text-avoqado-green">$171,000</span>
+								</div>
+							</div>
+							<!-- Event 2 -->
+							<div class="rounded-xl p-3.5" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${BLUE};`}>
+								<div class="flex items-start justify-between mb-2">
+									<div>
+										<span class="text-xs text-white font-medium">Stand-Up Comedy Night</span>
+										<span class="text-[9px] text-gray-500 block mt-0.5">Vie 28 Mar — 20:00 a 23:00</span>
+									</div>
+									<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.18 0.02 240); color: ${BLUE};`}>Early-bird</span>
+								</div>
+								<div class="flex items-center gap-4">
+									<div class="flex items-center gap-1.5">
+										<div class="w-full bg-gray-800 rounded-full h-1.5 w-20">
+											<div class="h-1.5 rounded-full" style={`background: ${BLUE}; width: 35%;`}></div>
+										</div>
+										<span class="text-[9px] text-gray-500">105/300</span>
+									</div>
+									<span class="text-[9px] text-avoqado-green">$31,500</span>
+								</div>
+							</div>
+							<!-- Event 3 -->
+							<div class="rounded-xl p-3.5" style="background: oklch(0.16 0.005 155); border-left: 3px solid oklch(0.40 0.005 155);">
+								<div class="flex items-start justify-between mb-2">
+									<div>
+										<span class="text-xs text-gray-400 font-medium">Karaoke Retro 80s</span>
+										<span class="text-[9px] text-gray-600 block mt-0.5">Sab 5 Abr — 19:00 a 01:00</span>
+									</div>
+									<span class="text-[8px] px-1.5 py-0.5 rounded" style="background: oklch(0.20 0.005 155); color: oklch(0.50 0.005 155);">Borrador</span>
+								</div>
+								<div class="flex items-center gap-4">
+									<div class="flex items-center gap-1.5">
+										<div class="w-full bg-gray-800 rounded-full h-1.5 w-20">
+											<div class="h-1.5 rounded-full bg-gray-700" style="width: 0%;"></div>
+										</div>
+										<span class="text-[9px] text-gray-600">0/200</span>
+									</div>
+									<span class="text-[9px] text-gray-600">$0</span>
+								</div>
+							</div>
+						</div>
+						<!-- Access control footer -->
+						<div class="mt-4 pt-3 border-t border-white/5">
+							<div class="grid grid-cols-3 gap-2">
+								<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+									<div class="text-sm font-light text-white">447</div>
+									<div class="text-[8px] text-gray-600">Vendidos hoy</div>
+								</div>
+								<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+									<div class="text-sm font-light" style={`color: ${ACCENT};`}>289</div>
+									<div class="text-[8px] text-gray-600">Escaneados</div>
+								</div>
+								<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+									<div class="text-sm font-light text-avoqado-green">$202k</div>
+									<div class="text-[8px] text-gray-600">Recaudado</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 2. CONSUMO EN BARRA                         -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Bar tab mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Barra Principal — 8 cuentas abiertas</span>
+							<div class="flex gap-1.5">
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>$47,230</span>
+							</div>
+						</div>
+
+						<!-- Active tab - expanded -->
+						<div class="rounded-xl p-3.5 mb-2.5" style={`background: oklch(0.16 0.005 155); border: 1px solid oklch(0.30 0.06 75);`}>
+							<div class="flex items-center justify-between mb-2.5">
+								<div class="flex items-center gap-2">
+									<div class="w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-bold" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>DV</div>
+									<div>
+										<span class="text-[11px] text-white font-medium">Daniel V. — Tab</span>
+										<span class="text-[8px] text-gray-600 block">Abierta hace 1h 23m</span>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-xs text-white font-medium">$2,870</span>
+									<span class="text-[8px] block" style={`color: ${ACCENT};`}>Pre-auth $5,000</span>
+								</div>
+							</div>
+							<div class="space-y-1">
+								<div class="flex items-center justify-between text-[9px] px-2 py-1 rounded" style="background: oklch(0.14 0.005 155);">
+									<span class="text-gray-300">3x Whisky Doble</span>
+									<span class="text-gray-500">$1,350</span>
+								</div>
+								<div class="flex items-center justify-between text-[9px] px-2 py-1 rounded" style="background: oklch(0.14 0.005 155);">
+									<span class="text-gray-300">2x Bucket Corona (6)</span>
+									<span class="text-gray-500">$720</span>
+								</div>
+								<div class="flex items-center justify-between text-[9px] px-2 py-1 rounded" style="background: oklch(0.14 0.005 155);">
+									<span class="text-gray-300">4x Nachos Supremos</span>
+									<span class="text-gray-500">$800</span>
+								</div>
+							</div>
+							<div class="flex gap-1.5 mt-2.5">
+								<span class="text-[8px] px-2 py-1 rounded-full" style={`background: ${ACCENT}; color: black;`}>+ Agregar</span>
+								<span class="text-[8px] px-2 py-1 rounded-full" style="background: oklch(0.20 0.005 155); color: oklch(0.60 0.005 155);">Cerrar tab</span>
+							</div>
+						</div>
+
+						<!-- Other tabs - compact -->
+						<div class="space-y-1.5">
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-2">
+									<div class="w-6 h-6 rounded-full flex items-center justify-center text-[8px] font-bold" style={`background: oklch(0.18 0.02 240); color: ${BLUE};`}>MR</div>
+									<span class="text-[10px] text-white">Maria R.</span>
+								</div>
+								<div class="flex items-center gap-3">
+									<span class="text-[9px] text-gray-500">5 items</span>
+									<span class="text-[10px] text-white">$1,430</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-2">
+									<div class="w-6 h-6 rounded-full flex items-center justify-center text-[8px] font-bold" style="background: oklch(0.18 0.02 155); color: oklch(0.60 0.10 155);">AG</div>
+									<span class="text-[10px] text-white">Andrea G.</span>
+								</div>
+								<div class="flex items-center gap-3">
+									<span class="text-[9px] text-gray-500">3 items</span>
+									<span class="text-[10px] text-white">$890</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 2px solid ${RED};`}>
+								<div class="flex items-center gap-2">
+									<div class="w-6 h-6 rounded-full flex items-center justify-center text-[8px] font-bold" style={`background: oklch(0.18 0.02 25); color: ${RED};`}>LP</div>
+									<span class="text-[10px] text-white">Luis P.</span>
+								</div>
+								<div class="flex items-center gap-3">
+									<span class="text-[9px]" style={`color: ${RED};`}>Cerca del limite</span>
+									<span class="text-[10px] text-white">$4,750</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Barra</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Del pedido a la barra en segundos.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							Abre tabs con pre-autorizacion de tarjeta. Agrega consumos con un tap, ve el acumulado en tiempo real y cierra la cuenta cuando el cliente quiera. Ideal para noches de alto volumen donde la velocidad es todo.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${ACCENT};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Tab con pre-auth:</span> Retiene un monto en tarjeta y cobra solo lo consumido al cerrar</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Pedido rapido:</span> Favoritos, recientes y busqueda para servir en 3 taps</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Alertas de limite:</span> Notificacion cuando el consumo se acerca al pre-auth</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${RED};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Multiples barras:</span> Cada zona con su inventario y su equipo asignado</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 3. RESERVACIONES                            -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Reservaciones</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Mesas, VIP, y listas de espera.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Administra reservaciones por zona: salon general, area VIP, terraza, privados. Waitlist automatica con notificacion por SMS cuando se libera un espacio. Depositos opcionales para asegurar reservas grandes.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${ACCENT};`}></div>
+								<span class="text-sm text-gray-600">Zonas configurables: general, VIP, terraza, lounge, privado</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-600">Waitlist con posicion y notificacion automatica al cliente</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-600">Deposito via Stripe para reservas VIP y mesas grandes</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${RED};`}></div>
+								<span class="text-sm text-gray-600">Pagina de booking publica: book.avoqado.io/tu-venue</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Venue layout mockup -->
+					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Mapa del venue — Sabado noche</span>
+							<div class="flex gap-1.5">
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>General</span>
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 240); color: ${BLUE};`}>VIP</span>
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style="background: oklch(0.16 0.005 155); color: oklch(0.50 0.005 155);">Terraza</span>
+							</div>
+						</div>
+
+						<!-- Venue grid -->
+						<div class="grid grid-cols-4 gap-2 mb-4">
+							<!-- VIP Section label -->
+							<div class="col-span-2 rounded-xl p-3 flex flex-col items-center justify-center" style={`background: oklch(0.18 0.02 240); border: 1px solid oklch(0.30 0.06 240);`}>
+								<span class="text-[10px] text-white font-medium">VIP-1</span>
+								<span class="text-[7px] mt-0.5" style={`color: ${BLUE};`}>10 pax — Reservada</span>
+								<span class="text-[7px]" style={`color: ${BLUE};`}>Garcia — 23:00</span>
+							</div>
+							<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style={`background: oklch(0.18 0.02 75); border: 1px solid oklch(0.30 0.04 75);`}>
+								<span class="text-[10px] text-white font-medium">G1</span>
+								<span class="text-[7px] mt-0.5" style={`color: ${ACCENT};`}>4 pax</span>
+								<span class="text-[7px]" style={`color: ${ACCENT};`}>$1,280</span>
+							</div>
+							<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style={`background: oklch(0.18 0.02 75); border: 1px solid oklch(0.30 0.04 75);`}>
+								<span class="text-[10px] text-white font-medium">G2</span>
+								<span class="text-[7px] mt-0.5" style={`color: ${ACCENT};`}>6 pax</span>
+								<span class="text-[7px]" style={`color: ${ACCENT};`}>$2,450</span>
+							</div>
+
+							<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style="background: oklch(0.16 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+								<span class="text-[10px] text-gray-500 font-medium">G3</span>
+								<span class="text-[7px] text-gray-600 mt-0.5">Libre</span>
+							</div>
+							<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style={`background: oklch(0.18 0.02 75); border: 1px solid oklch(0.30 0.04 75);`}>
+								<span class="text-[10px] text-white font-medium">G4</span>
+								<span class="text-[7px] mt-0.5" style={`color: ${ACCENT};`}>4 pax</span>
+								<span class="text-[7px]" style={`color: ${ACCENT};`}>$890</span>
+							</div>
+							<div class="col-span-2 rounded-xl p-3 flex flex-col items-center justify-center" style={`background: oklch(0.18 0.02 240); border: 1px solid oklch(0.30 0.06 240);`}>
+								<span class="text-[10px] text-white font-medium">VIP-2</span>
+								<span class="text-[7px] mt-0.5" style={`color: ${BLUE};`}>8 pax — Ocupada</span>
+								<span class="text-[7px]" style={`color: ${BLUE};`}>$8,920</span>
+							</div>
+
+							<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style="background: oklch(0.16 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+								<span class="text-[10px] text-gray-500 font-medium">G5</span>
+								<span class="text-[7px] text-gray-600 mt-0.5">Libre</span>
+							</div>
+							<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style={`background: oklch(0.18 0.02 75); border: 1px solid oklch(0.30 0.04 75);`}>
+								<span class="text-[10px] text-white font-medium">G6</span>
+								<span class="text-[7px] mt-0.5" style={`color: ${ACCENT};`}>2 pax</span>
+								<span class="text-[7px]" style={`color: ${ACCENT};`}>$560</span>
+							</div>
+							<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style="background: oklch(0.16 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+								<span class="text-[10px] text-gray-500 font-medium">T1</span>
+								<span class="text-[7px] text-gray-600 mt-0.5">Terraza</span>
+							</div>
+							<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style="background: oklch(0.16 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+								<span class="text-[10px] text-gray-500 font-medium">T2</span>
+								<span class="text-[7px] text-gray-600 mt-0.5">Terraza</span>
+							</div>
+						</div>
+
+						<!-- Legend + Waitlist -->
+						<div class="flex items-center justify-between pt-3 border-t border-white/5">
+							<div class="flex items-center gap-3">
+								<div class="flex items-center gap-1.5">
+									<div class="w-2 h-2 rounded-sm" style={`background: ${ACCENT};`}></div>
+									<span class="text-[8px] text-gray-500">Ocupada</span>
+								</div>
+								<div class="flex items-center gap-1.5">
+									<div class="w-2 h-2 rounded-sm" style={`background: ${BLUE};`}></div>
+									<span class="text-[8px] text-gray-500">VIP</span>
+								</div>
+								<div class="flex items-center gap-1.5">
+									<div class="w-2 h-2 rounded-sm" style="background: oklch(0.25 0.005 155);"></div>
+									<span class="text-[8px] text-gray-500">Libre</span>
+								</div>
+							</div>
+							<span class="text-[8px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>Waitlist: 4</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 4. PERSONAL                                 -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Personal</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Equipo grande, control total.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							Roles diferenciados para seguridad, bartenders, meseros, cajeros y management. Turnos con clock-in/out, comisiones por ventas en barra y corte de caja al final de la noche. Sabe quien vendio que y cuando.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${ACCENT};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Roles especializados:</span> Door, Bartender, Mesero, Cajero, Manager, DJ, Seguridad</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Comisiones:</span> Porcentaje por venta en barra, escalonado por turno o noche</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Turnos:</span> Clock-in/out con breaks, horas extras y geolocalizacion</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${RED};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Permisos:</span> Cada rol solo ve y hace lo que le corresponde</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Staff grid mockup -->
+					<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Equipo activo — Sabado noche</span>
+							<span class="text-[9px] px-2 py-0.5 rounded-full bg-avoqado-green text-black font-medium">12 en turno</span>
+						</div>
+						<div class="space-y-2 mb-4">
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>RM</div>
+									<div>
+										<span class="text-xs text-white">Ricardo M. — Bartender</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">20:00 — ahora</span>
+											<span class="text-[9px] text-avoqado-green">$34,200 en ventas</span>
+										</div>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-xs text-avoqado-green">$1,710</span>
+									<span class="text-[8px] text-gray-600 block">Comision 5%</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style={`background: oklch(0.18 0.02 240); color: ${BLUE};`}>KL</div>
+									<div>
+										<span class="text-xs text-white">Karen L. — Cajera</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">20:00 — ahora</span>
+											<span class="text-[9px]" style={`color: ${BLUE};`}>142 transacciones</span>
+										</div>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-xs text-white">$89,340</span>
+									<span class="text-[8px] text-gray-600 block">Cobrado</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style={`background: oklch(0.18 0.02 25); color: ${RED};`}>FH</div>
+									<div>
+										<span class="text-xs text-white">Fernando H. — Door</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">21:00 — ahora</span>
+											<span class="text-[9px]" style={`color: ${ACCENT};`}>289 escaneados</span>
+										</div>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-[9px] text-gray-600">Seguridad</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style="background: oklch(0.18 0.02 155); color: oklch(0.60 0.10 155);">PS</div>
+									<div>
+										<span class="text-xs text-white">Paola S. — Mesera VIP</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">20:00 — ahora</span>
+											<span class="text-[9px] text-avoqado-green">$18,650 en ventas</span>
+										</div>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-xs text-avoqado-green">$1,398</span>
+									<span class="text-[8px] text-gray-600 block">Comision 7.5%</span>
+								</div>
+							</div>
+						</div>
+						<!-- Shift summary -->
+						<div class="rounded-lg p-3" style="background: oklch(0.14 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+							<div class="flex items-center justify-between mb-2">
+								<span class="text-[10px] text-gray-400">Resumen del turno</span>
+								<span class="text-[9px] text-avoqado-green">En curso</span>
+							</div>
+							<div class="grid grid-cols-4 gap-2">
+								<div class="text-center">
+									<div class="text-[10px] text-white">12</div>
+									<div class="text-[7px] text-gray-600">Activos</div>
+								</div>
+								<div class="text-center">
+									<div class="text-[10px] text-white">$142k</div>
+									<div class="text-[7px] text-gray-600">Ventas</div>
+								</div>
+								<div class="text-center">
+									<div class="text-[10px]" style={`color: ${ACCENT};`}>$5.4k</div>
+									<div class="text-[7px] text-gray-600">Comisiones</div>
+								</div>
+								<div class="text-center">
+									<div class="text-[10px] text-white">289</div>
+									<div class="text-[7px] text-gray-600">Accesos</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 5. PAGOS                                    -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Payment mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Cobro rapido — Mesa VIP-2</span>
+							<span class="text-[9px] px-2 py-0.5 rounded-full bg-avoqado-green text-black font-medium">$8,920</span>
+						</div>
+
+						<!-- Payment methods -->
+						<div class="grid grid-cols-2 gap-2 mb-4">
+							<div class="rounded-xl p-3 text-center" style={`background: oklch(0.16 0.005 155); border: 1px solid oklch(0.30 0.06 75);`}>
+								<div class="w-8 h-8 mx-auto mb-2 rounded-lg flex items-center justify-center" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>
+									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v4"/><path d="m16 6-4-4-4 4"/><rect x="2" y="10" width="20" height="12" rx="2"/><path d="M12 14v4"/><circle cx="12" cy="14" r="1"/></svg>
+								</div>
+								<span class="text-[10px] text-white block">NFC / Tap</span>
+								<span class="text-[8px] text-gray-600">Contactless</span>
+							</div>
+							<div class="rounded-xl p-3 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="w-8 h-8 mx-auto mb-2 rounded-lg flex items-center justify-center" style="background: oklch(0.20 0.005 155); color: oklch(0.60 0.005 155);">
+									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h4"/><path d="M14 8h4"/><path d="M6 12h12"/><path d="M6 16h8"/></svg>
+								</div>
+								<span class="text-[10px] text-white block">Tarjeta</span>
+								<span class="text-[8px] text-gray-600">Chip / Banda</span>
+							</div>
+							<div class="rounded-xl p-3 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="w-8 h-8 mx-auto mb-2 rounded-lg flex items-center justify-center" style="background: oklch(0.20 0.005 155); color: oklch(0.60 0.005 155);">
+									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M20 14v3h-3"/><path d="M14 20h3"/><path d="M20 20h0"/></svg>
+								</div>
+								<span class="text-[10px] text-white block">QR Pay</span>
+								<span class="text-[8px] text-gray-600">CoDi / SPEI</span>
+							</div>
+							<div class="rounded-xl p-3 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="w-8 h-8 mx-auto mb-2 rounded-lg flex items-center justify-center" style="background: oklch(0.20 0.005 155); color: oklch(0.60 0.005 155);">
+									<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+								</div>
+								<span class="text-[10px] text-white block">Efectivo</span>
+								<span class="text-[8px] text-gray-600">Con cambio</span>
+							</div>
+						</div>
+
+						<!-- Split payment -->
+						<div class="rounded-xl p-3 mb-3" style="background: oklch(0.16 0.005 155);">
+							<div class="text-[10px] text-gray-400 mb-2">Dividir cuenta — VIP-2 (4 personas)</div>
+							<div class="space-y-1.5">
+								<div class="flex items-center justify-between">
+									<div class="flex items-center gap-2">
+										<div class="w-5 h-5 rounded-full flex items-center justify-center text-[7px] font-bold" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>1</div>
+										<span class="text-[10px] text-white">Persona 1</span>
+									</div>
+									<div class="flex items-center gap-2">
+										<span class="text-[10px] text-white">$2,230</span>
+										<span class="text-[8px] px-1.5 py-0.5 rounded bg-avoqado-green text-black">Pagado</span>
+									</div>
+								</div>
+								<div class="flex items-center justify-between">
+									<div class="flex items-center gap-2">
+										<div class="w-5 h-5 rounded-full flex items-center justify-center text-[7px] font-bold" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>2</div>
+										<span class="text-[10px] text-white">Persona 2</span>
+									</div>
+									<div class="flex items-center gap-2">
+										<span class="text-[10px] text-white">$2,230</span>
+										<span class="text-[8px] px-1.5 py-0.5 rounded bg-avoqado-green text-black">Pagado</span>
+									</div>
+								</div>
+								<div class="flex items-center justify-between">
+									<div class="flex items-center gap-2">
+										<div class="w-5 h-5 rounded-full flex items-center justify-center text-[7px] font-bold" style="background: oklch(0.20 0.005 155); color: oklch(0.50 0.005 155);">3</div>
+										<span class="text-[10px] text-gray-400">Persona 3</span>
+									</div>
+									<div class="flex items-center gap-2">
+										<span class="text-[10px] text-gray-400">$2,230</span>
+										<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>Cobrar</span>
+									</div>
+								</div>
+								<div class="flex items-center justify-between">
+									<div class="flex items-center gap-2">
+										<div class="w-5 h-5 rounded-full flex items-center justify-center text-[7px] font-bold" style="background: oklch(0.20 0.005 155); color: oklch(0.50 0.005 155);">4</div>
+										<span class="text-[10px] text-gray-400">Persona 4</span>
+									</div>
+									<div class="flex items-center gap-2">
+										<span class="text-[10px] text-gray-400">$2,230</span>
+										<span class="text-[8px] px-1.5 py-0.5 rounded" style="background: oklch(0.20 0.005 155); color: oklch(0.50 0.005 155);">Pendiente</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Tip -->
+						<div class="flex items-center justify-between p-3 rounded-xl" style={`background: oklch(0.14 0.02 155); border: 1px solid oklch(0.25 0.03 155);`}>
+							<div>
+								<span class="text-[10px] text-white">Propina sugerida</span>
+								<span class="text-[9px] text-avoqado-green block">El cliente elige en la terminal</span>
+							</div>
+							<div class="flex gap-1.5">
+								<span class="text-[8px] px-2 py-1 rounded-full" style="background: oklch(0.20 0.005 155); color: oklch(0.60 0.005 155);">10%</span>
+								<span class="text-[8px] px-2 py-1 rounded-full" style={`background: oklch(0.18 0.02 75); color: ${ACCENT};`}>15%</span>
+								<span class="text-[8px] px-2 py-1 rounded-full" style="background: oklch(0.20 0.005 155); color: oklch(0.60 0.005 155);">20%</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Pagos</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Cobra rapido en alta demanda.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							NFC contactless para cobrar en 2 segundos. Division de cuentas para grupos. Propinas digitales configurables. Cierre de caja por turno con desglose completo. Diseñado para las noches mas pesadas.
+						</p>
+						<div class="space-y-3">
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Contactless NFC</h3>
+								<p class="text-sm text-gray-500">Tap to pay con terminales PAX. El cliente acerca su tarjeta o telefono y listo.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Division de cuentas</h3>
+								<p class="text-sm text-gray-500">Partes iguales, por persona, o por consumo. Cada quien paga lo suyo.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Propinas digitales</h3>
+								<p class="text-sm text-gray-500">10%, 15%, 20% o monto libre. El cliente elige en la terminal sin presion.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Corte de caja</h3>
+								<p class="text-sm text-gray-500">Esperado vs contado, desglose por metodo de pago, varianza al centavo.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 6. NUMEROS                                  -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+					<div class="border-t pt-6" style={`border-color: ${ACCENT};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">Eventos</div>
+						<div class="text-sm text-gray-500">Creacion, venta y validacion de boletos</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${ACCENT};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">Control de acceso</div>
+						<div class="text-sm text-gray-500">QR scan en puerta con aforo en vivo</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${ACCENT};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">Multi-zona</div>
+						<div class="text-sm text-gray-500">General, VIP, terraza, lounge, privados</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${ACCENT};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">Tiempo real</div>
+						<div class="text-sm text-gray-500">Ventas, accesos y consumo al instante</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 7. CTA                                      -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-3xl mx-auto text-center">
+				<h2 class="text-3xl md:text-5xl font-light tracking-tight text-black mb-8">
+					Prueba Avoqado para tu venue.
+				</h2>
+				<p class="text-lg text-gray-500 mb-12 max-w-xl mx-auto">
+					Demo interactiva con datos de un venue real. Sin tarjeta, sin compromiso. Explora boletos, barra, reservaciones y pagos a tu ritmo.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 text-lg" style={`background: ${ACCENT};`}>
+						Probar demo gratis
+					</a>
+					<a href="/contact" class="px-8 py-4 border border-black/20 text-black font-medium rounded-full hover:bg-black/5 hover:-translate-y-0.5 transition-all duration-200 text-lg">
+						Hablar con ventas
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<FloatingChatbot client:idle />
+		<Footer />
+	</body>
+</html>

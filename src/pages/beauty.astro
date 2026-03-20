@@ -1,100 +1,824 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
 import Navbar from '../components/layout/Navbar.astro';
 import Footer from '../components/layout/Footer.astro';
-import IndustryHero from '../components/sections/IndustryHero.astro';
-import CategoryGrid from '../components/sections/CategoryGrid.astro';
-import CategoryPills from '../components/interactive/CategoryPills';
-import FeatureAccordion from '../components/interactive/FeatureAccordion';
+import FloatingChatbot from '../components/interactive/FloatingChatbot';
 
-// Hero image - high quality lifestyle shot
-const heroImage = "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1600&q=80";
-
-// Categories - Square style
-const categories = [
-    { name: "Salones", image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&q=80", href: "#features" },
-    { name: "Spas", image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400&q=80", href: "#features" },
-    { name: "Gimnasios", image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&q=80", href: "#features" },
-    { name: "Clínicas", image: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=400&q=80", href: "#features" },
-    { name: "Veterinarias", image: "https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=400&q=80", href: "#features" }
-];
-
-// Sub-category pills
-const subcategories = [
-    "Salones de Belleza", "Spas", "Gimnasios", "Clínicas Médicas", 
-    "Veterinarias", "Talleres Mecánicos", "Lavanderías", "Reparación"
-];
-
-// Feature accordion - simplified Square style
-const features = [
-    {
-        title: "Cobra al finalizar el servicio",
-        description: "Terminales PAX con NFC, chip y banda. Propinas digitales, pagos parciales, y recibos por email automáticos.",
-        image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&q=80"
-    },
-    {
-        title: "Comisiones por estilista",
-        description: "Porcentajes de comisión por empleado o servicio. Tiers progresivos por volumen. Pagos automáticos.",
-        image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80"
-    },
-    {
-        title: "Gestiona desde el celular",
-        description: "App iOS y Android. Revisa ventas, notificaciones push, y monitorea la asistencia de tu equipo.",
-        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&q=80"
-    },
-    {
-        title: "Crece con lealtad",
-        description: "Puntos por visita. Programa de lealtad integrado. Fideliza clientes sin apps externas.",
-        image: "https://images.unsplash.com/photo-1556742111-a301076d9d18?w=800&q=80"
-    }
-];
+const MAGENTA = 'oklch(0.72 0.15 340)';
+const GREEN = '#69E185';
+const BLUE = 'oklch(0.72 0.14 240)';
+const AMBER = 'oklch(0.78 0.14 75)';
+const ROSE = 'oklch(0.65 0.18 10)';
 ---
 
-<Layout title="Avoqado para Belleza | Salones, Spas y Clínicas">
-  <body class="bg-white m-0 p-0 w-full">
-    <Navbar position="fixed" transparentOnTop={true} />
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Avoqado para Belleza | Salones, Spas y Wellness</title>
+		<meta name="description" content="Plataforma integral para salones, spas, barberias, nail studios y centros de bienestar. Reservaciones, comisiones, CRM y pagos en un solo lugar." />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+	</head>
+	<body class="bg-black m-0 p-0 w-full">
+		<Navbar position="fixed" transparentOnTop={true} />
 
-    <!-- Hero -->
-    <IndustryHero 
-        title="Soluciones personalizadas para salones"
-        heroImage={heroImage}
-    />
 
-    <!-- Category Grid -->
-    <CategoryGrid 
-        title="Creado para todo tipo de servicios"
-        categories={categories}
-    />
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- HERO                                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="min-h-screen flex items-center pt-24 md:pt-32 pb-16 px-6">
+			<div class="max-w-[1400px] mx-auto w-full">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+					<!-- Text -->
+					<div>
+						<div class="flex items-center gap-3 mb-6">
+							<span class="text-5xl font-light text-white/10">B&W</span>
+							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${MAGENTA};`}>Avoqado Beauty</span>
+						</div>
+						<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-white mb-8">
+							Tu salon.<br/>Tu sistema.
+						</h1>
+						<p class="text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-10">
+							Citas, clientes y comisiones en un solo lugar. Reservaciones online, historial de cada cliente, comisiones automaticas por estilista y pagos integrados — todo desde una sola plataforma.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4">
+							<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-white font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${MAGENTA};`}>
+								Probar demo gratis
+							</a>
+							<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200">
+								Hablar con ventas
+							</a>
+						</div>
+					</div>
 
-    <!-- Category Pills -->
-    <CategoryPills client:visible categories={subcategories} />
+					<!-- Calendar mockup -->
+					<div class="hidden lg:block">
+						<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+							<!-- Header -->
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center gap-2">
+									<div class="w-6 h-6 rounded-lg flex items-center justify-center" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>
+										<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
+									</div>
+									<span class="text-[11px] text-white font-medium">Agenda — Hoy, 19 mar</span>
+								</div>
+								<div class="flex gap-1.5">
+									<span class="text-[8px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>8 citas</span>
+									<span class="text-[8px] px-2 py-0.5 rounded-full bg-avoqado-green text-black">2 libres</span>
+								</div>
+							</div>
+							<!-- Time slots -->
+							<div class="space-y-1.5 mb-4">
+								<div class="flex items-center gap-2">
+									<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">09:00</span>
+									<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style={`background: oklch(0.18 0.02 340); border-left: 3px solid ${MAGENTA};`}>
+										<div>
+											<span class="text-[10px] text-white">Corte + Balayage</span>
+											<span class="text-[8px] text-gray-500 block">Lucia M. — Diana (Est. 2)</span>
+										</div>
+										<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.22 0.03 340); color: ${MAGENTA};`}>2h 30m</span>
+									</div>
+								</div>
+								<div class="flex items-center gap-2">
+									<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">09:30</span>
+									<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style={`background: oklch(0.18 0.02 340); border-left: 3px solid ${MAGENTA};`}>
+										<div>
+											<span class="text-[10px] text-white">Barba + Corte clasico</span>
+											<span class="text-[8px] text-gray-500 block">Carlos R. — Erick (Est. 1)</span>
+										</div>
+										<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.22 0.03 340); color: ${MAGENTA};`}>1h</span>
+									</div>
+								</div>
+								<div class="flex items-center gap-2">
+									<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">10:30</span>
+									<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style="background: oklch(0.16 0.005 155); border-left: 3px solid oklch(0.40 0.005 155);">
+										<div>
+											<span class="text-[10px] text-gray-400">Espacio libre</span>
+											<span class="text-[8px] text-gray-600 block">Erick (Est. 1) disponible</span>
+										</div>
+										<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>Agendar</span>
+									</div>
+								</div>
+								<div class="flex items-center gap-2">
+									<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">11:00</span>
+									<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style={`background: oklch(0.18 0.02 75); border-left: 3px solid ${AMBER};`}>
+										<div>
+											<span class="text-[10px] text-white">Manicure + Pedicure gel</span>
+											<span class="text-[8px] text-gray-500 block">Sofia G. — Valentina (Est. 3)</span>
+										</div>
+										<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.22 0.03 75); color: ${AMBER};`}>1h 30m</span>
+									</div>
+								</div>
+								<div class="flex items-center gap-2">
+									<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">12:00</span>
+									<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style={`background: oklch(0.18 0.02 340); border-left: 3px solid ${MAGENTA};`}>
+										<div>
+											<span class="text-[10px] text-white">Tinte + Tratamiento keratina</span>
+											<span class="text-[8px] text-gray-500 block">Ana L. — Diana (Est. 2)</span>
+										</div>
+										<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.22 0.03 340); color: ${MAGENTA};`}>3h</span>
+									</div>
+								</div>
+							</div>
+							<!-- Legend -->
+							<div class="flex items-center gap-4 pt-3 border-t border-white/5">
+								<div class="flex items-center gap-1.5">
+									<div class="w-2 h-2 rounded-sm" style={`background: ${MAGENTA};`}></div>
+									<span class="text-[8px] text-gray-500">Confirmada</span>
+								</div>
+								<div class="flex items-center gap-1.5">
+									<div class="w-2 h-2 rounded-sm" style={`background: ${AMBER};`}></div>
+									<span class="text-[8px] text-gray-500">Pendiente</span>
+								</div>
+								<div class="flex items-center gap-1.5">
+									<div class="w-2 h-2 rounded-sm" style="background: oklch(0.25 0.005 155);"></div>
+									<span class="text-[8px] text-gray-500">Libre</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-    <!-- Feature Accordion -->
-    <div id="features">
-        <FeatureAccordion client:visible features={features} />
-    </div>
 
-    <Footer />
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 1. RESERVACIONES                            -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${MAGENTA};`}>Reservaciones</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Agenda sin esfuerzo.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Tus clientes reservan desde tu pagina de booking o WhatsApp. El sistema asigna estacion, bloquea el horario y envia recordatorio automatico. Si no confirman, libera el espacio.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${MAGENTA};`}></div>
+								<span class="text-sm text-gray-600">Booking online 24/7 con pagina publica personalizada</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-600">Waitlist automatica cuando no hay disponibilidad</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-600">Recordatorios por WhatsApp 24h y 1h antes de la cita</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-600">Deposito con Stripe para reducir no-shows</span>
+							</div>
+						</div>
+					</div>
 
-    <!-- Scroll Animation Script -->
-    <script>
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+					<!-- Booking calendar mockup -->
+					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Reservaciones — Semana del 17 mar</span>
+							<div class="flex gap-1.5">
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>Dia</span>
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: ${MAGENTA}; color: white;`}>Semana</span>
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style="background: oklch(0.16 0.005 155); color: oklch(0.50 0.005 155);">Mes</span>
+							</div>
+						</div>
+						<!-- Week grid -->
+						<div class="grid grid-cols-6 gap-1 mb-4">
+							<!-- Header row -->
+							<div class="text-center py-1"></div>
+							<div class="text-center py-1"><span class="text-[8px] text-gray-600">Lun 17</span></div>
+							<div class="text-center py-1"><span class="text-[8px] text-gray-600">Mar 18</span></div>
+							<div class="text-center py-1 rounded" style={`background: oklch(0.18 0.02 340);`}><span class="text-[8px]" style={`color: ${MAGENTA};`}>Mie 19</span></div>
+							<div class="text-center py-1"><span class="text-[8px] text-gray-600">Jue 20</span></div>
+							<div class="text-center py-1"><span class="text-[8px] text-gray-600">Vie 21</span></div>
+							<!-- 09:00 -->
+							<div class="text-right pr-1 py-2"><span class="text-[8px] text-gray-600">09:00</span></div>
+							<div class="rounded p-1" style={`background: oklch(0.18 0.02 340); border-left: 2px solid ${MAGENTA};`}>
+								<span class="text-[7px] text-white block">Lucia M.</span>
+								<span class="text-[6px] text-gray-500">Balayage</span>
+							</div>
+							<div class="rounded p-1" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[7px] text-gray-500 block">Libre</span>
+							</div>
+							<div class="rounded p-1" style={`background: oklch(0.18 0.02 340); border-left: 2px solid ${MAGENTA};`}>
+								<span class="text-[7px] text-white block">Marta S.</span>
+								<span class="text-[6px] text-gray-500">Corte</span>
+							</div>
+							<div class="rounded p-1" style={`background: oklch(0.18 0.02 75); border-left: 2px solid ${AMBER};`}>
+								<span class="text-[7px] text-white block">Reservada</span>
+								<span class="text-[6px]" style={`color: ${AMBER};`}>Pend.</span>
+							</div>
+							<div class="rounded p-1" style={`background: oklch(0.18 0.02 340); border-left: 2px solid ${MAGENTA};`}>
+								<span class="text-[7px] text-white block">Ana T.</span>
+								<span class="text-[6px] text-gray-500">Tinte</span>
+							</div>
+							<!-- 11:00 -->
+							<div class="text-right pr-1 py-2"><span class="text-[8px] text-gray-600">11:00</span></div>
+							<div class="rounded p-1" style={`background: oklch(0.18 0.02 340); border-left: 2px solid ${MAGENTA};`}>
+								<span class="text-[7px] text-white block">Carlos R.</span>
+								<span class="text-[6px] text-gray-500">Barba</span>
+							</div>
+							<div class="rounded p-1" style={`background: oklch(0.18 0.02 340); border-left: 2px solid ${MAGENTA};`}>
+								<span class="text-[7px] text-white block">Sofia G.</span>
+								<span class="text-[6px] text-gray-500">Manicure</span>
+							</div>
+							<div class="rounded p-1" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[7px] text-gray-500 block">Libre</span>
+							</div>
+							<div class="rounded p-1" style={`background: oklch(0.18 0.02 340); border-left: 2px solid ${MAGENTA};`}>
+								<span class="text-[7px] text-white block">Rosa P.</span>
+								<span class="text-[6px] text-gray-500">Pedicure</span>
+							</div>
+							<div class="rounded p-1" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[7px] text-gray-500 block">Libre</span>
+							</div>
+							<!-- 13:00 -->
+							<div class="text-right pr-1 py-2"><span class="text-[8px] text-gray-600">13:00</span></div>
+							<div class="rounded p-1" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[7px] text-gray-500 block">Libre</span>
+							</div>
+							<div class="rounded p-1" style={`background: oklch(0.18 0.02 340); border-left: 2px solid ${MAGENTA};`}>
+								<span class="text-[7px] text-white block">Elena V.</span>
+								<span class="text-[6px] text-gray-500">Keratina</span>
+							</div>
+							<div class="rounded p-1" style={`background: oklch(0.18 0.02 340); border-left: 2px solid ${MAGENTA};`}>
+								<span class="text-[7px] text-white block">Lucia M.</span>
+								<span class="text-[6px] text-gray-500">Retoque</span>
+							</div>
+							<div class="rounded p-1" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[7px] text-gray-500 block">Libre</span>
+							</div>
+							<div class="rounded p-1" style={`background: oklch(0.18 0.02 340); border-left: 2px solid ${MAGENTA};`}>
+								<span class="text-[7px] text-white block">Julia M.</span>
+								<span class="text-[6px] text-gray-500">Extensiones</span>
+							</div>
+						</div>
+						<!-- Booking link -->
+						<div class="rounded-lg p-3 flex items-center justify-between" style="background: oklch(0.14 0.02 155); border: 1px solid oklch(0.25 0.03 155);">
+							<div>
+								<span class="text-[10px] text-white">Pagina de booking publica</span>
+								<span class="text-[9px] text-avoqado-green block">book.avoqado.io/tu-salon</span>
+							</div>
+							<span class="text-[9px] px-2 py-0.5 rounded bg-avoqado-green text-black font-medium">Compartir</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.remove('opacity-0', 'translate-y-10');
-                    entry.target.classList.add('opacity-100', 'translate-y-0');
-                }
-            });
-        }, observerOptions);
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('[data-animate-on-scroll]').forEach(el => observer.observe(el));
-        });
-    </script>
-  </body>
-</Layout>
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 2. CLIENTES VIP                             -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Client profile mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<!-- Client header -->
+						<div class="flex items-center gap-3 mb-4">
+							<div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>LM</div>
+							<div>
+								<span class="text-sm text-white font-medium">Lucia Martinez</span>
+								<div class="flex items-center gap-2 mt-0.5">
+									<span class="text-[9px] text-gray-500">Cliente desde feb 2024</span>
+									<span class="text-[8px] px-1.5 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>VIP</span>
+								</div>
+							</div>
+						</div>
+						<!-- Stats row -->
+						<div class="grid grid-cols-3 gap-2 mb-4">
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-sm font-light text-white">24</div>
+								<div class="text-[8px] text-gray-600">Visitas</div>
+							</div>
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-sm font-light text-white">$18,400</div>
+								<div class="text-[8px] text-gray-600">Total gastado</div>
+							</div>
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-sm font-light text-white">$767</div>
+								<div class="text-[8px] text-gray-600">Ticket prom.</div>
+							</div>
+						</div>
+						<!-- Tags -->
+						<div class="mb-4">
+							<div class="text-[9px] text-gray-500 mb-2">Etiquetas</div>
+							<div class="flex flex-wrap gap-1.5">
+								<span class="text-[8px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.04 10); color: ${ROSE};`}>Alergica a amoniaco</span>
+								<span class="text-[8px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>Prefiere Diana</span>
+								<span class="text-[8px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>Horario matutino</span>
+								<span class="text-[8px] px-2 py-0.5 rounded-full bg-avoqado-green/10 text-avoqado-green">Cumpleanos: 15 abr</span>
+							</div>
+						</div>
+						<!-- Preferences -->
+						<div class="mb-4">
+							<div class="text-[9px] text-gray-500 mb-2">Preferencias registradas</div>
+							<div class="space-y-1.5">
+								<div class="flex items-center justify-between p-2 rounded-lg" style="background: oklch(0.16 0.005 155);">
+									<span class="text-[9px] text-gray-300">Formula de tinte</span>
+									<span class="text-[9px] text-white">6N + 7G (40vol) — 35 min</span>
+								</div>
+								<div class="flex items-center justify-between p-2 rounded-lg" style="background: oklch(0.16 0.005 155);">
+									<span class="text-[9px] text-gray-300">Corte favorito</span>
+									<span class="text-[9px] text-white">Capas largas con fleco cortina</span>
+								</div>
+								<div class="flex items-center justify-between p-2 rounded-lg" style="background: oklch(0.16 0.005 155);">
+									<span class="text-[9px] text-gray-300">Bebida</span>
+									<span class="text-[9px] text-white">Cafe americano sin azucar</span>
+								</div>
+							</div>
+						</div>
+						<!-- Recent history -->
+						<div>
+							<div class="text-[9px] text-gray-500 mb-2">Historial reciente</div>
+							<div class="space-y-1.5">
+								<div class="flex items-center justify-between p-2 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${MAGENTA};`}>
+									<div>
+										<span class="text-[9px] text-white">Balayage + Corte</span>
+										<span class="text-[7px] text-gray-600 block">5 mar — Diana</span>
+									</div>
+									<span class="text-[9px] text-white">$1,850</span>
+								</div>
+								<div class="flex items-center justify-between p-2 rounded-lg" style="background: oklch(0.16 0.005 155); border-left: 3px solid oklch(0.40 0.005 155);">
+									<div>
+										<span class="text-[9px] text-white">Retoque raiz</span>
+										<span class="text-[7px] text-gray-600 block">12 feb — Diana</span>
+									</div>
+									<span class="text-[9px] text-white">$650</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${MAGENTA};`}>Clientes VIP</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Conoce a cada cliente.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							Perfil completo con historial de servicios, formulas, preferencias y etiquetas personalizadas. Sabe que producto le gusta, que estilista prefiere y cuando es su cumpleanos — antes de que llegue al salon.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${MAGENTA};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Historial completo:</span> Cada visita, servicio, producto y monto registrado</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Etiquetas libres:</span> "Alergico a X", "Solo sabados", "Prefiere silencio"</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Recordatorios:</span> Cumpleanos, retoque programado, cita pendiente</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Formulas guardadas:</span> Tinte, mezcla, tiempos — accesibles para cualquier estilista</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 3. COMISIONES                               -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${MAGENTA};`}>Comisiones</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Motiva a tu equipo.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Comisiones escalonadas que se calculan solas. Define porcentajes por servicio, producto o monto total. Cuando un estilista alcanza un milestone, sube de tier automaticamente. Sin hojas de calculo.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${MAGENTA};`}></div>
+								<span class="text-sm text-gray-600">Comision por servicio, producto o venta total — configurable por estilista</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-600">Tiers progresivos: 30%, 35%, 40% segun volumen mensual</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-600">Milestones con logros visibles para todo el equipo</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-600">Liquidaciones quincenales automaticas con desglose completo</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Staff performance mockup -->
+					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Rendimiento del equipo — Marzo 2026</span>
+							<span class="text-[9px] px-2 py-0.5 rounded-full bg-avoqado-green text-black font-medium">En curso</span>
+						</div>
+						<!-- Staff cards -->
+						<div class="space-y-2 mb-4">
+							<div class="rounded-lg p-3" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${MAGENTA};`}>
+								<div class="flex items-center justify-between mb-2">
+									<div class="flex items-center gap-3">
+										<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>DL</div>
+										<div>
+											<span class="text-xs text-white">Diana Lopez — Estilista Sr.</span>
+											<span class="text-[8px] text-gray-600 block">Tier 3 (40%) — 68 servicios</span>
+										</div>
+									</div>
+									<div class="text-right">
+										<span class="text-xs text-avoqado-green">$24,800</span>
+										<span class="text-[8px] text-gray-600 block">Comision: $9,920</span>
+									</div>
+								</div>
+								<!-- Progress bar -->
+								<div class="w-full h-1.5 rounded-full" style="background: oklch(0.20 0.005 155);">
+									<div class="h-full rounded-full" style={`width: 92%; background: ${MAGENTA};`}></div>
+								</div>
+								<div class="flex items-center justify-between mt-1">
+									<span class="text-[7px] text-gray-600">$24,800 / $27,000 para bonus</span>
+									<span class="text-[7px]" style={`color: ${MAGENTA};`}>92%</span>
+								</div>
+							</div>
+							<div class="rounded-lg p-3" style="background: oklch(0.16 0.005 155); border-left: 3px solid oklch(0.60 0.10 155);">
+								<div class="flex items-center justify-between mb-2">
+									<div class="flex items-center gap-3">
+										<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style="background: oklch(0.18 0.02 155); color: oklch(0.60 0.10 155);">ER</div>
+										<div>
+											<span class="text-xs text-white">Erick Ruiz — Barbero</span>
+											<span class="text-[8px] text-gray-600 block">Tier 2 (35%) — 54 servicios</span>
+										</div>
+									</div>
+									<div class="text-right">
+										<span class="text-xs text-avoqado-green">$16,200</span>
+										<span class="text-[8px] text-gray-600 block">Comision: $5,670</span>
+									</div>
+								</div>
+								<div class="w-full h-1.5 rounded-full" style="background: oklch(0.20 0.005 155);">
+									<div class="h-full rounded-full bg-avoqado-green" style="width: 72%;"></div>
+								</div>
+								<div class="flex items-center justify-between mt-1">
+									<span class="text-[7px] text-gray-600">$16,200 / $22,500 para Tier 3</span>
+									<span class="text-[7px] text-avoqado-green">72%</span>
+								</div>
+							</div>
+							<div class="rounded-lg p-3" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${AMBER};`}>
+								<div class="flex items-center justify-between mb-2">
+									<div class="flex items-center gap-3">
+										<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>VS</div>
+										<div>
+											<span class="text-xs text-white">Valentina S. — Nail Artist</span>
+											<span class="text-[8px] text-gray-600 block">Tier 1 (30%) — 41 servicios</span>
+										</div>
+									</div>
+									<div class="text-right">
+										<span class="text-xs text-avoqado-green">$10,250</span>
+										<span class="text-[8px] text-gray-600 block">Comision: $3,075</span>
+									</div>
+								</div>
+								<div class="w-full h-1.5 rounded-full" style="background: oklch(0.20 0.005 155);">
+									<div class="h-full rounded-full" style={`width: 51%; background: ${AMBER};`}></div>
+								</div>
+								<div class="flex items-center justify-between mt-1">
+									<span class="text-[7px] text-gray-600">$10,250 / $20,000 para Tier 2</span>
+									<span class="text-[7px]" style={`color: ${AMBER};`}>51%</span>
+								</div>
+							</div>
+						</div>
+						<!-- Summary -->
+						<div class="grid grid-cols-3 gap-2">
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-sm font-light text-white">$51,250</div>
+								<div class="text-[8px] text-gray-600">Ventas totales</div>
+							</div>
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-sm font-light text-avoqado-green">$18,665</div>
+								<div class="text-[8px] text-gray-600">Comisiones</div>
+							</div>
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-sm font-light text-white">163</div>
+								<div class="text-[8px] text-gray-600">Servicios</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 4. PAGOS                                    -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${MAGENTA};`}>Pagos</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Cobra como quieras.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							Tarjeta, QR, efectivo o link de pago por WhatsApp. Tu cliente elige como pagar al final del servicio. Propinas digitales, cuentas divididas y recibos automaticos por email.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${MAGENTA};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Tarjeta:</span> Terminal PAX con NFC, chip y banda magnetica</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-400"><span class="text-white">QR:</span> El cliente escanea y paga desde su celular</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Link de pago:</span> Envia por WhatsApp antes o despues del servicio</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Efectivo:</span> Registro con corte de caja y varianza al centavo</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Payment terminal mockup -->
+					<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Cobro — Lucia Martinez</span>
+							<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>Balayage + Corte</span>
+						</div>
+						<!-- Order summary -->
+						<div class="space-y-1.5 mb-4">
+							<div class="flex items-center justify-between p-2 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[10px] text-gray-300">Balayage completo</span>
+								<span class="text-[10px] text-white">$1,200</span>
+							</div>
+							<div class="flex items-center justify-between p-2 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[10px] text-gray-300">Corte y peinado</span>
+								<span class="text-[10px] text-white">$450</span>
+							</div>
+							<div class="flex items-center justify-between p-2 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[10px] text-gray-300">Tratamiento reparador</span>
+								<span class="text-[10px] text-white">$350</span>
+							</div>
+							<div class="flex items-center justify-between p-2 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[10px] text-gray-300">Shampoo Olaplex (retail)</span>
+								<span class="text-[10px] text-white">$680</span>
+							</div>
+						</div>
+						<!-- Totals -->
+						<div class="rounded-lg p-3 mb-4" style="background: oklch(0.16 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+							<div class="flex items-center justify-between mb-1">
+								<span class="text-[10px] text-gray-400">Subtotal</span>
+								<span class="text-[10px] text-white">$2,680</span>
+							</div>
+							<div class="flex items-center justify-between mb-1">
+								<span class="text-[10px] text-gray-400">Descuento VIP (10%)</span>
+								<span class="text-[10px] text-avoqado-green">-$268</span>
+							</div>
+							<div class="flex items-center justify-between pt-2 border-t border-white/5">
+								<span class="text-xs text-white font-medium">Total</span>
+								<span class="text-lg text-white font-light">$2,412</span>
+							</div>
+						</div>
+						<!-- Payment methods -->
+						<div class="text-[9px] text-gray-500 mb-2">Metodo de pago</div>
+						<div class="grid grid-cols-4 gap-2 mb-4">
+							<div class="rounded-lg p-2.5 text-center" style={`background: oklch(0.18 0.02 340); border: 1px solid oklch(0.30 0.06 340);`}>
+								<svg class="mx-auto mb-1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={MAGENTA} stroke-width="1.5" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+								<span class="text-[8px]" style={`color: ${MAGENTA};`}>Tarjeta</span>
+							</div>
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<svg class="mx-auto mb-1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h2v2H7z"/><path d="M15 7h2v2h-2z"/><path d="M7 15h2v2H7z"/><path d="M11 11h2v2h-2z"/></svg>
+								<span class="text-[8px] text-gray-500">QR</span>
+							</div>
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<svg class="mx-auto mb-1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="1.5" stroke-linecap="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+								<span class="text-[8px] text-gray-500">Efectivo</span>
+							</div>
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<svg class="mx-auto mb-1" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="1.5" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+								<span class="text-[8px] text-gray-500">Link</span>
+							</div>
+						</div>
+						<!-- Propina -->
+						<div class="text-[9px] text-gray-500 mb-2">Propina sugerida</div>
+						<div class="grid grid-cols-4 gap-2 mb-4">
+							<div class="rounded-lg py-2 text-center" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[10px] text-gray-400">10%</span>
+								<span class="text-[8px] text-gray-600 block">$241</span>
+							</div>
+							<div class="rounded-lg py-2 text-center" style={`background: oklch(0.18 0.02 340); border: 1px solid oklch(0.30 0.06 340);`}>
+								<span class="text-[10px]" style={`color: ${MAGENTA};`}>15%</span>
+								<span class="text-[8px] text-gray-500 block">$362</span>
+							</div>
+							<div class="rounded-lg py-2 text-center" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[10px] text-gray-400">20%</span>
+								<span class="text-[8px] text-gray-600 block">$482</span>
+							</div>
+							<div class="rounded-lg py-2 text-center" style="background: oklch(0.16 0.005 155);">
+								<span class="text-[10px] text-gray-400">Otro</span>
+							</div>
+						</div>
+						<!-- Pay button -->
+						<div class="h-10 rounded-xl flex items-center justify-center" style={`background: ${MAGENTA};`}>
+							<span class="text-sm font-semibold text-white">Cobrar $2,774</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 5. PRODUCTOS Y SERVICIOS                    -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Service catalog mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Catalogo de servicios y productos</span>
+							<div class="flex gap-1.5">
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: ${MAGENTA}; color: white;`}>Servicios</span>
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style="background: oklch(0.16 0.005 155); color: oklch(0.50 0.005 155);">Retail</span>
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style="background: oklch(0.16 0.005 155); color: oklch(0.50 0.005 155);">Paquetes</span>
+							</div>
+						</div>
+						<!-- Categories -->
+						<div class="flex gap-1.5 mb-4 overflow-hidden">
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-white shrink-0" style={`background: ${MAGENTA};`}>Todo</div>
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-gray-500 shrink-0" style="background: oklch(0.16 0.005 155);">Corte</div>
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-gray-500 shrink-0" style="background: oklch(0.16 0.005 155);">Color</div>
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-gray-500 shrink-0" style="background: oklch(0.16 0.005 155);">Unas</div>
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-gray-500 shrink-0" style="background: oklch(0.16 0.005 155);">Facial</div>
+						</div>
+						<!-- Service items -->
+						<div class="space-y-1.5 mb-4">
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${MAGENTA};`}>
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center" style={`background: oklch(0.18 0.02 340);`}>
+										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={MAGENTA} stroke-width="1.5" stroke-linecap="round"><path d="M6 3v7"/><path d="M18 3v7"/><path d="M6 10c0 3 2 6 6 6s6-3 6-6"/></svg>
+									</div>
+									<div>
+										<span class="text-[10px] text-white">Corte dama</span>
+										<span class="text-[8px] text-gray-500 block">45 min — Todas las estilistas</span>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-[10px] text-white">$350</span>
+									<span class="text-[7px] text-gray-600 block">Comision 35%</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${MAGENTA};`}>
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center" style={`background: oklch(0.18 0.02 340);`}>
+										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={MAGENTA} stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+									</div>
+									<div>
+										<span class="text-[10px] text-white">Balayage completo</span>
+										<span class="text-[8px] text-gray-500 block">2h 30m — Diana, Sofia</span>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-[10px] text-white">$1,200</span>
+									<span class="text-[7px] text-gray-600 block">Comision 40%</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${AMBER};`}>
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center" style={`background: oklch(0.18 0.02 75);`}>
+										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={AMBER} stroke-width="1.5" stroke-linecap="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><path d="M16 8L2 22"/><path d="M17.5 15H9"/></svg>
+									</div>
+									<div>
+										<span class="text-[10px] text-white">Manicure gel</span>
+										<span class="text-[8px] text-gray-500 block">1h — Valentina</span>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-[10px] text-white">$450</span>
+									<span class="text-[7px] text-gray-600 block">Comision 30%</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style="background: oklch(0.16 0.005 155); border-left: 3px solid oklch(0.40 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="1.5" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+									</div>
+									<div>
+										<span class="text-[10px] text-white">Olaplex No. 3 (Retail)</span>
+										<span class="text-[8px] text-gray-500 block">Producto — Stock: 12 uds</span>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-[10px] text-white">$680</span>
+									<span class="text-[7px] text-gray-600 block">Comision 10%</span>
+								</div>
+							</div>
+						</div>
+						<!-- Credit packs -->
+						<div class="rounded-lg p-3" style={`background: oklch(0.14 0.02 340); border: 1px solid oklch(0.25 0.05 340);`}>
+							<div class="flex items-center justify-between">
+								<div>
+									<span class="text-[10px] text-white">Paquete 5 cortes</span>
+									<span class="text-[8px] block" style={`color: ${MAGENTA};`}>Ahorro $250 — Vigencia 3 meses</span>
+								</div>
+								<span class="text-[10px] text-white font-medium">$1,500</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${MAGENTA};`}>Catalogo</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Menu de servicios y retail.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Cada servicio con duracion, precio, estilistas asignadas y comision. Productos retail con inventario. Paquetes con creditos prepagados y vigencia. Todo configurable, todo integrado.
+						</p>
+						<div class="space-y-3">
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Servicios con duracion</h3>
+								<p class="text-sm text-gray-500">Cada servicio bloquea el tiempo exacto en la agenda. Sin sobreposiciones, sin huecos.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Retail integrado</h3>
+								<p class="text-sm text-gray-500">Vende shampoos, tratamientos y accesorios con inventario y margen por producto.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Paquetes y creditos</h3>
+								<p class="text-sm text-gray-500">Vende packs prepagados: 5 cortes, 10 sesiones. El cliente canjea y tu controlas el saldo.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 6. NUMEROS                                  -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+					<div class="border-t pt-6" style={`border-color: ${MAGENTA};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">Citas online</div>
+						<div class="text-sm text-gray-500">Booking 24/7 desde tu pagina</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${MAGENTA};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">Comisiones</div>
+						<div class="text-sm text-gray-500">Automaticas por servicio</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${MAGENTA};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">CRM</div>
+						<div class="text-sm text-gray-500">Integrado con cada cliente</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${MAGENTA};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">Multi-sucursal</div>
+						<div class="text-sm text-gray-500">Gestiona todas tus sedes</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- CTA                                         -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-3xl mx-auto text-center">
+				<h2 class="text-3xl md:text-5xl font-light tracking-tight text-black mb-8">
+					Prueba Avoqado para tu salon.
+				</h2>
+				<p class="text-lg text-gray-500 mb-12 max-w-xl mx-auto">
+					Demo interactiva con datos reales de un salon. Sin tarjeta, sin compromiso. Explora las reservaciones, el CRM, las comisiones y todo lo demas a tu ritmo.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="px-8 py-4 text-white font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 text-lg" style={`background: ${MAGENTA};`}>
+						Probar demo gratis
+					</a>
+					<a href="/contact" class="px-8 py-4 border border-black/10 text-black font-medium rounded-full hover:bg-black/5 hover:-translate-y-0.5 transition-all duration-200 text-lg">
+						Hablar con ventas
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<FloatingChatbot client:idle />
+		<Footer />
+	</body>
+</html>

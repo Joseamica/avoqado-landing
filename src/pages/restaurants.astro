@@ -1,117 +1,821 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Footer from '../components/layout/Footer.astro';
+import '../styles/global.css';
 import Navbar from '../components/layout/Navbar.astro';
-import RestaurantHero from '../components/sections/RestaurantHero.astro';
-import RestaurantFeatures from '../components/interactive/RestaurantFeatures';
-import MobileMenu from '../components/interactive/MobileMenu';
+import Footer from '../components/layout/Footer.astro';
 import FloatingChatbot from '../components/interactive/FloatingChatbot';
+
+const ACCENT = '#69E185';
+const AMBER = 'oklch(0.78 0.14 75)';
+const BLUE = 'oklch(0.72 0.14 240)';
+const RED = 'oklch(0.65 0.20 25)';
 ---
 
-<Layout title="Avoqado para Restaurantes | El TPV todo en uno">
-  <body class="bg-black min-h-screen">
-    
-    <Navbar position="fixed" transparentOnTop={true} />
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Avoqado para Restaurantes y Bares | Gestion Integral</title>
+		<meta name="description" content="Plataforma todo-en-uno para restaurantes, cafes, bares, food trucks, dark kitchens y catering. Mesas, ordenes, menu, pagos QR, delivery y gestion de equipo." />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+	</head>
+	<body class="bg-black m-0 p-0 w-full">
+		<Navbar position="fixed" transparentOnTop={true} />
 
-    {/* Hero Section */}
-    <RestaurantHero />
 
-    {/* Features Section */}
-    <div class="opacity-0 translate-y-20 transition-all duration-1000 ease-out" data-animate-on-scroll>
-        <section id="features" class="py-24 px-6 max-w-[1400px] mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-light text-white mb-6 font-sans">
-                    Todo lo que necesitas. <br/>
-                    <span class="text-gray-500">En un solo dispositivo.</span>
-                </h2>
-                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
-                    Avoqado reemplaza la caja registradora, la impresora y el datáfono con una solución elegante y potente.
-                </p>
-            </div>
-            
-            <RestaurantFeatures client:visible />
-        </section>
-    </div>
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- HERO                                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="min-h-screen flex items-center pt-24 md:pt-32 pb-16 px-6">
+			<div class="max-w-[1400px] mx-auto w-full">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+					<!-- Text -->
+					<div>
+						<div class="flex items-center gap-3 mb-6">
+							<span class="text-5xl font-light text-white/10">R</span>
+							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${ACCENT};`}>Restaurantes y Bares</span>
+						</div>
+						<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-white mb-8">
+							Todo lo que tu restaurante necesita.
+						</h1>
+						<p class="text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-10">
+							De la cocina a la mesa, del menu al cobro. Una sola plataforma para gestionar mesas, ordenes, inventario, pagos y equipo — sin importar si tienes un cafe, un bar, un food truck o una dark kitchen.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4">
+							<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${ACCENT};`}>
+								Probar demo gratis
+							</a>
+							<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200">
+								Hablar con ventas
+							</a>
+						</div>
+					</div>
 
-    {/* Hardware Spotlight - Dark Theme matching Square */}
-    <div class="opacity-0 translate-y-20 transition-all duration-1000 ease-out" data-animate-on-scroll>
-        <section class="py-32 bg-avoqado-dark-surface text-white">
-            <div class="max-w-[1400px] mx-auto px-6">
-                <div class="mb-20 text-center md:text-left">
-                    <h2 class="text-5xl md:text-6xl font-light mb-6 font-sans tracking-tight">Hardware para <br/> cada concepto.</h2>
-                    <p class="text-xl text-gray-400 max-w-2xl font-light">
-                        Desde cafeterías hasta alta cocina. Equipos diseñados para resistir el ritmo de tu cocina.
-                    </p>
-                </div>
+					<!-- Floor plan mockup -->
+					<div class="hidden lg:block">
+						<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+							<!-- Header -->
+							<div class="flex items-center justify-between mb-4">
+								<div class="flex items-center gap-2">
+									<div class="w-6 h-6 rounded-lg flex items-center justify-center" style={`background: oklch(0.18 0.04 155); color: ${ACCENT};`}>
+										<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+									</div>
+									<span class="text-[11px] text-white font-medium">Floor Plan — Sala Principal</span>
+								</div>
+								<div class="flex gap-1.5">
+									<span class="text-[8px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.04 155); color: ${ACCENT};`}>14 mesas</span>
+									<span class="text-[8px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>2 reservadas</span>
+								</div>
+							</div>
+							<!-- Floor plan grid -->
+							<div class="grid grid-cols-4 gap-2.5 mb-4">
+								<!-- Row 1 -->
+								<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style={`background: oklch(0.18 0.04 155); border: 1px solid oklch(0.30 0.08 155);`}>
+									<span class="text-[10px] text-white font-medium">M1</span>
+									<span class="text-[7px] mt-0.5" style={`color: ${ACCENT};`}>4 pax</span>
+									<span class="text-[7px] mt-0.5" style={`color: ${ACCENT};`}>$1,840</span>
+								</div>
+								<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style={`background: oklch(0.18 0.04 155); border: 1px solid oklch(0.30 0.08 155);`}>
+									<span class="text-[10px] text-white font-medium">M2</span>
+									<span class="text-[7px] mt-0.5" style={`color: ${ACCENT};`}>2 pax</span>
+									<span class="text-[7px] mt-0.5" style={`color: ${ACCENT};`}>$650</span>
+								</div>
+								<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style="background: oklch(0.16 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+									<span class="text-[10px] text-gray-500 font-medium">M3</span>
+									<span class="text-[7px] text-gray-600 mt-0.5">Libre</span>
+								</div>
+								<div class="aspect-square rounded-full flex flex-col items-center justify-center" style={`background: oklch(0.18 0.02 75); border: 1px solid oklch(0.30 0.04 75);`}>
+									<span class="text-[10px] text-white font-medium">M4</span>
+									<span class="text-[7px] mt-0.5" style={`color: ${AMBER};`}>20:00</span>
+								</div>
+								<!-- Row 2 -->
+								<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style="background: oklch(0.16 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+									<span class="text-[10px] text-gray-500 font-medium">M5</span>
+									<span class="text-[7px] text-gray-600 mt-0.5">Libre</span>
+								</div>
+								<div class="aspect-square rounded-xl flex flex-col items-center justify-center col-span-2" style={`background: oklch(0.18 0.04 155); border: 1px solid oklch(0.30 0.08 155);`}>
+									<span class="text-[10px] text-white font-medium">M6 — VIP</span>
+									<span class="text-[7px] mt-0.5" style={`color: ${ACCENT};`}>8 pax</span>
+									<span class="text-[7px] mt-0.5" style={`color: ${ACCENT};`}>$4,520</span>
+								</div>
+								<div class="aspect-square rounded-full flex flex-col items-center justify-center" style={`background: oklch(0.18 0.04 155); border: 1px solid oklch(0.30 0.08 155);`}>
+									<span class="text-[10px] text-white font-medium">M7</span>
+									<span class="text-[7px] mt-0.5" style={`color: ${ACCENT};`}>2 pax</span>
+								</div>
+								<!-- Row 3 -->
+								<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style={`background: oklch(0.18 0.04 155); border: 1px solid oklch(0.30 0.08 155);`}>
+									<span class="text-[10px] text-white font-medium">M8</span>
+									<span class="text-[7px] mt-0.5" style={`color: ${ACCENT};`}>3 pax</span>
+									<span class="text-[7px] mt-0.5" style={`color: ${ACCENT};`}>$980</span>
+								</div>
+								<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style="background: oklch(0.16 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+									<span class="text-[10px] text-gray-500 font-medium">M9</span>
+									<span class="text-[7px] text-gray-600 mt-0.5">Libre</span>
+								</div>
+								<div class="aspect-square rounded-xl flex flex-col items-center justify-center" style="background: oklch(0.16 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+									<span class="text-[10px] text-gray-500 font-medium">M10</span>
+									<span class="text-[7px] text-gray-600 mt-0.5">Libre</span>
+								</div>
+								<div class="aspect-square rounded-full flex flex-col items-center justify-center" style={`background: oklch(0.18 0.02 75); border: 1px solid oklch(0.30 0.04 75);`}>
+									<span class="text-[10px] text-white font-medium">M11</span>
+									<span class="text-[7px] mt-0.5" style={`color: ${AMBER};`}>21:00</span>
+								</div>
+							</div>
+							<!-- Legend -->
+							<div class="flex items-center gap-4 pt-3 border-t border-white/5">
+								<div class="flex items-center gap-1.5">
+									<div class="w-2 h-2 rounded-sm" style={`background: ${ACCENT};`}></div>
+									<span class="text-[8px] text-gray-500">Ocupada</span>
+								</div>
+								<div class="flex items-center gap-1.5">
+									<div class="w-2 h-2 rounded-sm" style="background: oklch(0.25 0.005 155);"></div>
+									<span class="text-[8px] text-gray-500">Libre</span>
+								</div>
+								<div class="flex items-center gap-1.5">
+									<div class="w-2 h-2 rounded-sm" style={`background: ${AMBER};`}></div>
+									<span class="text-[8px] text-gray-500">Reservada</span>
+								</div>
+								<div class="flex items-center gap-1.5">
+									<div class="w-2 h-2 rounded-full" style="background: oklch(0.25 0.005 155);"></div>
+									<span class="text-[8px] text-gray-500">Redonda</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {/* Card 1: Main TPV */}
-                    <div class="group relative h-[500px] bg-black rounded-3xl border border-gray-800 overflow-hidden hover:border-white transition-colors duration-300">
-                        <div class="p-8 relative z-10">
-                            <h3 class="text-2xl font-medium mb-2">Avoqado TPV</h3>
-                            <p class="text-gray-400 font-light">La potencia de un servidor en tu mostrador.</p>
-                        </div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
-                        {/* Simulated Image */}
-                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-3/4 bg-gray-800 rounded-t-2xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
-                    </div>
 
-                    {/* Card 2: Handheld */}
-                    <div class="group relative h-[500px] bg-black rounded-3xl border border-gray-800 overflow-hidden hover:border-white transition-colors duration-300">
-                        <div class="p-8 relative z-10">
-                            <h3 class="text-2xl font-medium mb-2">Avoqado Go</h3>
-                            <p class="text-gray-400 font-light">Toma pedidos en la mesa y cobra al instante.</p>
-                        </div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
-                         {/* Simulated Image */}
-                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-2/3 bg-gray-800 rounded-t-2xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
-                    </div>
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 1. MESAS Y ORDENES                          -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Mesas y Ordenes</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							De la mesa a la cocina al instante.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Floor plan visual con estado de cada mesa en tiempo real. Crea ordenes de cualquier tipo — dine-in, takeout o delivery — y envialas a cocina con un tap. El KDS muestra todo al instante con timer de preparacion.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${ACCENT};`}></div>
+								<span class="text-sm text-gray-600"><span class="text-black font-medium">Dine-in:</span> Orden vinculada a mesa con cuenta abierta, split y propina</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-600"><span class="text-black font-medium">Takeout:</span> Para llevar con tiempo estimado y notificacion al cliente</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-600"><span class="text-black font-medium">Delivery:</span> Direccion, zona de cobertura y asignacion de repartidor</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${RED};`}></div>
+								<span class="text-sm text-gray-600"><span class="text-black font-medium">KDS integrado:</span> Timer por orden, estado por platillo, notas y modificadores visibles</span>
+							</div>
+						</div>
+					</div>
 
-                     {/* Card 3: Kitchen Display */}
-                     <div class="group relative h-[500px] bg-black rounded-3xl border border-gray-800 overflow-hidden hover:border-white transition-colors duration-300">
-                        <div class="p-8 relative z-10">
-                            <h3 class="text-2xl font-medium mb-2">KDS Cocina</h3>
-                            <p class="text-gray-400 font-light">Sincroniza sala y cocina sin gritos ni papel.</p>
-                        </div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
-                         {/* Simulated Image */}
-                        <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gray-800 rounded-t-none opacity-40 group-hover:opacity-70 transition-opacity flex items-center justify-center border-t border-gray-700">
-                           <span class="text-gray-500 text-xs tracking-widest uppercase">Coming Soon</span>
-                        </div>
-                    </div>
-                </div>
+					<!-- Order flow mockup -->
+					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Orden activa — Mesa 6</span>
+							<div class="flex gap-1.5">
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.04 155); color: ${ACCENT};`}>Dine-in</span>
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>8 pax</span>
+							</div>
+						</div>
+						<!-- Order items -->
+						<div class="space-y-1.5 mb-4">
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${ACCENT};`}>
+								<div class="flex items-center gap-3">
+									<span class="text-[10px] font-bold w-5 text-center" style={`color: ${ACCENT};`}>3x</span>
+									<div>
+										<span class="text-[11px] text-white">Tacos al Pastor</span>
+										<span class="text-[8px] text-gray-600 block">Sin cebolla, extra salsa</span>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-[10px] text-white">$285</span>
+									<span class="text-[8px] block" style={`color: ${ACCENT};`}>En cocina</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${ACCENT};`}>
+								<div class="flex items-center gap-3">
+									<span class="text-[10px] font-bold w-5 text-center" style={`color: ${ACCENT};`}>1x</span>
+									<div>
+										<span class="text-[11px] text-white">Arrachera 300g</span>
+										<span class="text-[8px] text-gray-600 block">Termino medio</span>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-[10px] text-white">$320</span>
+									<span class="text-[8px] block" style={`color: ${AMBER};`}>Preparando</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style="background: oklch(0.16 0.005 155); border-left: 3px solid oklch(0.40 0.005 155);">
+								<div class="flex items-center gap-3">
+									<span class="text-[10px] font-bold w-5 text-center text-gray-500">2x</span>
+									<span class="text-[11px] text-white">Michelada Clasica</span>
+								</div>
+								<div class="text-right">
+									<span class="text-[10px] text-white">$190</span>
+									<span class="text-[8px] text-gray-600 block">Barra</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style="background: oklch(0.16 0.005 155); border-left: 3px solid oklch(0.40 0.005 155);">
+								<div class="flex items-center gap-3">
+									<span class="text-[10px] font-bold w-5 text-center text-gray-500">1x</span>
+									<span class="text-[11px] text-white">Guacamole</span>
+								</div>
+								<div class="text-right">
+									<span class="text-[10px] text-white">$120</span>
+									<span class="text-[8px] text-avoqado-green block">Servido</span>
+								</div>
+							</div>
+						</div>
+						<!-- KDS mini preview -->
+						<div class="rounded-lg p-3 mb-3" style="background: oklch(0.14 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+							<div class="flex items-center justify-between mb-2">
+								<span class="text-[10px] text-gray-400">Kitchen Display</span>
+								<span class="text-[8px]" style={`color: ${AMBER};`}>2 preparando</span>
+							</div>
+							<div class="grid grid-cols-3 gap-1.5">
+								<div class="rounded p-1.5 text-center" style={`background: oklch(0.16 0.005 155); border-top: 2px solid ${AMBER};`}>
+									<span class="text-[8px] text-white block">M6</span>
+									<span class="text-[7px]" style={`color: ${AMBER};`}>4:12</span>
+								</div>
+								<div class="rounded p-1.5 text-center" style={`background: oklch(0.16 0.005 155); border-top: 2px solid ${ACCENT};`}>
+									<span class="text-[8px] text-white block">M2</span>
+									<span class="text-[7px]" style={`color: ${ACCENT};`}>Lista</span>
+								</div>
+								<div class="rounded p-1.5 text-center" style="background: oklch(0.16 0.005 155); border-top: 2px solid oklch(0.40 0.005 155);">
+									<span class="text-[8px] text-white block">#47</span>
+									<span class="text-[7px] text-gray-600">Takeout</span>
+								</div>
+							</div>
+						</div>
+						<!-- Total -->
+						<div class="flex items-center justify-between p-3 rounded-xl" style={`background: oklch(0.18 0.04 155);`}>
+							<div>
+								<span class="text-[11px] text-white font-semibold">7 items</span>
+								<span class="text-[9px] text-gray-500 ml-2">Mesero: Carlos R.</span>
+							</div>
+							<span class="text-sm font-semibold" style={`color: ${ACCENT};`}>$4,520</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-                <div class="mt-16 text-center md:text-left">
-                    <a href="/shop" class="text-lg font-bold underline hover:text-gray-300 transition-colors">Ver todos los dispositivos →</a>
-                </div>
-            </div>
-        </section>
-    </div>
 
-    <FloatingChatbot client:idle />
-    <Footer />
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 2. MENU E INVENTARIO                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Menu editor mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">MenuMaker — 48 productos</span>
+							<div class="flex gap-1.5">
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.04 155); color: ${ACCENT};`}>Publicado</span>
+							</div>
+						</div>
+						<!-- Categories -->
+						<div class="flex gap-1.5 mb-4 overflow-hidden">
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-black shrink-0" style={`background: ${ACCENT};`}>Todo</div>
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-gray-500 shrink-0" style="background: oklch(0.16 0.005 155);">Entradas</div>
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-gray-500 shrink-0" style="background: oklch(0.16 0.005 155);">Platos fuertes</div>
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-gray-500 shrink-0" style="background: oklch(0.16 0.005 155);">Bebidas</div>
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-gray-500 shrink-0" style="background: oklch(0.16 0.005 155);">Postres</div>
+						</div>
+						<!-- Product grid -->
+						<div class="grid grid-cols-2 gap-2 mb-4">
+							<div class="rounded-xl p-3" style={`background: oklch(0.16 0.005 155); border: 1px solid oklch(0.30 0.08 155);`}>
+								<div class="w-full aspect-[4/3] rounded-lg mb-2 flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="oklch(0.35 0.005 155)" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+								</div>
+								<span class="text-[11px] text-white">Tacos al Pastor</span>
+								<div class="flex items-center justify-between mt-1">
+									<span class="text-[10px]" style={`color: ${ACCENT};`}>$95</span>
+									<span class="text-[8px] text-gray-600">6 modif.</span>
+								</div>
+							</div>
+							<div class="rounded-xl p-3" style="background: oklch(0.16 0.005 155);">
+								<div class="w-full aspect-[4/3] rounded-lg mb-2 flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="oklch(0.35 0.005 155)" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+								</div>
+								<span class="text-[11px] text-white">Arrachera 300g</span>
+								<div class="flex items-center justify-between mt-1">
+									<span class="text-[10px] text-gray-500">$320</span>
+									<span class="text-[8px] text-gray-600">3 modif.</span>
+								</div>
+							</div>
+							<div class="rounded-xl p-3" style="background: oklch(0.16 0.005 155);">
+								<div class="w-full aspect-[4/3] rounded-lg mb-2 flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="oklch(0.35 0.005 155)" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+								</div>
+								<span class="text-[11px] text-white">Michelada</span>
+								<div class="flex items-center justify-between mt-1">
+									<span class="text-[10px] text-gray-500">$95</span>
+									<span class="text-[8px] text-gray-600">2 modif.</span>
+								</div>
+							</div>
+							<div class="rounded-xl p-3" style="background: oklch(0.16 0.005 155);">
+								<div class="w-full aspect-[4/3] rounded-lg mb-2 flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="oklch(0.35 0.005 155)" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+								</div>
+								<span class="text-[11px] text-white">Guacamole</span>
+								<div class="flex items-center justify-between mt-1">
+									<span class="text-[10px] text-gray-500">$120</span>
+									<span class="text-[8px] text-gray-600">1 modif.</span>
+								</div>
+							</div>
+						</div>
+						<!-- Inventory alert -->
+						<div class="rounded-lg p-3" style="background: oklch(0.14 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+							<div class="flex items-center justify-between mb-2">
+								<span class="text-[10px] text-gray-400">Inventario FIFO</span>
+								<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.18 0.02 25); color: ${RED};`}>2 alertas</span>
+							</div>
+							<div class="space-y-1.5">
+								<div class="flex items-center justify-between">
+									<span class="text-[9px] text-gray-300">Aguacate Hass</span>
+									<div class="flex items-center gap-2">
+										<div class="w-16 h-1 rounded-full" style="background: oklch(0.20 0.005 155);">
+											<div class="w-3 h-1 rounded-full" style={`background: ${RED};`}></div>
+										</div>
+										<span class="text-[8px]" style={`color: ${RED};`}>2 kg</span>
+									</div>
+								</div>
+								<div class="flex items-center justify-between">
+									<span class="text-[9px] text-gray-300">Carne Pastor</span>
+									<div class="flex items-center gap-2">
+										<div class="w-16 h-1 rounded-full" style="background: oklch(0.20 0.005 155);">
+											<div class="w-5 h-1 rounded-full" style={`background: ${AMBER};`}></div>
+										</div>
+										<span class="text-[8px]" style={`color: ${AMBER};`}>4 kg</span>
+									</div>
+								</div>
+								<div class="flex items-center justify-between">
+									<span class="text-[9px] text-gray-300">Limon</span>
+									<div class="flex items-center gap-2">
+										<div class="w-16 h-1 rounded-full" style="background: oklch(0.20 0.005 155);">
+											<div class="w-12 h-1 rounded-full" style={`background: ${ACCENT};`}></div>
+										</div>
+										<span class="text-[8px]" style={`color: ${ACCENT};`}>12 kg</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-    <script>
-        // Scroll animation with Intersection Observer
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Menu e Inventario</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Tu menu, siempre actualizado.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							MenuMaker con categorias, modificadores, fotos y variantes de precio. Conectado con inventario FIFO que descuenta ingredientes por receta — cuando algo se agota, el platillo se desactiva automaticamente.
+						</p>
+						<div class="space-y-3">
+							<div class="border-t border-white/5 pt-3">
+								<h3 class="text-base text-white font-medium mb-1">Categorias y subcategorias</h3>
+								<p class="text-sm text-gray-500">Organiza tu menu por tipo de platillo, tiempo de servicio o seccion de la carta.</p>
+							</div>
+							<div class="border-t border-white/5 pt-3">
+								<h3 class="text-base text-white font-medium mb-1">Modificadores ilimitados</h3>
+								<p class="text-sm text-gray-500">Termino de carne, extras, sustituciones, alergenos — cada modificador con su costo.</p>
+							</div>
+							<div class="border-t border-white/5 pt-3">
+								<h3 class="text-base text-white font-medium mb-1">Recetas con costo</h3>
+								<p class="text-sm text-gray-500">Vincula ingredientes a platillos. Ve el costo real, el margen y la merma por receta.</p>
+							</div>
+							<div class="border-t border-white/5 pt-3">
+								<h3 class="text-base text-white font-medium mb-1">Alertas de stock</h3>
+								<p class="text-sm text-gray-500">Notificacion cuando un ingrediente esta bajo. Desactivacion automatica del platillo si se agota.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.remove('opacity-0', 'translate-y-20');
-                    entry.target.classList.add('opacity-100', 'translate-y-0');
-                }
-            });
-        }, observerOptions);
 
-        // Observe all elements with data-animate-on-scroll
-        document.addEventListener('DOMContentLoaded', () => {
-            const animateElements = document.querySelectorAll('[data-animate-on-scroll]');
-            animateElements.forEach(el => observer.observe(el));
-        });
-    </script>
-  </body>
-</Layout>
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 3. PAGOS QR                                 -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Pagos QR</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Tu cliente paga desde su celular.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							El comensal escanea el QR de la mesa, ve su cuenta, divide entre amigos, agrega propina y paga — todo desde su celular, sin descargar nada. El mesero recibe la notificacion al instante.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${ACCENT};`}></div>
+								<span class="text-sm text-gray-600"><span class="text-black font-medium">Escanea y paga:</span> Sin app, sin espera, sin pedir la cuenta al mesero</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-600"><span class="text-black font-medium">Split inteligente:</span> Divide por persona, por platillo o por monto personalizado</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-600"><span class="text-black font-medium">Propina digital:</span> Sugerencias de 10%, 15%, 20% o monto libre con recibo al instante</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${RED};`}></div>
+								<span class="text-sm text-gray-600"><span class="text-black font-medium">Multi-metodo:</span> Tarjeta, Apple Pay, Google Pay — todo en la misma pantalla</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- QR payment phone mockup -->
+					<div class="flex justify-center">
+						<div class="w-72 rounded-[2rem] overflow-hidden border border-black/10 p-4" style="background: #0A0A0A;">
+							<!-- Phone notch -->
+							<div class="w-24 h-5 bg-black rounded-full mx-auto mb-4"></div>
+							<!-- Screen content -->
+							<div class="rounded-2xl p-4" style="background: oklch(0.16 0.005 155);">
+								<div class="text-center mb-4">
+									<span class="text-[13px] text-white font-medium block">Mesa 6</span>
+									<span class="text-[10px] text-gray-500">La Terraza MX</span>
+								</div>
+								<!-- Bill items -->
+								<div class="space-y-2 mb-4">
+									<div class="flex items-center justify-between">
+										<span class="text-[10px] text-gray-300">3x Tacos al Pastor</span>
+										<span class="text-[10px] text-white">$285</span>
+									</div>
+									<div class="flex items-center justify-between">
+										<span class="text-[10px] text-gray-300">1x Arrachera 300g</span>
+										<span class="text-[10px] text-white">$320</span>
+									</div>
+									<div class="flex items-center justify-between">
+										<span class="text-[10px] text-gray-300">2x Michelada</span>
+										<span class="text-[10px] text-white">$190</span>
+									</div>
+									<div class="flex items-center justify-between">
+										<span class="text-[10px] text-gray-300">1x Guacamole</span>
+										<span class="text-[10px] text-white">$120</span>
+									</div>
+									<div class="h-px" style="background: oklch(0.25 0.005 155);"></div>
+									<div class="flex items-center justify-between">
+										<span class="text-[10px] text-gray-400">Subtotal</span>
+										<span class="text-[10px] text-white">$915</span>
+									</div>
+								</div>
+								<!-- Split selector -->
+								<div class="mb-4">
+									<span class="text-[9px] text-gray-500 block mb-2">Dividir cuenta</span>
+									<div class="grid grid-cols-3 gap-1.5">
+										<div class="py-1.5 rounded-lg text-center text-[9px] text-black font-medium" style={`background: ${ACCENT};`}>Yo pago todo</div>
+										<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">Mitad</div>
+										<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">Por platillo</div>
+									</div>
+								</div>
+								<!-- Tip selector -->
+								<div class="mb-4">
+									<span class="text-[9px] text-gray-500 block mb-2">Propina</span>
+									<div class="grid grid-cols-4 gap-1.5">
+										<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">10%</div>
+										<div class="py-1.5 rounded-lg text-center text-[9px] text-black font-medium" style={`background: ${ACCENT};`}>15%</div>
+										<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">20%</div>
+										<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">Otro</div>
+									</div>
+								</div>
+								<!-- Total -->
+								<div class="flex items-center justify-between mb-3 pt-2 border-t border-white/5">
+									<span class="text-[11px] text-gray-400">Total con propina</span>
+									<span class="text-base font-semibold text-white">$1,052</span>
+								</div>
+								<!-- Pay button -->
+								<div class="h-10 rounded-xl flex items-center justify-center" style={`background: ${ACCENT};`}>
+									<span class="text-sm font-semibold text-black">Pagar $1,052</span>
+								</div>
+								<div class="text-center mt-2">
+									<span class="text-[8px] text-gray-600">Apple Pay / Tarjeta / Google Pay</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 4. DELIVERY Y TAKEOUT                       -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Order sources mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Pedidos entrantes — Hoy</span>
+							<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.04 155); color: ${ACCENT};`}>12 activos</span>
+						</div>
+						<!-- Channel cards -->
+						<div class="space-y-2 mb-4">
+							<div class="flex items-center justify-between p-3 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${ACCENT};`}>
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center" style={`background: oklch(0.18 0.04 155); color: ${ACCENT};`}>
+										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+									</div>
+									<div>
+										<span class="text-xs text-white">WhatsApp — Maria L.</span>
+										<span class="text-[9px] text-gray-600 block">2x Combo Familiar + 4 Aguas</span>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-xs" style={`color: ${ACCENT};`}>$680</span>
+									<span class="text-[8px] text-gray-600 block">Delivery</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${BLUE};`}>
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center" style={`background: oklch(0.18 0.02 240); color: ${BLUE};`}>
+										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+									</div>
+									<div>
+										<span class="text-xs text-white">Widget web — Juan P.</span>
+										<span class="text-[9px] text-gray-600 block">1x Arrachera + 1x Ensalada</span>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-xs" style={`color: ${BLUE};`}>$440</span>
+									<span class="text-[8px] text-gray-600 block">Takeout</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${AMBER};`}>
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>
+										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+									</div>
+									<div>
+										<span class="text-xs text-white">Link de pago — Sofia R.</span>
+										<span class="text-[9px] text-gray-600 block">Pedido especial — Evento privado</span>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-xs" style={`color: ${AMBER};`}>$3,200</span>
+									<span class="text-[8px] text-gray-600 block">Catering</span>
+								</div>
+							</div>
+						</div>
+						<!-- Channel summary -->
+						<div class="grid grid-cols-3 gap-2">
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-sm font-light text-white">6</div>
+								<div class="text-[8px] text-gray-600">WhatsApp</div>
+							</div>
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-sm font-light text-white">4</div>
+								<div class="text-[8px] text-gray-600">Widget web</div>
+							</div>
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-sm font-light text-white">2</div>
+								<div class="text-[8px] text-gray-600">Link de pago</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Delivery y Takeout</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Recibe pedidos de cualquier canal.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							Widget de pedidos para tu sitio web, links de pago via WhatsApp y pagina de pedidos propia. Cada pedido llega al mismo tablero y al KDS — sin importar de donde venga. Sin comisiones de plataformas externas.
+						</p>
+						<div class="space-y-3">
+							<div class="border-t border-white/5 pt-3">
+								<h3 class="text-base text-white font-medium mb-1">Widget para tu sitio web</h3>
+								<p class="text-sm text-gray-500">Embebe tu menu y sistema de pedidos en tu pagina. Tu cliente ordena y paga sin salir.</p>
+							</div>
+							<div class="border-t border-white/5 pt-3">
+								<h3 class="text-base text-white font-medium mb-1">Links de pago por WhatsApp</h3>
+								<p class="text-sm text-gray-500">Genera un link con el pedido y envialo por mensaje. El cliente paga con un tap.</p>
+							</div>
+							<div class="border-t border-white/5 pt-3">
+								<h3 class="text-base text-white font-medium mb-1">Pagina de pedidos propia</h3>
+								<p class="text-sm text-gray-500">tu-negocio.avoqado.io — menu completo, carrito, pago y confirmacion. Sin app externa.</p>
+							</div>
+							<div class="border-t border-white/5 pt-3">
+								<h3 class="text-base text-white font-medium mb-1">0% comision por pedido</h3>
+								<p class="text-sm text-gray-500">Solo pagas el procesamiento de la transaccion. Sin porcentaje extra por delivery o takeout.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 5. EQUIPO                                   -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${ACCENT};`}>Equipo</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Gestiona meseros, cocina y barra.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Roles con permisos granulares, comisiones por venta, control de turnos con clock-in/out y corte de caja al final del dia. Cada peso queda registrado — esperado vs real, con varianza al centavo.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${ACCENT};`}></div>
+								<span class="text-sm text-gray-600"><span class="text-black font-medium">Roles:</span> Owner, Admin, Manager, Cajero, Mesero, Chef, Host, Driver, Custom</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-600"><span class="text-black font-medium">Comisiones:</span> Porcentaje por venta con milestones y calculo automatico</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-600"><span class="text-black font-medium">Turnos:</span> Clock-in/out, breaks, geolocalizacion y horas trabajadas</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${RED};`}></div>
+								<span class="text-sm text-gray-600"><span class="text-black font-medium">Corte de caja:</span> Esperado vs contado, varianza, deposito y firma digital</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Staff cards mockup -->
+					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Turno vespertino — 5 activos</span>
+							<span class="text-[9px] px-2 py-0.5 rounded-full bg-avoqado-green text-black font-medium">En curso</span>
+						</div>
+						<div class="space-y-2 mb-4">
+							<div class="flex items-center justify-between p-3 rounded-lg" style={`background: oklch(0.16 0.005 155);`}>
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style={`background: oklch(0.18 0.04 155); color: ${ACCENT};`}>CR</div>
+									<div>
+										<span class="text-xs text-white">Carlos R. — Mesero</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">14:00 — ahora</span>
+											<span class="text-[9px] text-avoqado-green">$18,450 ventas</span>
+										</div>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-xs text-avoqado-green">$922</span>
+									<span class="text-[8px] text-gray-600 block">Comision 5%</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style={`background: oklch(0.16 0.005 155);`}>
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style={`background: oklch(0.18 0.02 240); color: ${BLUE};`}>JP</div>
+									<div>
+										<span class="text-xs text-white">Jorge P. — Chef</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">15:00 — ahora</span>
+											<span class="text-[9px]" style={`color: ${BLUE};`}>56 platillos</span>
+										</div>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-[9px] text-gray-600">Turno fijo</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style={`background: oklch(0.16 0.005 155);`}>
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>LM</div>
+									<div>
+										<span class="text-xs text-white">Laura M. — Barista</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">14:00 — ahora</span>
+											<span class="text-[9px]" style={`color: ${AMBER};`}>Break 10 min</span>
+										</div>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-xs text-white">$340</span>
+									<span class="text-[8px] text-gray-600 block">Comision 3%</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style={`background: oklch(0.16 0.005 155);`}>
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style="background: oklch(0.18 0.005 155); color: oklch(0.50 0.005 155);">MG</div>
+									<div>
+										<span class="text-xs text-white">Maria G. — Cajera</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">14:00 — ahora</span>
+											<span class="text-[9px] text-gray-500">23 transacciones</span>
+										</div>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-xs text-white">$456</span>
+									<span class="text-[8px] text-gray-600 block">Comision 2%</span>
+								</div>
+							</div>
+						</div>
+						<!-- Cash closeout preview -->
+						<div class="rounded-lg p-3" style="background: oklch(0.14 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+							<div class="flex items-center justify-between mb-2">
+								<span class="text-[10px] text-gray-400">Corte de caja — Maria G.</span>
+								<span class="text-[9px] text-avoqado-green">Cuadrado</span>
+							</div>
+							<div class="grid grid-cols-3 gap-2">
+								<div class="text-center">
+									<div class="text-[10px] text-white">$8,670</div>
+									<div class="text-[7px] text-gray-600">Esperado</div>
+								</div>
+								<div class="text-center">
+									<div class="text-[10px] text-white">$8,670</div>
+									<div class="text-[7px] text-gray-600">Contado</div>
+								</div>
+								<div class="text-center">
+									<div class="text-[10px] text-avoqado-green">$0.00</div>
+									<div class="text-[7px] text-gray-600">Varianza</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 6. NUMEROS CLAVE                            -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="text-center max-w-2xl mx-auto mb-16">
+					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+						Todo integrado. Sin parches.
+					</h2>
+					<p class="text-gray-400 text-lg leading-relaxed">
+						Una plataforma que reemplaza 5+ herramientas diferentes. Cada pieza conectada, cada dato en un solo lugar.
+					</p>
+				</div>
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+					<div class="border-t pt-6" style={`border-color: ${ACCENT};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">KDS</div>
+						<div class="text-sm text-gray-500">Kitchen Display integrado con timer y estados por platillo</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${ACCENT};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">Pagos QR</div>
+						<div class="text-sm text-gray-500">El cliente paga, divide y deja propina desde su celular</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${ACCENT};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">Multi-suc.</div>
+						<div class="text-sm text-gray-500">Gestiona todas tus sucursales desde un solo dashboard</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${ACCENT};`}>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">IA</div>
+						<div class="text-sm text-gray-500">Asistente que analiza ventas, sugiere precios y detecta anomalias</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 7. CTA                                      -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-3xl mx-auto text-center">
+				<h2 class="text-3xl md:text-5xl font-light tracking-tight text-black mb-8">
+					Empieza con Avoqado.
+				</h2>
+				<p class="text-lg text-gray-500 mb-12 max-w-xl mx-auto">
+					Demo interactiva con datos reales de un restaurante. Sin tarjeta, sin compromiso. Explora mesas, ordenes, menu y todo lo demas a tu ritmo.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 text-lg" style={`background: ${ACCENT};`}>
+						Probar demo gratis
+					</a>
+					<a href="/contact" class="px-8 py-4 border border-black/15 text-black font-medium rounded-full hover:bg-black/5 hover:-translate-y-0.5 transition-all duration-200 text-lg">
+						Hablar con ventas
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<FloatingChatbot client:idle />
+		<Footer />
+	</body>
+</html>

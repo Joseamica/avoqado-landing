@@ -60,12 +60,16 @@ export default function QrLivingPreview({ scrollYProgress }: Props) {
           </motion.span>
         </div>
 
-        <div className="rounded-[2rem] overflow-hidden border shadow-2xl shadow-black/60"
-          style={{ background: '#0A0A0A', borderColor: 'oklch(0.28 0.005 155)' }}>
+        {/* iPhone-style frame */}
+        <div className="rounded-[2.2rem] p-[3px]" style={{ background: 'linear-gradient(145deg, oklch(0.45 0.005 155), oklch(0.30 0.005 155) 50%, oklch(0.38 0.005 155))', boxShadow: '0 15px 50px rgba(0,0,0,0.5), inset 0 1px 0 oklch(0.50 0.005 155)' }}>
+        <div className="rounded-[2rem] overflow-hidden"
+          style={{ background: '#0A0A0A' }}>
 
-          {/* Notch */}
+          {/* Dynamic Island */}
           <div className="flex justify-center pt-3 pb-2">
-            <div className="w-20 h-5 rounded-full" style={{ background: 'oklch(0.15 0.005 155)' }} />
+            <div className="w-24 h-[22px] rounded-full flex items-center justify-center gap-2" style={{ background: 'oklch(0.08 0.005 155)' }}>
+              <div className="w-[6px] h-[6px] rounded-full" style={{ background: 'oklch(0.15 0.01 240)' }} />
+            </div>
           </div>
 
           {/* Screen content */}
@@ -264,6 +268,7 @@ export default function QrLivingPreview({ scrollYProgress }: Props) {
           <div className="flex justify-center pb-2">
             <div className="w-28 h-1 rounded-full" style={{ background: N800 }} />
           </div>
+        </div>
         </div>
       </div>
     </div>

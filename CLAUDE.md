@@ -356,6 +356,23 @@ Venue owners and operators across Mexico — restaurants, hotels, gyms, retail s
 4. **Trust through craft** — Pixel-perfect alignment, smooth 60fps animations, consistent tokens.
 5. **Accessible premium** — WCAG-compliant contrast, focus-visible styles, reduced-motion support.
 
+### Device Frame Mockups
+
+When showing product UI mockups, ALWAYS use the appropriate device frame:
+
+| Context | Frame | Example |
+|---|---|---|
+| **Dashboard, Widget, Checkout, Ligas de Pago** | Browser frame (3 dots + URL bar + lock icon) | `dashboard.avoqado.io`, `pay.avoqado.io/l/...`, `misushi.com.mx` |
+| **POS, Kiosko, apps de tableta** | iPad/tablet CSS frame (silver gradient shell + black bezel + camera dot) | Floor plan, catalogo, turnos |
+| **QR, pagos del celular, apps moviles** | iPhone CSS frame (titanium shell + Dynamic Island + home indicator) | QR scan, split cuenta, pago |
+| **TPV terminal** | Real PAX image (`pax-frontal.png`) with UI overlay | Menu, orden, cobro |
+
+Rules:
+- Browser frame: dark chrome (`oklch(0.14)`) with dots + URL bar showing the actual domain
+- iPad frame: silver gradient shell with rounded corners, black inner bezel, camera dot top-center
+- iPhone frame: dark titanium gradient shell, Dynamic Island (pill with camera dot), home indicator bar at bottom
+- TPV: Use the real PAX A920 Pro image with transparent screen, UI rendered behind at z-5
+
 ### Section Background Alternation Pattern
 
 Product pages and detail pages MUST alternate section backgrounds between dark and light to create visual rhythm and prevent monotony:

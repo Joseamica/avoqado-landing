@@ -5,22 +5,22 @@ import Footer from '../../components/layout/Footer.astro';
 import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 ---
 
-<Layout title="Avoqado QR - Pago Instantáneo" description="El cliente escanea, escoge y paga en menos de 30 segundos. Acelera tu servicio y mejora la experiencia.">
+<Layout title="Avoqado QR - Pago Instantaneo" description="El cliente escanea, escoge y paga en menos de 30 segundos. Acelera tu servicio y mejora la experiencia.">
 	<Navbar />
 	<main>
 		<!-- Hero Section -->
 		<section class="relative min-h-screen flex items-center pt-16">
-			<div class="absolute top-1/4 right-0 w-96 h-96 bg-avoqado-green rounded-full opacity-20 blur-3xl" aria-hidden="true"></div>
+			<div class="absolute top-1/4 right-0 w-96 h-96 rounded-full opacity-15 blur-3xl" style="background: oklch(0.78 0.14 75);" aria-hidden="true"></div>
 
 			<div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-20">
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 					<!-- Left Column - Content -->
 					<div class="space-y-8">
-						<div class="inline-block px-4 py-2 bg-avoqado-green/20 rounded-full text-avoqado-green text-sm font-semibold mb-4">
+						<div class="inline-block px-4 py-2 rounded-full text-sm font-semibold mb-4" style="background: oklch(0.78 0.14 75 / 0.15); color: oklch(0.78 0.14 75);">
 							Avoqado QR
 						</div>
 						<h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-							Pago en <span class="text-avoqado-green">30 segundos</span>
+							Pago en <span style="color: oklch(0.78 0.14 75);">30 segundos</span>
 						</h1>
 						<p class="text-xl text-gray-300 max-w-lg">
 							El cliente escanea el QR, ve su cuenta y paga al instante. Sin esperas, sin fricciones.
@@ -28,15 +28,15 @@ import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 
 						<div class="grid grid-cols-3 gap-4 pt-8">
 							<div class="text-center">
-								<div class="text-3xl font-bold text-avoqado-green mb-2">1</div>
+								<div class="text-3xl font-bold mb-2" style="color: oklch(0.78 0.14 75);">1</div>
 								<p class="text-sm text-gray-300">Escanea QR</p>
 							</div>
 							<div class="text-center">
-								<div class="text-3xl font-bold text-avoqado-green mb-2">2</div>
+								<div class="text-3xl font-bold mb-2" style="color: oklch(0.78 0.14 75);">2</div>
 								<p class="text-sm text-gray-300">Ve su cuenta</p>
 							</div>
 							<div class="text-center">
-								<div class="text-3xl font-bold text-avoqado-green mb-2">3</div>
+								<div class="text-3xl font-bold mb-2" style="color: oklch(0.78 0.14 75);">3</div>
 								<p class="text-sm text-gray-300">Paga</p>
 							</div>
 						</div>
@@ -44,23 +44,147 @@ import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 						<div class="flex flex-col sm:flex-row gap-4">
 							<a
 								href="/#contact"
-								class="inline-block px-8 py-4 bg-avoqado-green text-white text-lg font-semibold rounded-full hover:opacity-90 hover:scale-105 transition-all text-center shadow-glow-green"
+								class="inline-block px-8 py-4 text-white text-lg font-semibold rounded-full hover:opacity-90 hover:scale-105 transition-all text-center"
+								style="background: oklch(0.78 0.14 75); box-shadow: 0 0 24px oklch(0.78 0.14 75 / 0.3);"
 							>
 								Solicitar demo
 							</a>
 							<a
 								href="#features"
-								class="inline-block px-8 py-4 border-2 border-avoqado-green text-avoqado-green text-lg font-semibold rounded-full hover:bg-avoqado-green hover:text-white transition-all text-center"
+								class="inline-block px-8 py-4 border-2 text-lg font-semibold rounded-full hover:text-white transition-all text-center"
+								style="border-color: oklch(0.78 0.14 75); color: oklch(0.78 0.14 75);"
+								onmouseover="this.style.background='oklch(0.78 0.14 75)'; this.style.color='white';"
+								onmouseout="this.style.background='transparent'; this.style.color='oklch(0.78 0.14 75)';"
 							>
-								Ver características
+								Ver caracteristicas
 							</a>
 						</div>
 					</div>
 
-					<!-- Right Column - Image/Video Placeholder -->
-					<div class="relative">
-						<div class="aspect-[3/4] bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl flex items-center justify-center">
-							<div class="w-16 h-16 bg-avoqado-green/10 rounded-2xl flex items-center justify-center"><svg class="w-8 h-8 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
+					<!-- Right Column - iPhone Mockup -->
+					<div class="hidden lg:flex justify-center items-center relative" style="min-height: 560px;" aria-hidden="true">
+						<!-- Ambient glow -->
+						<div class="absolute bottom-12 left-1/2 -translate-x-1/2 w-64 h-20 rounded-full blur-3xl animate-qr-glow" style="background: oklch(0.78 0.14 75); opacity: 0.12;"></div>
+
+						<!-- iPhone frame -->
+						<div class="animate-qr-float" style="transform: rotate(-3deg); filter: drop-shadow(0 20px 60px rgba(0,0,0,0.5));">
+							<!-- Outer shell - titanium -->
+							<div style="background: linear-gradient(145deg, oklch(0.45 0.005 155), oklch(0.30 0.005 155)); border-radius: 2.2rem; padding: 3px;">
+								<!-- Inner phone body -->
+								<div style="background: oklch(0.08 0.005 155); border-radius: 2rem; overflow: hidden; width: 280px;">
+
+									<!-- Dynamic Island -->
+									<div class="flex justify-center pt-3 pb-2">
+										<div class="relative flex items-center justify-center" style="width: 96px; height: 28px; background: oklch(0.12 0.005 155); border-radius: 14px;">
+											<div style="width: 8px; height: 8px; background: oklch(0.18 0.005 155); border-radius: 50%; position: absolute; left: 22px;"></div>
+										</div>
+									</div>
+
+									<!-- Screen content -->
+									<div style="padding: 12px 20px 8px;">
+										<!-- Status bar -->
+										<div class="flex items-center justify-between mb-5" style="padding: 0 2px;">
+											<span style="font-size: 10px; font-weight: 600; color: oklch(0.85 0 0);">9:41</span>
+											<div class="flex items-center gap-1">
+												<svg width="14" height="10" viewBox="0 0 14 10" fill="oklch(0.85 0 0)"><rect x="0" y="5" width="2.5" height="5" rx="0.5"/><rect x="3.5" y="3" width="2.5" height="7" rx="0.5"/><rect x="7" y="1" width="2.5" height="9" rx="0.5"/><rect x="10.5" y="0" width="2.5" height="10" rx="0.5"/></svg>
+												<svg width="14" height="10" viewBox="0 0 24 12" fill="oklch(0.85 0 0)"><rect x="0" y="0" width="22" height="12" rx="2" stroke="oklch(0.85 0 0)" stroke-width="1.5" fill="none"/><rect x="2" y="2" width="16" height="8" rx="1" fill="oklch(0.85 0 0)"/><rect x="23" y="4" width="1.5" height="4" rx="0.5"/></svg>
+											</div>
+										</div>
+
+										<!-- Restaurant name -->
+										<div class="text-center mb-4">
+											<span style="font-size: 11px; color: oklch(0.50 0.005 155); letter-spacing: 0.05em; text-transform: uppercase;">La Terraza Rooftop</span>
+										</div>
+
+										<!-- QR Grid -->
+										<div class="flex justify-center mb-5">
+											<div style="padding: 12px; background: oklch(0.12 0.005 155); border-radius: 16px; border: 1px solid oklch(0.20 0.005 155);">
+												<div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; width: 140px; height: 140px;">
+													<!-- Row 1 -->
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<div style="background: oklch(0.68 0.12 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<!-- Row 2 -->
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.68 0.12 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<!-- Row 3 -->
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.68 0.12 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<!-- Row 4 -->
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<div style="background: oklch(0.68 0.12 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<div style="background: oklch(0.68 0.12 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<!-- Row 5 -->
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<!-- Row 6 -->
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<div style="background: oklch(0.68 0.12 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.68 0.12 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<!-- Row 7 -->
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.12 0.005 155); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.78 0.14 75); border-radius: 2px;"></div>
+													<div style="background: oklch(0.68 0.12 75); border-radius: 2px;"></div>
+												</div>
+											</div>
+										</div>
+
+										<!-- Text below QR -->
+										<div class="text-center mb-4" style="display: flex; flex-direction: column; gap: 4px;">
+											<p style="font-size: 14px; font-weight: 500; color: oklch(0.90 0 0);">Escanea el codigo QR</p>
+											<p style="font-size: 11px; color: oklch(0.45 0.005 155);">Sin descargar app</p>
+										</div>
+
+										<!-- Bill preview -->
+										<div style="background: oklch(0.12 0.005 155); border-radius: 12px; padding: 10px 12px; border: 1px solid oklch(0.18 0.005 155);">
+											<div class="flex items-center justify-between" style="margin-bottom: 6px;">
+												<span style="font-size: 10px; color: oklch(0.50 0.005 155);">Mesa 14</span>
+												<span style="font-size: 10px; color: oklch(0.78 0.14 75);">3 items</span>
+											</div>
+											<div class="flex items-center justify-between">
+												<span style="font-size: 16px; font-weight: 600; color: oklch(0.90 0 0);">$847.00</span>
+												<div style="background: oklch(0.78 0.14 75); color: oklch(0.15 0 0); font-size: 11px; font-weight: 600; padding: 5px 14px; border-radius: 8px;">Pagar</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- Home indicator -->
+									<div class="flex justify-center" style="padding: 10px 0;">
+										<div style="width: 100px; height: 4px; background: oklch(0.35 0.005 155); border-radius: 2px;"></div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -72,17 +196,17 @@ import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div class="text-center mb-16">
 					<h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
-						Características principales
+						Caracteristicas principales
 					</h2>
 					<p class="text-xl text-gray-300">
-						La forma más rápida de cobrar
+						La forma mas rapida de cobrar
 					</p>
 				</div>
 
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
 						<div class="w-12 h-12 mb-4 bg-avoqado-green/10 rounded-xl flex items-center justify-center"><svg class="w-6 h-6 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
-						<h3 class="text-2xl font-bold text-white mb-3">Pago instantáneo</h3>
+						<h3 class="text-2xl font-bold text-white mb-3">Pago instantaneo</h3>
 						<p class="text-gray-300">
 							El cliente paga en menos de 30 segundos sin esperar al mesero
 						</p>
@@ -92,13 +216,13 @@ import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 						<div class="w-12 h-12 mb-4 bg-avoqado-green/10 rounded-xl flex items-center justify-center"><svg class="w-6 h-6 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"></path></svg></div>
 						<h3 class="text-2xl font-bold text-white mb-3">Divide la cuenta</h3>
 						<p class="text-gray-300">
-							Cada comensal puede pagar solo lo suyo de forma automática
+							Cada comensal puede pagar solo lo suyo de forma automatica
 						</p>
 					</div>
 
 					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
 						<div class="w-12 h-12 mb-4 bg-avoqado-green/10 rounded-xl flex items-center justify-center"><svg class="w-6 h-6 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg></div>
-						<h3 class="text-2xl font-bold text-white mb-3">Todos los métodos</h3>
+						<h3 class="text-2xl font-bold text-white mb-3">Todos los metodos</h3>
 						<p class="text-gray-300">
 							Tarjetas, transferencias, wallets digitales
 						</p>
@@ -108,7 +232,7 @@ import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 						<div class="w-12 h-12 mb-4 bg-avoqado-green/10 rounded-xl flex items-center justify-center"><svg class="w-6 h-6 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
 						<h3 class="text-2xl font-bold text-white mb-3">Propina integrada</h3>
 						<p class="text-gray-300">
-							El cliente elige cuánto dejar de propina al pagar
+							El cliente elige cuanto dejar de propina al pagar
 						</p>
 					</div>
 
@@ -122,7 +246,7 @@ import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 
 					<div class="bg-avoqado-dark-bg rounded-2xl p-8">
 						<div class="w-12 h-12 mb-4 bg-avoqado-green/10 rounded-xl flex items-center justify-center"><svg class="w-6 h-6 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg></div>
-						<h3 class="text-2xl font-bold text-white mb-3">Actualización en tiempo real</h3>
+						<h3 class="text-2xl font-bold text-white mb-3">Actualizacion en tiempo real</h3>
 						<p class="text-gray-300">
 							Tu TPV y Dashboard se actualizan al instante
 						</p>
@@ -146,7 +270,7 @@ import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 							<svg class="w-6 h-6 text-avoqado-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
 						</div>
 						<div>
-							<h3 class="text-xl font-bold text-white mb-2">Aumenta la rotación de mesas</h3>
+							<h3 class="text-xl font-bold text-white mb-2">Aumenta la rotacion de mesas</h3>
 							<p class="text-gray-300">Reduce el tiempo de espera para pagar hasta en 80%</p>
 						</div>
 					</div>
@@ -185,13 +309,13 @@ import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 		</section>
 
 		<!-- CTA Section -->
-		<section class="py-20 bg-gradient-to-br from-avoqado-green to-green-500">
+		<section class="py-20" style="background: linear-gradient(135deg, oklch(0.78 0.14 75), oklch(0.68 0.14 65));">
 			<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 				<h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
 					Acelera tu servicio hoy
 				</h2>
 				<p class="text-xl text-white/90 mb-8">
-					Empieza a aceptar pagos QR y ve la diferencia desde el primer día
+					Empieza a aceptar pagos QR y ve la diferencia desde el primer dia
 				</p>
 				<a href="/#contact" class="inline-block px-8 py-4 bg-black text-white text-lg font-semibold rounded-full hover:bg-gray-900 transition-colors">
 					Solicitar demo gratuita
@@ -202,3 +326,20 @@ import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 	<FloatingChatbot client:idle />
 	<Footer />
 </Layout>
+
+<style>
+	@keyframes qr-float {
+		0%, 100% { transform: rotate(-3deg) translateY(0px); }
+		50% { transform: rotate(-3deg) translateY(-14px); }
+	}
+	@keyframes qr-glow {
+		0%, 100% { opacity: 0.08; transform: translateX(-50%) scale(1); }
+		50% { opacity: 0.2; transform: translateX(-50%) scale(1.1); }
+	}
+	.animate-qr-float {
+		animation: qr-float 5s ease-in-out infinite;
+	}
+	.animate-qr-glow {
+		animation: qr-glow 5s ease-in-out infinite;
+	}
+</style>

@@ -1,0 +1,850 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/layout/Navbar.astro';
+import Footer from '../../components/layout/Footer.astro';
+import FloatingChatbot from '../../components/interactive/FloatingChatbot';
+
+const INDIGO = 'oklch(0.68 0.15 290)';
+const GREEN = '#69E185';
+const BLUE = 'oklch(0.72 0.14 240)';
+const AMBER = 'oklch(0.78 0.14 75)';
+const RED = 'oklch(0.65 0.20 25)';
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Avoqado POS | Punto de Venta para iOS y Android</title>
+		<meta name="description" content="Punto de venta nativo para iOS y Android. Floor plan, ordenes multi-tipo, KDS, reservaciones, turnos, comisiones, modo kiosko y operacion offline." />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+	</head>
+	<body class="bg-black m-0 p-0 w-full">
+		<Navbar position="fixed" transparentOnTop={true} />
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- HERO                                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="min-h-screen flex items-center pt-24 md:pt-32 pb-16 px-6">
+			<div class="max-w-[1400px] mx-auto w-full">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+					<!-- Text -->
+					<div>
+						<div class="flex items-center gap-3 mb-6">
+							<span class="text-5xl font-light text-white/10">03</span>
+							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${INDIGO};`}>Avoqado POS</span>
+						</div>
+						<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-white mb-8">
+							Tu punto de venta.<br/>En cualquier dispositivo.
+						</h1>
+						<p class="text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-10">
+							App nativa para iOS y Android con floor plan, ordenes multi-tipo, catalogo completo, KDS, reservaciones, turnos y operacion offline. Para cualquier tipo de negocio.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4">
+							<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-white font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${INDIGO};`}>
+								Probar demo gratis
+							</a>
+							<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200">
+								Hablar con ventas
+							</a>
+						</div>
+					</div>
+
+					<!-- iPad tablet mockup — floor plan preview -->
+					<div class="hidden lg:flex justify-center items-center">
+						<div
+							class="ipad-frame relative"
+							style={`
+								background: linear-gradient(145deg, oklch(0.82 0.005 155), oklch(0.70 0.005 155));
+								border-radius: 1.6rem;
+								padding: 8px;
+								transform: perspective(1200px) rotateY(-5deg) rotateX(3deg);
+								box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+							`}
+						>
+							<!-- Inner bezel -->
+							<div
+								class="relative overflow-hidden"
+								style="background: oklch(0.12 0.005 155); border-radius: 1.2rem; padding: 4px;"
+							>
+								<!-- Camera dot -->
+								<div class="absolute top-[6px] left-1/2 -translate-x-1/2 w-[6px] h-[6px] rounded-full z-10" style="background: oklch(0.20 0.005 155); box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);"></div>
+
+								<!-- Screen -->
+								<div class="relative overflow-hidden" style="background: oklch(0.10 0.008 290); border-radius: 0.9rem; padding: 16px 14px 14px;">
+									<!-- Screen header bar -->
+									<div class="flex items-center justify-between mb-3 pt-1">
+										<div class="flex items-center gap-2">
+											<div class="w-5 h-5 rounded-md flex items-center justify-center" style={`background: oklch(0.18 0.03 290); color: ${INDIGO};`}>
+												<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+											</div>
+											<span class="text-[10px] text-white/80 font-medium">Sala Principal</span>
+										</div>
+										<div class="flex gap-1.5">
+											<span class="text-[7px] px-1.5 py-0.5 rounded-full" style={`background: oklch(0.16 0.03 290); color: ${INDIGO};`}>12 mesas</span>
+											<span class="text-[7px] px-1.5 py-0.5 rounded-full" style="background: oklch(0.16 0.02 155); color: oklch(0.65 0.12 155);">5 libres</span>
+										</div>
+									</div>
+
+									<!-- Floor plan grid — 6 tables -->
+									<div class="grid grid-cols-3 gap-2 mb-3">
+										<!-- T1: occupied (indigo) -->
+										<div class="aspect-square rounded-lg flex flex-col items-center justify-center" style={`background: oklch(0.16 0.03 290); border: 1px solid oklch(0.28 0.06 290);`}>
+											<span class="text-[9px] text-white font-medium">M1</span>
+											<span class="text-[6px] mt-0.5" style={`color: ${INDIGO};`}>4 pax</span>
+											<span class="text-[6px]" style={`color: ${INDIGO};`}>$2,340</span>
+										</div>
+										<!-- T2: free (gray) -->
+										<div class="aspect-square rounded-lg flex flex-col items-center justify-center" style="background: oklch(0.14 0.005 155); border: 1px solid oklch(0.20 0.005 155);">
+											<span class="text-[9px] text-gray-500 font-medium">M2</span>
+											<span class="text-[6px] text-gray-600 mt-0.5">Libre</span>
+										</div>
+										<!-- T3: occupied (indigo) -->
+										<div class="aspect-square rounded-lg flex flex-col items-center justify-center" style={`background: oklch(0.16 0.03 290); border: 1px solid oklch(0.28 0.06 290);`}>
+											<span class="text-[9px] text-white font-medium">M3</span>
+											<span class="text-[6px] mt-0.5" style={`color: ${INDIGO};`}>2 pax</span>
+											<span class="text-[6px]" style={`color: ${INDIGO};`}>$890</span>
+										</div>
+										<!-- T4: reserved (amber), round -->
+										<div class="aspect-square rounded-full flex flex-col items-center justify-center" style={`background: oklch(0.16 0.03 75); border: 1px solid oklch(0.28 0.05 75);`}>
+											<span class="text-[9px] text-white font-medium">M4</span>
+											<span class="text-[6px] mt-0.5" style={`color: ${AMBER};`}>19:30</span>
+										</div>
+										<!-- T5: occupied (indigo) -->
+										<div class="aspect-square rounded-lg flex flex-col items-center justify-center col-span-2" style={`background: oklch(0.16 0.03 290); border: 1px solid oklch(0.28 0.06 290);`}>
+											<span class="text-[9px] text-white font-medium">M5 — VIP</span>
+											<span class="text-[6px] mt-0.5" style={`color: ${INDIGO};`}>8 pax</span>
+											<span class="text-[6px]" style={`color: ${INDIGO};`}>$5,670</span>
+										</div>
+										<!-- T6: free (gray) -->
+										<div class="aspect-square rounded-lg flex flex-col items-center justify-center" style="background: oklch(0.14 0.005 155); border: 1px solid oklch(0.20 0.005 155);">
+											<span class="text-[9px] text-gray-500 font-medium">M6</span>
+											<span class="text-[6px] text-gray-600 mt-0.5">Libre</span>
+										</div>
+									</div>
+
+									<!-- Legend bar -->
+									<div class="flex items-center gap-3 pt-2 border-t" style="border-color: oklch(0.18 0.005 155);">
+										<div class="flex items-center gap-1">
+											<div class="w-1.5 h-1.5 rounded-sm" style={`background: ${INDIGO};`}></div>
+											<span class="text-[6px] text-gray-500">Ocupada</span>
+										</div>
+										<div class="flex items-center gap-1">
+											<div class="w-1.5 h-1.5 rounded-sm" style="background: oklch(0.25 0.005 155);"></div>
+											<span class="text-[6px] text-gray-500">Libre</span>
+										</div>
+										<div class="flex items-center gap-1">
+											<div class="w-1.5 h-1.5 rounded-sm" style={`background: ${AMBER};`}></div>
+											<span class="text-[6px] text-gray-500">Reservada</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 1. FLOOR PLAN / MESAS                       -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${INDIGO};`}>Mesas</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Gestiona tu espacio como quieras.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Floor plan visual con drag & drop. Posiciona mesas cuadradas, redondas o rectangulares. Ve el estado de cada mesa en tiempo real — ocupada, libre, reservada — con el monto de la cuenta abierta.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${INDIGO};`}></div>
+								<span class="text-sm text-gray-600">Drag & drop para posicionar mesas en el plano de tu local</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-600">Formas cuadradas, redondas y rectangulares con capacidad por mesa</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-600">Estado en tiempo real: disponible, ocupada, reservada, por limpiar</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-600">Multiples zonas: salon, terraza, bar, privado — cada una con su layout</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Floor plan detail mockup -->
+					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Zonas configuradas — 4</span>
+							<div class="flex gap-1.5">
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 290); color: ${INDIGO};`}>Salon</span>
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style="background: oklch(0.16 0.005 155); color: oklch(0.50 0.005 155);">Terraza</span>
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style="background: oklch(0.16 0.005 155); color: oklch(0.50 0.005 155);">Bar</span>
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style="background: oklch(0.16 0.005 155); color: oklch(0.50 0.005 155);">Privado</span>
+							</div>
+						</div>
+						<!-- Table detail cards -->
+						<div class="space-y-2 mb-4">
+							<div class="flex items-center justify-between p-3 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${INDIGO};`}>
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold" style={`background: oklch(0.18 0.02 290); color: ${INDIGO};`}>M6</div>
+									<div>
+										<span class="text-xs text-white">Mesa VIP — 8 personas</span>
+										<span class="text-[9px] text-gray-600 block">Ocupada hace 47 min — Mesero: Carlos R.</span>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-xs text-white">$5,670</span>
+									<span class="text-[9px] block" style={`color: ${INDIGO};`}>9 items</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${AMBER};`}>
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>M4</div>
+									<div>
+										<span class="text-xs text-white">Mesa 4 — 4 personas</span>
+										<span class="text-[9px] block" style={`color: ${AMBER};`}>Reservada 20:00 — Ana L. (Tel: *4521)</span>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-[9px]" style={`color: ${AMBER};`}>En 35 min</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155); border-left: 3px solid oklch(0.40 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold" style="background: oklch(0.20 0.005 155); color: oklch(0.50 0.005 155);">M3</div>
+									<div>
+										<span class="text-xs text-gray-400">Mesa 3 — 2 personas</span>
+										<span class="text-[9px] text-gray-600 block">Disponible</span>
+									</div>
+								</div>
+								<span class="text-[9px] px-2 py-0.5 rounded" style={`background: oklch(0.18 0.02 290); color: ${INDIGO};`}>Asignar</span>
+							</div>
+						</div>
+						<!-- Summary -->
+						<div class="grid grid-cols-3 gap-2">
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-sm font-light text-white">7</div>
+								<div class="text-[8px] text-gray-600">Ocupadas</div>
+							</div>
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-sm font-light text-white">5</div>
+								<div class="text-[8px] text-gray-600">Libres</div>
+							</div>
+							<div class="rounded-lg p-2.5 text-center" style="background: oklch(0.16 0.005 155);">
+								<div class="text-sm font-light" style={`color: ${AMBER};`}>2</div>
+								<div class="text-[8px] text-gray-600">Reservadas</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 2. ORDENES Y CATALOGO                       -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Catalog mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Nueva orden — Mesa 6</span>
+							<div class="flex gap-1.5">
+								<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 290); color: ${INDIGO};`}>Dine-in</span>
+							</div>
+						</div>
+						<!-- Categories -->
+						<div class="flex gap-1.5 mb-4 overflow-hidden">
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-white shrink-0" style={`background: ${INDIGO};`}>Todo</div>
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-gray-500 shrink-0" style="background: oklch(0.16 0.005 155);">Entradas</div>
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-gray-500 shrink-0" style="background: oklch(0.16 0.005 155);">Platos</div>
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-gray-500 shrink-0" style="background: oklch(0.16 0.005 155);">Bebidas</div>
+							<div class="px-3 py-1.5 rounded-full text-[9px] text-gray-500 shrink-0" style="background: oklch(0.16 0.005 155);">Postres</div>
+						</div>
+						<!-- Product grid -->
+						<div class="grid grid-cols-2 gap-2 mb-4">
+							<div class="rounded-xl p-3" style={`background: oklch(0.16 0.005 155); border: 1px solid oklch(0.30 0.06 290);`}>
+								<div class="w-full aspect-[4/3] rounded-lg mb-2" style="background: oklch(0.20 0.005 155);"></div>
+								<span class="text-[11px] text-white">Tacos al Pastor</span>
+								<div class="flex items-center justify-between mt-1">
+									<span class="text-[10px]" style={`color: ${INDIGO};`}>$95</span>
+									<div class="flex items-center gap-1">
+										<div class="w-4 h-4 rounded flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+											<span class="text-[8px] text-gray-500">-</span>
+										</div>
+										<span class="text-[9px] text-white">3</span>
+										<div class="w-4 h-4 rounded flex items-center justify-center" style={`background: ${INDIGO};`}>
+											<span class="text-[8px] text-white">+</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="rounded-xl p-3" style="background: oklch(0.16 0.005 155);">
+								<div class="w-full aspect-[4/3] rounded-lg mb-2" style="background: oklch(0.20 0.005 155);"></div>
+								<span class="text-[11px] text-white">Guacamole</span>
+								<div class="flex items-center justify-between mt-1">
+									<span class="text-[10px] text-gray-500">$120</span>
+									<div class="w-4 h-4 rounded flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+										<span class="text-[8px] text-gray-500">+</span>
+									</div>
+								</div>
+							</div>
+							<div class="rounded-xl p-3" style="background: oklch(0.16 0.005 155);">
+								<div class="w-full aspect-[4/3] rounded-lg mb-2" style="background: oklch(0.20 0.005 155);"></div>
+								<span class="text-[11px] text-white">Arrachera 300g</span>
+								<div class="flex items-center justify-between mt-1">
+									<span class="text-[10px] text-gray-500">$320</span>
+									<div class="w-4 h-4 rounded flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+										<span class="text-[8px] text-gray-500">+</span>
+									</div>
+								</div>
+							</div>
+							<div class="rounded-xl p-3" style="background: oklch(0.16 0.005 155);">
+								<div class="w-full aspect-[4/3] rounded-lg mb-2" style="background: oklch(0.20 0.005 155);"></div>
+								<span class="text-[11px] text-white">Michelada</span>
+								<div class="flex items-center justify-between mt-1">
+									<span class="text-[10px] text-gray-500">$95</span>
+									<div class="w-4 h-4 rounded flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+										<span class="text-[8px] text-gray-500">+</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Cart summary -->
+						<div class="h-10 rounded-xl flex items-center justify-between px-4" style={`background: ${INDIGO};`}>
+							<span class="text-[11px] font-semibold text-white">3 items — $285</span>
+							<span class="text-sm font-semibold text-white">Enviar a cocina</span>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${INDIGO};`}>Ordenes</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Ordena desde cualquier lugar.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							Catalogo completo con categorias, modificadores y precios por variante. Crea ordenes de cualquier tipo desde la misma app — sin cambiar de pantalla ni de sistema.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${INDIGO};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Dine-in:</span> Orden vinculada a mesa con cuenta abierta y split</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Takeout:</span> Para llevar con tiempo estimado y notificacion al cliente</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Delivery:</span> Direccion, zona de cobertura, asignacion de repartidor</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Pickup:</span> Cliente ordena y recoge en mostrador sin espera</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 3. RESERVACIONES                            -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="text-center max-w-2xl mx-auto mb-12">
+					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${INDIGO};`}>Reservaciones</span>
+					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+						Reservaciones integradas.
+					</h2>
+					<p class="text-gray-600 text-lg leading-relaxed">
+						Calendario, waitlist y pagina de booking publica — todo conectado con tu floor plan. Cuando un cliente reserva, la mesa se bloquea automaticamente. Sin doble asignacion, sin confusiones.
+					</p>
+				</div>
+
+				<!-- Reservation mockup — centered -->
+				<div class="max-w-3xl mx-auto rounded-2xl overflow-hidden border border-black/5 p-5 mb-12" style="background: #0A0A0A;">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<!-- Calendar side -->
+						<div class="rounded-xl p-4" style="background: oklch(0.16 0.005 155);">
+							<div class="flex items-center justify-between mb-3">
+								<span class="text-xs text-white">Marzo 2026</span>
+								<div class="flex gap-1">
+									<div class="w-6 h-6 rounded flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+										<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+									</div>
+									<div class="w-6 h-6 rounded flex items-center justify-center" style="background: oklch(0.20 0.005 155);">
+										<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="oklch(0.50 0.005 155)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+									</div>
+								</div>
+							</div>
+							<div class="grid grid-cols-7 gap-1 text-center mb-2">
+								<span class="text-[8px] text-gray-600">L</span>
+								<span class="text-[8px] text-gray-600">M</span>
+								<span class="text-[8px] text-gray-600">M</span>
+								<span class="text-[8px] text-gray-600">J</span>
+								<span class="text-[8px] text-gray-600">V</span>
+								<span class="text-[8px] text-gray-600">S</span>
+								<span class="text-[8px] text-gray-600">D</span>
+							</div>
+							<div class="grid grid-cols-7 gap-1 text-center">
+								<span class="text-[9px] text-gray-600 py-1"></span>
+								<span class="text-[9px] text-gray-600 py-1"></span>
+								<span class="text-[9px] text-gray-600 py-1"></span>
+								<span class="text-[9px] text-gray-600 py-1"></span>
+								<span class="text-[9px] text-gray-600 py-1"></span>
+								<span class="text-[9px] text-gray-600 py-1"></span>
+								<span class="text-[9px] text-gray-500 py-1">1</span>
+								<span class="text-[9px] text-gray-500 py-1">2</span>
+								<span class="text-[9px] text-gray-500 py-1">3</span>
+								<span class="text-[9px] text-gray-500 py-1">4</span>
+								<span class="text-[9px] text-gray-500 py-1">5</span>
+								<span class="text-[9px] text-gray-500 py-1">6</span>
+								<span class="text-[9px] text-gray-500 py-1">7</span>
+								<span class="text-[9px] text-gray-500 py-1">8</span>
+								<span class="text-[9px] text-gray-500 py-1">9</span>
+								<span class="text-[9px] text-gray-500 py-1">10</span>
+								<span class="text-[9px] text-gray-500 py-1">11</span>
+								<span class="text-[9px] text-gray-500 py-1">12</span>
+								<span class="text-[9px] text-gray-500 py-1">13</span>
+								<span class="text-[9px] text-gray-500 py-1">14</span>
+								<span class="text-[9px] text-gray-500 py-1">15</span>
+								<span class="text-[9px] text-gray-500 py-1">16</span>
+								<span class="text-[9px] text-gray-500 py-1">17</span>
+								<span class="text-[9px] text-white py-1 rounded-lg" style={`background: ${INDIGO};`}>18</span>
+								<span class="text-[9px] text-gray-500 py-1">19</span>
+								<span class="text-[9px] text-gray-500 py-1">20</span>
+								<span class="text-[9px] text-gray-500 py-1">21</span>
+								<span class="text-[9px] text-gray-500 py-1">22</span>
+								<span class="text-[9px] text-gray-500 py-1">23</span>
+								<span class="text-[9px] text-gray-500 py-1">24</span>
+								<span class="text-[9px] text-gray-500 py-1">25</span>
+								<span class="text-[9px] text-gray-500 py-1">26</span>
+								<span class="text-[9px] text-gray-500 py-1">27</span>
+								<span class="text-[9px] text-gray-500 py-1">28</span>
+								<span class="text-[9px] text-gray-500 py-1">29</span>
+								<span class="text-[9px] text-gray-500 py-1">30</span>
+								<span class="text-[9px] text-gray-500 py-1">31</span>
+							</div>
+							<!-- Time slots -->
+							<div class="mt-3 pt-3 border-t border-white/5">
+								<div class="text-[9px] text-gray-500 mb-2">Horarios — 18 mar</div>
+								<div class="grid grid-cols-4 gap-1">
+									<div class="py-1.5 rounded text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">14:00</div>
+									<div class="py-1.5 rounded text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">15:00</div>
+									<div class="py-1.5 rounded text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">18:00</div>
+									<div class="py-1.5 rounded text-center text-[9px] text-white" style={`background: ${INDIGO};`}>20:00</div>
+								</div>
+							</div>
+						</div>
+						<!-- Booking card side -->
+						<div class="space-y-3">
+							<div class="text-[10px] text-gray-500">Reservaciones del 18 mar</div>
+							<div class="rounded-lg p-3" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${INDIGO};`}>
+								<div class="flex items-center justify-between mb-1">
+									<span class="text-xs text-white">Ana Lopez — 4 pax</span>
+									<span class="text-[9px] px-1.5 py-0.5 rounded" style={`background: oklch(0.18 0.02 290); color: ${INDIGO};`}>Confirmada</span>
+								</div>
+								<span class="text-[9px] text-gray-500">20:00 — Mesa 4, Salon — Tel: *4521</span>
+							</div>
+							<div class="rounded-lg p-3" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${AMBER};`}>
+								<div class="flex items-center justify-between mb-1">
+									<span class="text-xs text-white">Roberto M. — 6 pax</span>
+									<span class="text-[9px] px-1.5 py-0.5 rounded" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>Pendiente</span>
+								</div>
+								<span class="text-[9px] text-gray-500">19:30 — Mesa 11, Terraza — Cumpleanos</span>
+							</div>
+							<div class="rounded-lg p-3" style="background: oklch(0.16 0.005 155); border-left: 3px solid oklch(0.40 0.005 155);">
+								<div class="flex items-center justify-between mb-1">
+									<span class="text-xs text-white">Sofia G. — 2 pax</span>
+									<span class="text-[9px] px-1.5 py-0.5 rounded" style="background: oklch(0.20 0.005 155); color: oklch(0.50 0.005 155);">Waitlist</span>
+								</div>
+								<span class="text-[9px] text-gray-500">20:00 — Cualquier zona — Posicion #3</span>
+							</div>
+							<!-- Booking page link -->
+							<div class="rounded-lg p-3 flex items-center justify-between" style="background: oklch(0.14 0.02 155); border: 1px solid oklch(0.25 0.03 155);">
+								<div>
+									<span class="text-[10px] text-white">Pagina de booking publica</span>
+									<span class="text-[9px] text-avoqado-green block">book.avoqado.io/tu-negocio</span>
+								</div>
+								<span class="text-[9px] px-2 py-0.5 rounded bg-avoqado-green text-black font-medium">Compartir</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Features row -->
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+					<div class="text-center">
+						<h3 class="text-base text-black font-medium mb-1">Calendario visual</h3>
+						<p class="text-sm text-gray-500">Vista por dia, semana o mes. Arrastra para reasignar horario o mesa.</p>
+					</div>
+					<div class="text-center">
+						<h3 class="text-base text-black font-medium mb-1">Waitlist inteligente</h3>
+						<p class="text-sm text-gray-500">Cuando se libera una mesa del tamano correcto, notifica automaticamente.</p>
+					</div>
+					<div class="text-center">
+						<h3 class="text-base text-black font-medium mb-1">Depositos opcionales</h3>
+						<p class="text-sm text-gray-500">Cobro anticipado via Stripe para reducir no-shows en reservas grandes.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 4. TURNOS Y PERSONAL                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${INDIGO};`}>Personal</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Control total de tu equipo.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							Turnos con clock-in/out, breaks, comisiones por empleado y corte de caja al final del turno. Cada peso queda registrado — esperado vs real, con varianza al centavo.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${INDIGO};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Clock-in/out:</span> Registro de entrada, salida y breaks con geolocalizacion</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Comisiones:</span> Porcentaje por venta, escalonado con milestones, calculo automatico</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">Corte de caja:</span> Esperado vs contado, varianza, deposito y firma digital</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-400"><span class="text-white">9 roles:</span> Owner, Admin, Manager, Cashier, Waiter, Chef, Host, Driver, Custom</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Shifts mockup -->
+					<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Turno vespertino — 4 activos</span>
+							<span class="text-[9px] px-2 py-0.5 rounded-full bg-avoqado-green text-black font-medium">En curso</span>
+						</div>
+						<div class="space-y-2 mb-4">
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style={`background: oklch(0.18 0.02 290); color: ${INDIGO};`}>CR</div>
+									<div>
+										<span class="text-xs text-white">Carlos R. — Mesero</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">14:00 — ahora</span>
+											<span class="text-[9px] text-avoqado-green">$12,340 en ventas</span>
+										</div>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-xs text-avoqado-green">$617</span>
+									<span class="text-[8px] text-gray-600 block">Comision 5%</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style="background: oklch(0.18 0.02 155); color: oklch(0.60 0.10 155);">MG</div>
+									<div>
+										<span class="text-xs text-white">Maria G. — Cajera</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">14:00 — ahora</span>
+											<span class="text-[9px]" style={`color: ${AMBER};`}>Break 15 min</span>
+										</div>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-xs text-white">$890</span>
+									<span class="text-[8px] text-gray-600 block">Comision 3%</span>
+								</div>
+							</div>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.16 0.005 155);">
+								<div class="flex items-center gap-3">
+									<div class="w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold" style={`background: oklch(0.18 0.02 240); color: ${BLUE};`}>JP</div>
+									<div>
+										<span class="text-xs text-white">Jorge P. — Chef</span>
+										<div class="flex items-center gap-2 mt-0.5">
+											<span class="text-[9px] text-gray-600">15:00 — ahora</span>
+											<span class="text-[9px] text-avoqado-green">42 platillos</span>
+										</div>
+									</div>
+								</div>
+								<div class="text-right">
+									<span class="text-[9px] text-gray-600">Turno fijo</span>
+								</div>
+							</div>
+						</div>
+						<!-- Cash closeout preview -->
+						<div class="rounded-lg p-3" style="background: oklch(0.14 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+							<div class="flex items-center justify-between mb-2">
+								<span class="text-[10px] text-gray-400">Corte de caja — Maria G.</span>
+								<span class="text-[9px] text-avoqado-green">Cuadrado</span>
+							</div>
+							<div class="grid grid-cols-3 gap-2">
+								<div class="text-center">
+									<div class="text-[10px] text-white">$4,230</div>
+									<div class="text-[7px] text-gray-600">Esperado</div>
+								</div>
+								<div class="text-center">
+									<div class="text-[10px] text-white">$4,230</div>
+									<div class="text-[7px] text-gray-600">Contado</div>
+								</div>
+								<div class="text-center">
+									<div class="text-[10px] text-avoqado-green">$0.00</div>
+									<div class="text-[7px] text-gray-600">Varianza</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 5. KDS — KITCHEN DISPLAY SYSTEM             -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- KDS mockup -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-500">Kitchen Display — 6 ordenes activas</span>
+							<div class="flex gap-1.5">
+								<span class="text-[8px] px-2 py-0.5 rounded-full bg-avoqado-green text-black">2 listas</span>
+								<span class="text-[8px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 290); color: ${INDIGO};`}>3 preparando</span>
+								<span class="text-[8px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>1 nueva</span>
+							</div>
+						</div>
+						<div class="grid grid-cols-3 gap-2">
+							<!-- New order -->
+							<div class="rounded-lg p-2.5" style={`background: oklch(0.16 0.005 155); border-top: 3px solid ${AMBER};`}>
+								<div class="flex items-center justify-between mb-2">
+									<span class="text-[9px] text-white font-medium">M6 — Dine-in</span>
+									<span class="text-[8px]" style={`color: ${AMBER};`}>0:00</span>
+								</div>
+								<div class="space-y-1">
+									<div class="text-[9px] text-gray-300">3x Tacos al Pastor</div>
+									<div class="text-[9px] text-gray-300">1x Guacamole</div>
+									<div class="text-[8px] text-gray-600 italic">Sin cebolla</div>
+								</div>
+							</div>
+							<!-- Preparing -->
+							<div class="rounded-lg p-2.5" style={`background: oklch(0.16 0.005 155); border-top: 3px solid ${INDIGO};`}>
+								<div class="flex items-center justify-between mb-2">
+									<span class="text-[9px] text-white font-medium">M2 — Dine-in</span>
+									<span class="text-[8px]" style={`color: ${INDIGO};`}>4:32</span>
+								</div>
+								<div class="space-y-1">
+									<div class="text-[9px] text-gray-300">1x Arrachera 300g</div>
+									<div class="text-[9px] text-gray-300">2x Agua mineral</div>
+								</div>
+							</div>
+							<!-- Ready -->
+							<div class="rounded-lg p-2.5" style="background: oklch(0.16 0.005 155); border-top: 3px solid #69E185;">
+								<div class="flex items-center justify-between mb-2">
+									<span class="text-[9px] text-white font-medium">Takeout #47</span>
+									<span class="text-[8px] text-avoqado-green">Lista</span>
+								</div>
+								<div class="space-y-1">
+									<div class="text-[9px] text-gray-300 line-through">2x Combo Clasico</div>
+									<div class="text-[9px] text-gray-300 line-through">1x Michelada</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${INDIGO};`}>Cocina</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							De la mesa a la cocina en tiempo real.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Kitchen Display System que muestra ordenes por estado con timer de preparacion. El mesero envia desde la app, la cocina ve al instante. Cada platillo se trackea individualmente.
+						</p>
+						<div class="space-y-3">
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Timer por orden</h3>
+								<p class="text-sm text-gray-500">Cronometro desde que llega la orden. Alerta cuando excede el tiempo objetivo.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Estado por platillo</h3>
+								<p class="text-sm text-gray-500">Nuevo, preparando, listo — cada item cambia de estado con un tap.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Notas y modificadores</h3>
+								<p class="text-sm text-gray-500">"Sin cebolla", "Termino medio", "Alergico a nueces" — visible en la pantalla de cocina.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 6. MODO KIOSKO                              -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="text-center max-w-2xl mx-auto mb-12">
+					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${INDIGO};`}>Self-service</span>
+					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+						Modo Kiosko. Sin mesero.
+					</h2>
+					<p class="text-gray-400 text-lg leading-relaxed">
+						Convierte cualquier iPad o tablet Android en un punto de auto-servicio. El cliente ve el menu, arma su orden, paga y recibe confirmacion. Ideal para alto volumen o cuando necesitas reducir costos de personal.
+					</p>
+				</div>
+
+				<!-- Kiosk mockup centered -->
+				<div class="max-w-sm mx-auto rounded-2xl overflow-hidden border border-white/5 p-5 mb-12" style="background: oklch(0.12 0.005 155);">
+					<div class="text-center mb-4">
+						<span class="text-sm text-white font-medium">Haz tu pedido</span>
+						<div class="text-[10px] text-gray-600 mt-0.5">Toca para comenzar</div>
+					</div>
+					<div class="flex gap-2 mb-4">
+						<div class="px-3 py-1.5 rounded-full text-[10px] text-white" style={`background: ${INDIGO};`}>Todo</div>
+						<div class="px-3 py-1.5 rounded-full text-[10px] text-gray-500" style="background: oklch(0.16 0.005 155);">Entradas</div>
+						<div class="px-3 py-1.5 rounded-full text-[10px] text-gray-500" style="background: oklch(0.16 0.005 155);">Platos</div>
+						<div class="px-3 py-1.5 rounded-full text-[10px] text-gray-500" style="background: oklch(0.16 0.005 155);">Bebidas</div>
+					</div>
+					<div class="grid grid-cols-2 gap-2 mb-4">
+						<div class="rounded-xl p-3" style={`background: oklch(0.16 0.005 155); border: 1px solid oklch(0.30 0.06 290);`}>
+							<div class="w-full aspect-square rounded-lg mb-2" style="background: oklch(0.20 0.005 155);"></div>
+							<span class="text-[11px] text-white">Combo Clasico</span>
+							<div class="flex items-center justify-between mt-1">
+								<span class="text-[10px]" style={`color: ${INDIGO};`}>$185</span>
+								<div class="w-5 h-5 rounded-full flex items-center justify-center" style={`background: ${INDIGO};`}>
+									<span class="text-[9px] font-bold text-white">1</span>
+								</div>
+							</div>
+						</div>
+						<div class="rounded-xl p-3" style="background: oklch(0.16 0.005 155);">
+							<div class="w-full aspect-square rounded-lg mb-2" style="background: oklch(0.20 0.005 155);"></div>
+							<span class="text-[11px] text-white">Ensalada Fresh</span>
+							<span class="text-[10px] text-gray-500 block mt-1">$120</span>
+						</div>
+						<div class="rounded-xl p-3" style="background: oklch(0.16 0.005 155);">
+							<div class="w-full aspect-square rounded-lg mb-2" style="background: oklch(0.20 0.005 155);"></div>
+							<span class="text-[11px] text-white">Wrap Pollo</span>
+							<span class="text-[10px] text-gray-500 block mt-1">$145</span>
+						</div>
+						<div class="rounded-xl p-3" style="background: oklch(0.16 0.005 155);">
+							<div class="w-full aspect-square rounded-lg mb-2" style="background: oklch(0.20 0.005 155);"></div>
+							<span class="text-[11px] text-white">Agua Mineral</span>
+							<span class="text-[10px] text-gray-500 block mt-1">$35</span>
+						</div>
+					</div>
+					<div class="h-10 rounded-xl flex items-center justify-between px-4" style={`background: ${INDIGO};`}>
+						<span class="text-[11px] font-semibold text-white">1 item — $185</span>
+						<span class="text-sm font-semibold text-white">Pagar</span>
+					</div>
+				</div>
+
+				<!-- Features row -->
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+					<div class="text-center">
+						<h3 class="text-base text-white font-medium mb-1">iPad y Android</h3>
+						<p class="text-sm text-gray-500">Funciona en cualquier tablet. Montalo en un stand o en la barra.</p>
+					</div>
+					<div class="text-center">
+						<h3 class="text-base text-white font-medium mb-1">Pago integrado</h3>
+						<p class="text-sm text-gray-500">Tarjeta, QR o efectivo. El cliente paga sin necesitar a nadie.</p>
+					</div>
+					<div class="text-center">
+						<h3 class="text-base text-white font-medium mb-1">Orden a cocina</h3>
+						<p class="text-sm text-gray-500">La orden llega directo al KDS. Sin intermediarios.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- KEY NUMBERS                                 -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+					<div class="border-t pt-6" style={`border-color: ${INDIGO};`}>
+						<div class="text-3xl md:text-4xl font-light text-black mb-1">iOS + Android</div>
+						<div class="text-sm text-gray-500">Plataformas nativas</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${INDIGO};`}>
+						<div class="text-3xl md:text-4xl font-light text-black mb-1">7</div>
+						<div class="text-sm text-gray-500">Tipos de orden</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${INDIGO};`}>
+						<div class="text-3xl md:text-4xl font-light text-black mb-1">9</div>
+						<div class="text-sm text-gray-500">Roles con permisos granulares</div>
+					</div>
+					<div class="border-t pt-6" style={`border-color: ${INDIGO};`}>
+						<div class="text-3xl md:text-4xl font-light text-black mb-1">Offline</div>
+						<div class="text-sm text-gray-500">Opera sin internet</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- CTA                                         -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-avoqado-dark-surface border-t border-white/5">
+			<div class="max-w-3xl mx-auto text-center">
+				<h2 class="text-3xl md:text-5xl font-light tracking-tight text-white mb-8">
+					Prueba Avoqado POS.
+				</h2>
+				<p class="text-lg text-gray-500 mb-12 max-w-xl mx-auto">
+					Demo interactiva con datos reales. Sin tarjeta, sin compromiso. Explora el floor plan, las ordenes y todo lo demas a tu ritmo.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="px-8 py-4 text-white font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 text-lg" style={`background: ${INDIGO};`}>
+						Probar demo gratis
+					</a>
+					<a href="/contact" class="px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200 text-lg">
+						Hablar con ventas
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<FloatingChatbot client:idle />
+		<Footer />
+
+		<style>
+			@keyframes ipad-float {
+				0%, 100% { transform: perspective(1200px) rotateY(-5deg) rotateX(3deg) translateY(0px); }
+				50% { transform: perspective(1200px) rotateY(-5deg) rotateX(3deg) translateY(-10px); }
+			}
+			.ipad-frame {
+				animation: ipad-float 5s ease-in-out infinite;
+			}
+		</style>
+	</body>
+</html>

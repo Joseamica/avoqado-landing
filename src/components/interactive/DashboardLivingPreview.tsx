@@ -84,7 +84,22 @@ export default function DashboardLivingPreview({ scrollYProgress }: Props) {
         </motion.span>
       </div>
 
-      <div className="relative rounded-2xl overflow-hidden bg-avoqado-dark-surface border border-white/5 aspect-[4/3] w-full">
+      {/* Browser frame */}
+      <div className="relative rounded-2xl overflow-hidden border border-white/5" style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.3)' }}>
+        {/* Browser chrome */}
+        <div className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5" style={{ background: NEUTRAL_900, borderBottom: `1px solid ${NEUTRAL_800}` }}>
+          <div className="flex gap-1.5">
+            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full" style={{ background: 'oklch(0.40 0.15 25)' }} />
+            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full" style={{ background: 'oklch(0.60 0.15 85)' }} />
+            <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full" style={{ background: 'oklch(0.55 0.15 145)' }} />
+          </div>
+          <div className="flex-1 mx-2 sm:mx-4 px-2 sm:px-3 py-0.5 sm:py-1 rounded-md text-[8px] sm:text-[10px] flex items-center gap-1.5" style={{ background: 'oklch(0.12 0.005 155)', color: 'oklch(0.50 0.005 155)' }}>
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            dashboard.avoqado.io
+          </div>
+        </div>
+        {/* Screen content */}
+        <div className="relative bg-avoqado-dark-surface aspect-[4/3] w-full">
         <div className="absolute inset-0 p-4 sm:p-6 flex flex-col">
 
         {/* ─── Top bar (persistent) ─── */}
@@ -209,6 +224,7 @@ export default function DashboardLivingPreview({ scrollYProgress }: Props) {
 
           </div>
         </div>
+      </div>
       </div>
       </div>
     </div>
