@@ -21,55 +21,193 @@ import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 		<meta name="description" content="Dashboard, TPV, POS, QR, Asistente IA y Widget — seis productos integrados que transforman como operas tu negocio. 11 plataformas conectadas en tiempo real." />
 		<link rel="icon" type="image/png" href="/favicon.png" />
 	</head>
-	<body class="bg-black m-0 p-0 w-full">
-		<Navbar position="fixed" transparentOnTop={true} />
+	<body class="m-0 p-0 w-full" style="background-color: #ffffff !important;">
+		<Navbar position="fixed" transparentOnTop={false} />
 
-		<!-- HERO — Static, visible immediately -->
+		<!-- HERO -->
 		<section class="flex flex-col min-h-screen justify-center pt-24 md:pt-32 pb-16 md:pb-24 px-6">
 			<div class="max-w-[1400px] mx-auto w-full">
-				<p class="text-avoqado-green text-sm font-semibold tracking-widest uppercase mb-6">
-					Productos
-				</p>
-				<h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[0.95] text-white max-w-4xl mb-8">
-					Seis productos.<br/>
-					Un ecosistema.
-				</h1>
-				<p class="text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-12">
-					Dashboard, TPV, POS, QR, asistente IA y widget embeddable — todo sincronizado en tiempo real.
-				</p>
-				<div class="flex flex-col sm:flex-row gap-4 mb-12">
-					<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors">
-						Agendar demo
-					</a>
-					<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 transition-colors">
-						Probar gratis
-					</a>
-				</div>
-				<div class="flex flex-wrap gap-3">
-					<a href="#product-01" class="flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-white/20 transition-colors group">
-						<span class="text-xs font-mono" style="color: oklch(0.72 0.14 240);">01</span>
-						<span class="text-white text-sm font-medium group-hover:text-avoqado-green transition-colors">Dashboard</span>
-					</a>
-					<a href="#product-02" class="flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-white/20 transition-colors group">
-						<span class="text-xs font-mono text-avoqado-green">02</span>
-						<span class="text-white text-sm font-medium group-hover:text-avoqado-green transition-colors">TPV</span>
-					</a>
-					<a href="#product-03" class="flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-white/20 transition-colors group">
-						<span class="text-xs font-mono" style="color: oklch(0.68 0.15 290);">03</span>
-						<span class="text-white text-sm font-medium group-hover:text-avoqado-green transition-colors">POS</span>
-					</a>
-					<a href="#product-04" class="flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-white/20 transition-colors group">
-						<span class="text-xs font-mono" style="color: oklch(0.78 0.14 75);">04</span>
-						<span class="text-white text-sm font-medium group-hover:text-avoqado-green transition-colors">QR</span>
-					</a>
-					<a href="#product-05" class="flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-white/20 transition-colors group">
-						<span class="text-xs font-mono" style="color: oklch(0.75 0.14 195);">05</span>
-						<span class="text-white text-sm font-medium group-hover:text-avoqado-green transition-colors">IA</span>
-					</a>
-					<a href="#product-06" class="flex items-center gap-3 px-5 py-3 rounded-full border border-white/10 hover:border-white/20 transition-colors group">
-						<span class="text-xs font-mono" style="color: oklch(0.72 0.15 340);">06</span>
-						<span class="text-white text-sm font-medium group-hover:text-avoqado-green transition-colors">Widget</span>
-					</a>
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+					<!-- Text -->
+					<div>
+						<p class="text-avoqado-green text-sm font-semibold tracking-widest uppercase mb-6">
+							Productos
+						</p>
+						<h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[0.95] text-black max-w-4xl mb-8">
+							Seis productos.<br/>
+							Un ecosistema.
+						</h1>
+						<p class="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed mb-12">
+							Dashboard, TPV, POS, QR, asistente IA y widget embeddable — todo sincronizado en tiempo real.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4 mb-12">
+							<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 bg-black text-white font-semibold rounded-full hover:bg-gray-800 transition-colors">
+								Agendar demo
+							</a>
+							<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 border border-black/20 text-black font-medium rounded-full hover:bg-black/5 transition-colors">
+								Probar gratis
+							</a>
+						</div>
+						<div class="flex flex-wrap gap-3">
+							<a href="#product-01" class="flex items-center gap-3 px-5 py-3 rounded-full border border-black/10 hover:border-black/20 transition-colors group">
+								<span class="text-xs font-mono" style="color: oklch(0.72 0.14 240);">01</span>
+								<span class="text-black text-sm font-medium group-hover:text-avoqado-green transition-colors">Dashboard</span>
+							</a>
+							<a href="#product-02" class="flex items-center gap-3 px-5 py-3 rounded-full border border-black/10 hover:border-black/20 transition-colors group">
+								<span class="text-xs font-mono text-avoqado-green">02</span>
+								<span class="text-black text-sm font-medium group-hover:text-avoqado-green transition-colors">TPV</span>
+							</a>
+							<a href="#product-03" class="flex items-center gap-3 px-5 py-3 rounded-full border border-black/10 hover:border-black/20 transition-colors group">
+								<span class="text-xs font-mono" style="color: oklch(0.68 0.15 290);">03</span>
+								<span class="text-black text-sm font-medium group-hover:text-avoqado-green transition-colors">POS</span>
+							</a>
+							<a href="#product-04" class="flex items-center gap-3 px-5 py-3 rounded-full border border-black/10 hover:border-black/20 transition-colors group">
+								<span class="text-xs font-mono" style="color: oklch(0.78 0.14 75);">04</span>
+								<span class="text-black text-sm font-medium group-hover:text-avoqado-green transition-colors">QR</span>
+							</a>
+							<a href="#product-05" class="flex items-center gap-3 px-5 py-3 rounded-full border border-black/10 hover:border-black/20 transition-colors group">
+								<span class="text-xs font-mono" style="color: oklch(0.75 0.14 195);">05</span>
+								<span class="text-black text-sm font-medium group-hover:text-avoqado-green transition-colors">IA</span>
+							</a>
+							<a href="#product-06" class="flex items-center gap-3 px-5 py-3 rounded-full border border-black/10 hover:border-black/20 transition-colors group">
+								<span class="text-xs font-mono" style="color: oklch(0.72 0.15 340);">06</span>
+								<span class="text-black text-sm font-medium group-hover:text-avoqado-green transition-colors">Widget</span>
+							</a>
+						</div>
+					</div>
+
+					<!-- Device collage — tight pile like thrown cards -->
+					<div class="hidden lg:block relative" style="min-height: 500px;">
+
+						<!-- 1. DASHBOARD — Browser (back, base of pile) -->
+						<div class="absolute w-[400px] rounded-2xl overflow-hidden" style="top: 20px; left: 10px; transform: rotate(-3deg); z-index: 1; box-shadow: 0 25px 60px rgba(0,0,0,0.15);">
+							<div class="flex items-center gap-1.5 px-3 py-2" style="background: oklch(0.13 0.005 155); border-bottom: 1px solid oklch(0.20 0.005 155);">
+								<div class="w-2.5 h-2.5 rounded-full" style="background: #FF5F57;"></div>
+								<div class="w-2.5 h-2.5 rounded-full" style="background: #FEBC2E;"></div>
+								<div class="w-2.5 h-2.5 rounded-full" style="background: #28C840;"></div>
+								<span class="text-[8px] ml-3" style="color: oklch(0.50 0.005 155);">dashboard.avoqado.io</span>
+							</div>
+							<div class="p-3.5 flex gap-3" style="background: oklch(0.09 0.005 155);">
+								<div class="w-10 space-y-2 shrink-0">
+									<div class="w-6 h-6 rounded-lg" style="background: oklch(0.72 0.14 240 / 0.2);"></div>
+									<div class="w-6 h-1.5 rounded" style="background: oklch(0.22 0.005 155);"></div>
+									<div class="w-6 h-1.5 rounded" style="background: oklch(0.18 0.005 155);"></div>
+									<div class="w-6 h-1.5 rounded" style="background: oklch(0.18 0.005 155);"></div>
+								</div>
+								<div class="flex-1 space-y-2.5">
+									<div class="flex gap-2">
+										<div class="flex-1 p-2.5 rounded-lg" style="background: oklch(0.14 0.005 155);">
+											<div class="text-[7px]" style="color: oklch(0.50 0.005 155);">Ventas</div>
+											<div class="text-sm font-semibold" style="color: oklch(0.72 0.14 240);">$24,850</div>
+										</div>
+										<div class="flex-1 p-2.5 rounded-lg" style="background: oklch(0.14 0.005 155);">
+											<div class="text-[7px]" style="color: oklch(0.50 0.005 155);">Ordenes</div>
+											<div class="text-sm font-semibold" style="color: #69E185;">127</div>
+										</div>
+										<div class="flex-1 p-2.5 rounded-lg" style="background: oklch(0.14 0.005 155);">
+											<div class="text-[7px]" style="color: oklch(0.50 0.005 155);">Ticket</div>
+											<div class="text-sm font-semibold" style="color: oklch(0.78 0.14 75);">$195</div>
+										</div>
+									</div>
+									<div class="rounded-lg p-3 flex items-end gap-1 h-[65px]" style="background: oklch(0.14 0.005 155);">
+										{[30,50,40,70,55,85,65].map((h) => (
+											<div class="flex-1 rounded-t" style={`height: ${h}%; background: oklch(0.72 0.14 240); opacity: 0.6;`}></div>
+										))}
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- 2. TPV — Real PAX (overlapping dashboard top-right) -->
+						<div class="absolute" style="top: 0; right: 30px; transform: rotate(4deg); z-index: 6;">
+							<img src="/pax-avoqado.png" alt="Terminal PAX" class="w-[190px] h-auto" style="filter: drop-shadow(0 15px 35px rgba(0,0,0,0.2));" />
+						</div>
+
+						<!-- 3. POS — iPad (overlapping dashboard right, partially behind TPV) -->
+						<div class="absolute w-[230px] rounded-[1.2rem] p-[5px]" style="top: 130px; right: -10px; transform: rotate(5deg); z-index: 3; background: linear-gradient(145deg, oklch(0.84 0.005 155), oklch(0.70 0.005 155)); box-shadow: 0 18px 45px rgba(0,0,0,0.15);">
+							<div class="rounded-[0.9rem] p-[3px] relative" style="background: oklch(0.12 0.005 155);">
+								<div class="absolute top-[5px] left-1/2 -translate-x-1/2 w-[4px] h-[4px] rounded-full" style="background: oklch(0.22 0.005 155);"></div>
+								<div class="rounded-[0.6rem] overflow-hidden p-3" style="background: oklch(0.08 0.005 155);">
+									<div class="text-[8px] text-white mb-2 font-medium">Plano de mesas</div>
+									<div class="grid grid-cols-3 gap-1.5">
+										{['M1','M2','M3','M4','M5','M6'].map((m, i) => {
+											const occ = i===0||i===1||i===5; const res = i===3;
+											return <div class="aspect-square rounded-lg flex items-center justify-center text-[7px] font-medium" style={`background: ${occ ? 'oklch(0.68 0.15 290 / 0.15)' : res ? 'oklch(0.78 0.14 75 / 0.12)' : 'oklch(0.16 0.005 155)'}; color: ${occ ? 'oklch(0.68 0.15 290)' : res ? 'oklch(0.78 0.14 75)' : 'oklch(0.40 0.005 155)'};`}>{m}</div>;
+										})}
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- 4. QR — iPhone tall (bottom-left, overlapping dashboard) -->
+						<div class="absolute w-[130px] rounded-[1.5rem] p-[2px]" style="bottom: 0; left: 40px; transform: rotate(-5deg); z-index: 5; background: linear-gradient(145deg, oklch(0.48 0.005 155), oklch(0.30 0.005 155)); box-shadow: 0 15px 40px rgba(0,0,0,0.18);">
+							<div class="rounded-[1.4rem] overflow-hidden" style="background: oklch(0.06 0.005 155);">
+								<div class="flex justify-center pt-2 pb-1">
+									<div class="w-16 h-[12px] rounded-full flex items-center justify-center" style="background: oklch(0.10 0.005 155);">
+										<div class="w-[4px] h-[4px] rounded-full" style="background: oklch(0.20 0.01 240);"></div>
+									</div>
+								</div>
+								<div class="px-3 pb-3 flex flex-col items-center">
+									<div class="w-20 h-20 rounded-xl p-2 mb-2" style="border: 2px solid oklch(0.78 0.14 75);">
+										<div class="w-full h-full grid grid-cols-5 grid-rows-5 gap-0.5">
+											{Array.from({length:25}).map((_, i) => {
+												const corner = (i<3&&Math.floor(i/5)<1)||(i%5>=3&&Math.floor(i/5)<1)||(i%5<2&&Math.floor(i/5)>=3);
+												return <div class="rounded-sm" style={`background: oklch(0.78 0.14 75 / ${corner?'0.8':i%3===0?'0.5':'0.25'});`}></div>;
+											})}
+										</div>
+									</div>
+									<span class="text-[8px] text-white mb-0.5">Escanea el QR</span>
+									<span class="text-[6px]" style="color: oklch(0.45 0.005 155);">Sin descargar app</span>
+									<div class="w-full mt-2 py-1.5 rounded-lg text-center text-[7px] font-semibold text-black" style="background: oklch(0.78 0.14 75);">Pagar $530</div>
+								</div>
+								<div class="flex justify-center pb-2">
+									<div class="w-10 h-[3px] rounded-full" style="background: oklch(0.22 0.005 155);"></div>
+								</div>
+							</div>
+						</div>
+
+						<!-- 5. IA — Chat with browser frame (overlapping center-bottom) -->
+						<div class="absolute w-[240px] rounded-xl overflow-hidden" style="bottom: 30px; left: 200px; transform: rotate(2deg); z-index: 4; box-shadow: 0 15px 40px rgba(0,0,0,0.14);">
+							<div class="flex items-center gap-1.5 px-3 py-1.5" style="background: oklch(0.12 0.005 155); border-bottom: 1px solid oklch(0.18 0.005 155);">
+								<div class="w-3 h-3 rounded-full flex items-center justify-center" style="background: oklch(0.75 0.14 195 / 0.2);">
+									<div class="w-1.5 h-1.5 rounded-full" style="background: oklch(0.75 0.14 195);"></div>
+								</div>
+								<span class="text-[8px] text-white font-medium">Asistente IA</span>
+							</div>
+							<div class="p-3 space-y-2" style="background: oklch(0.09 0.005 155);">
+								<div class="flex justify-end"><div class="px-2.5 py-1 rounded-lg text-[8px] text-white" style="background: oklch(0.18 0.005 155);">Cuanto vendi esta semana?</div></div>
+								<div class="px-2.5 py-1.5 rounded-lg text-[8px]" style="background: oklch(0.14 0.005 155); color: oklch(0.60 0.005 155);"><span style="color: oklch(0.75 0.14 195);">$148,500</span> esta semana. +12% vs anterior.</div>
+							</div>
+						</div>
+
+						<!-- 6. WIDGET — Browser (bottom-right, overlapping POS) -->
+						<div class="absolute w-[210px] rounded-xl overflow-hidden" style="bottom: 10px; right: 0; transform: rotate(-3deg); z-index: 2; box-shadow: 0 12px 35px rgba(0,0,0,0.12);">
+							<div class="flex items-center gap-1 px-2.5 py-1.5" style="background: oklch(0.13 0.005 155);">
+								<div class="w-2 h-2 rounded-full" style="background: #FF5F57;"></div>
+								<div class="w-2 h-2 rounded-full" style="background: #FEBC2E;"></div>
+								<div class="w-2 h-2 rounded-full" style="background: #28C840;"></div>
+								<span class="text-[7px] ml-2" style="color: oklch(0.45 0.005 155);">misushi.com.mx</span>
+							</div>
+							<div class="flex" style="background: oklch(0.97 0.005 75);">
+								<div class="w-[40%] p-2">
+									<div class="h-1.5 w-10 rounded mb-1" style="background: oklch(0.82 0.005 75);"></div>
+									<div class="h-0.5 w-full rounded mb-0.5" style="background: oklch(0.88 0.005 75);"></div>
+									<div class="h-10 w-full rounded-lg" style="background: oklch(0.90 0.005 75);"></div>
+								</div>
+								<div class="w-[60%] p-2" style="background: oklch(0.10 0.005 155);">
+									<div class="flex items-center gap-1 mb-1.5">
+										<div class="w-2.5 h-2.5 rounded-full" style="background: #69E185;"></div>
+										<span class="text-[7px] text-white font-medium">Ordenar</span>
+									</div>
+									<div class="space-y-1">
+										<div class="flex justify-between text-[7px] p-1 rounded" style="background: oklch(0.16 0.005 155);"><span class="text-white">Dragon Roll</span><span style="color: #69E185;">$280</span></div>
+										<div class="flex justify-between text-[7px] p-1 rounded" style="background: oklch(0.16 0.005 155);"><span class="text-white">Edamame</span><span style="color: #69E185;">$95</span></div>
+									</div>
+									<div class="mt-1.5 py-1 rounded-lg text-center text-[7px] font-semibold text-black" style="background: #69E185;">Pagar $375</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>

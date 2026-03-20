@@ -50,18 +50,30 @@ export default function NavigationMenu() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSection, setMobileSection] = useState<string | null>(null);
+  const [isLightPage, setIsLightPage] = useState(false);
   const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navRef = useRef<HTMLElement>(null);
 
+  // Detect white/light background pages on mount
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20 || activeMenu !== null);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [activeMenu]);
+    const bodyBg = document.body.style.backgroundColor || '';
+    const computedBg = window.getComputedStyle(document.body).backgroundColor;
+    const isLight = bodyBg.includes('fff') || bodyBg.includes('white') || computedBg === 'rgb(255, 255, 255)';
+    if (isLight) {
+      setIsLightPage(true);
+      setScrolled(true);
+    }
+  }, []);
 
   useEffect(() => {
-    setScrolled(window.scrollY > 20 || activeMenu !== null || mobileOpen);
-  }, [activeMenu, mobileOpen]);
+    const onScroll = () => setScrolled(window.scrollY > 20 || activeMenu !== null || isLightPage);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [activeMenu, isLightPage]);
+
+  useEffect(() => {
+    setScrolled(window.scrollY > 20 || activeMenu !== null || mobileOpen || isLightPage);
+  }, [activeMenu, mobileOpen, isLightPage]);
 
   const enter = useCallback((menu: string) => {
     if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
