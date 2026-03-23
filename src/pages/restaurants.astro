@@ -51,9 +51,12 @@ const RED = 'oklch(0.65 0.20 25)';
 						</div>
 					</div>
 
-					<!-- Floor plan mockup -->
+					<!-- Floor plan mockup — iPad frame -->
 					<div class="hidden lg:block">
-						<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+						<div class="rounded-[1.2rem] p-[5px]" style="background: linear-gradient(145deg, oklch(0.84 0.005 155), oklch(0.70 0.005 155)); box-shadow: 0 15px 40px rgba(0,0,0,0.12);">
+							<div class="rounded-[0.9rem] p-[3px] relative" style="background: oklch(0.12 0.005 155);">
+								<div class="absolute top-[5px] left-1/2 -translate-x-1/2 w-[4px] h-[4px] rounded-full" style="background: oklch(0.22 0.005 155);"></div>
+								<div class="rounded-[0.6rem] overflow-hidden p-5" style="background: oklch(0.12 0.005 155);">
 							<!-- Header -->
 							<div class="flex items-center justify-between mb-4">
 								<div class="flex items-center gap-2">
@@ -140,6 +143,8 @@ const RED = 'oklch(0.65 0.20 25)';
 									<span class="text-[8px] text-gray-500">Redonda</span>
 								</div>
 							</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -181,8 +186,11 @@ const RED = 'oklch(0.65 0.20 25)';
 						</div>
 					</div>
 
-					<!-- Order flow mockup -->
-					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+					<!-- Order flow mockup — iPad frame -->
+					<div class="rounded-[1.2rem] p-[5px]" style="background: linear-gradient(145deg, oklch(0.84 0.005 155), oklch(0.70 0.005 155)); box-shadow: 0 15px 40px rgba(0,0,0,0.12);">
+						<div class="rounded-[0.9rem] p-[3px] relative" style="background: oklch(0.12 0.005 155);">
+							<div class="absolute top-[5px] left-1/2 -translate-x-1/2 w-[4px] h-[4px] rounded-full" style="background: oklch(0.22 0.005 155);"></div>
+							<div class="rounded-[0.6rem] overflow-hidden p-5" style="background: #0A0A0A;">
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Orden activa — Mesa 6</span>
 							<div class="flex gap-1.5">
@@ -268,6 +276,8 @@ const RED = 'oklch(0.65 0.20 25)';
 							</div>
 							<span class="text-sm font-semibold" style={`color: ${ACCENT};`}>$4,520</span>
 						</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -280,8 +290,15 @@ const RED = 'oklch(0.65 0.20 25)';
 		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-					<!-- Menu editor mockup -->
-					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+					<!-- Menu editor mockup — Browser frame -->
+					<div class="order-2 lg:order-1 rounded-xl overflow-hidden" style="box-shadow: 0 15px 40px rgba(0,0,0,0.12);">
+						<div class="flex items-center gap-1.5 px-3 py-2" style="background: oklch(0.13 0.005 155);">
+							<div class="w-2 h-2 rounded-full" style="background: #FF5F57;"></div>
+							<div class="w-2 h-2 rounded-full" style="background: #FEBC2E;"></div>
+							<div class="w-2 h-2 rounded-full" style="background: #28C840;"></div>
+							<span class="text-[7px] ml-2" style="color: oklch(0.50 0.005 155);">dashboard.avoqado.io/menu</span>
+						</div>
+						<div class="p-5" style="background: oklch(0.12 0.005 155);">
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">MenuMaker — 48 productos</span>
 							<div class="flex gap-1.5">
@@ -375,6 +392,7 @@ const RED = 'oklch(0.65 0.20 25)';
 								</div>
 							</div>
 						</div>
+						</div>
 					</div>
 
 					<div class="order-1 lg:order-2">
@@ -443,71 +461,81 @@ const RED = 'oklch(0.65 0.20 25)';
 						</div>
 					</div>
 
-					<!-- QR payment phone mockup -->
+					<!-- QR payment phone mockup — iPhone frame -->
 					<div class="flex justify-center">
-						<div class="w-72 rounded-[2rem] overflow-hidden border border-black/10 p-4" style="background: #0A0A0A;">
-							<!-- Phone notch -->
-							<div class="w-24 h-5 bg-black rounded-full mx-auto mb-4"></div>
-							<!-- Screen content -->
-							<div class="rounded-2xl p-4" style="background: oklch(0.16 0.005 155);">
-								<div class="text-center mb-4">
-									<span class="text-[13px] text-white font-medium block">Mesa 6</span>
-									<span class="text-[10px] text-gray-500">La Terraza MX</span>
+						<div class="w-72 rounded-[1.5rem] p-[2px]" style="background: linear-gradient(145deg, oklch(0.48 0.005 155), oklch(0.30 0.005 155)); box-shadow: 0 15px 40px rgba(0,0,0,0.15);">
+							<div class="rounded-[1.4rem] overflow-hidden" style="background: oklch(0.06 0.005 155);">
+								<!-- Dynamic Island -->
+								<div class="flex justify-center pt-2 pb-1">
+									<div class="w-16 h-[12px] rounded-full" style="background: oklch(0.10 0.005 155);"></div>
 								</div>
-								<!-- Bill items -->
-								<div class="space-y-2 mb-4">
-									<div class="flex items-center justify-between">
-										<span class="text-[10px] text-gray-300">3x Tacos al Pastor</span>
-										<span class="text-[10px] text-white">$285</span>
-									</div>
-									<div class="flex items-center justify-between">
-										<span class="text-[10px] text-gray-300">1x Arrachera 300g</span>
-										<span class="text-[10px] text-white">$320</span>
-									</div>
-									<div class="flex items-center justify-between">
-										<span class="text-[10px] text-gray-300">2x Michelada</span>
-										<span class="text-[10px] text-white">$190</span>
-									</div>
-									<div class="flex items-center justify-between">
-										<span class="text-[10px] text-gray-300">1x Guacamole</span>
-										<span class="text-[10px] text-white">$120</span>
-									</div>
-									<div class="h-px" style="background: oklch(0.25 0.005 155);"></div>
-									<div class="flex items-center justify-between">
-										<span class="text-[10px] text-gray-400">Subtotal</span>
-										<span class="text-[10px] text-white">$915</span>
+								<!-- Screen content -->
+								<div class="px-4 pb-0">
+									<div class="rounded-2xl p-4" style="background: oklch(0.16 0.005 155);">
+										<div class="text-center mb-4">
+											<span class="text-[13px] text-white font-medium block">Mesa 6</span>
+											<span class="text-[10px] text-gray-500">La Terraza MX</span>
+										</div>
+										<!-- Bill items -->
+										<div class="space-y-2 mb-4">
+											<div class="flex items-center justify-between">
+												<span class="text-[10px] text-gray-300">3x Tacos al Pastor</span>
+												<span class="text-[10px] text-white">$285</span>
+											</div>
+											<div class="flex items-center justify-between">
+												<span class="text-[10px] text-gray-300">1x Arrachera 300g</span>
+												<span class="text-[10px] text-white">$320</span>
+											</div>
+											<div class="flex items-center justify-between">
+												<span class="text-[10px] text-gray-300">2x Michelada</span>
+												<span class="text-[10px] text-white">$190</span>
+											</div>
+											<div class="flex items-center justify-between">
+												<span class="text-[10px] text-gray-300">1x Guacamole</span>
+												<span class="text-[10px] text-white">$120</span>
+											</div>
+											<div class="h-px" style="background: oklch(0.25 0.005 155);"></div>
+											<div class="flex items-center justify-between">
+												<span class="text-[10px] text-gray-400">Subtotal</span>
+												<span class="text-[10px] text-white">$915</span>
+											</div>
+										</div>
+										<!-- Split selector -->
+										<div class="mb-4">
+											<span class="text-[9px] text-gray-500 block mb-2">Dividir cuenta</span>
+											<div class="grid grid-cols-3 gap-1.5">
+												<div class="py-1.5 rounded-lg text-center text-[9px] text-black font-medium" style={`background: ${ACCENT};`}>Yo pago todo</div>
+												<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">Mitad</div>
+												<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">Por platillo</div>
+											</div>
+										</div>
+										<!-- Tip selector -->
+										<div class="mb-4">
+											<span class="text-[9px] text-gray-500 block mb-2">Propina</span>
+											<div class="grid grid-cols-4 gap-1.5">
+												<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">10%</div>
+												<div class="py-1.5 rounded-lg text-center text-[9px] text-black font-medium" style={`background: ${ACCENT};`}>15%</div>
+												<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">20%</div>
+												<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">Otro</div>
+											</div>
+										</div>
+										<!-- Total -->
+										<div class="flex items-center justify-between mb-3 pt-2 border-t border-white/5">
+											<span class="text-[11px] text-gray-400">Total con propina</span>
+											<span class="text-base font-semibold text-white">$1,052</span>
+										</div>
+										<!-- Pay button -->
+										<div class="h-10 rounded-xl flex items-center justify-center" style={`background: ${ACCENT};`}>
+											<span class="text-sm font-semibold text-black">Pagar $1,052</span>
+										</div>
+										<div class="text-center mt-2">
+											<span class="text-[8px] text-gray-600">Apple Pay / Tarjeta / Google Pay</span>
+										</div>
 									</div>
 								</div>
-								<!-- Split selector -->
-								<div class="mb-4">
-									<span class="text-[9px] text-gray-500 block mb-2">Dividir cuenta</span>
-									<div class="grid grid-cols-3 gap-1.5">
-										<div class="py-1.5 rounded-lg text-center text-[9px] text-black font-medium" style={`background: ${ACCENT};`}>Yo pago todo</div>
-										<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">Mitad</div>
-										<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">Por platillo</div>
-									</div>
-								</div>
-								<!-- Tip selector -->
-								<div class="mb-4">
-									<span class="text-[9px] text-gray-500 block mb-2">Propina</span>
-									<div class="grid grid-cols-4 gap-1.5">
-										<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">10%</div>
-										<div class="py-1.5 rounded-lg text-center text-[9px] text-black font-medium" style={`background: ${ACCENT};`}>15%</div>
-										<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">20%</div>
-										<div class="py-1.5 rounded-lg text-center text-[9px] text-gray-500" style="background: oklch(0.20 0.005 155);">Otro</div>
-									</div>
-								</div>
-								<!-- Total -->
-								<div class="flex items-center justify-between mb-3 pt-2 border-t border-white/5">
-									<span class="text-[11px] text-gray-400">Total con propina</span>
-									<span class="text-base font-semibold text-white">$1,052</span>
-								</div>
-								<!-- Pay button -->
-								<div class="h-10 rounded-xl flex items-center justify-center" style={`background: ${ACCENT};`}>
-									<span class="text-sm font-semibold text-black">Pagar $1,052</span>
-								</div>
-								<div class="text-center mt-2">
-									<span class="text-[8px] text-gray-600">Apple Pay / Tarjeta / Google Pay</span>
+								<!-- Home indicator -->
+								<div class="flex justify-center pb-1.5">
+									<div class="w-10 h-[3px] rounded-full" style="background: oklch(0.22 0.005 155);"></div>
 								</div>
 							</div>
 						</div>
@@ -523,8 +551,15 @@ const RED = 'oklch(0.65 0.20 25)';
 		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-					<!-- Order sources mockup -->
-					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+					<!-- Order sources mockup — Browser frame -->
+					<div class="order-2 lg:order-1 rounded-xl overflow-hidden" style="box-shadow: 0 15px 40px rgba(0,0,0,0.12);">
+						<div class="flex items-center gap-1.5 px-3 py-2" style="background: oklch(0.13 0.005 155);">
+							<div class="w-2 h-2 rounded-full" style="background: #FF5F57;"></div>
+							<div class="w-2 h-2 rounded-full" style="background: #FEBC2E;"></div>
+							<div class="w-2 h-2 rounded-full" style="background: #28C840;"></div>
+							<span class="text-[7px] ml-2" style="color: oklch(0.50 0.005 155);">misushi.com.mx</span>
+						</div>
+						<div class="p-5" style="background: oklch(0.12 0.005 155);">
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Pedidos entrantes — Hoy</span>
 							<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.04 155); color: ${ACCENT};`}>12 activos</span>
@@ -591,6 +626,7 @@ const RED = 'oklch(0.65 0.20 25)';
 								<div class="text-sm font-light text-white">2</div>
 								<div class="text-[8px] text-gray-600">Link de pago</div>
 							</div>
+						</div>
 						</div>
 					</div>
 
@@ -660,8 +696,15 @@ const RED = 'oklch(0.65 0.20 25)';
 						</div>
 					</div>
 
-					<!-- Staff cards mockup -->
-					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+					<!-- Staff cards mockup — Browser frame -->
+					<div class="rounded-xl overflow-hidden" style="box-shadow: 0 15px 40px rgba(0,0,0,0.12);">
+						<div class="flex items-center gap-1.5 px-3 py-2" style="background: oklch(0.13 0.005 155);">
+							<div class="w-2 h-2 rounded-full" style="background: #FF5F57;"></div>
+							<div class="w-2 h-2 rounded-full" style="background: #FEBC2E;"></div>
+							<div class="w-2 h-2 rounded-full" style="background: #28C840;"></div>
+							<span class="text-[7px] ml-2" style="color: oklch(0.50 0.005 155);">dashboard.avoqado.io/staff</span>
+						</div>
+						<div class="p-5" style="background: #0A0A0A;">
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Turno vespertino — 5 activos</span>
 							<span class="text-[9px] px-2 py-0.5 rounded-full bg-avoqado-green text-black font-medium">En curso</span>
@@ -751,6 +794,7 @@ const RED = 'oklch(0.65 0.20 25)';
 									<div class="text-[7px] text-gray-600">Varianza</div>
 								</div>
 							</div>
+						</div>
 						</div>
 					</div>
 				</div>

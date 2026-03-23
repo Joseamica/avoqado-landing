@@ -52,88 +52,107 @@ const ROSE = 'oklch(0.65 0.18 10)';
 						</div>
 					</div>
 
-					<!-- Calendar mockup -->
-					<div class="hidden lg:block">
-						<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
-							<!-- Header -->
-							<div class="flex items-center justify-between mb-4">
-								<div class="flex items-center gap-2">
-									<div class="w-6 h-6 rounded-lg flex items-center justify-center" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>
-										<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
-									</div>
-									<span class="text-[11px] text-white font-medium">Agenda — Hoy, 19 mar</span>
-								</div>
-								<div class="flex gap-1.5">
-									<span class="text-[8px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>8 citas</span>
-									<span class="text-[8px] px-2 py-0.5 rounded-full bg-avoqado-green text-black">2 libres</span>
-								</div>
-							</div>
-							<!-- Time slots -->
-							<div class="space-y-1.5 mb-4">
-								<div class="flex items-center gap-2">
-									<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">09:00</span>
-									<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style={`background: oklch(0.18 0.02 340); border-left: 3px solid ${MAGENTA};`}>
-										<div>
-											<span class="text-[10px] text-white">Corte + Balayage</span>
-											<span class="text-[8px] text-gray-500 block">Lucia M. — Diana (Est. 2)</span>
+					<!-- Calendar mockup — iPad frame -->
+					<div class="hidden lg:flex justify-center items-center">
+						<div
+							style={`
+								background: linear-gradient(145deg, oklch(0.82 0.005 155), oklch(0.70 0.005 155));
+								border-radius: 1.6rem;
+								padding: 8px;
+								box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+							`}
+						>
+							<!-- Inner bezel -->
+							<div
+								class="relative overflow-hidden"
+								style="background: oklch(0.12 0.005 155); border-radius: 1.2rem; padding: 4px;"
+							>
+								<!-- Camera dot -->
+								<div class="absolute top-[6px] left-1/2 -translate-x-1/2 w-[6px] h-[6px] rounded-full z-10" style="background: oklch(0.20 0.005 155); box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);"></div>
+
+								<!-- Screen -->
+								<div class="relative overflow-hidden" style="background: oklch(0.12 0.005 155); border-radius: 0.9rem; padding: 16px 14px 14px;">
+									<!-- Header -->
+									<div class="flex items-center justify-between mb-4">
+										<div class="flex items-center gap-2">
+											<div class="w-6 h-6 rounded-lg flex items-center justify-center" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>
+												<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
+											</div>
+											<span class="text-[11px] text-white font-medium">Agenda — Hoy, 19 mar</span>
 										</div>
-										<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.22 0.03 340); color: ${MAGENTA};`}>2h 30m</span>
-									</div>
-								</div>
-								<div class="flex items-center gap-2">
-									<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">09:30</span>
-									<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style={`background: oklch(0.18 0.02 340); border-left: 3px solid ${MAGENTA};`}>
-										<div>
-											<span class="text-[10px] text-white">Barba + Corte clasico</span>
-											<span class="text-[8px] text-gray-500 block">Carlos R. — Erick (Est. 1)</span>
+										<div class="flex gap-1.5">
+											<span class="text-[8px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>8 citas</span>
+											<span class="text-[8px] px-2 py-0.5 rounded-full bg-avoqado-green text-black">2 libres</span>
 										</div>
-										<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.22 0.03 340); color: ${MAGENTA};`}>1h</span>
 									</div>
-								</div>
-								<div class="flex items-center gap-2">
-									<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">10:30</span>
-									<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style="background: oklch(0.16 0.005 155); border-left: 3px solid oklch(0.40 0.005 155);">
-										<div>
-											<span class="text-[10px] text-gray-400">Espacio libre</span>
-											<span class="text-[8px] text-gray-600 block">Erick (Est. 1) disponible</span>
+									<!-- Time slots -->
+									<div class="space-y-1.5 mb-4">
+										<div class="flex items-center gap-2">
+											<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">09:00</span>
+											<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style={`background: oklch(0.18 0.02 340); border-left: 3px solid ${MAGENTA};`}>
+												<div>
+													<span class="text-[10px] text-white">Corte + Balayage</span>
+													<span class="text-[8px] text-gray-500 block">Lucia M. — Diana (Est. 2)</span>
+												</div>
+												<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.22 0.03 340); color: ${MAGENTA};`}>2h 30m</span>
+											</div>
 										</div>
-										<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>Agendar</span>
-									</div>
-								</div>
-								<div class="flex items-center gap-2">
-									<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">11:00</span>
-									<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style={`background: oklch(0.18 0.02 75); border-left: 3px solid ${AMBER};`}>
-										<div>
-											<span class="text-[10px] text-white">Manicure + Pedicure gel</span>
-											<span class="text-[8px] text-gray-500 block">Sofia G. — Valentina (Est. 3)</span>
+										<div class="flex items-center gap-2">
+											<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">09:30</span>
+											<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style={`background: oklch(0.18 0.02 340); border-left: 3px solid ${MAGENTA};`}>
+												<div>
+													<span class="text-[10px] text-white">Barba + Corte clasico</span>
+													<span class="text-[8px] text-gray-500 block">Carlos R. — Erick (Est. 1)</span>
+												</div>
+												<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.22 0.03 340); color: ${MAGENTA};`}>1h</span>
+											</div>
 										</div>
-										<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.22 0.03 75); color: ${AMBER};`}>1h 30m</span>
-									</div>
-								</div>
-								<div class="flex items-center gap-2">
-									<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">12:00</span>
-									<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style={`background: oklch(0.18 0.02 340); border-left: 3px solid ${MAGENTA};`}>
-										<div>
-											<span class="text-[10px] text-white">Tinte + Tratamiento keratina</span>
-											<span class="text-[8px] text-gray-500 block">Ana L. — Diana (Est. 2)</span>
+										<div class="flex items-center gap-2">
+											<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">10:30</span>
+											<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style="background: oklch(0.16 0.005 155); border-left: 3px solid oklch(0.40 0.005 155);">
+												<div>
+													<span class="text-[10px] text-gray-400">Espacio libre</span>
+													<span class="text-[8px] text-gray-600 block">Erick (Est. 1) disponible</span>
+												</div>
+												<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>Agendar</span>
+											</div>
 										</div>
-										<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.22 0.03 340); color: ${MAGENTA};`}>3h</span>
+										<div class="flex items-center gap-2">
+											<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">11:00</span>
+											<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style={`background: oklch(0.18 0.02 75); border-left: 3px solid ${AMBER};`}>
+												<div>
+													<span class="text-[10px] text-white">Manicure + Pedicure gel</span>
+													<span class="text-[8px] text-gray-500 block">Sofia G. — Valentina (Est. 3)</span>
+												</div>
+												<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.22 0.03 75); color: ${AMBER};`}>1h 30m</span>
+											</div>
+										</div>
+										<div class="flex items-center gap-2">
+											<span class="text-[9px] text-gray-600 w-10 shrink-0 text-right">12:00</span>
+											<div class="flex-1 rounded-lg p-2.5 flex items-center justify-between" style={`background: oklch(0.18 0.02 340); border-left: 3px solid ${MAGENTA};`}>
+												<div>
+													<span class="text-[10px] text-white">Tinte + Tratamiento keratina</span>
+													<span class="text-[8px] text-gray-500 block">Ana L. — Diana (Est. 2)</span>
+												</div>
+												<span class="text-[8px] px-1.5 py-0.5 rounded" style={`background: oklch(0.22 0.03 340); color: ${MAGENTA};`}>3h</span>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-							<!-- Legend -->
-							<div class="flex items-center gap-4 pt-3 border-t border-white/5">
-								<div class="flex items-center gap-1.5">
-									<div class="w-2 h-2 rounded-sm" style={`background: ${MAGENTA};`}></div>
-									<span class="text-[8px] text-gray-500">Confirmada</span>
-								</div>
-								<div class="flex items-center gap-1.5">
-									<div class="w-2 h-2 rounded-sm" style={`background: ${AMBER};`}></div>
-									<span class="text-[8px] text-gray-500">Pendiente</span>
-								</div>
-								<div class="flex items-center gap-1.5">
-									<div class="w-2 h-2 rounded-sm" style="background: oklch(0.25 0.005 155);"></div>
-									<span class="text-[8px] text-gray-500">Libre</span>
+									<!-- Legend -->
+									<div class="flex items-center gap-4 pt-3 border-t border-white/5">
+										<div class="flex items-center gap-1.5">
+											<div class="w-2 h-2 rounded-sm" style={`background: ${MAGENTA};`}></div>
+											<span class="text-[8px] text-gray-500">Confirmada</span>
+										</div>
+										<div class="flex items-center gap-1.5">
+											<div class="w-2 h-2 rounded-sm" style={`background: ${AMBER};`}></div>
+											<span class="text-[8px] text-gray-500">Pendiente</span>
+										</div>
+										<div class="flex items-center gap-1.5">
+											<div class="w-2 h-2 rounded-sm" style="background: oklch(0.25 0.005 155);"></div>
+											<span class="text-[8px] text-gray-500">Libre</span>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -177,8 +196,22 @@ const ROSE = 'oklch(0.65 0.18 10)';
 						</div>
 					</div>
 
-					<!-- Booking calendar mockup -->
-					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+					<!-- Booking calendar mockup — Browser frame -->
+					<div class="rounded-2xl overflow-hidden" style="border: 1px solid oklch(0.22 0.005 155); box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+						<!-- Browser chrome -->
+						<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.14 0.005 155); border-bottom: 1px solid oklch(0.20 0.005 155);">
+							<div class="flex gap-1.5">
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.40 0.15 25);"></div>
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.60 0.15 85);"></div>
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.55 0.15 145);"></div>
+							</div>
+							<div class="flex-1 mx-4 px-3 py-1 rounded-lg text-[10px] flex items-center gap-2" style="background: oklch(0.10 0.005 155); color: oklch(0.50 0.005 155);">
+								<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+								dashboard.avoqado.io/reservaciones
+							</div>
+						</div>
+						<!-- Page content -->
+						<div class="p-5" style="background: #0A0A0A;">
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Reservaciones — Semana del 17 mar</span>
 							<div class="flex gap-1.5">
@@ -266,6 +299,7 @@ const ROSE = 'oklch(0.65 0.18 10)';
 							</div>
 							<span class="text-[9px] px-2 py-0.5 rounded bg-avoqado-green text-black font-medium">Compartir</span>
 						</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -278,8 +312,22 @@ const ROSE = 'oklch(0.65 0.18 10)';
 		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-					<!-- Client profile mockup -->
-					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+					<!-- Client profile mockup — Browser frame -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden" style="border: 1px solid oklch(0.22 0.005 155); box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+						<!-- Browser chrome -->
+						<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.14 0.005 155); border-bottom: 1px solid oklch(0.20 0.005 155);">
+							<div class="flex gap-1.5">
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.40 0.15 25);"></div>
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.60 0.15 85);"></div>
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.55 0.15 145);"></div>
+							</div>
+							<div class="flex-1 mx-4 px-3 py-1 rounded-lg text-[10px] flex items-center gap-2" style="background: oklch(0.10 0.005 155); color: oklch(0.50 0.005 155);">
+								<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+								dashboard.avoqado.io/clientes
+							</div>
+						</div>
+						<!-- Page content -->
+						<div class="p-5" style="background: oklch(0.12 0.005 155);">
 						<!-- Client header -->
 						<div class="flex items-center gap-3 mb-4">
 							<div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>LM</div>
@@ -354,6 +402,7 @@ const ROSE = 'oklch(0.65 0.18 10)';
 								</div>
 							</div>
 						</div>
+						</div>
 					</div>
 
 					<div class="order-1 lg:order-2">
@@ -422,8 +471,22 @@ const ROSE = 'oklch(0.65 0.18 10)';
 						</div>
 					</div>
 
-					<!-- Staff performance mockup -->
-					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+					<!-- Staff performance mockup — Browser frame -->
+					<div class="rounded-2xl overflow-hidden" style="border: 1px solid oklch(0.22 0.005 155); box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+						<!-- Browser chrome -->
+						<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.14 0.005 155); border-bottom: 1px solid oklch(0.20 0.005 155);">
+							<div class="flex gap-1.5">
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.40 0.15 25);"></div>
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.60 0.15 85);"></div>
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.55 0.15 145);"></div>
+							</div>
+							<div class="flex-1 mx-4 px-3 py-1 rounded-lg text-[10px] flex items-center gap-2" style="background: oklch(0.10 0.005 155); color: oklch(0.50 0.005 155);">
+								<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+								dashboard.avoqado.io/comisiones
+							</div>
+						</div>
+						<!-- Page content -->
+						<div class="p-5" style="background: #0A0A0A;">
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Rendimiento del equipo — Marzo 2026</span>
 							<span class="text-[9px] px-2 py-0.5 rounded-full bg-avoqado-green text-black font-medium">En curso</span>
@@ -513,6 +576,7 @@ const ROSE = 'oklch(0.65 0.18 10)';
 								<div class="text-[8px] text-gray-600">Servicios</div>
 							</div>
 						</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -553,8 +617,25 @@ const ROSE = 'oklch(0.65 0.18 10)';
 						</div>
 					</div>
 
-					<!-- Payment terminal mockup -->
-					<div class="rounded-2xl overflow-hidden border border-white/5 p-5" style="background: oklch(0.12 0.005 155);">
+					<!-- Payment terminal mockup — iPad frame -->
+					<div
+						style={`
+							background: linear-gradient(145deg, oklch(0.82 0.005 155), oklch(0.70 0.005 155));
+							border-radius: 1.6rem;
+							padding: 8px;
+							box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+						`}
+					>
+						<!-- Inner bezel -->
+						<div
+							class="relative overflow-hidden"
+							style="background: oklch(0.12 0.005 155); border-radius: 1.2rem; padding: 4px;"
+						>
+							<!-- Camera dot -->
+							<div class="absolute top-[6px] left-1/2 -translate-x-1/2 w-[6px] h-[6px] rounded-full z-10" style="background: oklch(0.20 0.005 155); box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);"></div>
+
+							<!-- Screen -->
+							<div class="relative overflow-hidden" style="background: oklch(0.12 0.005 155); border-radius: 0.9rem; padding: 16px 14px 14px;">
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Cobro — Lucia Martinez</span>
 							<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 340); color: ${MAGENTA};`}>Balayage + Corte</span>
@@ -636,6 +717,8 @@ const ROSE = 'oklch(0.65 0.18 10)';
 						<div class="h-10 rounded-xl flex items-center justify-center" style={`background: ${MAGENTA};`}>
 							<span class="text-sm font-semibold text-white">Cobrar $2,774</span>
 						</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -648,8 +731,22 @@ const ROSE = 'oklch(0.65 0.18 10)';
 		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-					<!-- Service catalog mockup -->
-					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+					<!-- Service catalog mockup — Browser frame -->
+					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden" style="border: 1px solid oklch(0.22 0.005 155); box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+						<!-- Browser chrome -->
+						<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.14 0.005 155); border-bottom: 1px solid oklch(0.20 0.005 155);">
+							<div class="flex gap-1.5">
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.40 0.15 25);"></div>
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.60 0.15 85);"></div>
+								<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.55 0.15 145);"></div>
+							</div>
+							<div class="flex-1 mx-4 px-3 py-1 rounded-lg text-[10px] flex items-center gap-2" style="background: oklch(0.10 0.005 155); color: oklch(0.50 0.005 155);">
+								<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+								dashboard.avoqado.io/menu
+							</div>
+						</div>
+						<!-- Page content -->
+						<div class="p-5" style="background: #0A0A0A;">
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Catalogo de servicios y productos</span>
 							<div class="flex gap-1.5">
@@ -738,6 +835,7 @@ const ROSE = 'oklch(0.65 0.18 10)';
 								</div>
 								<span class="text-[10px] text-white font-medium">$1,500</span>
 							</div>
+						</div>
 						</div>
 					</div>
 
