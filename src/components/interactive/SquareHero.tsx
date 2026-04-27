@@ -148,23 +148,27 @@ export default function SquareHero() {
             style={{ opacity: heroTextOpacity }}
             className="absolute inset-0 flex flex-col items-center justify-center z-30 px-4 md:px-8 text-center"
           >
-            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl text-white tracking-tight mb-4 md:mb-6 text-center max-w-5xl font-light">
-              Empezó en tu barrio.<br/>
-              Terminó en todo México.
+            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-7xl text-white tracking-tight mb-6 md:mb-10 text-center max-w-5xl font-light">
+              Tu tienda, tu gym, tu estética.<br/>
+              Un solo sistema.
             </h1>
-            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 items-center">
-              <a href="https://dashboardv2.avoqado.io/signup" className="bg-black text-white px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer font-baby">
-                Comienza gratis
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 max-w-2xl text-center mb-8 md:mb-12">
+              Punto de venta, cobros, citas, inventario y reportes — todo en una app.<br className="hidden sm:block" />
+              Más barato que lo que ya pagas en pedacitos.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 md:gap-6 items-center">
+              <a href="https://calendly.com/joseamica/demo-avoqado-15-min" target="_blank" rel="noopener noreferrer" className="bg-white text-black px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer">
+                Ver demo de 15 min
               </a>
-              <a href="/contact" className="bg-white text-black px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer border-2">
-                Contáctanos
+              <a href="https://dashboardv2.avoqado.io/signup" className="bg-black/60 text-white px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer border-2 border-white/30">
+                Comienza gratis
               </a>
             </div>
           </motion.div>
         </motion.div>
 
-        {/* Grid content - offset by navbar height */}
-        <div className="absolute top-16 left-0 right-0 bottom-0 overflow-hidden bg-white">
+        {/* Grid content - offset by navbar height + founders banner */}
+        <div className="absolute top-[100px] left-0 right-0 bottom-0 overflow-hidden bg-white">
 
         {/* CSS GRID - Desktop (9 cols) */}
         <motion.div
@@ -213,13 +217,13 @@ export default function SquareHero() {
                   <motion.span
                     style={{ opacity: textLine1Opacity, y: textLine1Y, filter: textLine1Blur, display: 'inline-block' }}
                   >
-                    Sin importar tu tipo de negocio,
+                    Tiendas, gyms, estéticas, clínicas y más.
                   </motion.span>
                   <br/>
                   <motion.span
                     style={{ opacity: textLine2Opacity, y: textLine2Y, filter: textLine2Blur, display: 'inline-block' }}
                   >
-                    comienza y crece a tu manera.
+                    Cobra, organiza y crece desde un solo lugar.
                   </motion.span>
                 </h2>
               </div>
@@ -275,13 +279,13 @@ export default function SquareHero() {
                   <motion.span
                     style={{ opacity: textLine1Opacity, y: textLine1Y, filter: textLine1Blur, display: 'inline-block' }}
                   >
-                    Sin importar tu negocio,
+                    Tiendas, gyms, estéticas, clínicas y más.
                   </motion.span>
                   <br/>
                   <motion.span
                     style={{ opacity: textLine2Opacity, y: textLine2Y, filter: textLine2Blur, display: 'inline-block' }}
                   >
-                    crece a tu manera.
+                    Cobra, organiza y crece desde un solo lugar.
                   </motion.span>
                 </h2>
               </div>

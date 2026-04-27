@@ -215,7 +215,7 @@ const products = [
     ),
     rightContent: (
       <div className="space-y-1.5">
-        {[{n:'Aguacate Hass',s:85,c:GREEN},{n:'Limon',s:12,c:'oklch(0.65 0.20 25)'},{n:'Queso Oaxaca',s:8,c:'oklch(0.65 0.20 25)'},{n:'Tortilla maiz',s:62,c:GREEN},{n:'Cebolla',s:71,c:GREEN}].map((item,i) => (
+        {[{n:'Crema facial 50ml',s:85,c:GREEN},{n:'Aceite de argán',s:12,c:'oklch(0.65 0.20 25)'},{n:'Gel UV constructor',s:8,c:'oklch(0.65 0.20 25)'},{n:'Toallas desechables',s:62,c:GREEN},{n:'Shampoo profesional',s:71,c:GREEN}].map((item,i) => (
           <div key={i} className="flex items-center gap-2 py-1.5 px-2 rounded" style={{background:item.s<15?'oklch(0.16 0.02 25)':N(0.14)}}>
             <span className="text-[8px] text-white flex-1 truncate">{item.n}</span>
             <div className="w-12 h-1.5 rounded-full overflow-hidden" style={{background:N(0.22)}}><div className="h-full rounded-full" style={{width:`${item.s}%`,background:item.c}}/></div>
@@ -231,51 +231,51 @@ const products = [
     leftAnim: 'top' as const, rightAnim: 'bottom' as const,
     leftContent: (
       <div className="space-y-1.5">
-        {[{n:'Tacos Pastor x2',p:'$190'},{n:'Enchiladas Suizas',p:'$165'},{n:'Horchata x2',p:'$90'}].map((item,i) => (
+        {[{n:'Membresía mensual',p:'$899'},{n:'10 clases spinning',p:'$1,200'},{n:'Batido proteína',p:'$85'}].map((item,i) => (
           <div key={i} className="flex items-center justify-between p-2 rounded-lg" style={{background:N(0.14)}}>
             <div className="flex items-center gap-1.5">
-              <div className="w-5 h-5 rounded flex items-center justify-center text-[8px] font-bold" style={{background:N(0.20),color:GREEN}}>{i===0?'2':i===2?'2':'1'}</div>
+              <div className="w-5 h-5 rounded flex items-center justify-center text-[8px] font-bold" style={{background:N(0.20),color:GREEN}}>{i===0?'1':i===2?'1':'1'}</div>
               <span className="text-[9px] text-white">{item.n}</span>
             </div>
             <span className="text-[9px] text-white">{item.p}</span>
           </div>
         ))}
         <div className="flex justify-between pt-1.5" style={{borderTop:`1px solid ${N(0.20)}`}}>
-          <span className="text-[8px]" style={{color:N(0.55)}}>5 items</span>
-          <span className="text-base font-light text-white">$445</span>
+          <span className="text-[8px]" style={{color:N(0.55)}}>3 items</span>
+          <span className="text-base font-light text-white">$2,184</span>
         </div>
       </div>
     ),
     rightContent: (
       <div className="flex flex-col h-full">
-        <div className="text-center mb-3"><div className="text-2xl font-light text-white">$445</div><div className="text-[8px]" style={{color:N(0.55)}}>+ propina</div></div>
+        <div className="text-center mb-3"><div className="text-2xl font-light text-white">$2,184</div><div className="text-[8px]" style={{color:N(0.55)}}>Total</div></div>
         <div className="space-y-1.5 flex-1">
           {['Tarjeta (NFC/Chip)','Codigo QR','Efectivo'].map((m,i) => (
             <div key={m} className="py-2 rounded-lg text-center text-[9px] font-medium" style={{background:i===0?GREEN:N(0.16),color:i===0?'#000':N(0.45),border:i===0?'none':`1px solid ${N(0.22)}`}}>{m}</div>
           ))}
         </div>
-        <div className="mt-2 py-2 rounded-xl text-center text-[10px] font-semibold text-black" style={{background:GREEN}}>Cobrar $445</div>
+        <div className="mt-2 py-2 rounded-xl text-center text-[10px] font-semibold text-black" style={{background:GREEN}}>Cobrar $2,184</div>
       </div>
     ),
   },
   {
-    num: '03', name: 'Avoqado POS', desc: 'Gestiona mesas y reservaciones', color: INDIGO, href: '/productos/pos',
-    leftLabel: 'Plano de mesas', rightLabel: 'Reservaciones',
+    num: '03', name: 'Avoqado POS', desc: 'Gestiona citas y agenda', color: INDIGO, href: '/productos/pos',
+    leftLabel: 'Espacios', rightLabel: 'Agenda de citas',
     leftAnim: 'scale' as const, rightAnim: 'rotate' as const,
     leftContent: (
       <>
         <div className="grid grid-cols-3 gap-1.5 mb-2">
-          {['M1','M2','M3','M4','M5','M6'].map((m,i) => {
+          {['Sala 1','Sala 2','Cabina A','Cabina B','Estación 1','Estación 2'].map((m,i) => {
             const st=['occupied','occupied','free','reserved','free','occupied'][i];
             const c={occupied:{bg:`${INDIGO}15`,b:`${INDIGO}40`,t:INDIGO},free:{bg:N(0.14),b:N(0.20),t:N(0.40)},reserved:{bg:`${AMBER}10`,b:`${AMBER}30`,t:AMBER}}[st]!;
             return <div key={i} className="aspect-square rounded-lg flex flex-col items-center justify-center" style={{background:c.bg,border:`1px solid ${c.b}`}}>
-              <span className="text-[8px] font-medium" style={{color:c.t}}>{m}</span>
-              <span className="text-[6px]" style={{color:c.t}}>{st==='occupied'?'3 pax':st==='reserved'?'19:00':''}</span>
+              <span className="text-[7px] font-medium text-center leading-tight" style={{color:c.t}}>{m}</span>
+              <span className="text-[6px]" style={{color:c.t}}>{st==='occupied'?'En cita':st==='reserved'?'11:00':''}</span>
             </div>;
           })}
         </div>
         <div className="flex gap-2">
-          {[{l:'Ocup.',c:INDIGO},{l:'Libre',c:N(0.40)},{l:'Reserv.',c:AMBER}].map((s,i) => (
+          {[{l:'Ocupado',c:INDIGO},{l:'Libre',c:N(0.40)},{l:'Reserv.',c:AMBER}].map((s,i) => (
             <div key={i} className="flex items-center gap-1"><div className="w-1.5 h-1.5 rounded-full" style={{background:s.c}}/><span className="text-[7px]" style={{color:N(0.55)}}>{s.l}</span></div>
           ))}
         </div>
@@ -291,7 +291,7 @@ const products = [
           ))}
         </div>
         <div className="space-y-1">
-          {[{t:'19:00',n:'Mesa 4 — 4 pax'},{t:'20:30',n:'Mesa 2 — 2 pax'},{t:'21:00',n:'Mesa 6 — 6 pax'}].map((r,i)=>(
+          {[{t:'10:00',n:'Sala 1 — Corte + color'},{t:'11:30',n:'Cabina A — Facial'},{t:'12:00',n:'Estación 2 — Uñas'}].map((r,i)=>(
             <div key={i} className="flex items-center gap-2 p-1.5 rounded" style={{background:N(0.16)}}>
               <span className="text-[7px] font-mono" style={{color:INDIGO}}>{r.t}</span>
               <span className="text-[8px] text-white">{r.n}</span>
@@ -326,16 +326,16 @@ const products = [
     ),
     rightContent: (
       <div className="space-y-1.5">
-        {[{n:'Tacos x2',p:'$190'},{n:'Guacamole',p:'$85'},{n:'Horchata',p:'$45'}].map((item,i)=>(
+        {[{n:'Blusa bordada',p:'$890'},{n:'Aretes artesanales',p:'$350'},{n:'Bolsa de piel',p:'$1,450'}].map((item,i)=>(
           <div key={i} className="flex justify-between p-2 rounded text-[9px]" style={{background:N(0.14)}}>
             <span className="text-white">{item.n}</span><span style={{color:AMBER}}>{item.p}</span>
           </div>
         ))}
         <div className="flex justify-between pt-1.5" style={{borderTop:`1px solid ${N(0.20)}`}}>
           <span className="text-[8px]" style={{color:N(0.55)}}>Total</span>
-          <span className="text-sm text-white">$320</span>
+          <span className="text-sm text-white">$2,690</span>
         </div>
-        <div className="py-2 rounded-lg text-center text-[10px] font-semibold text-black" style={{background:AMBER}}>Pagar $320</div>
+        <div className="py-2 rounded-lg text-center text-[10px] font-semibold text-black" style={{background:AMBER}}>Pagar $2,690</div>
       </div>
     ),
   },
@@ -374,7 +374,7 @@ const products = [
       <div>
         <div className="flex items-center gap-1 mb-2">
           <div className="w-1.5 h-1.5 rounded-full" style={{background:'oklch(0.40 0.15 25)'}}/><div className="w-1.5 h-1.5 rounded-full" style={{background:'oklch(0.60 0.15 85)'}}/><div className="w-1.5 h-1.5 rounded-full" style={{background:'oklch(0.55 0.15 145)'}}/>
-          <span className="text-[7px] ml-1" style={{color:N(0.55)}}>misushi.com.mx</span>
+          <span className="text-[7px] ml-1" style={{color:N(0.55)}}>miestudio.com.mx</span>
         </div>
         <div className="rounded-lg p-2.5" style={{background:'oklch(0.94 0.005 75)'}}>
           <div className="h-2 w-16 rounded mb-1.5" style={{background:'oklch(0.80 0.005 75)'}}/>
@@ -387,12 +387,12 @@ const products = [
     rightContent: (
       <div className="space-y-1.5">
         <div className="flex items-center gap-1.5 mb-1"><div className="w-3.5 h-3.5 rounded-full" style={{background:GREEN}}/><span className="text-[9px] text-white font-medium">Ordenar</span></div>
-        {['Dragon Roll x2','Edamame','Limonada Yuzu'].map((item,i)=>(
+        {['Clase cycling','Asesoría nutricional','Paquete 10 sesiones'].map((item,i)=>(
           <div key={i} className="flex justify-between p-2 rounded text-[8px]" style={{background:N(0.14)}}>
-            <span className="text-white">{item}</span><span style={{color:GREEN}}>{['$280','$95','$75'][i]}</span>
+            <span className="text-white">{item}</span><span style={{color:GREEN}}>{['$250','$600','$2,000'][i]}</span>
           </div>
         ))}
-        <div className="py-2 rounded-lg text-center text-[9px] font-semibold text-black" style={{background:GREEN}}>Pagar $450</div>
+        <div className="py-2 rounded-lg text-center text-[9px] font-semibold text-black" style={{background:GREEN}}>Pagar $2,850</div>
       </div>
     ),
   },

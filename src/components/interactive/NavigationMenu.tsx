@@ -116,7 +116,7 @@ export default function NavigationMenu() {
   return (
     <nav
       ref={navRef}
-      className={`fixed top-0 left-0 right-0 z-[300] transition-all duration-300 font-sans ${
+      className={`fixed top-[36px] left-0 right-0 z-[300] transition-all duration-300 font-sans ${
         scrolled
           ? 'bg-white/95 backdrop-blur-xl border-b border-black/5 py-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
           : 'bg-transparent py-4'
@@ -230,7 +230,7 @@ export default function NavigationMenu() {
       </div>
 
       {/* ═══ Mobile Menu ═══ */}
-      <div className={`fixed inset-0 top-[52px] bg-white z-30 lg:hidden overflow-y-auto transition-all duration-300 ${mobileOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+      <div className={`fixed inset-0 top-[88px] bg-white z-30 lg:hidden overflow-y-auto transition-all duration-300 ${mobileOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
         <div className="p-5 pb-32 space-y-1">
           {/* Mobile sections */}
           {[

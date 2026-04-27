@@ -10,55 +10,55 @@ import servicesImg from '../../assets/industry/services.png';
 // Industry data
 const industries = [
   {
-    id: 'food',
-    title: 'Alimentos y Bebidas',
-    image: foodImg.src,
-    cursorText: 'Alimentos',
-    description: 'Soluciones escalables para restaurantes de todos los tamaños.',
-    link: '#',
-    color: 'from-orange-500/20 to-orange-900/40',
-    font: "'Permanent Marker', cursive", // Estilo graffiti para Food
-    rotation: -8,
-    cursorSize: 'w-44' // 176px
-  },
-  {
     id: 'retail',
-    title: 'Retail',
+    title: 'Tiendas',
     image: retailImg.src,
-    cursorText: 'Retail',
-    description: 'Todo lo que necesitas para administrar tu tienda.',
-    link: '#',
+    cursorText: 'Tiendas',
+    description: 'Punto de venta, inventario y multi-sucursal para tu tienda.',
+    link: '/retail',
     color: 'from-blue-500/20 to-blue-900/40',
-    font: "'Bungee Shade', sans-serif", // Estilo chunky fragmentado
+    font: "'Bungee Shade', sans-serif",
     rotation: 5,
     cursorImage: '/retail.png',
-    cursorSize: 'w-44' // 176px
+    cursorSize: 'w-44'
   },
   {
     id: 'beauty',
-    title: 'Belleza',
+    title: 'Estéticas y Spas',
     image: beautyImg.src,
     cursorText: 'Belleza',
-    description: 'Reservas y pagos para salones y spas.',
-    link: '#',
+    description: 'Citas, cobros y agenda para salones, barberías y spas.',
+    link: '/beauty',
     color: 'from-pink-500/20 to-pink-900/40',
-    font: "'Monoton', monospace", // Estilo elegante con líneas
+    font: "'Monoton', monospace",
     rotation: -5,
     cursorImage: '/beauty.png',
-    cursorSize: 'w-64' // 256px - MÁS GRANDE
+    cursorSize: 'w-64'
   },
   {
     id: 'services',
-    title: 'Servicios Profesionales',
+    title: 'Gyms y Estudios',
     image: servicesImg.src,
-    cursorText: 'Servicios',
-    description: 'Herramientas para gestión eficiente de servicios.',
-    link: '#',
+    cursorText: 'Fitness',
+    description: 'Membresías, clases, cobros recurrentes y agenda para tu gym o estudio.',
+    link: '/services',
     color: 'from-indigo-500/20 to-indigo-900/40',
-    font: "'Special Elite', serif", // Estilo typewriter
+    font: "'Special Elite', serif",
     rotation: 3,
     cursorImage: '/services.png',
-    cursorSize: 'w-96' // 384px - MUCHO MÁS GRANDE
+    cursorSize: 'w-96'
+  },
+  {
+    id: 'food',
+    title: 'Restaurantes y Bares',
+    image: foodImg.src,
+    cursorText: 'Restaurantes',
+    description: 'Mesas, órdenes, menú digital y cobros para tu restaurante.',
+    link: '/restaurants',
+    color: 'from-orange-500/20 to-orange-900/40',
+    font: "'Permanent Marker', cursive",
+    rotation: -8,
+    cursorSize: 'w-44'
   }
 ];
 
@@ -144,9 +144,9 @@ export default function IndustryAccordion() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <p className="!text-white text-xs sm:text-sm tracking-widest uppercase mb-1 sm:mb-2 font-medium">Construido para Cada Industria</p>
+            <p className="!text-white text-xs sm:text-sm tracking-widest uppercase mb-1 sm:mb-2 font-medium">Hecho para tu tipo de negocio</p>
             <h2 className="!text-white text-2xl sm:text-3xl lg:text-5xl font-thin leading-tight">
-                Mantén tu negocio <br/> creciendo
+                Tu industria, <br/> nuestro enfoque
             </h2>
           </motion.div>
 
