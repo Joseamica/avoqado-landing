@@ -183,13 +183,13 @@ export default function NavigationMenu() {
               <Search className="w-4.5 h-4.5" />
             </button>
             <a
-              href="https://dashboardv2.avoqado.io/login"
+              href="https://dashboard.avoqado.io/login"
               className={`text-sm font-medium transition-colors ${isDark ? 'text-white/80 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}
             >
               Iniciar sesion
             </a>
             <a
-              href="https://dashboardv2.avoqado.io/signup"
+              href="https://dashboard.avoqado.io/signup"
               className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
                 isDark
                   ? 'bg-white text-black hover:bg-gray-100 hover:-translate-y-0.5'
@@ -263,10 +263,10 @@ export default function NavigationMenu() {
 
           {/* Mobile CTAs */}
           <div className="pt-6 space-y-3">
-            <a href="https://dashboardv2.avoqado.io/signup" className="flex items-center justify-center w-full p-3.5 rounded-xl bg-black text-white font-semibold text-sm">
+            <a href="https://dashboard.avoqado.io/signup" className="flex items-center justify-center w-full p-3.5 rounded-xl bg-black text-white font-semibold text-sm">
               Comienza
             </a>
-            <a href="https://dashboardv2.avoqado.io/login" className="flex items-center justify-center w-full p-3.5 rounded-xl bg-gray-50 text-gray-900 font-medium text-sm">
+            <a href="https://dashboard.avoqado.io/login" className="flex items-center justify-center w-full p-3.5 rounded-xl bg-gray-50 text-gray-900 font-medium text-sm">
               Iniciar sesion
             </a>
             <a href="/contact" className="flex items-center justify-center w-full p-3.5 rounded-xl border border-gray-200 text-gray-700 font-medium text-sm">

@@ -160,7 +160,7 @@ export default function SquareHero() {
               <a href="https://calendly.com/joseamica/demo-avoqado-15-min" target="_blank" rel="noopener noreferrer" className="bg-white text-black px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer">
                 Ver demo de 15 min
               </a>
-              <a href="https://dashboardv2.avoqado.io/signup" className="bg-black/60 text-white px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer border-2 border-white/30">
+              <a href="https://dashboard.avoqado.io/signup" className="bg-black/60 text-white px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer border-2 border-white/30">
                 Comienza gratis
               </a>
             </div>

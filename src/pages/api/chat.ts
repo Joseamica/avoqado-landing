@@ -76,7 +76,7 @@ const localFAQ: { keywords: string[], answer: string }[] = [
   },
   {
     keywords: ['prueba', 'trial', 'gratis', 'gratuito', 'probar', 'demo', 'demostración'],
-    answer: 'Sí, ofrecemos una demostración personalizada para que conozcas todas las funcionalidades. Puedes agendar una demo en avoqado.io/contact o registrarte directamente en dashboardv2.avoqado.io/signup.'
+    answer: 'Sí, ofrecemos una demostración personalizada para que conozcas todas las funcionalidades. Puedes agendar una demo en avoqado.io/contact o registrarte directamente en dashboard.avoqado.io/signup.'
   },
   {
     keywords: ['contacto', 'contactar', 'ventas', 'hablar', 'comunicar', 'whatsapp', 'teléfono', 'telefono', 'email', 'correo'],
@@ -272,7 +272,7 @@ const localFAQ: { keywords: string[], answer: string }[] = [
   },
   {
     keywords: ['registrar', 'registrarse', 'inscribir', 'unirse', 'apuntar'],
-    answer: 'Puedes registrarte de dos formas: 1) En la seccion "Se parte del futuro" al final de avoqado.io, 2) En dashboardv2.avoqado.io/signup. Si quieres ser parte del programa de Acceso Anticipado, solo quedan ~50 lugares con 50% de descuento permanente.'
+    answer: 'Puedes registrarte de dos formas: 1) En la seccion "Se parte del futuro" al final de avoqado.io, 2) En dashboard.avoqado.io/signup. Si quieres ser parte del programa de Acceso Anticipado, solo quedan ~50 lugares con 50% de descuento permanente.'
   }
 ];
 
@@ -288,7 +288,7 @@ INFORMACION CLAVE DE AVOQADO:
 - Sede: Mexico. Optimizado para mercado mexicano (RFC, INE, CLABE, MXN)
 - Contacto: avoqado.io/contact o WhatsApp +52 564 007 0001
 - Demo: demo.dashboard.avoqado.io (sin tarjeta, sin compromiso)
-- Registro: dashboardv2.avoqado.io/signup
+- Registro: dashboard.avoqado.io/signup
 
 LOS 6 PRODUCTOS:
 1. Dashboard Web (avoqado.io/productos/dashboard) — Panel de control con inventario FIFO, gestion de personal (9 roles, 50+ permisos), comisiones escalonadas, reservaciones, reportes automatizados, y asistente de IA con Text-to-SQL.
