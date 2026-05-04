@@ -297,8 +297,9 @@ export default function LabsChat() {
     if (!isComplete(state.fields)) {
       return { success: false, message: 'Faltan datos en el brief' };
     }
+    let res: Response;
     try {
-      const res = await fetch('/api/labs/submit', {
+      res = await fetch('/api/labs/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -308,16 +309,29 @@ export default function LabsChat() {
           transcript: state.messages,
         }),
       });
-      const data = (await res.json()) as SubmitResponse;
-      if (data.success) {
-        setSubmitted(true);
-        clearStorage();
-        setSubmitModalOpen(false);
-      }
-      return data;
-    } catch {
-      return { success: false, message: 'Error de conexión. Intenta de nuevo.' };
+    } catch (err) {
+      console.error('Labs submit fetch error:', err);
+      return { success: false, message: 'No pudimos contactar al servidor. Revisa tu conexión.' };
     }
+
+    let data: SubmitResponse;
+    try {
+      data = (await res.json()) as SubmitResponse;
+    } catch (err) {
+      const text = await res.text().catch(() => '');
+      console.error('Labs submit non-JSON response:', res.status, text);
+      return {
+        success: false,
+        message: `El servidor falló (${res.status}). Tu brief NO se envió. ${text.slice(0, 120)}`,
+      };
+    }
+
+    if (data.success) {
+      setSubmitted(true);
+      clearStorage();
+      setSubmitModalOpen(false);
+    }
+    return data;
   };
 
   if (submitted) {

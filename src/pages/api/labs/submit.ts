@@ -64,6 +64,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
     secure: false,
     auth: { user: smtpUser, pass: smtpPass },
     tls: { rejectUnauthorized: false },
+    // Cloudflare Pages Functions have a 30s wall-clock budget; cap SMTP I/O
+    // tightly so we fail loudly rather than silently timing out.
+    connectionTimeout: 8000,
+    greetingTimeout: 8000,
+    socketTimeout: 12000,
   });
 
   const html = renderBriefEmail(payload);
@@ -101,8 +106,21 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const r: SubmitResponse = { success: true, message: 'Brief enviado' };
     return new Response(JSON.stringify(r), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (err) {
-    console.error('Labs submit error:', err);
-    const r: SubmitResponse = { success: false, message: 'No pudimos enviar el brief. Intenta de nuevo.' };
-    return new Response(JSON.stringify(r), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    // Always log the full brief to CF logs so we can recover the lead manually
+    // if email transport fails. This is the safety net.
+    console.error('[LABS_SUBMIT_FAILED]', JSON.stringify({
+      sessionId: payload.sessionId,
+      contact: payload.fields.contact,
+      projectType: payload.fields.projectType,
+      coreFunctionality: payload.fields.coreFunctionality,
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack?.split('\n').slice(0, 3).join(' | ') : undefined,
+    }));
+    const detail = err instanceof Error ? err.message : 'unknown error';
+    const r: SubmitResponse = {
+      success: false,
+      message: `El correo no se pudo enviar (${detail}). Tu brief quedó registrado en logs; Jose lo recupera manualmente.`,
+    };
+    return new Response(JSON.stringify(r), { status: 502, headers: { 'Content-Type': 'application/json' } });
   }
 };
