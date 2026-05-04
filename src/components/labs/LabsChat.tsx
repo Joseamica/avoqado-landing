@@ -35,11 +35,12 @@ function sanitizeMessages(messages: ChatMessage[]): ChatMessage[] {
   return messages
     .map(m => {
       if (m.role !== 'assistant') return m;
-      // Strip any embedded error suffix from legacy bubbles
-      const cleaned = m.content
-        .replace(/\n*_Error:[^_]*_\n*/g, '')
-        .replace(/\n*_Error de conexión\._\n*/g, '')
-        .trim();
+      // Strip any trailing error suffix (greedy to end-of-string — error blobs may contain
+      // underscores like OPENAI_API_KEY that broke earlier non-greedy patterns).
+      let cleaned = m.content;
+      const errorIdx = cleaned.search(/\n*_Error[: ]/);
+      if (errorIdx >= 0) cleaned = cleaned.slice(0, errorIdx);
+      cleaned = cleaned.trim();
       return { ...m, content: cleaned };
     })
     .filter(m => m.role !== 'assistant' || (m.content.length > 0 && !isErrorArtifact(m.content)));
