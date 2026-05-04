@@ -1,0 +1,30 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/layout/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
+import LabsHero from '../components/labs/LabsHero.astro';
+import LabsChat from '../components/labs/LabsChat.tsx';
+---
+
+<!doctype html>
+<html lang="es" data-theme="labs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Avoqado Labs — Software a la medida en menos de un día</title>
+    <meta
+      name="description"
+      content="Avoqado Labs construye software a la medida con agentes AI. Apps, dashboards, integraciones, automatizaciones y agentes — entregados en menos de un día."
+    />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+  </head>
+  <body data-theme="labs" data-nav-light="true" style="background-color: var(--labs-bg);">
+    <Navbar position="fixed" transparentOnTop={false} />
+
+    <LabsHero />
+
+    <LabsChat client:load />
+
+    <Footer />
+  </body>
+</html>
