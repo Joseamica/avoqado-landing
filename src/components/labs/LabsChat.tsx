@@ -21,26 +21,26 @@ function uid(): string {
 
 // Detect inline error messages that older versions of the client appended
 // to assistant bubbles. We strip these out so they don't pollute the UI or
-// the prompt history sent to OpenAI.
+// the prompt history sent to OpenAI. The patterns include legacy residues
+// from a previous buggy sanitizer that left tails like 'API_KEY missing"}_'.
+const ERROR_FRAGMENT_RE = /(\n*_Error[: ]|OPENAI_API_KEY|API_KEY\s+missing|"error"\s*:|_Error de conexión)/i;
+
 function isErrorArtifact(content: string): boolean {
-  const trimmed = content.trim();
-  return (
-    trimmed.startsWith('_Error:') ||
-    trimmed.includes('OPENAI_API_KEY missing') ||
-    trimmed === '_Error de conexión._'
-  );
+  const t = content.trim();
+  if (!t) return false;
+  return ERROR_FRAGMENT_RE.test(t);
 }
 
 function sanitizeMessages(messages: ChatMessage[]): ChatMessage[] {
   return messages
     .map(m => {
       if (m.role !== 'assistant') return m;
-      // Strip any trailing error suffix (greedy to end-of-string — error blobs may contain
-      // underscores like OPENAI_API_KEY that broke earlier non-greedy patterns).
       let cleaned = m.content;
-      const errorIdx = cleaned.search(/\n*_Error[: ]/);
-      if (errorIdx >= 0) cleaned = cleaned.slice(0, errorIdx);
-      cleaned = cleaned.trim();
+      // Slice off everything from the start of any error fragment to end-of-string.
+      const match = cleaned.match(ERROR_FRAGMENT_RE);
+      if (match && match.index !== undefined) {
+        cleaned = cleaned.slice(0, match.index).trim();
+      }
       return { ...m, content: cleaned };
     })
     .filter(m => m.role !== 'assistant' || (m.content.length > 0 && !isErrorArtifact(m.content)));
