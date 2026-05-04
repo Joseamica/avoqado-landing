@@ -25,8 +25,11 @@ function rateLimited(ip: string): boolean {
   return entry.count > MAX_PER_WINDOW;
 }
 
-export const POST: APIRoute = async ({ request, clientAddress }) => {
-  const apiKey = import.meta.env.OPENAI_API_KEY;
+export const POST: APIRoute = async ({ request, clientAddress, locals }) => {
+  // Prefer Cloudflare runtime env (set in CF Pages dashboard); fall back to
+  // import.meta.env for local Astro dev when not running under Miniflare.
+  const runtimeEnv = (locals as { runtime?: { env?: Record<string, string> } })?.runtime?.env;
+  const apiKey = runtimeEnv?.OPENAI_API_KEY || import.meta.env.OPENAI_API_KEY;
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'OPENAI_API_KEY missing' }), {
       status: 500,

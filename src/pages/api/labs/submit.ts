@@ -27,7 +27,7 @@ function validate(p: unknown): p is SubmitPayload {
   return true;
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   let body: unknown;
   try {
     body = await request.json();
@@ -43,11 +43,14 @@ export const POST: APIRoute = async ({ request }) => {
 
   const payload = body as SubmitPayload;
 
-  const smtpUser = import.meta.env.SMTP_USER;
-  const smtpPass = import.meta.env.SMTP_PASS;
-  const smtpHost = import.meta.env.SMTP_HOST || 'smtpout.secureserver.net';
-  const smtpPort = parseInt(import.meta.env.SMTP_PORT || '587');
-  const notifyEmail = import.meta.env.LABS_NOTIFY_EMAIL || smtpUser;
+  const runtimeEnv = (locals as { runtime?: { env?: Record<string, string> } })?.runtime?.env;
+  const readEnv = (key: string) => runtimeEnv?.[key] || import.meta.env[key];
+
+  const smtpUser = readEnv('SMTP_USER');
+  const smtpPass = readEnv('SMTP_PASS');
+  const smtpHost = readEnv('SMTP_HOST') || 'smtpout.secureserver.net';
+  const smtpPort = parseInt(readEnv('SMTP_PORT') || '587');
+  const notifyEmail = readEnv('LABS_NOTIFY_EMAIL') || smtpUser;
 
   if (!smtpUser || !smtpPass) {
     console.error('Labs submit: SMTP credentials missing');
