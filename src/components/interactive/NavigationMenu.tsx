@@ -58,7 +58,12 @@ export default function NavigationMenu() {
   useEffect(() => {
     const bodyBg = document.body.style.backgroundColor || '';
     const computedBg = window.getComputedStyle(document.body).backgroundColor;
-    const isLight = bodyBg.includes('fff') || bodyBg.includes('white') || computedBg === 'rgb(255, 255, 255)';
+    const explicitLight = document.body.dataset.navLight === 'true';
+    const isLight =
+      explicitLight ||
+      bodyBg.includes('fff') ||
+      bodyBg.includes('white') ||
+      computedBg === 'rgb(255, 255, 255)';
     if (isLight) {
       setIsLightPage(true);
       setScrolled(true);
@@ -164,6 +169,14 @@ export default function NavigationMenu() {
               Traje a la medida
             </a>
             <a
+              href="/labs"
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                isDark ? 'text-white/80 hover:text-white hover:bg-white/8' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              Labs
+            </a>
+            <a
               href="/pricing"
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                 isDark ? 'text-white/80 hover:text-white hover:bg-white/8' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
@@ -254,6 +267,10 @@ export default function NavigationMenu() {
 
           <a href="/traje-a-la-medida" className="flex items-center justify-between w-full py-4 text-base font-semibold text-gray-900 border-b border-gray-100">
             Traje a la medida
+            <ArrowRight className="w-4 h-4 text-gray-400" />
+          </a>
+          <a href="/labs" className="flex items-center justify-between w-full py-4 text-base font-semibold text-gray-900 border-b border-gray-100">
+            Labs
             <ArrowRight className="w-4 h-4 text-gray-400" />
           </a>
           <a href="/pricing" className="flex items-center justify-between w-full py-4 text-base font-semibold text-gray-900 border-b border-gray-100">

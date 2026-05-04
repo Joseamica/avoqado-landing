@@ -188,3 +188,30 @@ button:focus-visible {
   box-shadow: 0 0 0 2px var(--color-avoqado-dark-bg), 0 0 0 4px var(--color-avoqado-green);
   border-radius: 0.5rem;
 }
+
+/* ─── Avoqado Labs sub-brand: Editorial Light ─── */
+[data-theme="labs"] {
+  --labs-bg: oklch(0.97 0.012 80);
+  --labs-bg-elevated: oklch(0.99 0.008 80);
+  --labs-ink: oklch(0.22 0.012 250);
+  --labs-ink-muted: oklch(0.45 0.015 250);
+  --labs-rule: oklch(0.88 0.015 80);
+  --labs-accent: oklch(0.62 0.16 35);
+  --labs-accent-hover: oklch(0.55 0.17 35);
+  --labs-accent-soft: oklch(0.92 0.05 35);
+  --labs-shadow-soft: 0 1px 3px oklch(0.22 0.012 250 / 0.04), 0 4px 12px oklch(0.22 0.012 250 / 0.05);
+  --labs-shadow-pop: 0 8px 24px oklch(0.62 0.16 35 / 0.12), 0 2px 6px oklch(0.62 0.16 35 / 0.08);
+
+  background-color: var(--labs-bg);
+  color: var(--labs-ink);
+  font-family: var(--font-family-sans);
+}
+
+[data-theme="labs"] ::selection {
+  background-color: var(--labs-accent-soft);
+  color: var(--labs-ink);
+}
+
+[data-theme="labs"] *:focus-visible {
+  box-shadow: 0 0 0 2px var(--labs-bg), 0 0 0 4px var(--labs-accent);
+}
