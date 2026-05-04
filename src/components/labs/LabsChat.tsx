@@ -19,6 +19,32 @@ function uid(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
+// Detect inline error messages that older versions of the client appended
+// to assistant bubbles. We strip these out so they don't pollute the UI or
+// the prompt history sent to OpenAI.
+function isErrorArtifact(content: string): boolean {
+  const trimmed = content.trim();
+  return (
+    trimmed.startsWith('_Error:') ||
+    trimmed.includes('OPENAI_API_KEY missing') ||
+    trimmed === '_Error de conexión._'
+  );
+}
+
+function sanitizeMessages(messages: ChatMessage[]): ChatMessage[] {
+  return messages
+    .map(m => {
+      if (m.role !== 'assistant') return m;
+      // Strip any embedded error suffix from legacy bubbles
+      const cleaned = m.content
+        .replace(/\n*_Error:[^_]*_\n*/g, '')
+        .replace(/\n*_Error de conexión\._\n*/g, '')
+        .trim();
+      return { ...m, content: cleaned };
+    })
+    .filter(m => m.role !== 'assistant' || (m.content.length > 0 && !isErrorArtifact(m.content)));
+}
+
 function loadFromStorage(): ConversationState | null {
   if (typeof window === 'undefined') return null;
   try {
@@ -29,7 +55,8 @@ function loadFromStorage(): ConversationState | null {
       localStorage.removeItem(STORAGE_KEY);
       return null;
     }
-    return parsed;
+    // Retroactively scrub error artifacts from prior sessions
+    return { ...parsed, messages: sanitizeMessages(parsed.messages) };
   } catch {
     return null;
   }
@@ -89,8 +116,22 @@ export default function LabsChat() {
   const [isStreaming, setIsStreaming] = useState(false);
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stateRef = useRef(state);
+
+  const showToast = useCallback((message: string) => {
+    setToast(message);
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = setTimeout(() => setToast(null), 4500);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     stateRef.current = state;
@@ -136,8 +177,10 @@ export default function LabsChat() {
       const assistantMsg: ChatMessage = { id: uid(), role: 'assistant', content: '', timestamp: Date.now() };
       addMessage(assistantMsg);
 
-      const history = [...stateRef.current.messages, userMsg].map(m => ({ role: m.role, content: m.content }));
+      const cleanHistory = sanitizeMessages([...stateRef.current.messages, userMsg]);
+      const history = cleanHistory.map(m => ({ role: m.role, content: m.content }));
       const toolCallBuffer: Record<number, { name?: string; args: string }> = {};
+      let streamFailed = false;
 
       try {
         const res = await fetch('/api/labs/chat', {
@@ -147,8 +190,19 @@ export default function LabsChat() {
         });
 
         if (!res.ok || !res.body) {
-          const errBody = await res.text();
-          updateLastAssistant(`\n\n_Error: ${errBody.slice(0, 200)}_`);
+          let errMsg = 'No pudimos conectar con el agente. Intenta de nuevo.';
+          try {
+            const errBody = await res.text();
+            const parsed = JSON.parse(errBody);
+            if (parsed?.error) {
+              if (res.status === 429) errMsg = 'Vas muy rápido. Espera unos segundos.';
+              else if (parsed.error.includes('OPENAI_API_KEY')) errMsg = 'El agente no está configurado. Avísale a Jose.';
+            }
+          } catch {
+            // keep generic message
+          }
+          showToast(errMsg);
+          streamFailed = true;
           setIsStreaming(false);
           return;
         }
@@ -194,7 +248,8 @@ export default function LabsChat() {
                   }
                 }
               } else if (parsed.type === 'error') {
-                updateLastAssistant(`\n\n_Error: ${parsed.message}_`);
+                showToast('El agente tuvo un problema. Vuelve a enviar tu mensaje.');
+                streamFailed = true;
               }
             } catch {
               // ignore malformed event
@@ -202,22 +257,24 @@ export default function LabsChat() {
           }
         }
       } catch (err) {
-        updateLastAssistant(`\n\n_Error de conexión._`);
+        showToast('Error de conexión. Intenta de nuevo.');
+        streamFailed = true;
         console.error(err);
       } finally {
         setIsStreaming(false);
-        // Defense: if the model emitted only tool calls and no text, the trailing assistant
-        // message would be empty. Drop it so the user can continue without seeing a void bubble.
+        // Defense: if the model emitted only tool calls and no text, OR if the stream failed
+        // before producing text, drop the empty assistant placeholder so it doesn't pollute
+        // the conversation or the next request to OpenAI.
         setState(prev => {
           const last = prev.messages[prev.messages.length - 1];
-          if (last?.role === 'assistant' && last.content.trim() === '') {
+          if (last?.role === 'assistant' && (last.content.trim() === '' || streamFailed)) {
             return { ...prev, messages: prev.messages.slice(0, -1) };
           }
           return prev;
         });
       }
     },
-    [isStreaming, addMessage, updateLastAssistant, setFields]
+    [isStreaming, addMessage, updateLastAssistant, setFields, showToast]
   );
 
   const handleChipClick = (chip: string) => setInput(chip);
@@ -351,6 +408,20 @@ export default function LabsChat() {
           onConfirm={handleSubmitConfirmed}
         />
       )}
+
+      {/* Transient toast for transport-level errors. Never written to chat history. */}
+      <div
+        aria-live="polite"
+        className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[1100] transition-all duration-300 ease-out ${
+          toast ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0 pointer-events-none'
+        }`}
+      >
+        {toast && (
+          <div className="px-4 py-3 rounded-full bg-[color:var(--labs-ink)] text-[color:var(--labs-bg)] text-sm shadow-lg max-w-[90vw]">
+            {toast}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
