@@ -206,6 +206,15 @@ export default function LabsChat() {
         console.error(err);
       } finally {
         setIsStreaming(false);
+        // Defense: if the model emitted only tool calls and no text, the trailing assistant
+        // message would be empty. Drop it so the user can continue without seeing a void bubble.
+        setState(prev => {
+          const last = prev.messages[prev.messages.length - 1];
+          if (last?.role === 'assistant' && last.content.trim() === '') {
+            return { ...prev, messages: prev.messages.slice(0, -1) };
+          }
+          return prev;
+        });
       }
     },
     [isStreaming, addMessage, updateLastAssistant, setFields]

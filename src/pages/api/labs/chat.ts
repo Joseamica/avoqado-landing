@@ -12,7 +12,7 @@ interface ChatRequest {
 
 const RATE_BUCKET = new Map<string, { count: number; windowStart: number }>();
 const WINDOW_MS = 60_000;
-const MAX_PER_WINDOW = 5;
+const MAX_PER_WINDOW = 15;
 
 function rateLimited(ip: string): boolean {
   const now = Date.now();
