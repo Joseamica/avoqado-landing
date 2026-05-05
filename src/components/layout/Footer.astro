@@ -1,5 +1,7 @@
 ---
 import { Image } from 'astro:assets';
+
+const SUPPORT_WHATSAPP_URL = 'https://wa.me/525640070001';
 ---
 
 <footer class="bg-avoqado-black text-white py-12">
@@ -31,7 +33,7 @@ import { Image } from 'astro:assets';
 				<h3 class="font-semibold mb-4">Contacto</h3>
 				<ul class="space-y-2 text-gray-400">
 					<li><a href="mailto:hola@avoqado.io" class="hover:text-avoqado-green transition-colors">hola@avoqado.io</a></li>
-					<li><a href="/contact" class="hover:text-avoqado-green transition-colors">Soporte</a></li>
+					<li><a href={SUPPORT_WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="hover:text-avoqado-green transition-colors">Soporte</a></li>
 				</ul>
 			</div>
 		</div>
