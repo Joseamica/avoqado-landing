@@ -7,18 +7,23 @@ import LabsMessage from './LabsMessage';
 import LabsSubmitModal from './LabsSubmitModal';
 import LabsSuccessScreen from './LabsSuccessScreen';
 
-const SUGGESTION_LABELS: { text: string; hint: string }[] = [
-  { text: 'Un dashboard que conecte mi POS con WhatsApp', hint: 'Dashboard · WhatsApp' },
-  { text: 'Un agente que conteste reservaciones automáticamente', hint: 'Agente AI · Reservas' },
-  { text: 'Un reporte diario de ventas que me llegue al correo', hint: 'Reporte · Email' },
+// Quick-start badges — short labels that pre-fill the input with a concrete prompt
+// so users can see Labs' range without having to type a full description first.
+const QUICK_STARTS: { label: string; prompt: string }[] = [
+  { label: 'Dashboard', prompt: 'Un dashboard que conecte mi POS con WhatsApp y me muestre ventas en tiempo real' },
+  { label: 'Agente AI', prompt: 'Un agente AI que conteste reservaciones por WhatsApp 24/7' },
+  { label: 'Reporte automático', prompt: 'Un reporte diario de ventas que me llegue al correo a las 8am' },
+  { label: 'Integración', prompt: 'Una integración entre Shopify y mi sistema interno de inventario' },
+  { label: 'App móvil', prompt: 'Una app móvil para que mi staff registre asistencia con foto y geolocalización' },
+  { label: 'Automatización', prompt: 'Una automatización para enviar WhatsApp a clientes 3 días después de comprar' },
 ];
 
-// Rotating placeholder hints — cycle through concrete examples to give the
-// blank input some personality and hint at the range of things Labs can build.
+// Typewriter placeholder examples — cycled with a type-and-delete animation
+// (Lovable-style) to give the empty input personality and hint at Labs' range.
 const PLACEHOLDER_EXAMPLES = [
   'Un dashboard que conecte mi POS con WhatsApp…',
   'Un agente AI que conteste reservas 24/7…',
-  'Una integración entre Shopify y mi sistema interno…',
+  'Una integración entre Shopify y mi inventario…',
   'Un reporte diario de ventas al correo a las 8am…',
   'Una app móvil para que mi staff registre asistencia…',
 ];
@@ -131,6 +136,8 @@ export default function LabsChat() {
   const [toast, setToast] = useState<string | null>(null);
   const [restartConfirm, setRestartConfirm] = useState(false);
   const [placeholderIdx, setPlaceholderIdx] = useState(0);
+  const [typedPlaceholder, setTypedPlaceholder] = useState('');
+  const [typingPhase, setTypingPhase] = useState<'typing' | 'deleting'>('typing');
   const scrollRef = useRef<HTMLDivElement>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stateRef = useRef(state);
@@ -161,17 +168,46 @@ export default function LabsChat() {
     }
   }, [state.messages, isStreaming]);
 
-  // Rotate the placeholder while the input is empty and untouched, but only on
-  // the empty/landing state. Stops rotating once the user starts typing or sends
-  // a message. Respects prefers-reduced-motion: stays on the first example.
+  // Typewriter placeholder (Lovable-style). State machine:
+  //   typing → (full)   → wait → deleting
+  //   deleting → (empty) → wait → next example → typing
+  // Pauses once user starts typing or after first message. Reduced-motion users
+  // see the first example fully typed and frozen.
   useEffect(() => {
     if (state.messages.length > 0 || input.length > 0) return;
-    if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
-    const id = setInterval(() => {
-      setPlaceholderIdx(i => (i + 1) % PLACEHOLDER_EXAMPLES.length);
-    }, 3200);
-    return () => clearInterval(id);
-  }, [state.messages.length, input.length]);
+
+    const reduceMotion =
+      typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      setTypedPlaceholder(PLACEHOLDER_EXAMPLES[0]);
+      return;
+    }
+
+    const current = PLACEHOLDER_EXAMPLES[placeholderIdx];
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    if (typingPhase === 'typing') {
+      if (typedPlaceholder.length < current.length) {
+        timeoutId = setTimeout(
+          () => setTypedPlaceholder(current.slice(0, typedPlaceholder.length + 1)),
+          35 + Math.random() * 35,
+        );
+      } else {
+        timeoutId = setTimeout(() => setTypingPhase('deleting'), 1800);
+      }
+    } else {
+      if (typedPlaceholder.length > 0) {
+        timeoutId = setTimeout(() => setTypedPlaceholder(typedPlaceholder.slice(0, -1)), 18);
+      } else {
+        timeoutId = setTimeout(() => {
+          setPlaceholderIdx(i => (i + 1) % PLACEHOLDER_EXAMPLES.length);
+          setTypingPhase('typing');
+        }, 220);
+      }
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [typingPhase, typedPlaceholder, placeholderIdx, state.messages.length, input.length]);
 
   const setFields = useCallback((updater: (prev: ExtractedFields) => ExtractedFields) => {
     setState(prev => ({ ...prev, fields: updater(prev.fields), lastActivityAt: Date.now() }));
@@ -396,7 +432,7 @@ export default function LabsChat() {
             sendMessage(input);
           }
         }}
-        placeholder={empty ? PLACEHOLDER_EXAMPLES[placeholderIdx] : '¿Algo más?'}
+        placeholder={empty ? typedPlaceholder || ' ' : '¿Algo más?'}
         rows={empty ? 3 : 2}
         className={`w-full bg-transparent border-0 outline-none resize-none text-[color:var(--labs-ink)] placeholder:text-[color:var(--labs-ink-muted)]/80 focus-visible:!shadow-none ${
           empty ? 'text-lg md:text-xl leading-relaxed' : 'text-base'
@@ -457,24 +493,17 @@ export default function LabsChat() {
         // ─── Empty state: input is the hero ───
         <div className="max-w-[760px] mx-auto">
           {InputCard}
-          <div className="mt-6">
-            <div className="text-[10px] uppercase tracking-[0.2em] text-[color:var(--labs-ink-muted)] font-semibold mb-3">
-              O empieza con uno de estos
-            </div>
-            <div className="grid gap-2 sm:grid-cols-1">
-              {SUGGESTION_LABELS.map(({ text, hint }) => (
-                <button
-                  key={text}
-                  onClick={() => handleChipClick(text)}
-                  className="group text-left px-4 py-3 rounded-xl border border-[color:var(--labs-rule)] bg-[color:var(--labs-bg-elevated)] hover:border-[color:var(--labs-accent)] hover:bg-[color:var(--labs-accent-soft)] transition-all duration-200 motion-reduce:transition-none"
-                >
-                  <div className="text-[10px] uppercase tracking-widest text-[color:var(--labs-accent)] font-semibold mb-0.5">
-                    {hint}
-                  </div>
-                  <div className="text-sm text-[color:var(--labs-ink)] leading-snug">{text}</div>
-                </button>
-              ))}
-            </div>
+          {/* Quick-start badges — small pills for fast prompts. Click pre-fills the input. */}
+          <div className="mt-4 flex flex-wrap gap-2 justify-center">
+            {QUICK_STARTS.map(({ label, prompt }) => (
+              <button
+                key={label}
+                onClick={() => handleChipClick(prompt)}
+                className="px-3 py-1.5 rounded-full text-xs font-medium border border-[color:var(--labs-rule)] bg-[color:var(--labs-bg-elevated)] text-[color:var(--labs-ink-muted)] hover:border-[color:var(--labs-accent)] hover:text-[color:var(--labs-ink)] hover:bg-[color:var(--labs-accent-soft)] transition-all duration-200 motion-reduce:transition-none"
+              >
+                {label}
+              </button>
+            ))}
           </div>
         </div>
       ) : (
