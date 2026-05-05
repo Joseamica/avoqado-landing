@@ -13,6 +13,16 @@ const SUGGESTION_LABELS: { text: string; hint: string }[] = [
   { text: 'Un reporte diario de ventas que me llegue al correo', hint: 'Reporte · Email' },
 ];
 
+// Rotating placeholder hints — cycle through concrete examples to give the
+// blank input some personality and hint at the range of things Labs can build.
+const PLACEHOLDER_EXAMPLES = [
+  'Un dashboard que conecte mi POS con WhatsApp…',
+  'Un agente AI que conteste reservas 24/7…',
+  'Una integración entre Shopify y mi sistema interno…',
+  'Un reporte diario de ventas al correo a las 8am…',
+  'Una app móvil para que mi staff registre asistencia…',
+];
+
 const STORAGE_KEY = 'avoqado-labs-conversation-v1';
 const IDLE_MS = 24 * 60 * 60 * 1000;
 
@@ -120,6 +130,7 @@ export default function LabsChat() {
   const [submitted, setSubmitted] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [restartConfirm, setRestartConfirm] = useState(false);
+  const [placeholderIdx, setPlaceholderIdx] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stateRef = useRef(state);
@@ -149,6 +160,18 @@ export default function LabsChat() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [state.messages, isStreaming]);
+
+  // Rotate the placeholder while the input is empty and untouched, but only on
+  // the empty/landing state. Stops rotating once the user starts typing or sends
+  // a message. Respects prefers-reduced-motion: stays on the first example.
+  useEffect(() => {
+    if (state.messages.length > 0 || input.length > 0) return;
+    if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    const id = setInterval(() => {
+      setPlaceholderIdx(i => (i + 1) % PLACEHOLDER_EXAMPLES.length);
+    }, 3200);
+    return () => clearInterval(id);
+  }, [state.messages.length, input.length]);
 
   const setFields = useCallback((updater: (prev: ExtractedFields) => ExtractedFields) => {
     setState(prev => ({ ...prev, fields: updater(prev.fields), lastActivityAt: Date.now() }));
@@ -355,9 +378,12 @@ export default function LabsChat() {
   // switch to the conventional chat layout (messages above, input below, sidebar
   // appears with the live summary).
   const sendDisabled = !input.trim() || isStreaming;
+  // Single source of focus: the card itself shows focus-within via a 2px accent
+  // ring; the textarea inside opts out of the global [data-theme="labs"]
+  // *:focus-visible rule with focus-visible:!shadow-none to avoid a double ring.
   const InputCard = (
     <div
-      className={`rounded-3xl border border-[color:var(--labs-rule)] bg-[color:var(--labs-bg-elevated)] shadow-[var(--labs-shadow-soft)] focus-within:border-[color:var(--labs-accent)] focus-within:shadow-[var(--labs-shadow-pop)] transition-all duration-300 motion-reduce:transition-none ${
+      className={`relative rounded-2xl bg-[color:var(--labs-bg-elevated)] ring-1 ring-[color:var(--labs-rule)] shadow-[var(--labs-shadow-soft)] focus-within:ring-2 focus-within:ring-[color:var(--labs-accent)]/70 transition-all duration-200 motion-reduce:transition-none ${
         empty ? 'p-5 md:p-6' : 'p-4'
       }`}
     >
@@ -370,13 +396,14 @@ export default function LabsChat() {
             sendMessage(input);
           }
         }}
-        placeholder={empty ? 'Describe lo que quieres construir…' : '¿Algo más?'}
-        rows={empty ? 4 : 2}
-        className={`w-full bg-transparent border-0 outline-none resize-none text-[color:var(--labs-ink)] placeholder:text-[color:var(--labs-ink-muted)] ${
+        placeholder={empty ? PLACEHOLDER_EXAMPLES[placeholderIdx] : '¿Algo más?'}
+        rows={empty ? 3 : 2}
+        className={`w-full bg-transparent border-0 outline-none resize-none text-[color:var(--labs-ink)] placeholder:text-[color:var(--labs-ink-muted)]/80 focus-visible:!shadow-none ${
           empty ? 'text-lg md:text-xl leading-relaxed' : 'text-base'
         }`}
         disabled={isStreaming}
         autoFocus={empty}
+        aria-label="Describe tu proyecto"
       />
       <div className="flex items-center justify-between mt-2 gap-3">
         <div className="text-xs text-[color:var(--labs-ink-muted)] min-h-[28px] flex items-center">
