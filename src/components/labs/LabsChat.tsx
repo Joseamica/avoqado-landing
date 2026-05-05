@@ -10,22 +10,20 @@ import LabsSuccessScreen from './LabsSuccessScreen';
 // Quick-start badges — short labels that pre-fill the input with a concrete prompt
 // so users can see Labs' range without having to type a full description first.
 const QUICK_STARTS: { label: string; prompt: string }[] = [
-  { label: 'Dashboard', prompt: 'Un dashboard que conecte mi POS con WhatsApp y me muestre ventas en tiempo real' },
-  { label: 'Agente AI', prompt: 'Un agente AI que conteste reservaciones por WhatsApp 24/7' },
-  { label: 'Reporte automático', prompt: 'Un reporte diario de ventas que me llegue al correo a las 8am' },
-  { label: 'Integración', prompt: 'Una integración entre Shopify y mi sistema interno de inventario' },
-  { label: 'App móvil', prompt: 'Una app móvil para que mi staff registre asistencia con foto y geolocalización' },
-  { label: 'Automatización', prompt: 'Una automatización para enviar WhatsApp a clientes 3 días después de comprar' },
+  { label: 'Apps', prompt: 'Quiero una app de iPhone, Android, Windows o Mac que…' },
+  { label: 'AI', prompt: 'Quiero un asistente con IA que conteste solo a mis clientes…' },
+  { label: 'Web', prompt: 'Quiero una página web o tienda online que…' },
+  { label: 'Automatización', prompt: 'Quiero automatizar una tarea repetitiva de mi negocio que…' },
 ];
 
 // Typewriter placeholder examples — cycled with a type-and-delete animation
 // (Lovable-style) to give the empty input personality and hint at Labs' range.
 const PLACEHOLDER_EXAMPLES = [
-  'Un dashboard que conecte mi POS con WhatsApp…',
-  'Un agente AI que conteste reservas 24/7…',
-  'Una integración entre Shopify y mi inventario…',
-  'Un reporte diario de ventas al correo a las 8am…',
-  'Una app móvil para que mi staff registre asistencia…',
+  'Quiero una app de iOS y Android que…',
+  'Una página web que conecte con mi POS…',
+  'Un asistente con IA que conteste WhatsApp…',
+  'Una automatización que mande reportes al correo…',
+  'Un sistema interno para mi negocio que…',
 ];
 
 const STORAGE_KEY = 'avoqado-labs-conversation-v1';
