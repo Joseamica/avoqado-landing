@@ -24,6 +24,17 @@ const transparentClasses = "bg-transparent border-transparent";
 const initialClasses = transparentOnTop ? transparentClasses : solidClasses;
 ---
 
+<!-- FOUNDERS BANNER — sits above the navbar on every page (Navbar.astro is included in all pages) -->
+<!-- whitespace-nowrap + overflow-hidden keeps height locked to 36px so top-[36px] (nav) and -->
+<!-- top-[88px] (mobile drawer) in NavigationMenu.tsx stay correct on every viewport -->
+<div class="fixed top-0 left-0 right-0 z-[400] bg-gradient-to-r from-green-900 to-green-700 text-white text-center py-2 px-4 text-sm font-medium whitespace-nowrap overflow-hidden">
+    <a href="https://calendly.com/joseamica/demo-avoqado-15-min" target="_blank" rel="noopener noreferrer" class="hover:underline">
+        <span class="hidden sm:inline">Quedan 47 de 100 lugares de Fundador — <strong>50% de descuento de por vida</strong></span>
+        <span class="sm:hidden"><strong>50% de descuento de por vida</strong> · 47 lugares</span>
+        <span class="ml-2 inline-block bg-white/20 px-2 py-0.5 rounded-full text-xs">Apartar →</span>
+    </a>
+</div>
+
 <NavigationMenu client:load />
 
 <style>
