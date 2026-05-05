@@ -118,6 +118,7 @@ export default function LabsChat() {
   const [submitModalOpen, setSubmitModalOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [restartConfirm, setRestartConfirm] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stateRef = useRef(state);
@@ -281,7 +282,6 @@ export default function LabsChat() {
   const handleChipClick = (chip: string) => setInput(chip);
 
   const restart = () => {
-    if (state.messages.length > 0 && !confirm('¿Empezar de nuevo? Se borrará la conversación actual.')) return;
     clearStorage();
     setState({
       sessionId: uid(),
@@ -291,6 +291,15 @@ export default function LabsChat() {
       lastActivityAt: Date.now(),
     });
     setSubmitted(false);
+    setRestartConfirm(false);
+  };
+
+  const handleRestartClick = () => {
+    if (state.messages.length === 0) {
+      restart();
+      return;
+    }
+    setRestartConfirm(true);
   };
 
   const handleSubmitConfirmed = async (additionalNotes: string): Promise<SubmitResponse> => {
@@ -342,8 +351,22 @@ export default function LabsChat() {
 
   return (
     <div data-theme="labs" className="w-full max-w-[1200px] mx-auto px-6 pb-24">
+      {/*
+        DOM order puts the summary first so on mobile (single column) the live
+        brief is visible at the top while users chat. On lg+ we explicitly place
+        each child in the grid so the chat stays on the left and summary on the
+        right (the desktop sticky behavior is unchanged).
+      */}
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 lg:gap-10">
-        <div className="flex flex-col min-h-[60vh]">
+        <div className="lg:col-start-2 lg:row-start-1">
+          <LabsSummary
+            fields={state.fields}
+            canSubmit={isComplete(state.fields)}
+            onSubmit={() => setSubmitModalOpen(true)}
+          />
+        </div>
+
+        <div className="flex flex-col min-h-[60vh] lg:col-start-1 lg:row-start-1">
           <div
             ref={scrollRef}
             className="flex-1 overflow-y-auto pb-6 space-y-4 max-h-[60vh]"
@@ -376,18 +399,33 @@ export default function LabsChat() {
               className="w-full bg-transparent border-0 outline-none resize-none text-[color:var(--labs-ink)] placeholder:text-[color:var(--labs-ink-muted)] text-base"
               disabled={isStreaming}
             />
-            <div className="flex items-center justify-between mt-3">
-              <div className="text-xs text-[color:var(--labs-ink-muted)]">
-                {state.messages.length > 0 && (
-                  <button onClick={restart} className="hover:underline">
+            <div className="flex items-center justify-between mt-3 gap-3">
+              <div className="text-xs text-[color:var(--labs-ink-muted)] min-h-[24px] flex items-center">
+                {state.messages.length > 0 && !restartConfirm && (
+                  <button onClick={handleRestartClick} className="hover:underline">
                     Empezar de nuevo
                   </button>
+                )}
+                {restartConfirm && (
+                  <span className="flex items-center gap-2" role="alertdialog" aria-label="Confirmar reinicio">
+                    <span>¿Borrar conversación?</span>
+                    <button
+                      onClick={restart}
+                      className="text-[color:var(--labs-accent)] font-medium hover:underline"
+                    >
+                      Sí
+                    </button>
+                    <span aria-hidden="true">·</span>
+                    <button onClick={() => setRestartConfirm(false)} className="hover:underline">
+                      Cancelar
+                    </button>
+                  </span>
                 )}
               </div>
               <button
                 onClick={() => sendMessage(input)}
                 disabled={!input.trim() || isStreaming}
-                className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 disabled:opacity-40 bg-[color:var(--labs-accent)] hover:bg-[color:var(--labs-accent-hover)] text-white"
+                className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 motion-reduce:transition-none disabled:opacity-40 bg-[color:var(--labs-accent)] hover:bg-[color:var(--labs-accent-hover)] text-white"
               >
                 Enviar
               </button>
@@ -400,7 +438,7 @@ export default function LabsChat() {
                 <button
                   key={chip}
                   onClick={() => handleChipClick(chip)}
-                  className="px-4 py-2 rounded-full text-sm border border-[color:var(--labs-rule)] bg-[color:var(--labs-bg-elevated)] text-[color:var(--labs-ink)] hover:border-[color:var(--labs-accent)] hover:-translate-y-px transition-all duration-200"
+                  className="px-4 py-2 rounded-full text-sm border border-[color:var(--labs-rule)] bg-[color:var(--labs-bg-elevated)] text-[color:var(--labs-ink)] hover:border-[color:var(--labs-accent)] hover:-translate-y-px motion-reduce:hover:translate-y-0 transition-all duration-200 motion-reduce:transition-none"
                 >
                   {chip}
                 </button>
@@ -408,12 +446,6 @@ export default function LabsChat() {
             </div>
           )}
         </div>
-
-        <LabsSummary
-          fields={state.fields}
-          canSubmit={isComplete(state.fields)}
-          onSubmit={() => setSubmitModalOpen(true)}
-        />
       </div>
 
       {submitModalOpen && (
