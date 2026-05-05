@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { ArrowUp, RotateCcw } from 'lucide-react';
 import type { ChatMessage, ConversationState, ExtractedFields, SubmitResponse } from '../../lib/labs/types';
 import { isComplete } from '../../lib/labs/types';
 import LabsSummary from './LabsSummary';
@@ -6,14 +7,14 @@ import LabsMessage from './LabsMessage';
 import LabsSubmitModal from './LabsSubmitModal';
 import LabsSuccessScreen from './LabsSuccessScreen';
 
+const SUGGESTION_LABELS: { text: string; hint: string }[] = [
+  { text: 'Un dashboard que conecte mi POS con WhatsApp', hint: 'Dashboard · WhatsApp' },
+  { text: 'Un agente que conteste reservaciones automáticamente', hint: 'Agente AI · Reservas' },
+  { text: 'Un reporte diario de ventas que me llegue al correo', hint: 'Reporte · Email' },
+];
+
 const STORAGE_KEY = 'avoqado-labs-conversation-v1';
 const IDLE_MS = 24 * 60 * 60 * 1000;
-
-const SUGGESTION_CHIPS = [
-  'Un dashboard que conecte mi POS con WhatsApp',
-  'Un agente que conteste reservaciones automáticamente',
-  'Un reporte diario de ventas que me llegue al correo',
-];
 
 function uid(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -349,104 +350,152 @@ export default function LabsChat() {
 
   const empty = state.messages.length === 0;
 
+  // Hero-input layout when empty: input is THE focus, no sidebar yet, hero-sized
+  // textarea with circular send button. Once the user sends the first message we
+  // switch to the conventional chat layout (messages above, input below, sidebar
+  // appears with the live summary).
+  const sendDisabled = !input.trim() || isStreaming;
+  const InputCard = (
+    <div
+      className={`rounded-3xl border border-[color:var(--labs-rule)] bg-[color:var(--labs-bg-elevated)] shadow-[var(--labs-shadow-soft)] focus-within:border-[color:var(--labs-accent)] focus-within:shadow-[var(--labs-shadow-pop)] transition-all duration-300 motion-reduce:transition-none ${
+        empty ? 'p-5 md:p-6' : 'p-4'
+      }`}
+    >
+      <textarea
+        value={input}
+        onChange={e => setInput(e.target.value)}
+        onKeyDown={e => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage(input);
+          }
+        }}
+        placeholder={empty ? 'Describe lo que quieres construir…' : '¿Algo más?'}
+        rows={empty ? 4 : 2}
+        className={`w-full bg-transparent border-0 outline-none resize-none text-[color:var(--labs-ink)] placeholder:text-[color:var(--labs-ink-muted)] ${
+          empty ? 'text-lg md:text-xl leading-relaxed' : 'text-base'
+        }`}
+        disabled={isStreaming}
+        autoFocus={empty}
+      />
+      <div className="flex items-center justify-between mt-2 gap-3">
+        <div className="text-xs text-[color:var(--labs-ink-muted)] min-h-[28px] flex items-center">
+          {empty && (
+            <span className="hidden sm:inline">Enter para enviar · Shift+Enter para nueva línea</span>
+          )}
+          {!empty && state.messages.length > 0 && !restartConfirm && (
+            <button
+              onClick={handleRestartClick}
+              className="inline-flex items-center gap-1.5 hover:text-[color:var(--labs-ink)] transition-colors"
+              aria-label="Empezar conversación de nuevo"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Empezar de nuevo</span>
+            </button>
+          )}
+          {restartConfirm && (
+            <span className="flex items-center gap-2" role="alertdialog" aria-label="Confirmar reinicio">
+              <span>¿Borrar?</span>
+              <button onClick={restart} className="text-[color:var(--labs-accent)] font-medium hover:underline">
+                Sí
+              </button>
+              <span aria-hidden="true">·</span>
+              <button onClick={() => setRestartConfirm(false)} className="hover:underline">
+                Cancelar
+              </button>
+            </span>
+          )}
+        </div>
+        <button
+          onClick={() => sendMessage(input)}
+          disabled={sendDisabled}
+          aria-label="Enviar mensaje"
+          className={`shrink-0 inline-flex items-center justify-center rounded-full transition-all duration-200 motion-reduce:transition-none ${
+            empty ? 'w-12 h-12' : 'w-10 h-10'
+          } ${
+            sendDisabled
+              ? 'bg-[color:var(--labs-rule)] text-[color:var(--labs-ink-muted)] cursor-not-allowed'
+              : 'bg-[color:var(--labs-accent)] hover:bg-[color:var(--labs-accent-hover)] text-white shadow-[var(--labs-shadow-pop)] hover:-translate-y-0.5 motion-reduce:hover:translate-y-0'
+          }`}
+        >
+          <ArrowUp className={empty ? 'w-5 h-5' : 'w-4 h-4'} strokeWidth={2.5} />
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <div data-theme="labs" className="w-full max-w-[1200px] mx-auto px-6 pb-24">
-      {/*
-        DOM order puts the summary first so on mobile (single column) the live
-        brief is visible at the top while users chat. On lg+ we explicitly place
-        each child in the grid so the chat stays on the left and summary on the
-        right (the desktop sticky behavior is unchanged).
-      */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 lg:gap-10">
-        <div className="lg:col-start-2 lg:row-start-1">
-          <LabsSummary
-            fields={state.fields}
-            canSubmit={isComplete(state.fields)}
-            onSubmit={() => setSubmitModalOpen(true)}
-          />
-        </div>
-
-        <div className="flex flex-col min-h-[60vh] lg:col-start-1 lg:row-start-1">
-          <div
-            ref={scrollRef}
-            className="flex-1 overflow-y-auto pb-6 space-y-4 max-h-[60vh]"
-            style={{ scrollBehavior: 'smooth' }}
-          >
-            {empty ? (
-              <div className="text-center py-12 text-[color:var(--labs-ink-muted)]">
-                <p className="text-sm">Empieza por contarnos qué quieres construir.</p>
-              </div>
-            ) : (
-              state.messages.map(m => <LabsMessage key={m.id} message={m} />)
-            )}
-            {isStreaming && state.messages.at(-1)?.content === '' && (
-              <div className="text-xs text-[color:var(--labs-ink-muted)] px-1 italic">Escribiendo…</div>
-            )}
-          </div>
-
-          <div className="rounded-2xl border border-[color:var(--labs-rule)] bg-[color:var(--labs-bg-elevated)] p-4 shadow-[var(--labs-shadow-soft)]">
-            <textarea
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  sendMessage(input);
-                }
-              }}
-              placeholder="¿Qué quieres construir?"
-              rows={empty ? 3 : 2}
-              className="w-full bg-transparent border-0 outline-none resize-none text-[color:var(--labs-ink)] placeholder:text-[color:var(--labs-ink-muted)] text-base"
-              disabled={isStreaming}
-            />
-            <div className="flex items-center justify-between mt-3 gap-3">
-              <div className="text-xs text-[color:var(--labs-ink-muted)] min-h-[24px] flex items-center">
-                {state.messages.length > 0 && !restartConfirm && (
-                  <button onClick={handleRestartClick} className="hover:underline">
-                    Empezar de nuevo
-                  </button>
-                )}
-                {restartConfirm && (
-                  <span className="flex items-center gap-2" role="alertdialog" aria-label="Confirmar reinicio">
-                    <span>¿Borrar conversación?</span>
-                    <button
-                      onClick={restart}
-                      className="text-[color:var(--labs-accent)] font-medium hover:underline"
-                    >
-                      Sí
-                    </button>
-                    <span aria-hidden="true">·</span>
-                    <button onClick={() => setRestartConfirm(false)} className="hover:underline">
-                      Cancelar
-                    </button>
-                  </span>
-                )}
-              </div>
-              <button
-                onClick={() => sendMessage(input)}
-                disabled={!input.trim() || isStreaming}
-                className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 motion-reduce:transition-none disabled:opacity-40 bg-[color:var(--labs-accent)] hover:bg-[color:var(--labs-accent-hover)] text-white"
-              >
-                Enviar
-              </button>
+      {empty ? (
+        // ─── Empty state: input is the hero ───
+        <div className="max-w-[760px] mx-auto">
+          {InputCard}
+          <div className="mt-6">
+            <div className="text-[10px] uppercase tracking-[0.2em] text-[color:var(--labs-ink-muted)] font-semibold mb-3">
+              O empieza con uno de estos
             </div>
-          </div>
-
-          {empty && (
-            <div className="flex flex-wrap gap-2 mt-4">
-              {SUGGESTION_CHIPS.map(chip => (
+            <div className="grid gap-2 sm:grid-cols-1">
+              {SUGGESTION_LABELS.map(({ text, hint }) => (
                 <button
-                  key={chip}
-                  onClick={() => handleChipClick(chip)}
-                  className="px-4 py-2 rounded-full text-sm border border-[color:var(--labs-rule)] bg-[color:var(--labs-bg-elevated)] text-[color:var(--labs-ink)] hover:border-[color:var(--labs-accent)] hover:-translate-y-px motion-reduce:hover:translate-y-0 transition-all duration-200 motion-reduce:transition-none"
+                  key={text}
+                  onClick={() => handleChipClick(text)}
+                  className="group text-left px-4 py-3 rounded-xl border border-[color:var(--labs-rule)] bg-[color:var(--labs-bg-elevated)] hover:border-[color:var(--labs-accent)] hover:bg-[color:var(--labs-accent-soft)] transition-all duration-200 motion-reduce:transition-none"
                 >
-                  {chip}
+                  <div className="text-[10px] uppercase tracking-widest text-[color:var(--labs-accent)] font-semibold mb-0.5">
+                    {hint}
+                  </div>
+                  <div className="text-sm text-[color:var(--labs-ink)] leading-snug">{text}</div>
                 </button>
               ))}
             </div>
-          )}
+          </div>
         </div>
-      </div>
+      ) : (
+        // ─── Active state: messages + sidebar ───
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 lg:gap-10">
+          <div className="lg:col-start-2 lg:row-start-1">
+            <LabsSummary
+              fields={state.fields}
+              canSubmit={isComplete(state.fields)}
+              onSubmit={() => setSubmitModalOpen(true)}
+            />
+          </div>
+
+          <div className="flex flex-col min-h-[60vh] lg:col-start-1 lg:row-start-1">
+            <div
+              ref={scrollRef}
+              className="flex-1 overflow-y-auto pb-6 space-y-4 max-h-[min(65vh,640px)]"
+              style={{ scrollBehavior: 'smooth' }}
+            >
+              {state.messages.map(m => (
+                <LabsMessage key={m.id} message={m} />
+              ))}
+              {isStreaming && state.messages.at(-1)?.content === '' && (
+                <div className="flex justify-start">
+                  <div className="bg-[color:var(--labs-bg-elevated)] border border-[color:var(--labs-rule)] rounded-2xl rounded-tl-sm px-4 py-3">
+                    <div className="flex gap-1.5 items-center">
+                      <span
+                        className="w-1.5 h-1.5 rounded-full bg-[color:var(--labs-ink-muted)] animate-pulse"
+                        style={{ animationDelay: '0ms' }}
+                      />
+                      <span
+                        className="w-1.5 h-1.5 rounded-full bg-[color:var(--labs-ink-muted)] animate-pulse"
+                        style={{ animationDelay: '150ms' }}
+                      />
+                      <span
+                        className="w-1.5 h-1.5 rounded-full bg-[color:var(--labs-ink-muted)] animate-pulse"
+                        style={{ animationDelay: '300ms' }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {InputCard}
+          </div>
+        </div>
+      )}
 
       {submitModalOpen && (
         <LabsSubmitModal
