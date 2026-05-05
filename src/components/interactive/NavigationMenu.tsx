@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { ChevronDown, Search, Menu, X, ArrowRight, ArrowUpRight } from 'lucide-react';
 
 // ─── Product data with real accent colors ───
@@ -243,56 +244,109 @@ export default function NavigationMenu() {
       </div>
 
       {/* ═══ Mobile Menu ═══ */}
-      <div className={`fixed inset-0 top-[88px] bg-white z-30 lg:hidden overflow-y-auto transition-all duration-300 ${mobileOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
-        <div className="p-5 pb-32 space-y-1">
-          {/* Mobile sections */}
-          {[
-            { key: 'productos', label: 'Productos', content: <MobileProducts /> },
-            { key: 'industrias', label: 'Industrias', content: <MobileIndustries /> },
-            { key: 'recursos', label: 'Recursos', content: <MobileResources /> },
-          ].map(({ key, label, content }) => (
-            <div key={key} className="border-b border-gray-100">
-              <button
-                onClick={() => setMobileSection(mobileSection === key ? null : key)}
-                className="flex items-center justify-between w-full py-4 text-base font-semibold text-gray-900"
-              >
-                {label}
-                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${mobileSection === key ? 'rotate-180' : ''}`} />
-              </button>
-              <div className={`overflow-hidden transition-all duration-300 ${mobileSection === key ? 'max-h-[600px] opacity-100 pb-4' : 'max-h-0 opacity-0'}`}>
-                {content}
-              </div>
+      {/* Rendered via portal to document.body so it escapes the nav's z-300 stacking context */}
+      {/* and any data-theme parent that creates its own containing block. z-[350] sits between */}
+      {/* the nav (z-300) and the founders banner (z-400) so the banner stays visible above. */}
+      <MobileDrawer
+        open={mobileOpen}
+        section={mobileSection}
+        onSectionToggle={key => setMobileSection(mobileSection === key ? null : key)}
+      />
+    </nav>
+  );
+}
+
+interface MobileDrawerProps {
+  open: boolean;
+  section: string | null;
+  onSectionToggle: (key: string) => void;
+}
+
+function MobileDrawer({ open, section, onSectionToggle }: MobileDrawerProps) {
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
+    <div
+      className={`fixed inset-x-0 bottom-0 top-[88px] bg-white z-[350] lg:hidden overflow-y-auto transition-opacity duration-300 motion-reduce:transition-none ${
+        open ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
+      }`}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menú de navegación"
+    >
+      <div className="p-5 pb-32 space-y-1">
+        {/* Mobile sections */}
+        {[
+          { key: 'productos', label: 'Productos', content: <MobileProducts /> },
+          { key: 'industrias', label: 'Industrias', content: <MobileIndustries /> },
+          { key: 'recursos', label: 'Recursos', content: <MobileResources /> },
+        ].map(({ key, label, content }) => (
+          <div key={key} className="border-b border-gray-100">
+            <button
+              onClick={() => onSectionToggle(key)}
+              className="flex items-center justify-between w-full py-4 text-base font-semibold text-gray-900"
+            >
+              {label}
+              <ChevronDown
+                className={`w-4 h-4 text-gray-400 transition-transform ${section === key ? 'rotate-180' : ''}`}
+              />
+            </button>
+            <div
+              className={`overflow-hidden transition-all duration-300 ${
+                section === key ? 'max-h-[600px] opacity-100 pb-4' : 'max-h-0 opacity-0'
+              }`}
+            >
+              {content}
             </div>
-          ))}
-
-          <a href="/traje-a-la-medida" className="flex items-center justify-between w-full py-4 text-base font-semibold text-gray-900 border-b border-gray-100">
-            Traje a la medida
-            <ArrowRight className="w-4 h-4 text-gray-400" />
-          </a>
-          <a href="/labs" className="flex items-center justify-between w-full py-4 text-base font-semibold text-gray-900 border-b border-gray-100">
-            Labs
-            <ArrowRight className="w-4 h-4 text-gray-400" />
-          </a>
-          <a href="/pricing" className="flex items-center justify-between w-full py-4 text-base font-semibold text-gray-900 border-b border-gray-100">
-            Precios
-            <ArrowRight className="w-4 h-4 text-gray-400" />
-          </a>
-
-          {/* Mobile CTAs */}
-          <div className="pt-6 space-y-3">
-            <a href="https://dashboard.avoqado.io/signup" className="flex items-center justify-center w-full p-3.5 rounded-xl bg-black text-white font-semibold text-sm">
-              Comienza
-            </a>
-            <a href="https://dashboard.avoqado.io/login" className="flex items-center justify-center w-full p-3.5 rounded-xl bg-gray-50 text-gray-900 font-medium text-sm">
-              Iniciar sesion
-            </a>
-            <a href="/contact" className="flex items-center justify-center w-full p-3.5 rounded-xl border border-gray-200 text-gray-700 font-medium text-sm">
-              Contactar ventas
-            </a>
           </div>
+        ))}
+
+        <a
+          href="/traje-a-la-medida"
+          className="flex items-center justify-between w-full py-4 text-base font-semibold text-gray-900 border-b border-gray-100"
+        >
+          Traje a la medida
+          <ArrowRight className="w-4 h-4 text-gray-400" />
+        </a>
+        <a
+          href="/labs"
+          className="flex items-center justify-between w-full py-4 text-base font-semibold text-gray-900 border-b border-gray-100"
+        >
+          Labs
+          <ArrowRight className="w-4 h-4 text-gray-400" />
+        </a>
+        <a
+          href="/pricing"
+          className="flex items-center justify-between w-full py-4 text-base font-semibold text-gray-900 border-b border-gray-100"
+        >
+          Precios
+          <ArrowRight className="w-4 h-4 text-gray-400" />
+        </a>
+
+        {/* Mobile CTAs */}
+        <div className="pt-6 space-y-3">
+          <a
+            href="https://dashboard.avoqado.io/signup"
+            className="flex items-center justify-center w-full p-3.5 rounded-xl bg-black text-white font-semibold text-sm"
+          >
+            Comienza
+          </a>
+          <a
+            href="https://dashboard.avoqado.io/login"
+            className="flex items-center justify-center w-full p-3.5 rounded-xl bg-gray-50 text-gray-900 font-medium text-sm"
+          >
+            Iniciar sesion
+          </a>
+          <a
+            href="/contact"
+            className="flex items-center justify-center w-full p-3.5 rounded-xl border border-gray-200 text-gray-700 font-medium text-sm"
+          >
+            Contactar ventas
+          </a>
         </div>
       </div>
-    </nav>
+    </div>,
+    document.body,
   );
 }
 
