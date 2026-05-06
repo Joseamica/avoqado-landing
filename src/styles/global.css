@@ -191,14 +191,14 @@ button:focus-visible {
 
 /* ─── Avoqado Labs sub-brand: Dark + Mint (matches Avoqado main brand) ─── */
 [data-theme="labs"] {
-  --labs-bg: oklch(0.14 0.005 155);            /* near-black with subtle green tint */
-  --labs-bg-elevated: oklch(0.20 0.008 155);   /* elevated dark surface */
+  --labs-bg: #212121;
+  --labs-bg-elevated: #2b2b2b;
   --labs-ink: oklch(0.98 0.003 155);           /* near-white */
   --labs-ink-muted: oklch(0.62 0.008 155);     /* muted gray on dark */
-  --labs-rule: oklch(0.30 0.008 155);          /* subtle rule on dark */
+  --labs-rule: #3a3a3a;
   --labs-accent: oklch(0.78 0.18 155);         /* avoqado mint green */
   --labs-accent-hover: oklch(0.72 0.18 155);   /* darker mint */
-  --labs-accent-soft: oklch(0.25 0.04 155);    /* dark mint-tinted soft */
+  --labs-accent-soft: color-mix(in oklab, var(--labs-accent) 14%, #212121);
   --labs-shadow-soft: 0 1px 3px oklch(0 0 0 / 0.4), 0 4px 12px oklch(0 0 0 / 0.3);
   --labs-shadow-pop: 0 8px 24px oklch(0.78 0.18 155 / 0.18), 0 2px 6px oklch(0.78 0.18 155 / 0.12);
 
