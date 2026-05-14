@@ -12,7 +12,7 @@ export type Urgency = 'hoy' | 'esta-semana' | 'este-mes' | 'sin-prisa';
 
 export interface ContactInfo {
   name: string;
-  email: string;
+  email?: string;
   whatsapp?: string;
 }
 
@@ -61,6 +61,13 @@ export interface SubmitPayload {
   transcript: ChatMessage[];
 }
 
+export function hasReachableContact(c: ContactInfo | undefined): boolean {
+  if (!c?.name?.trim()) return false;
+  const email = c.email?.trim();
+  const whatsapp = c.whatsapp?.trim();
+  return Boolean(email || whatsapp);
+}
+
 export interface SubmitResponse {
   success: boolean;
   message: string;
@@ -75,7 +82,7 @@ export function missingFields(f: ExtractedFields): string[] {
   if (!f.integrations) missing.push('integrations');
   if (!f.designReference) missing.push('designReference');
   if (!f.urgency) missing.push('urgency');
-  if (!f.contact?.name || !f.contact?.email) missing.push('contact');
+  if (!hasReachableContact(f.contact)) missing.push('contact');
   return missing;
 }
 

@@ -66,7 +66,7 @@ export default function LabsSubmitModal({ fields, onClose, onConfirm }: Props) {
           <div>
             <span className="text-[color:var(--labs-ink-muted)]">Contacto:</span>{' '}
             <span className="text-[color:var(--labs-ink)]">
-              {fields.contact?.name} ({fields.contact?.email})
+              {fields.contact?.name} ({fields.contact?.email || fields.contact?.whatsapp})
             </span>
           </div>
         </div>

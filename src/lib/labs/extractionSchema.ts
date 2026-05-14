@@ -41,12 +41,22 @@ export const updateBriefTool = {
         contact: {
           type: 'object',
           additionalProperties: false,
+          description:
+            'Datos de contacto del cliente. Captura SIEMPRE el nombre y AL MENOS UNO entre email o whatsapp (cualquiera basta; ambos es mejor). Si el usuario te da solo un teléfono mexicano (10 dígitos, con o sin +52), guárdalo en whatsapp — nunca en email. Si te da algo que no es claramente un email, NO lo pongas en email.',
           properties: {
-            name: { type: 'string' },
-            email: { type: 'string' },
-            whatsapp: { type: 'string' },
+            name: { type: 'string', description: 'Nombre del cliente.' },
+            email: {
+              type: 'string',
+              description:
+                'Correo electrónico válido (debe contener @ y un dominio). Si el usuario no dio un email reconocible, OMITE este campo en vez de inventarlo.',
+            },
+            whatsapp: {
+              type: 'string',
+              description:
+                'Número de WhatsApp (idealmente con código de país, p. ej. +52 55 1234 5678). Acepta también solo 10 dígitos sin prefijo.',
+            },
           },
-          required: ['name', 'email'],
+          required: ['name'],
         },
       },
     },

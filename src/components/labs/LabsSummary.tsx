@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import type { ExtractedFields, ProjectType, Urgency } from '../../lib/labs/types';
+import { hasReachableContact } from '../../lib/labs/types';
 
 interface Props {
   fields: ExtractedFields;
@@ -46,7 +47,10 @@ function buildRows(f: ExtractedFields): FieldRow[] {
       ? 'ninguna'
       : f.integrations.join(', ');
 
-  const contactValue = f.contact?.name && f.contact?.email ? `${f.contact.name} · ${f.contact.email}` : undefined;
+  const contactDone = hasReachableContact(f.contact);
+  const contactValue = contactDone
+    ? `${f.contact!.name} · ${f.contact!.email || f.contact!.whatsapp}`
+    : undefined;
 
   return [
     { label: 'Tipo', value: projectTypeValue, done: !!f.projectType && (f.projectType !== 'other' || !!f.projectTypeFreeText) },
@@ -55,7 +59,7 @@ function buildRows(f: ExtractedFields): FieldRow[] {
     { label: 'Integraciones', value: integrationsValue, done: f.integrations !== undefined },
     { label: 'Diseño', value: f.designReference, done: !!f.designReference },
     { label: 'Urgencia', value: f.urgency ? urgencyLabels[f.urgency] : undefined, done: !!f.urgency },
-    { label: 'Contacto', value: contactValue, done: !!(f.contact?.name && f.contact?.email) },
+    { label: 'Contacto', value: contactValue, done: contactDone },
   ];
 }
 
