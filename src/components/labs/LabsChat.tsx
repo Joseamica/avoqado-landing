@@ -256,7 +256,7 @@ export default function LabsChat() {
             const parsed = JSON.parse(errBody);
             if (parsed?.error) {
               if (res.status === 429) errMsg = 'Vas muy rápido. Espera unos segundos.';
-              else if (parsed.error.includes('OPENAI_API_KEY')) errMsg = 'El agente no está configurado. Avísale a Jose.';
+              else if (parsed.error.includes('OPENAI_API_KEY')) errMsg = 'El agente no está configurado. Avísale a Avoqado.';
             }
           } catch {
             // keep generic message

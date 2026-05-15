@@ -193,7 +193,7 @@ export default function LabsSummary({ fields, canSubmit, onSubmit }: Props) {
                 : 'bg-[color:var(--labs-rule)] text-[color:var(--labs-ink)]/60 cursor-not-allowed'
             }`}
           >
-            {canSubmit ? 'Enviar a Jose' : `Completa el brief para enviar`}
+            {canSubmit ? 'Enviar brief' : `Completa el brief para enviar`}
           </button>
         </div>
       </div>

@@ -23,7 +23,7 @@ export default function LabsSuccessScreen({ onRestart }: Props) {
         Brief enviado.
       </h2>
       <p className="text-lg text-[color:var(--labs-ink-muted)] mb-10 max-w-md mx-auto">
-        Jose lo revisa personalmente. Te confirma timeline y costo en menos de 24 horas.
+        Avoqado lo revisa personalmente. Te confirma timeline y costo en menos de 24 horas.
       </p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <a

@@ -52,10 +52,10 @@ export default function LabsSubmitModal({ fields, onClose, onConfirm }: Props) {
         onClick={e => e.stopPropagation()}
       >
         <h2 className="font-serif italic text-2xl md:text-3xl text-[color:var(--labs-ink)] mb-2 leading-tight">
-          ¿Mando esto a Jose?
+          ¿Enviar este brief?
         </h2>
         <p className="text-sm text-[color:var(--labs-ink-muted)] mb-5">
-          Jose te confirma timeline y costo en menos de 24 horas.
+          Avoqado te confirma timeline y costo en menos de 24 horas.
         </p>
 
         <div className="space-y-2 mb-5 text-sm">
@@ -72,7 +72,7 @@ export default function LabsSubmitModal({ fields, onClose, onConfirm }: Props) {
         </div>
 
         <label className="block text-xs uppercase tracking-widest text-[color:var(--labs-ink-muted)] mb-2">
-          ¿Algo más que quieras agregar para Jose? (opcional)
+          ¿Algo más que quieras agregar al brief? (opcional)
         </label>
         <textarea
           value={notes}
@@ -102,7 +102,7 @@ export default function LabsSubmitModal({ fields, onClose, onConfirm }: Props) {
             disabled={submitting}
             className="flex-1 px-4 py-3 rounded-full text-sm font-medium bg-[color:var(--labs-accent)] hover:bg-[color:var(--labs-accent-hover)] text-white disabled:opacity-50"
           >
-            {submitting ? 'Enviando…' : 'Enviar a Jose'}
+            {submitting ? 'Enviando…' : 'Enviar brief'}
           </button>
         </div>
       </div>

@@ -68,7 +68,7 @@ export const finalizeBriefTool = {
   function: {
     name: 'finalizeBrief',
     description:
-      'Llama esta función SOLO cuando el usuario haya confirmado explícitamente que quiere enviar el brief a Jose. No llames esta función automáticamente — espera el "sí, mándalo" del usuario.',
+      'Llama esta función SOLO cuando el usuario haya confirmado explícitamente que quiere enviar el brief a Avoqado. No llames esta función automáticamente — espera el "sí, mándalo" del usuario.',
     parameters: {
       type: 'object',
       additionalProperties: false,
