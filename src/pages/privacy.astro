@@ -8,7 +8,7 @@ import Layout from '../layouts/Layout.astro'
     <section class="bg-black text-white py-20 px-4">
       <div class="max-w-4xl mx-auto">
         <h1 class="font-light tracking-tight text-4xl md:text-5xl lg:text-6xl mb-4">Aviso de Privacidad</h1>
-        <p class="text-gray-400 text-lg">Ultima actualizacion: 27 de enero de 2025</p>
+        <p class="text-gray-400 text-lg">Ultima actualizacion: 19 de mayo de 2026</p>
       </div>
     </section>
 
@@ -247,6 +247,97 @@ import Layout from '../layouts/Layout.astro'
           Al proporcionar sus datos personales a traves de nuestros formularios, sitio web o
           aplicaciones, usted manifiesta su consentimiento para que sean tratados conforme a
           lo establecido en este Aviso de Privacidad.
+        </p>
+
+        <h2>13. Integracion con Google Calendar y Google API Services</h2>
+        <p>
+          Avoqado ofrece una integracion opcional con Google Calendar que permite a los
+          duenos y administradores de venues sincronizar eventos de su Google Calendar
+          personal o de venue para evitar dobles reservas en el sistema de reservaciones
+          de Avoqado. Esta seccion detalla como se accede, usa, almacena y comparte la
+          informacion de Google de acuerdo con la <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a>,
+          incluyendo los requisitos de Limited Use.
+        </p>
+
+        <h3>13.1 Datos de Google a los que accedemos</h3>
+        <p>
+          Cuando el usuario conecta su cuenta de Google mediante el flujo OAuth 2.0 de
+          Avoqado, accedemos unicamente al permiso <strong>calendar.readonly</strong> de
+          Google Calendar. Esto nos permite leer:
+        </p>
+        <ul>
+          <li>Eventos de los calendarios que el usuario seleccione explicitamente.</li>
+          <li>Fecha de inicio, fecha de fin y zona horaria de cada evento.</li>
+          <li>Titulo del evento, unicamente cuando el evento NO esta marcado como
+            "privado" en Google. Para eventos privados, mostramos la etiqueta
+            generica "Ocupado".</li>
+          <li>Informacion de disponibilidad (free/busy) en los rangos solicitados.</li>
+        </ul>
+        <p>
+          Avoqado <strong>NO accede</strong> a Gmail, Drive, Contactos, Photos ni a
+          ningun otro servicio de Google. Tampoco accede a calendarios que el usuario
+          no haya autorizado expresamente.
+        </p>
+
+        <h3>13.2 Uso de los datos</h3>
+        <p>Los datos de Google Calendar se utilizan exclusivamente para:</p>
+        <ul>
+          <li>Mostrar bloques visuales de "ocupado" sobre el calendario de
+            reservaciones del venue, permitiendo al personal evitar agendar reservas
+            que choquen con compromisos del propietario.</li>
+        </ul>
+        <p>
+          Avoqado <strong>NO utiliza</strong> los datos de Google Calendar para
+          publicidad, analisis comerciales, perfilado de usuarios, entrenamiento de
+          modelos de inteligencia artificial, ni para ningun fin distinto al
+          descrito en este apartado.
+        </p>
+
+        <h3>13.3 Almacenamiento y seguridad</h3>
+        <p>
+          Los tokens de acceso (access tokens) y los tokens de refresco (refresh
+          tokens) emitidos por Google se almacenan cifrados en reposo mediante
+          AES-256. La informacion de los eventos se sincroniza incrementalmente y
+          se almacena unicamente durante el tiempo necesario para mostrar la
+          superposicion de bloques "ocupado" en tiempo real. Cuando el usuario
+          desconecta la integracion, los tokens y los bloques derivados se
+          eliminan automaticamente.
+        </p>
+
+        <h3>13.4 Comparticion con terceros</h3>
+        <p>
+          Los datos obtenidos a traves de Google Calendar <strong>NO se comparten
+          con ningun tercero</strong>. No se transfieren a Blumon, BANORTE, OpenAI,
+          Sentry, Cloudflare ni a ningun otro proveedor enumerado en la seccion 4
+          de este Aviso. Los datos permanecen exclusivamente dentro de la
+          infraestructura de Avoqado y solo son visibles para los usuarios
+          autorizados del venue.
+        </p>
+
+        <h3>13.5 Revocacion del acceso</h3>
+        <p>El usuario puede revocar el acceso a su Google Calendar en cualquier momento:</p>
+        <ul>
+          <li><strong>Desde Avoqado:</strong> Reservaciones &rarr; Configuracion &rarr;
+            Google Calendar &rarr; Desconectar. Esto elimina inmediatamente los
+            tokens cifrados y todos los bloques de "ocupado" derivados.</li>
+          <li><strong>Desde Google:</strong> visitar <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer">https://myaccount.google.com/permissions</a>,
+            buscar "Avoqado" y revocar el acceso. Avoqado detectara la revocacion
+            en su proximo intento de sincronizacion y eliminara los datos
+            asociados de su infraestructura.</li>
+        </ul>
+
+        <h3>13.6 Cumplimiento de la politica de Google</h3>
+        <p>
+          El uso y la transferencia de informacion recibida desde Google APIs por
+          parte de Avoqado se adhiere a la
+          <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a>,
+          incluyendo los requisitos de Limited Use cuando estos aplican.
+        </p>
+
+        <h3>13.7 Contacto</h3>
+        <p>
+          Para cualquier consulta relacionada con esta integracion o el uso de
+          datos de Google Calendar, escribanos a <strong>hola@avoqado.io</strong>.
         </p>
 
         <div class="bg-gray-100 p-6 rounded-lg mt-12">
