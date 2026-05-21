@@ -215,3 +215,33 @@ button:focus-visible {
 [data-theme="labs"] *:focus-visible {
   box-shadow: 0 0 0 2px var(--labs-bg), 0 0 0 4px var(--labs-accent);
 }
+
+.help-article h2 {
+  margin-top: 2rem;
+  font-size: 1.375rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.help-article p {
+  margin-top: 1rem;
+  line-height: 1.75;
+  color: rgb(75 85 99);
+}
+
+.help-article ol,
+.help-article ul {
+  margin-top: 1rem;
+  padding-left: 1.25rem;
+  color: rgb(75 85 99);
+}
+
+.help-article li {
+  margin-top: 0.5rem;
+  line-height: 1.7;
+}
+
+.help-article strong {
+  color: rgb(17 24 39);
+  font-weight: 600;
+}

@@ -1,0 +1,59 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../../../layouts/Layout.astro';
+import Navbar from '../../../../components/layout/Navbar.astro';
+import Footer from '../../../../components/layout/Footer.astro';
+import { getArticleSlug, getArticleUrl, getHelpCategory, sortHelpArticles } from '../../../../lib/help';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+	const articles = await getCollection('help');
+	return articles.map((article) => ({
+		params: {
+			category: article.data.category,
+			slug: getArticleSlug(article),
+		},
+		props: { article },
+	}));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+const category = getHelpCategory(article.data.category);
+const allArticles = await getCollection('help');
+const related = sortHelpArticles(allArticles.filter((candidate) => article.data.relatedArticles?.includes(getArticleSlug(candidate))));
+const verified = article.data.lastVerified.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+---
+
+<Layout title={`${article.data.title} | Ayuda Avoqado`} description={article.data.description} type="article">
+	<Navbar position="fixed" />
+	<main class="min-h-screen bg-white pt-32 text-black">
+		<article class="mx-auto max-w-3xl px-6 py-14">
+			<a href={`/help/dashboard/${article.data.category}`} class="text-sm text-gray-500 hover:text-black">{category?.title ?? 'Dashboard'}</a>
+			<h1 class="mt-4 text-4xl font-light tracking-tight md:text-5xl">{article.data.title}</h1>
+			<p class="mt-4 text-lg leading-relaxed text-gray-600">{article.data.description}</p>
+			<div class="mt-5 flex flex-wrap gap-2 text-xs text-gray-500">
+				<span class="rounded-full bg-black/[0.04] px-3 py-1">Verificado: {verified}</span>
+				{article.data.roles.map((role) => <span class="rounded-full bg-black/[0.04] px-3 py-1">{role}</span>)}
+			</div>
+			<div class="help-article mt-10">
+				<Content />
+			</div>
+			{related.length > 0 && (
+				<aside class="mt-12 border-t border-black/10 pt-8">
+					<h2 class="text-xl font-medium">Articulos relacionados</h2>
+					<div class="mt-4 grid gap-3">
+						{related.map((item) => (
+							<a href={getArticleUrl(item)} class="rounded-lg border border-black/10 p-4 hover:border-black/25">
+								<span class="font-medium">{item.data.title}</span>
+								<p class="mt-1 text-sm text-gray-600">{item.data.description}</p>
+							</a>
+						))}
+					</div>
+				</aside>
+			)}
+		</article>
+	</main>
+	<Footer />
+</Layout>

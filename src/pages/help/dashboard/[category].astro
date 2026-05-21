@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import Navbar from '../../../components/layout/Navbar.astro';
+import Footer from '../../../components/layout/Footer.astro';
+import { DASHBOARD_HELP_CATEGORIES, getArticleUrl, sortHelpArticles } from '../../../lib/help';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+	return DASHBOARD_HELP_CATEGORIES.map((category) => ({
+		params: { category: category.slug },
+		props: { category },
+	}));
+}
+
+const { category } = Astro.props;
+const articles = sortHelpArticles(await getCollection('help', (article) => article.data.category === category.slug));
+---
+
+<Layout title={`${category.title} | Ayuda Dashboard Avoqado`} description={category.description}>
+	<Navbar position="fixed" />
+	<main class="min-h-screen bg-white pt-32 text-black">
+		<section class="mx-auto max-w-4xl px-6 py-14">
+			<a href="/help/dashboard" class="text-sm text-gray-500 hover:text-black">Ayuda Dashboard</a>
+			<h1 class="mt-4 text-5xl font-light tracking-tight">{category.title}</h1>
+			<p class="mt-4 text-lg text-gray-600">{category.description}</p>
+			<div class="mt-10 divide-y divide-black/10 rounded-xl border border-black/10">
+				{articles.length > 0 ? (
+					articles.map((article) => (
+						<a href={getArticleUrl(article)} class="block p-5 transition hover:bg-black/[0.03]">
+							<h2 class="text-lg font-medium">{article.data.title}</h2>
+							<p class="mt-1 text-sm text-gray-600">{article.data.description}</p>
+						</a>
+					))
+				) : (
+					<div class="p-5 text-sm text-gray-600">Aun no hay articulos publicados en esta categoria.</div>
+				)}
+			</div>
+		</section>
+	</main>
+	<Footer />
+</Layout>

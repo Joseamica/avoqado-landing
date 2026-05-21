@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "help:inventory": "node scripts/help-inventory.mjs",
+    "help:check": "node scripts/help-check.mjs",
     "preview": "cloudflared tunnel run --url http://localhost:4321 avoqado-dev",
     "astro": "astro"
   },

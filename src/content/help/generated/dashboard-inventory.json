@@ -1,0 +1,652 @@
+{
+  "generatedAt": "2026-05-21T00:43:18.367Z",
+  "sourceRepo": "avoqado-web-dashboard",
+  "sourceFiles": {
+    "venueRoutes": "../avoqado-web-dashboard/src/routes/venueRoutes.tsx",
+    "sidebar": "../avoqado-web-dashboard/src/components/Sidebar/app-sidebar.tsx",
+    "featureRegistry": "../avoqado-web-dashboard/src/config/feature-registry.ts"
+  },
+  "summary": {
+    "routeCount": 135,
+    "sidebarRouteCount": 63,
+    "featureCount": 31,
+    "avoqadoCoreFeatureCount": 19
+  },
+  "routes": [
+    ":couponId",
+    ":customerId",
+    ":discountId",
+    ":memberId",
+    ":reservationId",
+    "account",
+    "analytics",
+    "available-balance",
+    "basic-info",
+    "branding",
+    "calendar",
+    "categories",
+    "categories/:categoryId",
+    "categories/create",
+    "chat",
+    "commissions",
+    "config/:configId",
+    "contact-images",
+    "counts",
+    "create",
+    "credit-packs",
+    "customers",
+    "customers/groups",
+    "disputes",
+    "documents",
+    "ecommerce-merchants",
+    "edit",
+    "edit/integrations",
+    "general",
+    "google",
+    "groups",
+    "history",
+    "home",
+    "ingredients",
+    "integrations",
+    "inventory",
+    "inventory/history",
+    "inventory/ingredients",
+    "inventory/modifier-analytics",
+    "inventory/profitability",
+    "inventory/purchase-orders",
+    "inventory/recipes",
+    "inventory/restocks",
+    "inventory/stock-counts",
+    "inventory/stock-overview",
+    "inventory/suppliers",
+    "inventory/transfers",
+    "kyc-required",
+    "loyalty",
+    "menumaker",
+    "menumaker/categories",
+    "menumaker/credit-packs",
+    "menumaker/menus",
+    "menumaker/modifier-groups",
+    "menumaker/overview",
+    "menumaker/products",
+    "menumaker/services",
+    "menus",
+    "menus/:menuId",
+    "menus/create",
+    "merchant-accounts",
+    "modifier-analytics",
+    "modifier-groups",
+    "modifier-groups/:modifierGroupId",
+    "modifier-groups/create",
+    "modifiers",
+    "notifications",
+    "notifications/preferences",
+    "notifications/preferences/1",
+    "notifications/preferences/2",
+    "notifications/preferences/3",
+    "notifications/preferences/4",
+    "notifications/preferences/5",
+    "online-booking",
+    "orders",
+    "orders/:orderId",
+    "overview",
+    "payment-config",
+    "payment-links",
+    "payment-links/branding",
+    "payment-links/settings",
+    "payment-methods",
+    "payments",
+    "payments/:paymentId",
+    "pricing",
+    "product-stock",
+    "products",
+    "products/:productId",
+    "products/create",
+    "profitability",
+    "promotions/coupons",
+    "promotions/discounts",
+    "purchase-orders",
+    "purchase-orders/:poId",
+    "raw-materials",
+    "recipes",
+    "reports/home-charts",
+    "reports/modifiers",
+    "reports/pay-later-aging",
+    "reports/payment-methods",
+    "reports/sales-by-category",
+    "reports/sales-by-item",
+    "reports/sales-summary",
+    "reports/taxes",
+    "reports/voids",
+    "reservations",
+    "reservations/calendar",
+    "reservations/communications",
+    "reservations/invite-clients",
+    "reservations/online-booking",
+    "reservations/settings",
+    "reservations/waitlist",
+    "reservations/widget-advanced",
+    "restocks",
+    "reviews",
+    "services",
+    "settings",
+    "settings/billing",
+    "settings/role-permissions",
+    "shifts",
+    "shifts/:shiftId",
+    "stock-counts",
+    "stock-counts/:countId",
+    "stock-overview",
+    "subscriptions",
+    "suppliers",
+    "team",
+    "tokens",
+    "tpv",
+    "tpv/:tpvId",
+    "transfers",
+    "transfers/:transferId",
+    "vendors",
+    "virtual-terminal",
+    "waitlist"
+  ],
+  "sidebarRoutes": [
+    "available-balance",
+    "commissions",
+    "customers",
+    "customers/groups",
+    "disputes",
+    "ecommerce-merchants",
+    "edit",
+    "edit/integrations",
+    "home",
+    "inventory/history",
+    "inventory/ingredients",
+    "inventory/modifier-analytics",
+    "inventory/profitability",
+    "inventory/purchase-orders",
+    "inventory/recipes",
+    "inventory/restocks",
+    "inventory/stock-counts",
+    "inventory/stock-overview",
+    "inventory/suppliers",
+    "inventory/transfers",
+    "loyalty",
+    "menumaker/categories",
+    "menumaker/credit-packs",
+    "menumaker/menus",
+    "menumaker/modifier-groups",
+    "menumaker/overview",
+    "menumaker/products",
+    "menumaker/services",
+    "merchant-accounts",
+    "notifications/preferences",
+    "orders",
+    "payment-config",
+    "payment-links",
+    "payment-links/branding",
+    "payment-links/settings",
+    "payments",
+    "promotions/coupons",
+    "promotions/discounts",
+    "reports/home-charts",
+    "reports/modifiers",
+    "reports/pay-later-aging",
+    "reports/payment-methods",
+    "reports/sales-by-category",
+    "reports/sales-by-item",
+    "reports/sales-summary",
+    "reports/taxes",
+    "reports/voids",
+    "reservations",
+    "reservations/calendar",
+    "reservations/communications",
+    "reservations/invite-clients",
+    "reservations/online-booking",
+    "reservations/settings",
+    "reservations/waitlist",
+    "reservations/widget-advanced",
+    "reviews",
+    "settings/billing",
+    "settings/role-permissions",
+    "shifts",
+    "subscriptions",
+    "team",
+    "tpv",
+    "virtual-terminal"
+  ],
+  "routePaths": [
+    ":couponId",
+    ":customerId",
+    ":discountId",
+    ":memberId",
+    ":reservationId",
+    "account",
+    "analytics",
+    "available-balance",
+    "basic-info",
+    "branding",
+    "calendar",
+    "categories",
+    "categories/:categoryId",
+    "categories/create",
+    "chat",
+    "commissions",
+    "config/:configId",
+    "contact-images",
+    "counts",
+    "create",
+    "credit-packs",
+    "customers",
+    "disputes",
+    "documents",
+    "edit",
+    "general",
+    "google",
+    "groups",
+    "history",
+    "home",
+    "ingredients",
+    "integrations",
+    "inventory",
+    "kyc-required",
+    "loyalty",
+    "menumaker",
+    "menus",
+    "menus/:menuId",
+    "menus/create",
+    "modifier-analytics",
+    "modifier-groups",
+    "modifier-groups/:modifierGroupId",
+    "modifier-groups/create",
+    "modifiers",
+    "notifications",
+    "notifications/preferences",
+    "notifications/preferences/1",
+    "notifications/preferences/2",
+    "notifications/preferences/3",
+    "notifications/preferences/4",
+    "notifications/preferences/5",
+    "online-booking",
+    "orders",
+    "orders/:orderId",
+    "overview",
+    "payment-links",
+    "payment-methods",
+    "payments",
+    "payments/:paymentId",
+    "pricing",
+    "product-stock",
+    "products",
+    "products/:productId",
+    "products/create",
+    "profitability",
+    "promotions/coupons",
+    "promotions/discounts",
+    "purchase-orders",
+    "purchase-orders/:poId",
+    "raw-materials",
+    "recipes",
+    "reports/home-charts",
+    "reports/pay-later-aging",
+    "reports/sales-by-item",
+    "reports/sales-summary",
+    "reservations",
+    "restocks",
+    "reviews",
+    "services",
+    "settings",
+    "settings/billing",
+    "settings/role-permissions",
+    "shifts",
+    "shifts/:shiftId",
+    "stock-counts",
+    "stock-counts/:countId",
+    "stock-overview",
+    "subscriptions",
+    "suppliers",
+    "team",
+    "tokens",
+    "tpv",
+    "tpv/:tpvId",
+    "transfers",
+    "transfers/:transferId",
+    "vendors",
+    "virtual-terminal",
+    "waitlist"
+  ],
+  "features": [
+    {
+      "code": "AVOQADO_DASHBOARD",
+      "name": "Dashboard",
+      "description": "Panel principal con métricas de ventas, órdenes y rendimiento del día",
+      "category": "analytics",
+      "source": "avoqado_core",
+      "routes": []
+    },
+    {
+      "code": "AVOQADO_ORDERS",
+      "name": "Órdenes",
+      "description": "Gestión de órdenes, historial y detalles de transacciones",
+      "category": "sales",
+      "source": "avoqado_core",
+      "routes": [
+        "orders",
+        "orders/:orderId"
+      ]
+    },
+    {
+      "code": "AVOQADO_PAYMENTS",
+      "name": "Pagos",
+      "description": "Historial de pagos, métodos de pago y detalles de transacciones",
+      "category": "sales",
+      "source": "avoqado_core",
+      "routes": [
+        "payments",
+        "payments/:paymentId"
+      ]
+    },
+    {
+      "code": "AVOQADO_MENU",
+      "name": "Menú",
+      "description": "Gestión de productos, categorías, modificadores y precios",
+      "category": "inventory",
+      "source": "avoqado_core",
+      "routes": [
+        "menu",
+        "menu/categories",
+        "menu/modifiers",
+        "menu/products"
+      ]
+    },
+    {
+      "code": "AVOQADO_INVENTORY",
+      "name": "Inventario",
+      "description": "Control de stock, ingredientes, recetas y alertas de inventario",
+      "category": "inventory",
+      "source": "avoqado_core",
+      "routes": [
+        "inventory",
+        "inventory/ingredients",
+        "inventory/recipes"
+      ]
+    },
+    {
+      "code": "AVOQADO_TEAM",
+      "name": "Equipo",
+      "description": "Gestión del personal, roles, permisos y horarios",
+      "category": "team",
+      "source": "avoqado_core",
+      "routes": [
+        "team",
+        "team/:memberId"
+      ]
+    },
+    {
+      "code": "AVOQADO_CUSTOMERS",
+      "name": "Clientes",
+      "description": "Base de datos de clientes, historial de compras y contacto",
+      "category": "sales",
+      "source": "avoqado_core",
+      "routes": [
+        "customers",
+        "customers/:customerId"
+      ]
+    },
+    {
+      "code": "AVOQADO_TPVS",
+      "name": "Terminales",
+      "description": "Gestión de terminales de punto de venta y dispositivos",
+      "category": "analytics",
+      "source": "avoqado_core",
+      "routes": [
+        "tpvs",
+        "tpvs/:tpvId"
+      ]
+    },
+    {
+      "code": "AVOQADO_BALANCE",
+      "name": "Balance",
+      "description": "Balance disponible, historial de depósitos y retiros",
+      "category": "analytics",
+      "source": "avoqado_core",
+      "routes": [
+        "balance"
+      ]
+    },
+    {
+      "code": "AVOQADO_PROMOTIONS",
+      "name": "Promociones",
+      "description": "Descuentos, cupones, promociones especiales y ofertas",
+      "category": "sales",
+      "source": "avoqado_core",
+      "routes": [
+        "promotions",
+        "promotions/coupons",
+        "promotions/discounts"
+      ]
+    },
+    {
+      "code": "AVOQADO_ANALYTICS",
+      "name": "Analítica",
+      "description": "Análisis avanzado de ventas, tendencias y métricas del negocio",
+      "category": "analytics",
+      "source": "avoqado_core",
+      "routes": [
+        "analytics"
+      ]
+    },
+    {
+      "code": "AVOQADO_SHIFTS",
+      "name": "Turnos",
+      "description": "Control de turnos, apertura y cierre de caja",
+      "category": "team",
+      "source": "avoqado_core",
+      "routes": [
+        "shifts",
+        "shifts/:shiftId"
+      ]
+    },
+    {
+      "code": "AVOQADO_COMMISSIONS",
+      "name": "Comisiones",
+      "description": "Sistema de comisiones para staff con configuración, aprobaciones y pagos",
+      "category": "team",
+      "source": "avoqado_core",
+      "routes": [
+        "commissions",
+        "commissions/config/:configId"
+      ]
+    },
+    {
+      "code": "AVOQADO_LOYALTY",
+      "name": "Programa de Lealtad",
+      "description": "Sistema de puntos y recompensas para clientes frecuentes",
+      "category": "sales",
+      "source": "avoqado_core",
+      "routes": [
+        "loyalty"
+      ]
+    },
+    {
+      "code": "AVOQADO_REVIEWS",
+      "name": "Reseñas",
+      "description": "Gestión de reseñas de clientes y Google Reviews",
+      "category": "sales",
+      "source": "avoqado_core",
+      "routes": [
+        "reviews"
+      ]
+    },
+    {
+      "code": "AVOQADO_REPORTS",
+      "name": "Reportes",
+      "description": "Reportes de ventas, ingresos y análisis del negocio",
+      "category": "analytics",
+      "source": "avoqado_core",
+      "routes": [
+        "reports",
+        "reports/payments"
+      ]
+    },
+    {
+      "code": "AVOQADO_RESERVATIONS",
+      "name": "Reservaciones",
+      "description": "Gestión de reservaciones, calendario, lista de espera y configuración",
+      "category": "custom",
+      "source": "avoqado_core",
+      "routes": [
+        "reservations",
+        "reservations/calendar",
+        "reservations/settings",
+        "reservations/waitlist"
+      ]
+    },
+    {
+      "code": "AVOQADO_PAYMENT_LINKS",
+      "name": "Ligas de Pago",
+      "description": "Crea y comparte ligas de pago para cobrar en línea vía WhatsApp, QR o link directo",
+      "category": "sales",
+      "source": "avoqado_core",
+      "routes": [
+        "payment-links"
+      ]
+    },
+    {
+      "code": "AVOQADO_SETTINGS",
+      "name": "Ajustes",
+      "description": "Configuración del venue, roles y facturación",
+      "category": "custom",
+      "source": "avoqado_core",
+      "routes": [
+        "edit",
+        "settings/billing",
+        "settings/role-permissions"
+      ]
+    },
+    {
+      "code": "COMMAND_CENTER",
+      "name": "Centro de Comando",
+      "description": "Dashboard principal con métricas en tiempo real para operaciones telecom",
+      "category": "analytics",
+      "source": "module_specific",
+      "routes": []
+    },
+    {
+      "code": "SERIALIZED_STOCK",
+      "name": "Inventario Serializado",
+      "description": "Control de inventario con números de serie (IMEI, SKU único)",
+      "category": "inventory",
+      "source": "module_specific",
+      "routes": [
+        "stock",
+        "stock/adjustments",
+        "stock/transfers"
+      ]
+    },
+    {
+      "code": "PROMOTERS_AUDIT",
+      "name": "Auditoría de Promotores",
+      "description": "Seguimiento y auditoría de promotores de campo",
+      "category": "team",
+      "source": "module_specific",
+      "routes": [
+        "promoters",
+        "promoters/:promoterId"
+      ]
+    },
+    {
+      "code": "STORES_ANALYSIS",
+      "name": "Análisis de Tiendas",
+      "description": "Comparativas y métricas de rendimiento por tienda",
+      "category": "analytics",
+      "source": "module_specific",
+      "routes": [
+        "stores",
+        "stores/:storeId"
+      ]
+    },
+    {
+      "code": "MANAGERS_DASHBOARD",
+      "name": "Gerentes",
+      "description": "Dashboard de gerentes con métricas de desempeño, metas y equipos supervisados",
+      "category": "team",
+      "source": "module_specific",
+      "routes": [
+        "managers"
+      ]
+    },
+    {
+      "code": "SALES_REPORT",
+      "name": "Reporte de Ventas",
+      "description": "Reporte de ventas con evidencias de registro (proof of sale) y validación de transacciones",
+      "category": "analytics",
+      "source": "module_specific",
+      "routes": [
+        "sales"
+      ]
+    },
+    {
+      "code": "SUPERVISOR_DASHBOARD",
+      "name": "Dashboard Supervisor",
+      "description": "Panel de supervisión operativa con cobertura en tiempo real, transacciones y detalle por tienda",
+      "category": "analytics",
+      "source": "module_specific",
+      "routes": [
+        "supervisor"
+      ]
+    },
+    {
+      "code": "TPV_CONFIGURATION",
+      "name": "Configuración White Label",
+      "description": "Configuración de terminales punto de venta: módulos, catálogo de SIMs, reglas de evidencia",
+      "category": "custom",
+      "source": "module_specific",
+      "routes": [
+        "tpv-config"
+      ]
+    },
+    {
+      "code": "CLOSING_REPORT",
+      "name": "Reporte de Cierre",
+      "description": "Reporte de cierre diario con detalle de ventas por tienda, promotor y tipo de venta con exportación Excel",
+      "category": "analytics",
+      "source": "module_specific",
+      "routes": [
+        "reporte"
+      ]
+    },
+    {
+      "code": "USERS_MANAGEMENT",
+      "name": "Gestión de Usuarios",
+      "description": "Administración de usuarios, zonas y permisos de la organización",
+      "category": "team",
+      "source": "module_specific",
+      "routes": [
+        "users"
+      ]
+    },
+    {
+      "code": "APPRAISALS",
+      "name": "Avalúos",
+      "description": "Sistema de avalúos y valuación de joyería",
+      "category": "sales",
+      "source": "module_specific",
+      "routes": [
+        "appraisals",
+        "appraisals/:appraisalId",
+        "appraisals/new"
+      ]
+    },
+    {
+      "code": "CONSIGNMENT",
+      "name": "Consignación",
+      "description": "Gestión de productos en consignación",
+      "category": "inventory",
+      "source": "module_specific",
+      "routes": [
+        "consignment",
+        "consignment/:itemId"
+      ]
+    }
+  ]
+}
