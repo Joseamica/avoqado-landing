@@ -21,11 +21,17 @@ const industries = [
 ];
 
 const resources = [
+  { name: 'Centro de Ayuda', desc: 'Tutoriales y documentacion', href: '/help', icon: 'help' },
   { name: 'Precios', desc: 'Planes y costos transparentes', href: '/pricing', icon: 'tag' },
   { name: 'Blog', desc: 'Noticias, guias y consejos', href: '/blog', icon: 'book' },
-  { name: 'Centro de Ayuda', desc: 'Tutoriales y documentacion', href: '/help', icon: 'help' },
   { name: 'API y Desarrolladores', desc: 'SDK, webhooks e integraciones', href: '/developers', icon: 'code' },
 ];
+
+const navDropdownItems = [
+  { key: 'productos', label: 'Productos' },
+  { key: 'industrias', label: 'Industrias' },
+  { key: 'recursos', label: 'Ayuda' },
+] as const;
 
 // ─── Simple SVG Icons (no lucide dependency for menu content) ───
 function IndustryIcon({ type, className }: { type: string; className?: string }) {
@@ -145,7 +151,7 @@ export default function NavigationMenu() {
 
           {/* Desktop Nav Items */}
           <div className="hidden lg:flex items-center gap-0.5">
-            {(['productos', 'industrias', 'recursos'] as const).map(key => (
+            {navDropdownItems.map(({ key, label }) => (
               <button
                 key={key}
                 onMouseEnter={() => enter(key)}
@@ -157,7 +163,7 @@ export default function NavigationMenu() {
                       : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
                 }`}
               >
-                {key.charAt(0).toUpperCase() + key.slice(1)}
+                {label}
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${activeMenu === key ? 'rotate-180' : ''}`} />
               </button>
             ))}
@@ -228,7 +234,7 @@ export default function NavigationMenu() {
 
       {/* ═══ Desktop Mega Menu ═══ */}
       <div
-        className={`absolute top-full left-0 w-full transition-all duration-300 ease-out ${
+        className={`absolute top-full left-0 hidden w-full transition-all duration-300 ease-out lg:block ${
           activeMenu ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-1 pointer-events-none'
         }`}
         onMouseEnter={keepOpen}
@@ -285,7 +291,7 @@ function MobileDrawer({ open, section, onSectionToggle }: MobileDrawerProps) {
         {[
           { key: 'productos', label: 'Productos', content: <MobileProducts /> },
           { key: 'industrias', label: 'Industrias', content: <MobileIndustries /> },
-          { key: 'recursos', label: 'Recursos', content: <MobileResources /> },
+          { key: 'recursos', label: 'Ayuda', content: <MobileResources /> },
         ].map(({ key, label, content }) => (
           <div key={key} className="border-b border-gray-100">
             <button
@@ -446,7 +452,7 @@ function ResourcesDropdown() {
   return (
     <div className="grid grid-cols-12 gap-8">
       <div className="col-span-8">
-        <div className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold mb-4">Recursos</div>
+        <div className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold mb-4">Ayuda y recursos</div>
         <div className="grid grid-cols-2 gap-x-8 gap-y-1">
           {resources.map(res => (
             <a key={res.name} href={res.href} className="group flex items-center gap-3 p-2.5 -mx-2.5 rounded-xl hover:bg-gray-50 transition-colors">
