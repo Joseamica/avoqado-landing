@@ -33,6 +33,35 @@ const navDropdownItems = [
   { key: 'recursos', label: 'Ayuda' },
 ] as const;
 
+function isLightColor(color: string) {
+  const rgb = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([.\d]+))?\)/);
+  if (!rgb) return false;
+
+  const alpha = rgb[4] === undefined ? 1 : Number(rgb[4]);
+  if (alpha < 0.5) return false;
+
+  const red = Number(rgb[1]);
+  const green = Number(rgb[2]);
+  const blue = Number(rgb[3]);
+  const luminance = (0.2126 * red + 0.7152 * green + 0.0722 * blue) / 255;
+
+  return luminance > 0.72;
+}
+
+function getEffectiveBackgroundColor(element: Element | null) {
+  let current: Element | null = element;
+
+  while (current && current !== document.documentElement) {
+    const backgroundColor = window.getComputedStyle(current).backgroundColor;
+    if (backgroundColor && !backgroundColor.startsWith('rgba(0, 0, 0, 0)') && backgroundColor !== 'transparent') {
+      return backgroundColor;
+    }
+    current = current.parentElement;
+  }
+
+  return window.getComputedStyle(document.body).backgroundColor;
+}
+
 // ─── Simple SVG Icons (no lucide dependency for menu content) ───
 function IndustryIcon({ type, className }: { type: string; className?: string }) {
   const cn = className || 'w-4 h-4';
@@ -57,35 +86,59 @@ export default function NavigationMenu() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileSection, setMobileSection] = useState<string | null>(null);
-  const [isLightPage, setIsLightPage] = useState(false);
+  const [isLightUnderNav, setIsLightUnderNav] = useState(false);
   const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navRef = useRef<HTMLElement>(null);
 
-  // Detect white/light background pages on mount
-  useEffect(() => {
+  const detectLightUnderNav = useCallback(() => {
+    if (typeof window === 'undefined') return false;
+
     const bodyBg = document.body.style.backgroundColor || '';
     const computedBg = window.getComputedStyle(document.body).backgroundColor;
     const explicitLight = document.body.dataset.navLight === 'true';
-    const isLight =
+    if (
       explicitLight ||
       bodyBg.includes('fff') ||
       bodyBg.includes('white') ||
-      computedBg === 'rgb(255, 255, 255)';
-    if (isLight) {
-      setIsLightPage(true);
-      setScrolled(true);
+      isLightColor(computedBg)
+    ) {
+      return true;
     }
+
+    const sampleY = Math.min(window.innerHeight - 1, 118);
+    const sampleXs = [window.innerWidth * 0.25, window.innerWidth * 0.5, window.innerWidth * 0.75];
+
+    return sampleXs.some((x) => {
+      const elements = document.elementsFromPoint(x, sampleY);
+      const surface = elements.find((element) => {
+        if (navRef.current?.contains(element)) return false;
+        if (element.closest('[role="dialog"]')) return false;
+        return element.tagName !== 'SCRIPT' && element.tagName !== 'STYLE';
+      });
+
+      return isLightColor(getEffectiveBackgroundColor(surface ?? null));
+    });
   }, []);
 
+  // Detect pages whose top content is light even if body remains dark.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20 || activeMenu !== null || isLightPage);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [activeMenu, isLightPage]);
+    const isLight = detectLightUnderNav();
+    setIsLightUnderNav(isLight);
+
+    const onResize = () => setIsLightUnderNav(detectLightUnderNav());
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [detectLightUnderNav]);
 
   useEffect(() => {
-    setScrolled(window.scrollY > 20 || activeMenu !== null || mobileOpen || isLightPage);
-  }, [activeMenu, mobileOpen, isLightPage]);
+    const onScroll = () => setScrolled(window.scrollY > 20 || activeMenu !== null);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [activeMenu]);
+
+  useEffect(() => {
+    setScrolled(window.scrollY > 20 || activeMenu !== null || mobileOpen);
+  }, [activeMenu, mobileOpen]);
 
   const enter = useCallback((menu: string) => {
     if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
@@ -123,7 +176,7 @@ export default function NavigationMenu() {
 
   const openSearch = () => window.dispatchEvent(new CustomEvent('open-global-search'));
 
-  const isDark = !scrolled && !activeMenu && !mobileOpen;
+  const useDarkAssets = !scrolled && !activeMenu && !mobileOpen && !isLightUnderNav;
 
   return (
     <nav
@@ -141,7 +194,7 @@ export default function NavigationMenu() {
           {/* Logo */}
           <a href="/" className="shrink-0">
             <img
-              src={isDark ? '/imagotipo-white.png' : '/imagotipo.png'}
+              src={useDarkAssets ? '/imagotipo-white.png' : '/imagotipo.png'}
               alt="Avoqado"
               className="h-7 w-auto transition-all duration-300"
               width={160}
@@ -158,7 +211,7 @@ export default function NavigationMenu() {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1 ${
                   activeMenu === key
                     ? 'bg-gray-100 text-gray-900'
-                    : isDark
+                    : useDarkAssets
                       ? 'text-white/80 hover:text-white hover:bg-white/8'
                       : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
                 }`}
@@ -170,7 +223,7 @@ export default function NavigationMenu() {
             <a
               href="/traje-a-la-medida"
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                isDark ? 'text-white/80 hover:text-white hover:bg-white/8' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                useDarkAssets ? 'text-white/80 hover:text-white hover:bg-white/8' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
               Traje a la medida
@@ -178,7 +231,7 @@ export default function NavigationMenu() {
             <a
               href="/labs"
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                isDark ? 'text-white/80 hover:text-white hover:bg-white/8' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                useDarkAssets ? 'text-white/80 hover:text-white hover:bg-white/8' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
               Labs
@@ -186,7 +239,7 @@ export default function NavigationMenu() {
             <a
               href="/pricing"
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                isDark ? 'text-white/80 hover:text-white hover:bg-white/8' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                useDarkAssets ? 'text-white/80 hover:text-white hover:bg-white/8' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
               }`}
             >
               Precios
@@ -197,21 +250,21 @@ export default function NavigationMenu() {
           <div className="hidden lg:flex items-center gap-3">
             <button
               onClick={openSearch}
-              className={`p-2 rounded-full transition-colors ${isDark ? 'text-white/70 hover:text-white hover:bg-white/10' : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100'}`}
+              className={`p-2 rounded-full transition-colors ${useDarkAssets ? 'text-white/70 hover:text-white hover:bg-white/10' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'}`}
               aria-label="Buscar"
             >
               <Search className="w-4.5 h-4.5" />
             </button>
             <a
               href="https://dashboard.avoqado.io/login"
-              className={`text-sm font-medium transition-colors ${isDark ? 'text-white/80 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}
+              className={`text-sm font-medium transition-colors ${useDarkAssets ? 'text-white/80 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}
             >
               Iniciar sesion
             </a>
             <a
               href="https://dashboard.avoqado.io/signup"
               className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                isDark
+                useDarkAssets
                   ? 'bg-white text-black hover:bg-gray-100 hover:-translate-y-0.5'
                   : 'bg-black text-white hover:bg-gray-800 hover:-translate-y-0.5'
               }`}
@@ -222,10 +275,10 @@ export default function NavigationMenu() {
 
           {/* Mobile Actions */}
           <div className="lg:hidden flex items-center gap-2">
-            <button onClick={openSearch} className={`p-2 rounded-full ${isDark ? 'text-white/70' : 'text-gray-500'}`}>
+            <button onClick={openSearch} className={`p-2 rounded-full ${useDarkAssets ? 'text-white/70' : 'text-gray-700'}`}>
               <Search className="w-5 h-5" />
             </button>
-            <button onClick={toggleMobile} className={`p-2 rounded-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            <button onClick={toggleMobile} className={`p-2 rounded-lg ${useDarkAssets ? 'text-white' : 'text-gray-900'}`}>
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>

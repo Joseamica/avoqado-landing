@@ -26,9 +26,9 @@ export default function DashboardDeepLinks({ routes }: DashboardDeepLinksProps) 
 	}, [routes]);
 
 	return (
-		<section className="mt-8 rounded-lg border border-black/10 bg-black/[0.025] p-5">
+		<section className="mt-8 rounded-[1.25rem] border border-black/10 bg-[#f7fbf5] p-5">
 			<div className="flex items-start gap-3">
-				<div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-black text-white">
+				<div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-black text-white">
 					<Store className="h-4 w-4" aria-hidden="true" />
 				</div>
 				<div>
@@ -53,15 +53,15 @@ export default function DashboardDeepLinks({ routes }: DashboardDeepLinksProps) 
 								key={route}
 								role="link"
 								aria-disabled="true"
-								className="rounded-md border border-dashed border-black/15 bg-white px-4 py-3 text-sm text-gray-500"
+								className="min-w-0 rounded-xl border border-dashed border-black/15 bg-white px-4 py-3 text-sm text-gray-500"
 							>
-								<span className="flex items-center gap-2 font-medium text-gray-700">
+								<span className="flex min-w-0 flex-wrap items-center gap-2 font-medium text-gray-700">
 									{label}
 									<span className="rounded-full bg-black/[0.06] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500">
 										Proximamente
 									</span>
 								</span>
-								<span className="mt-1 block text-xs leading-5 text-gray-500">{path}</span>
+								<span className="mt-1 block break-words text-xs leading-5 text-gray-500">{path}</span>
 							</div>
 						);
 					}
@@ -72,13 +72,13 @@ export default function DashboardDeepLinks({ routes }: DashboardDeepLinksProps) 
 							href={href}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="group rounded-md border border-black/10 bg-white px-4 py-3 text-sm transition hover:border-black/25 hover:shadow-sm"
+							className="group min-w-0 rounded-xl border border-black/10 bg-white px-4 py-3 text-sm transition hover:border-black/25 hover:shadow-sm"
 						>
-							<span className="flex items-center gap-2 font-medium text-black">
+							<span className="flex min-w-0 items-center gap-2 font-medium text-black">
 								{label}
 								<ExternalLink className="h-4 w-4 text-gray-400 transition group-hover:text-black" aria-hidden="true" />
 							</span>
-							<span className="mt-1 block text-xs leading-5 text-gray-500">{path}</span>
+							<span className="mt-1 block break-words text-xs leading-5 text-gray-500">{path}</span>
 						</a>
 					);
 				})}

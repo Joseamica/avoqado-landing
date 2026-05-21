@@ -162,9 +162,12 @@ export default function TrajeMedidaHero() {
 
   return (
     <div ref={containerRef} className="relative bg-black" style={{ height: '400vh' }}>
-      <div className="sticky top-16 h-[calc(100vh-4rem)] flex items-center overflow-hidden">
+      <div
+        data-traje-hero-sticky
+        className="sticky top-0 min-h-screen pt-32 pb-16 flex items-start overflow-hidden lg:top-16 lg:h-[calc(100vh-4rem)] lg:min-h-0 lg:items-center lg:pt-0 lg:pb-0"
+      >
         <div className="max-w-[1400px] mx-auto w-full px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start lg:items-center">
 
             {/* ─── Left ─── */}
             <div>
@@ -173,7 +176,7 @@ export default function TrajeMedidaHero() {
                 <span className="text-xs uppercase tracking-widest font-semibold text-avoqado-green">Traje a la medida</span>
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-white mb-4 leading-tight">
+              <h1 className="text-[2.65rem] md:text-5xl lg:text-6xl font-light tracking-tight text-white mb-4 leading-[1.08] md:leading-tight">
                 Tu negocio es unico.<br/>
                 <span className="text-avoqado-green">Tu software tambien.</span>
               </h1>

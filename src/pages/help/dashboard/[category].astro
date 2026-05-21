@@ -20,37 +20,71 @@ const articles = sortHelpArticles(await getCollection('help', (article) => artic
 
 <Layout title={`${category.title} | Ayuda Dashboard Avoqado`} description={category.description}>
 	<Navbar position="fixed" />
-	<main class="min-h-screen bg-white pt-32 text-black">
-		<section class="mx-auto max-w-4xl px-6 py-14">
-			<nav aria-label="Breadcrumb" class="text-sm text-gray-500">
-				<ol class="flex flex-wrap items-center gap-2">
-					<li><a href="/help" class="hover:text-black">Centro de ayuda</a></li>
-					<li aria-hidden="true">/</li>
-					<li><a href="/help/dashboard" class="hover:text-black">Dashboard</a></li>
-					<li aria-hidden="true">/</li>
-					<li class="text-black" aria-current="page">{category.title}</li>
-				</ol>
-			</nav>
-			<h1 class="mt-4 text-5xl font-light tracking-tight">{category.title}</h1>
-			<p class="mt-4 text-lg text-gray-600">{category.description}</p>
-			<div class="mt-8 rounded-xl border border-black/10 bg-black/[0.025] p-5">
-				<p class="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Como usar esta seccion</p>
-				<p class="mt-2 text-sm leading-6 text-gray-600">
-					Abre el articulo que coincida con la tarea que quieres hacer. Cada guia incluye la ruta dentro del Dashboard,
-					los roles que normalmente la usan, botones directos y problemas frecuentes para diagnosticar diferencias.
-				</p>
+	<main class="min-h-screen bg-[#f7f8f4] pt-32 text-black">
+		<section class="border-b border-black/10">
+			<div class="mx-auto max-w-6xl px-6 py-14">
+				<nav aria-label="Breadcrumb" class="text-sm text-gray-600">
+					<ol class="flex flex-wrap items-center gap-2">
+						<li><a href="/help" class="hover:text-black">Centro de ayuda</a></li>
+						<li aria-hidden="true" class="text-gray-400">/</li>
+						<li><a href="/help/dashboard" class="hover:text-black">Dashboard</a></li>
+						<li aria-hidden="true" class="text-gray-400">/</li>
+						<li class="text-black" aria-current="page">{category.title}</li>
+					</ol>
+				</nav>
+				<div class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
+					<div>
+						<p class="text-sm font-semibold uppercase tracking-[0.18em] text-green-800">Tema de ayuda</p>
+						<h1 class="mt-4 text-5xl font-light tracking-tight">{category.title}</h1>
+						<p class="mt-4 max-w-2xl text-lg leading-relaxed text-gray-700">{category.description}</p>
+					</div>
+					<aside class="rounded-[1.25rem] border border-black/10 bg-white p-5">
+						<p class="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Esta seccion</p>
+						<p class="mt-2 text-3xl font-light">{articles.length}</p>
+						<p class="mt-1 text-sm text-gray-600">{articles.length === 1 ? 'articulo publicado' : 'articulos publicados'}</p>
+					</aside>
+				</div>
 			</div>
-			<div class="mt-10 divide-y divide-black/10 rounded-xl border border-black/10">
-				{articles.length > 0 ? (
-					articles.map((article) => (
-						<a href={getArticleUrl(article)} class="block p-5 transition hover:bg-black/[0.03]">
-							<h2 class="text-lg font-medium">{article.data.title}</h2>
-							<p class="mt-1 text-sm text-gray-600">{article.data.description}</p>
-						</a>
-					))
-				) : (
-					<div class="p-5 text-sm text-gray-600">Aun no hay articulos publicados en esta categoria.</div>
-				)}
+		</section>
+
+		<section class="mx-auto max-w-6xl px-6 py-12">
+			<div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+				<div class="divide-y divide-black/10 overflow-hidden rounded-[1.25rem] border border-black/10 bg-white">
+					{articles.length > 0 ? (
+						articles.map((article) => (
+							<a href={getArticleUrl(article)} class="group block p-6 transition hover:bg-[#f7fbf5]">
+								<div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+									<div>
+										<h2 class="text-xl font-semibold group-hover:text-green-800">{article.data.title}</h2>
+										<p class="mt-2 text-sm leading-6 text-gray-600">{article.data.description}</p>
+									</div>
+									<span class="shrink-0 rounded-full bg-black/[0.05] px-3 py-1 text-xs font-semibold text-gray-600">
+										{article.data.roles.length} roles
+									</span>
+								</div>
+							</a>
+						))
+					) : (
+						<div class="p-6 text-sm text-gray-600">Aun no hay articulos publicados en esta categoria.</div>
+					)}
+				</div>
+
+				<aside class="space-y-4">
+					<div class="rounded-[1.25rem] border border-black/10 bg-white p-5">
+						<p class="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Otras areas</p>
+						<nav class="mt-4 space-y-1">
+							{DASHBOARD_HELP_CATEGORIES.filter((item) => item.slug !== category.slug).slice(0, 6).map((item) => (
+								<a href={`/help/dashboard/${item.slug}`} class="block rounded-xl px-3 py-2 text-sm font-medium text-gray-700 hover:bg-[#f7fbf5] hover:text-black">
+									{item.title}
+								</a>
+							))}
+						</nav>
+					</div>
+					<a href="/help/dashboard" class="block rounded-[1.25rem] border border-black/10 bg-black p-5 text-white transition hover:bg-gray-900">
+						<span class="text-xs font-semibold uppercase tracking-[0.16em] text-white/50">Dashboard</span>
+						<span class="mt-2 block text-lg font-medium">Volver al centro de Dashboard</span>
+					</a>
+				</aside>
 			</div>
 		</section>
 	</main>
