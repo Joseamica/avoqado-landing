@@ -37,3 +37,13 @@ Confirma tambien si la promocion aplica a todos los productos o solo a categoria
 Si una promocion no aplica, revisa vigencia, estado, restricciones y sucursal. Si aplica cuando no deberia, desactiva la regla y revisa condiciones. Si el equipo no la ve, confirma permisos y canal de venta. Si hay diferencias en reportes, identifica si el monto aparece como descuento, cupon o ajuste.
 
 Para campanas sensibles, deja una nota interna con responsable, fecha de inicio, fecha de cierre y criterio de exito.
+
+## Pruebas antes de comunicarla
+
+Antes de publicar una promocion, prueba un caso que debe aplicar y otro que no debe aplicar. Revisa producto, categoria, horario, sucursal, monto minimo y cliente objetivo si existen restricciones. Esto evita descuentos accidentales o campanas que el equipo no puede operar.
+
+Si la promocion usa cupon, confirma el codigo exacto, mayusculas o minusculas si aplican, fecha de expiracion y limite de uso. Si es descuento automatico, confirma que el equipo sepa como identificarlo en pedido o recibo.
+
+## Cuando pedir ayuda
+
+Pide soporte si una promocion activa no aplica despues de validar restricciones, si aplica a productos fuera de alcance o si el reporte muestra descuentos duplicados. Comparte nombre de promocion, sucursal, producto, fecha y ejemplo del pedido.

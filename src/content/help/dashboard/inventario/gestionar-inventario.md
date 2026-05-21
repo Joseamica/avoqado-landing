@@ -18,6 +18,7 @@ lastVerified: 2026-05-20
 sourceRepo: avoqado-web-dashboard
 popular: true
 relatedArticles:
+  - gestionar-inventario-avanzado
   - gestionar-productos
   - revisar-reportes-ventas
 ---
@@ -40,3 +41,13 @@ Tambien confirma que estas trabajando en la sucursal correcta. El stock es local
 ## Problemas frecuentes
 
 Si el stock no coincide, revisa primero el historial de movimientos y ultimo conteo. Si una receta no descuenta inventario, confirma que el producto tenga receta asignada y que sus ingredientes existan. Si no puedes crear movimientos, revisa permisos. Si el inventario no aparece, la funcion puede no estar activa para el local.
+
+## Orden recomendado de revision
+
+Para investigar diferencias, empieza por **Historial** y no por ajustes manuales. Identifica el ultimo conteo, entradas de proveedor, salidas, transferencias y ventas que pudieron descontar stock. Despues revisa ingredientes y recetas para confirmar que cada producto descuente la cantidad correcta.
+
+Si el problema es disponibilidad de venta, revisa si el producto depende de una receta y si todos sus ingredientes tienen existencia suficiente. Si el problema es costo, revisa unidad de compra, unidad de consumo y costo promedio antes de modificar cantidades.
+
+## Cuando pedir ayuda
+
+Escala a soporte cuando el historial muestre movimientos duplicados, cuando una receta descuente cantidades incorrectas despues de revisar unidades o cuando un conteo guardado no se refleje. Incluye producto o ingrediente, sucursal, fecha del conteo y captura del historial.

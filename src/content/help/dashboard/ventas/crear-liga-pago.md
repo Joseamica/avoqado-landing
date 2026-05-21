@@ -57,3 +57,13 @@ Confirma que el monto incluya impuestos, descuentos o cargos adicionales que cor
 ## Problemas frecuentes
 
 Si la liga no se crea, revisa permisos y que el local pueda aceptar pagos. Si el cliente dice que pago pero no aparece la transaccion, busca por fecha, monto y metodo en **Transacciones**. Si el enlace se ve generico, revisa configuracion de marca. Si una liga se compartio con monto incorrecto, crea una nueva liga con datos correctos y evita reutilizar la anterior.
+
+## Seguimiento despues de enviarla
+
+Despues de compartir una liga, define quien dara seguimiento al pago y en que plazo. Para anticipos o pedidos especiales, guarda el enlace junto con el cliente, concepto y fecha esperada de pago. Esto evita que el equipo dependa solo de conversaciones de WhatsApp.
+
+Cuando el cliente confirme que ya pago, revisa la liga y despues **Ventas > Transacciones**. Si el pago esta aprobado, puedes continuar con el pedido, reservacion o entrega. Si esta pendiente o rechazado, evita entregar producto o confirmar servicio hasta validar el estado final.
+
+## Cuando pedir ayuda
+
+Pide ayuda si el cliente ve error al pagar, si el estado no cambia despues de varios minutos o si el enlace abre con datos incorrectos. Comparte URL de la liga, monto, concepto, hora del intento y captura del error del cliente.

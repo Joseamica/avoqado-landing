@@ -33,3 +33,13 @@ El selector solo muestra locales a los que tu usuario tiene acceso. Si tienes ro
 ## Problemas frecuentes
 
 Si no ves una sucursal, tu usuario no esta asignado o el local no esta disponible para tu cuenta. Si al cambiar de sucursal faltan ventas o pedidos, revisa el rango de fechas y confirma que el local activo sea el esperado. Si ves la sucursal pero no puedes editar, tu rol puede ser solo de lectura.
+
+## Que cambia al cambiar de sucursal
+
+El cambio de sucursal afecta casi todo el Dashboard: datos visibles, permisos, inventario, terminales, reportes, clientes y configuracion. Algunas secciones pueden conservar filtros de fecha, por lo que conviene revisar local y periodo antes de comparar informacion.
+
+Si vas a hacer una accion irreversible o sensible, como editar configuracion, revisar saldo o cambiar inventario, detente un momento y confirma el nombre del local en el encabezado o selector. Este paso evita cambios en la ubicacion equivocada.
+
+## Cuando pedir ayuda
+
+Pide ayuda si el selector no carga, si una sucursal desaparece despues de haber tenido acceso o si el Dashboard vuelve a otro local automaticamente. Incluye correo del usuario, sucursal esperada y rol que deberia tener.

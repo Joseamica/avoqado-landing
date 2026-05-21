@@ -13,6 +13,12 @@ roles:
 lastVerified: 2026-05-20
 sourceRepo: avoqado-web-dashboard
 popular: true
+relatedArticles:
+  - configurar-imagenes-contacto
+  - editar-venue-local
+  - gestionar-notificaciones
+  - asignar-permisos-roles
+  - comprar-addons-suscripciones
 ---
 
 ## Antes de empezar
@@ -33,3 +39,13 @@ Haz cambios desde la sucursal correcta. Si administras varias ubicaciones, evita
 ## Problemas frecuentes
 
 Si no puedes editar, tu usuario no tiene rol administrativo. Si una integracion no conecta, revisa credenciales y permisos externos. Si un cambio no se refleja, refresca datos o confirma que editaste el local correcto. Si el ajuste afecta pagos, valida despues con una transaccion de prueba o con soporte.
+
+## Cambios que requieren mas cuidado
+
+Ten especial cuidado con datos legales, integraciones de pago, documentos, permisos y configuracion de canales externos. Estos cambios pueden afectar cobros, facturacion, reservas, comunicaciones o acceso del equipo. Si no estas seguro, documenta el valor anterior antes de guardar.
+
+Para cambios de imagen o marca, revisa como se ven en canales publicos. Para integraciones, confirma que la conexion quede activa y que la cuenta externa corresponda al local correcto.
+
+## Cuando pedir ayuda
+
+Pide soporte si una integracion queda conectada a la cuenta equivocada, si documentos no se cargan, si un cambio de permisos bloquea a administradores o si datos legales no se reflejan donde corresponde. Incluye sucursal, campo cambiado y captura antes/despues si la tienes.

@@ -22,9 +22,24 @@ const articles = sortHelpArticles(await getCollection('help', (article) => artic
 	<Navbar position="fixed" />
 	<main class="min-h-screen bg-white pt-32 text-black">
 		<section class="mx-auto max-w-4xl px-6 py-14">
-			<a href="/help/dashboard" class="text-sm text-gray-500 hover:text-black">Ayuda Dashboard</a>
+			<nav aria-label="Breadcrumb" class="text-sm text-gray-500">
+				<ol class="flex flex-wrap items-center gap-2">
+					<li><a href="/help" class="hover:text-black">Centro de ayuda</a></li>
+					<li aria-hidden="true">/</li>
+					<li><a href="/help/dashboard" class="hover:text-black">Dashboard</a></li>
+					<li aria-hidden="true">/</li>
+					<li class="text-black" aria-current="page">{category.title}</li>
+				</ol>
+			</nav>
 			<h1 class="mt-4 text-5xl font-light tracking-tight">{category.title}</h1>
 			<p class="mt-4 text-lg text-gray-600">{category.description}</p>
+			<div class="mt-8 rounded-xl border border-black/10 bg-black/[0.025] p-5">
+				<p class="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Como usar esta seccion</p>
+				<p class="mt-2 text-sm leading-6 text-gray-600">
+					Abre el articulo que coincida con la tarea que quieres hacer. Cada guia incluye la ruta dentro del Dashboard,
+					los roles que normalmente la usan, botones directos y problemas frecuentes para diagnosticar diferencias.
+				</p>
+			</div>
 			<div class="mt-10 divide-y divide-black/10 rounded-xl border border-black/10">
 				{articles.length > 0 ? (
 					articles.map((article) => (

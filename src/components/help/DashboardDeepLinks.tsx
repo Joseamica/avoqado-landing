@@ -1,6 +1,6 @@
 import { ExternalLink, Store } from 'lucide-react';
 import { useMemo } from 'react';
-import { getDashboardRouteLabel, normalizeDashboardRoute } from '../../lib/help';
+import { getDashboardRouteLabel, getDashboardRoutePath, isDashboardRouteComingSoon, normalizeDashboardRoute } from '../../lib/help';
 
 type DashboardDeepLinksProps = {
 	routes: string[];
@@ -40,10 +40,31 @@ export default function DashboardDeepLinks({ routes }: DashboardDeepLinksProps) 
 				</div>
 			</div>
 
-			<div className="mt-4 flex flex-wrap gap-2">
+			<div className="mt-4 grid gap-2 sm:grid-cols-2">
 				{uniqueRoutes.map((route) => {
 					const href = buildDashboardUrl(route);
 					const label = getDashboardRouteLabel(route);
+					const path = getDashboardRoutePath(route);
+					const comingSoon = isDashboardRouteComingSoon(route);
+
+					if (comingSoon) {
+						return (
+							<div
+								key={route}
+								role="link"
+								aria-disabled="true"
+								className="rounded-md border border-dashed border-black/15 bg-white px-4 py-3 text-sm text-gray-500"
+							>
+								<span className="flex items-center gap-2 font-medium text-gray-700">
+									{label}
+									<span className="rounded-full bg-black/[0.06] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500">
+										Proximamente
+									</span>
+								</span>
+								<span className="mt-1 block text-xs leading-5 text-gray-500">{path}</span>
+							</div>
+						);
+					}
 
 					return (
 						<a
@@ -51,10 +72,13 @@ export default function DashboardDeepLinks({ routes }: DashboardDeepLinksProps) 
 							href={href}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="inline-flex min-h-10 items-center gap-2 rounded-md bg-black px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
+							className="group rounded-md border border-black/10 bg-white px-4 py-3 text-sm transition hover:border-black/25 hover:shadow-sm"
 						>
-							{label}
-							<ExternalLink className="h-4 w-4" aria-hidden="true" />
+							<span className="flex items-center gap-2 font-medium text-black">
+								{label}
+								<ExternalLink className="h-4 w-4 text-gray-400 transition group-hover:text-black" aria-hidden="true" />
+							</span>
+							<span className="mt-1 block text-xs leading-5 text-gray-500">{path}</span>
 						</a>
 					);
 				})}

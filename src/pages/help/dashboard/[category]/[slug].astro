@@ -4,7 +4,16 @@ import Layout from '../../../../layouts/Layout.astro';
 import Navbar from '../../../../components/layout/Navbar.astro';
 import Footer from '../../../../components/layout/Footer.astro';
 import DashboardDeepLinks from '../../../../components/help/DashboardDeepLinks';
-import { getArticleSlug, getArticleUrl, getDashboardRouteLabel, getHelpCategory, sortHelpArticles } from '../../../../lib/help';
+import {
+	getArticleSlug,
+	getArticleUrl,
+	getDashboardRouteLabel,
+	getDashboardRoutePath,
+	getDashboardRoutePathParts,
+	getHelpCategory,
+	getRoleLabel,
+	sortHelpArticles,
+} from '../../../../lib/help';
 
 export const prerender = true;
 
@@ -26,6 +35,9 @@ const allArticles = await getCollection('help');
 const related = sortHelpArticles(allArticles.filter((candidate) => article.data.relatedArticles?.includes(getArticleSlug(candidate))));
 const verified = article.data.lastVerified.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 const tableOfContents = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const primaryRoute = article.data.dashboardRoutes[0] ?? 'home';
+const primaryRouteParts = getDashboardRoutePathParts(primaryRoute);
+const roleLabels = article.data.roles.map(getRoleLabel);
 ---
 
 <Layout title={`${article.data.title} | Ayuda Avoqado`} description={article.data.description} type="article">
@@ -33,13 +45,48 @@ const tableOfContents = headings.filter((heading) => heading.depth === 2 || head
 	<main class="min-h-screen bg-white pt-32 text-black">
 		<div class="mx-auto grid max-w-6xl gap-10 px-6 py-14 lg:grid-cols-[minmax(0,1fr)_280px]">
 			<article class="max-w-3xl">
-				<a href={`/help/dashboard/${article.data.category}`} class="text-sm text-gray-500 hover:text-black">{category?.title ?? 'Dashboard'}</a>
+				<nav aria-label="Breadcrumb" class="text-sm text-gray-500">
+					<ol class="flex flex-wrap items-center gap-2">
+						<li><a href="/help" class="hover:text-black">Centro de ayuda</a></li>
+						<li aria-hidden="true">/</li>
+						<li><a href="/help/dashboard" class="hover:text-black">Dashboard</a></li>
+						<li aria-hidden="true">/</li>
+						<li><a href={`/help/dashboard/${article.data.category}`} class="hover:text-black">{category?.title ?? 'Categoria'}</a></li>
+						<li aria-hidden="true">/</li>
+						<li class="text-black" aria-current="page">{article.data.title}</li>
+					</ol>
+				</nav>
 				<h1 class="mt-4 text-4xl font-light tracking-tight md:text-5xl">{article.data.title}</h1>
 				<p class="mt-4 text-lg leading-relaxed text-gray-600">{article.data.description}</p>
 				<div class="mt-5 flex flex-wrap gap-2 text-xs text-gray-500">
 					<span class="rounded-full bg-black/[0.04] px-3 py-1">Verificado: {verified}</span>
-					{article.data.roles.map((role) => <span class="rounded-full bg-black/[0.04] px-3 py-1">{role}</span>)}
+					{roleLabels.map((role) => <span class="rounded-full bg-black/[0.04] px-3 py-1">{role}</span>)}
 				</div>
+				<section class="mt-8 rounded-xl border border-black/10 bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+					<p class="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Donde estas</p>
+					<div class="mt-3 flex flex-wrap items-center gap-2 text-sm">
+						{primaryRouteParts.map((part, index) => (
+							<>
+								<span class:list={[index === primaryRouteParts.length - 1 ? 'font-semibold text-black' : 'text-gray-600']}>{part}</span>
+								{index < primaryRouteParts.length - 1 && <span class="text-gray-300">/</span>}
+							</>
+						))}
+					</div>
+					<div class="mt-5 grid gap-3 sm:grid-cols-3">
+						<div class="rounded-lg bg-black/[0.035] p-4">
+							<span class="text-xs font-medium uppercase tracking-[0.12em] text-gray-500">Seccion</span>
+							<p class="mt-1 text-sm font-medium text-black">{category?.title ?? 'Dashboard'}</p>
+						</div>
+						<div class="rounded-lg bg-black/[0.035] p-4">
+							<span class="text-xs font-medium uppercase tracking-[0.12em] text-gray-500">Ruta principal</span>
+							<p class="mt-1 text-sm font-medium text-black">{getDashboardRoutePath(primaryRoute)}</p>
+						</div>
+						<div class="rounded-lg bg-black/[0.035] p-4">
+							<span class="text-xs font-medium uppercase tracking-[0.12em] text-gray-500">Quien lo usa</span>
+							<p class="mt-1 text-sm font-medium text-black">{roleLabels.join(', ')}</p>
+						</div>
+					</div>
+				</section>
 				<DashboardDeepLinks routes={article.data.dashboardRoutes} client:load />
 				<div class="help-article mt-10">
 					<Content />
@@ -60,6 +107,14 @@ const tableOfContents = headings.filter((heading) => heading.depth === 2 || head
 			</article>
 			<aside class="hidden lg:block">
 				<div class="sticky top-32 rounded-xl border border-black/10 p-5">
+					<h2 class="text-sm font-semibold uppercase tracking-[0.14em] text-gray-500">Estas en</h2>
+					<div class="mt-4 space-y-1 text-sm text-gray-600">
+						<a href="/help" class="block hover:text-black">Centro de ayuda</a>
+						<a href="/help/dashboard" class="block hover:text-black">Dashboard</a>
+						<a href={`/help/dashboard/${article.data.category}`} class="block hover:text-black">{category?.title ?? 'Categoria'}</a>
+						<span class="block font-medium text-black">{article.data.title}</span>
+					</div>
+					<div class="my-5 border-t border-black/10"></div>
 					<h2 class="text-sm font-semibold uppercase tracking-[0.14em] text-gray-500">En este articulo</h2>
 					<nav class="mt-4 space-y-2 text-sm">
 						{tableOfContents.map((heading) => (
@@ -74,7 +129,7 @@ const tableOfContents = headings.filter((heading) => heading.depth === 2 || head
 							{article.data.dashboardRoutes.map((route) => (
 								<div class="rounded-md bg-black/[0.04] px-3 py-2">
 									<span class="block text-sm text-gray-700">{getDashboardRouteLabel(route)}</span>
-									<code class="mt-1 block truncate text-xs text-gray-500">{route}</code>
+									<code class="mt-1 block truncate text-xs text-gray-500">{getDashboardRoutePath(route)}</code>
 								</div>
 							))}
 						</div>

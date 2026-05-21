@@ -15,6 +15,9 @@ roles:
 lastVerified: 2026-05-20
 sourceRepo: avoqado-web-dashboard
 popular: true
+relatedArticles:
+  - configurar-menu-avanzado
+  - gestionar-inventario
 ---
 
 ## Antes de empezar
@@ -35,3 +38,13 @@ Antes de editar precios o categorias, confirma que estas en la sucursal correcta
 ## Problemas frecuentes
 
 Si un producto no aparece para venta, revisa si esta activo, si pertenece al menu correcto y si tiene categoria asignada. Si el precio no cambia en otro canal, confirma que guardaste en la sucursal correcta. Si no puedes editar, tu rol puede no tener permiso de menu. Si faltan modificadores, revisa **Menu > Modificadores**.
+
+## Validacion despues de guardar
+
+Despues de crear o editar un producto, revisa tres niveles: producto, categoria y menu. El producto puede estar correcto, pero si no esta dentro de una categoria visible o dentro del menu usado por el canal, el equipo puede no encontrarlo al vender.
+
+Si el producto tiene receta o control de inventario, valida que la receta use unidades correctas y que el stock exista en la sucursal. Para cambios de precio, revisa despues un pedido o flujo de venta de prueba antes de comunicarlo al equipo.
+
+## Buenas practicas
+
+Usa nombres claros y consistentes, evita duplicar productos para resolver problemas temporales y documenta cambios de precio importantes. Si varios locales comparten menu, confirma si el cambio debe repetirse o mantenerse solo en una sucursal.

@@ -36,3 +36,13 @@ Si las resenas vienen de una integracion externa, como Google, la sincronizacion
 Si no aparecen resenas, revisa sucursal e integracion. Si falta una resena reciente, espera sincronizacion o valida la fuente externa. Si no puedes responder, puede faltar permiso de respuesta. Si una resena negativa se repite, documenta el patron y revisa operacion antes de responder de forma generica.
 
 Para seguimiento, registra quien tomo el caso, que accion se hara y si se necesita contactar al cliente por otro canal.
+
+## Flujo recomendado de seguimiento
+
+Clasifica las resenas en tres grupos: informativas, urgentes y recurrentes. Las informativas ayudan a entender percepcion general; las urgentes requieren respuesta o contacto; las recurrentes indican un problema operativo que conviene revisar con gerencia.
+
+Antes de responder, evita prometer compensaciones o cambios que el equipo no pueda cumplir. Si la resena menciona fecha, mesa, producto o empleado, busca contexto en pedidos o reservaciones antes de contestar.
+
+## Cuando pedir ayuda
+
+Escala si una integracion deja de sincronizar, si una respuesta no se publica o si una resena contiene informacion sensible que requiere manejo cuidadoso. Incluye fuente, sucursal, fecha y captura del comentario.

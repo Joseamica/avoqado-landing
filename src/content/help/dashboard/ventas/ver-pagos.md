@@ -15,6 +15,7 @@ lastVerified: 2026-05-20
 sourceRepo: avoqado-web-dashboard
 popular: true
 relatedArticles:
+  - gestionar-cobros-avanzados
   - crear-liga-pago
   - ver-saldo-disponible
 ---
@@ -37,3 +38,13 @@ Ten claro que pagos y pedidos no siempre son lo mismo: un pedido puede contener 
 ## Problemas frecuentes
 
 Si no aparece un pago, amplia el rango de fechas y revisa si estas filtrando por metodo o estado. Si el pago aparece pero el saldo no, puede estar pendiente de liquidacion. Si no puedes abrir detalles, tu rol puede no tener permiso suficiente. Si el cliente pago por liga, revisa tambien **Ventas > Ligas de Pago**.
+
+## Validacion y conciliacion
+
+Para validar un pago, revisa cuatro datos antes de escalar: fecha de cobro, monto total, metodo de pago y estado. Si el pago viene de terminal, compara tambien la terminal o referencia disponible. Si viene de una liga de pago, confirma que el concepto coincida con la liga compartida.
+
+Cuando el objetivo sea conciliar, no uses una sola pantalla. Empieza en **Ventas > Transacciones**, cruza contra **Reportes > Resumen de ventas** y despues valida **Saldo disponible** para entender si el dinero ya esta liquidado o sigue pendiente.
+
+## Cuando pedir ayuda
+
+Contacta soporte con captura del pago, rango de fechas usado, sucursal activa, monto, hora aproximada y metodo de pago. Si el cliente tiene comprobante, agrega los ultimos cuatro digitos o referencia visible sin compartir datos sensibles completos.

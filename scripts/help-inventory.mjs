@@ -132,7 +132,20 @@ const routePaths = collectMatches(venueRoutesSource, /path:\s*['"`]([^'"`]+)['"`
 const sidebarRoutes = collectMatches(sidebarSource, /url:\s*['"`]([^'"`]+)['"`]/g);
 const features = extractFeatures(featureRegistrySource);
 
+// Some nested route objects use relative child paths in React Router. The simple
+// extractor above intentionally stays conservative, so keep explicit full paths
+// for support links that must deep-link into nested settings layouts.
+const extraRoutes = [
+  'edit/basic-info',
+  'edit/contact-images',
+  'settings/billing/subscriptions',
+  'settings/billing/history',
+  'settings/billing/payment-methods',
+  'settings/billing/tokens',
+];
+
 const routes = [...new Set([...routePaths, ...sidebarRoutes])].sort((a, b) => a.localeCompare(b, 'es'));
+const routesWithExtras = [...new Set([...routes, ...extraRoutes])].sort((a, b) => a.localeCompare(b, 'es'));
 
 const inventory = {
   generatedAt: new Date().toISOString(),
@@ -141,12 +154,13 @@ const inventory = {
     Object.entries(sourceFiles).map(([key, value]) => [key, relative(landingRoot, value)]),
   ),
   summary: {
-    routeCount: routes.length,
+    routeCount: routesWithExtras.length,
     sidebarRouteCount: sidebarRoutes.length,
     featureCount: features.length,
     avoqadoCoreFeatureCount: features.filter(feature => feature.code.startsWith('AVOQADO_')).length,
   },
-  routes,
+  routes: routesWithExtras,
+  extraRoutes,
   sidebarRoutes,
   routePaths,
   features,

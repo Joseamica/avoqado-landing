@@ -18,6 +18,9 @@ roles:
 lastVerified: 2026-05-20
 sourceRepo: avoqado-web-dashboard
 popular: true
+relatedArticles:
+  - configurar-reservaciones-avanzadas
+  - comprar-addons-suscripciones
 ---
 
 ## Antes de empezar
@@ -38,3 +41,13 @@ Los roles HOST, MANAGER, ADMIN y OWNER pueden tener responsabilidades distintas.
 ## Problemas frecuentes
 
 Si una reservacion no aparece, revisa fecha, sucursal, estado y canal. Si un cliente no puede reservar en linea, valida disponibilidad, horarios y enlace publicado. Si hay sobrecupo, revisa reglas de capacidad. Si no puedes cambiar ajustes, tu rol probablemente no tiene permisos administrativos.
+
+## Operacion diaria recomendada
+
+Al inicio del dia, revisa calendario, lista de reservas y lista de espera. Durante servicio, confirma cambios de estado para evitar duplicados o mesas apartadas sin seguimiento. Al cierre, revisa cancelaciones y no-shows para detectar patrones de horario o canal.
+
+Si modificas ajustes, valida inmediatamente una reserva de prueba o revisa la disponibilidad publica. Cambios en horarios, capacidad o canales online pueden afectar reservas futuras sin que el equipo lo note de inmediato.
+
+## Cuando pedir ayuda
+
+Pide soporte si reservas online no muestran disponibilidad correcta, si una reserva desaparece sin cambio de estado o si el calendario muestra sobrecupo despues de revisar ajustes. Incluye fecha, hora, numero de personas, sucursal y canal de origen.

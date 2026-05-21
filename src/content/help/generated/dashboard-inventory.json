@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-21T00:43:18.367Z",
+  "generatedAt": "2026-05-21T14:53:52.681Z",
   "sourceRepo": "avoqado-web-dashboard",
   "sourceFiles": {
     "venueRoutes": "../avoqado-web-dashboard/src/routes/venueRoutes.tsx",
@@ -7,7 +7,7 @@
     "featureRegistry": "../avoqado-web-dashboard/src/config/feature-registry.ts"
   },
   "summary": {
-    "routeCount": 135,
+    "routeCount": 141,
     "sidebarRouteCount": 63,
     "featureCount": 31,
     "avoqadoCoreFeatureCount": 19
@@ -40,6 +40,8 @@
     "documents",
     "ecommerce-merchants",
     "edit",
+    "edit/basic-info",
+    "edit/contact-images",
     "edit/integrations",
     "general",
     "google",
@@ -131,6 +133,10 @@
     "services",
     "settings",
     "settings/billing",
+    "settings/billing/history",
+    "settings/billing/payment-methods",
+    "settings/billing/subscriptions",
+    "settings/billing/tokens",
     "settings/role-permissions",
     "shifts",
     "shifts/:shiftId",
@@ -148,6 +154,14 @@
     "vendors",
     "virtual-terminal",
     "waitlist"
+  ],
+  "extraRoutes": [
+    "edit/basic-info",
+    "edit/contact-images",
+    "settings/billing/subscriptions",
+    "settings/billing/history",
+    "settings/billing/payment-methods",
+    "settings/billing/tokens"
   ],
   "sidebarRoutes": [
     "available-balance",

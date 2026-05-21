@@ -38,3 +38,13 @@ Antes de sacar conclusiones, revisa que el rango de fechas y la sucursal sean co
 Si las graficas no cargan, revisa permisos y rango de fechas. Si un numero no coincide con ventas del dia, confirma si la metrica usa ventas netas, brutas o total cobrado. Si hay una caida inesperada, compara contra pedidos, pagos, horarios y cambios de menu antes de asumir un error.
 
 Para decisiones comerciales, compara al menos dos periodos similares antes de cambiar precios, horarios o promociones.
+
+## Como convertir analitica en accion
+
+Usa analitica para detectar preguntas, no para cerrar conclusiones sin revisar fuentes. Si ves una caida, revisa horario, trafico, productos sin stock, promociones vencidas o problemas de terminal. Si ves un pico, identifica canal, producto o periodo para repetir lo que funciono.
+
+Para reuniones de direccion, prepara el rango de fechas, sucursal, metrica principal y una hipotesis. Despues cruza con reportes de ventas o inventario antes de decidir cambios.
+
+## Cuando pedir ayuda
+
+Escala si las metricas no cargan para ningun periodo, si un grafico se queda vacio con ventas existentes o si hay diferencias entre analitica y reportes con los mismos filtros. Incluye rango, sucursal y captura de ambas vistas.

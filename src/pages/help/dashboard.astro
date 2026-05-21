@@ -17,9 +17,29 @@ const searchItems = articles.map(toSearchItem);
 	<Navbar position="fixed" />
 	<main class="min-h-screen bg-white pt-32 text-black">
 		<section class="mx-auto max-w-6xl px-6 py-14">
-			<a href="/help" class="text-sm text-gray-500 hover:text-black">Centro de ayuda</a>
+			<nav aria-label="Breadcrumb" class="text-sm text-gray-500">
+				<ol class="flex flex-wrap items-center gap-2">
+					<li><a href="/help" class="hover:text-black">Centro de ayuda</a></li>
+					<li aria-hidden="true">/</li>
+					<li class="text-black" aria-current="page">Dashboard</li>
+				</ol>
+			</nav>
 			<h1 class="mt-4 text-5xl font-light tracking-tight md:text-6xl">Ayuda para Dashboard</h1>
 			<p class="mt-5 max-w-2xl text-lg leading-relaxed text-gray-600">Encuentra guias para operar ventas, pagos, terminales, menu, inventario, reportes y configuracion.</p>
+			<div class="mt-8 grid gap-3 md:grid-cols-3">
+				<div class="rounded-xl border border-black/10 p-5">
+					<p class="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Orientacion</p>
+					<p class="mt-2 text-sm leading-6 text-gray-600">Cada articulo muestra breadcrumbs, ruta exacta dentro del Dashboard y el modulo al que pertenece.</p>
+				</div>
+				<div class="rounded-xl border border-black/10 p-5">
+					<p class="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Acceso directo</p>
+					<p class="mt-2 text-sm leading-6 text-gray-600">Los botones abren el Dashboard y eligen automaticamente el local desde la sesion del usuario.</p>
+				</div>
+				<div class="rounded-xl border border-black/10 p-5">
+					<p class="text-xs font-semibold uppercase tracking-[0.14em] text-gray-500">Soporte operativo</p>
+					<p class="mt-2 text-sm leading-6 text-gray-600">Las guias separan preparacion, pasos, validaciones y problemas frecuentes para reducir dudas del equipo.</p>
+				</div>
+			</div>
 			<div class="mt-8">
 				<HelpSearch items={searchItems} client:load />
 			</div>

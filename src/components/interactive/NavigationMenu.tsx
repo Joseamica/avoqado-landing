@@ -263,7 +263,13 @@ interface MobileDrawerProps {
 }
 
 function MobileDrawer({ open, section, onSectionToggle }: MobileDrawerProps) {
-  if (typeof document === 'undefined') return null;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || typeof document === 'undefined') return null;
 
   return createPortal(
     <div
