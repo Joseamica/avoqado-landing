@@ -89,8 +89,8 @@ export default function GlobalSearch() {
             </Command.Group>
 
             <Command.Group heading="Recursos" className="text-zinc-400 px-2 py-1.5 text-xs font-semibold mt-2">
-              <Item icon={BookOpen} onSelect={() => runCommand(() => window.location.href = '/docs')}>
-                Documentación
+              <Item icon={BookOpen} onSelect={() => runCommand(() => window.location.href = '/help')}>
+                Centro de ayuda
               </Item>
               <Item icon={ExternalLink} onSelect={() => runCommand(() => window.location.href = 'https://dashboard.avoqado.io')}>
                 Ir al Dashboard

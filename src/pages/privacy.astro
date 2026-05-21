@@ -252,39 +252,55 @@ import Layout from '../layouts/Layout.astro'
         <h2>13. Integracion con Google Calendar y Google API Services</h2>
         <p>
           Avoqado ofrece una integracion opcional con Google Calendar que permite a los
-          duenos y administradores de venues sincronizar eventos de su Google Calendar
-          personal o de venue para evitar dobles reservas en el sistema de reservaciones
-          de Avoqado. Esta seccion detalla como se accede, usa, almacena y comparte la
+          duenos y administradores de venues sincronizar bidireccionalmente las
+          reservaciones de Avoqado con un Google Calendar (personal o de venue) para
+          evitar dobles reservas y mantener la disponibilidad consistente entre ambos
+          sistemas. Esta seccion detalla como se accede, usa, almacena y comparte la
           informacion de Google de acuerdo con la <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a>,
           incluyendo los requisitos de Limited Use.
         </p>
 
-        <h3>13.1 Datos de Google a los que accedemos</h3>
+        <h3>13.1 Permisos de Google que solicitamos</h3>
         <p>
           Cuando el usuario conecta su cuenta de Google mediante el flujo OAuth 2.0 de
-          Avoqado, accedemos unicamente al permiso <strong>calendar.readonly</strong> de
-          Google Calendar. Esto nos permite leer:
+          Avoqado, solicitamos los siguientes permisos minimos necesarios para la
+          funcionalidad:
         </p>
         <ul>
-          <li>Eventos de los calendarios que el usuario seleccione explicitamente.</li>
-          <li>Fecha de inicio, fecha de fin y zona horaria de cada evento.</li>
-          <li>Titulo del evento, unicamente cuando el evento NO esta marcado como
-            "privado" en Google. Para eventos privados, mostramos la etiqueta
-            generica "Ocupado".</li>
-          <li>Informacion de disponibilidad (free/busy) en los rangos solicitados.</li>
+          <li><strong>https://www.googleapis.com/auth/calendar.events</strong> &mdash;
+            permite a Avoqado crear, actualizar, cancelar y leer eventos
+            <em>unicamente en el calendario que el usuario eligio conectar</em>.</li>
+          <li><strong>https://www.googleapis.com/auth/calendar.calendarlist.readonly</strong>
+            &mdash; se usa exclusivamente durante el flujo inicial de conexion para
+            mostrar al usuario un selector con sus calendarios disponibles, de modo que
+            pueda elegir cual sincronizar. No se lee el contenido de los eventos con
+            este permiso.</li>
+          <li><strong>openid</strong> y <strong>email</strong> &mdash; permisos estandar
+            OIDC para identificar de forma criptograficamente verificada la cuenta de
+            Google que se esta conectando.</li>
         </ul>
         <p>
           Avoqado <strong>NO accede</strong> a Gmail, Drive, Contactos, Photos ni a
-          ningun otro servicio de Google. Tampoco accede a calendarios que el usuario
-          no haya autorizado expresamente.
+          ningun otro servicio de Google. Tampoco accede a calendarios distintos al
+          que el usuario haya seleccionado expresamente durante la conexion.
         </p>
 
         <h3>13.2 Uso de los datos</h3>
         <p>Los datos de Google Calendar se utilizan exclusivamente para:</p>
         <ul>
-          <li>Mostrar bloques visuales de "ocupado" sobre el calendario de
-            reservaciones del venue, permitiendo al personal evitar agendar reservas
-            que choquen con compromisos del propietario.</li>
+          <li><strong>Lectura (busy blocks):</strong> mostrar bloques visuales de
+            "ocupado" sobre el calendario de reservaciones del venue, permitiendo al
+            personal evitar agendar reservas que choquen con compromisos del
+            propietario. Para eventos marcados como "privados" en Google, se muestra
+            la etiqueta generica "Ocupado" sin titulo.</li>
+          <li><strong>Escritura (sincronizacion de reservaciones):</strong> crear,
+            actualizar o cancelar en el calendario conectado <em>unicamente los eventos
+            que corresponden a reservaciones originadas en Avoqado</em>. Avoqado
+            mantiene un mapeo interno (ReservationGoogleEventMapping) que rastrea con
+            precision cuales eventos del calendario fueron creados por Avoqado.
+            <strong>Avoqado nunca modifica ni elimina eventos creados manualmente por
+            el usuario en Google Calendar</strong> &mdash; solo gestiona los eventos
+            que Avoqado mismo creo.</li>
         </ul>
         <p>
           Avoqado <strong>NO utiliza</strong> los datos de Google Calendar para

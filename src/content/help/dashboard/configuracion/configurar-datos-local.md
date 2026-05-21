@@ -15,13 +15,21 @@ sourceRepo: avoqado-web-dashboard
 popular: true
 ---
 
-## Configurar el local
+## Antes de empezar
+
+Configuracion afecta como se presenta y opera el local. Antes de cambiar datos, confirma si el ajuste es informativo, legal, operativo o de integracion. Cambios en nombre, imagenes, documentos, integraciones o permisos pueden afectar cobros, reservaciones, comunicaciones o acceso del equipo.
+
+Haz cambios desde la sucursal correcta. Si administras varias ubicaciones, evita editar una sucursal mientras estas revisando otra.
+
+## Pasos
 
 1. Abre **Configuracion > Editar Local**.
-2. Revisa informacion basica, contacto, imagenes y documentos.
-3. Entra a **Integraciones** para revisar conexiones como pagos o calendario.
-4. Guarda los cambios.
+2. Revisa informacion basica: nombre, contacto, direccion y datos visibles.
+3. Entra a imagenes o documentos si necesitas actualizar identidad o archivos del local.
+4. Abre **Integraciones** para revisar conexiones como pagos, Google u otros servicios.
+5. Entra a **Permisos** o **Facturacion** si necesitas ajustar acceso o plan.
+6. Guarda cambios y verifica que se reflejen en la seccion correspondiente.
 
-## Permisos
+## Problemas frecuentes
 
-Solo usuarios con rol administrativo pueden modificar datos sensibles del local.
+Si no puedes editar, tu usuario no tiene rol administrativo. Si una integracion no conecta, revisa credenciales y permisos externos. Si un cambio no se refleja, refresca datos o confirma que editaste el local correcto. Si el ajuste afecta pagos, valida despues con una transaccion de prueba o con soporte.

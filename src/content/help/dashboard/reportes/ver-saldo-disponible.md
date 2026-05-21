@@ -15,12 +15,23 @@ sourceRepo: avoqado-web-dashboard
 popular: true
 ---
 
-## Ver saldo disponible
+## Antes de empezar
+
+Saldo disponible ayuda a entender cuanto dinero esta listo para depositarse o ya fue liquidado. No debe compararse directamente contra ventas brutas sin revisar comisiones, tiempos de liquidacion, metodo de pago, devoluciones o ajustes.
+
+Antes de revisar una diferencia, ten claro el periodo, la sucursal y el tipo de movimiento que buscas: venta, deposito, liquidacion pendiente o ajuste.
+
+## Pasos
 
 1. Abre **Reportes > Saldo Disponible**.
-2. Revisa el saldo por liquidar y el calendario de depositos.
-3. Filtra por periodo si necesitas revisar movimientos anteriores.
+2. Confirma la sucursal activa.
+3. Revisa saldo disponible, saldo pendiente y calendario de depositos.
+4. Ajusta el periodo si estas investigando un dia especifico.
+5. Compara contra **Ventas > Transacciones** para validar pagos cobrados.
+6. Si necesitas explicar diferencias, revisa metodo de pago, fecha de cobro y fecha estimada de deposito.
 
-## Diferencia contra ventas del dia
+## Problemas frecuentes
 
-El saldo disponible depende de reglas de liquidacion, tipo de tarjeta y fecha de deposito. No siempre coincide con las ventas brutas del dia.
+Si el saldo no coincide con ventas del dia, revisa liquidaciones pendientes. Si falta un deposito, confirma el calendario y el periodo. Si aparece un ajuste, revisa si hubo devolucion, contracargo o correccion. Si no puedes ver la seccion, tu rol puede no tener permiso de liquidaciones.
+
+Para seguimiento financiero, conserva captura o exportacion del periodo revisado junto con el dia de deposito esperado.

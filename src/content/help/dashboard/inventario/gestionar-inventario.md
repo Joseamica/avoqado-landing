@@ -22,16 +22,21 @@ relatedArticles:
   - revisar-reportes-ventas
 ---
 
-## Revisar existencias
+## Antes de empezar
 
-1. Abre **Inventario > Resumen de existencias**.
-2. Revisa productos o ingredientes con bajo stock.
-3. Usa filtros para encontrar el insumo que necesitas.
+Inventario combina varias piezas: existencias actuales, ingredientes, recetas, proveedores, ordenes de compra, conteos y movimientos. Antes de ajustar stock, identifica si el articulo se controla por cantidad directa o por receta. Cambiar inventario sin revisar el metodo puede producir diferencias en reportes de costo o disponibilidad.
 
-## Ver movimientos
+Tambien confirma que estas trabajando en la sucursal correcta. El stock es local: una misma materia prima puede tener existencias diferentes por ubicacion.
 
-Entra a **Inventario > Historial** para revisar entradas, salidas, ajustes y movimientos recientes.
+## Pasos
 
-## Mantener catalogos
+1. Abre **Inventario > Resumen de existencias** para revisar el estado general.
+2. Usa **Ingredientes** para mantener materias primas, unidades y costos.
+3. Usa **Recetas** para relacionar productos de venta con ingredientes.
+4. Entra a **Historial** para auditar movimientos recientes.
+5. Revisa **Pedidos** y **Proveedores** cuando necesites abastecimiento.
+6. Usa **Conteos** y **Transferencias** para seguimiento operativo cuando esten disponibles.
 
-Usa **Ingredientes**, **Recetas** y **Proveedores** para mantener la base operativa del inventario. Si una opcion no aparece, confirma que el local tenga inventario activo y que tu rol tenga permiso de lectura.
+## Problemas frecuentes
+
+Si el stock no coincide, revisa primero el historial de movimientos y ultimo conteo. Si una receta no descuenta inventario, confirma que el producto tenga receta asignada y que sus ingredientes existan. Si no puedes crear movimientos, revisa permisos. Si el inventario no aparece, la funcion puede no estar activa para el local.

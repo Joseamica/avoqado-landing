@@ -28,6 +28,9 @@ const forbiddenProductTerms = [
   /\btpv app\b/i,
 ];
 
+const minBodyWords = 180;
+const requiredHeadings = ['Antes de empezar', 'Pasos', 'Problemas frecuentes'];
+
 function walkMarkdownFiles(dir) {
   if (!existsSync(dir)) return [];
 
@@ -84,6 +87,19 @@ function articleSlug(path) {
   return basename(path, '.md');
 }
 
+function markdownBody(source) {
+  const match = /^---\n[\s\S]*?\n---\n?([\s\S]*)$/.exec(source);
+  return match?.[1] ?? '';
+}
+
+function wordCount(text) {
+  return text
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`[^`]*`/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean).length;
+}
+
 if (!existsSync(inventoryPath)) {
   console.error('Missing dashboard inventory. Run `npm run help:inventory` first.');
   process.exit(1);
@@ -106,6 +122,7 @@ const documentedFeatureCodes = new Set();
 for (const file of files) {
   const source = readFileSync(file, 'utf8');
   const frontmatter = parseFrontmatter(source);
+  const body = markdownBody(source);
   const label = relative(landingRoot, file);
 
   if (!frontmatter) {
@@ -162,6 +179,17 @@ for (const file of files) {
       warnings.push(`${label}: duplicate title also used by ${seenTitles.get(frontmatter.title)}`);
     }
     seenTitles.set(frontmatter.title, label);
+  }
+
+  const bodyWords = wordCount(body);
+  if (bodyWords < minBodyWords) {
+    errors.push(`${label}: body is too thin (${bodyWords} words, minimum ${minBodyWords})`);
+  }
+
+  for (const heading of requiredHeadings) {
+    if (!body.includes(`## ${heading}`)) {
+      errors.push(`${label}: missing required heading "## ${heading}"`);
+    }
   }
 
   for (const pattern of forbiddenProductTerms) {

@@ -362,12 +362,19 @@ import Layout from '../layouts/Layout.astro'
           Services".
         </p>
         <p>
-          Avoqado solicita el permiso <strong>calendar.readonly</strong> de
-          Google y lo utiliza unicamente para mostrar eventos del calendario
-          del usuario como bloques de "ocupado" sobre el calendario de
-          reservaciones, con el unico fin de evitar dobles reservas. Avoqado
-          no escribe, modifica ni elimina eventos en el Google Calendar del
-          usuario.
+          Avoqado solicita los permisos minimos necesarios de Google Calendar:
+          <strong>calendar.events</strong> (para crear, actualizar, cancelar y
+          leer eventos en el calendario que el usuario eligio conectar) y
+          <strong>calendar.calendarlist.readonly</strong> (usado solo durante la
+          conexion inicial para listar los calendarios disponibles y permitir al
+          usuario elegir cual sincronizar). La integracion sincroniza
+          bidireccionalmente las reservaciones de Avoqado con el calendario
+          conectado: muestra los eventos existentes como bloques de "ocupado"
+          para evitar dobles reservas, y refleja en el calendario las
+          reservaciones creadas, modificadas o canceladas en Avoqado. Avoqado
+          gestiona unicamente los eventos que el mismo origino (rastreados
+          mediante un mapeo interno) y <strong>nunca modifica ni elimina eventos
+          creados manualmente por el usuario</strong> en su Google Calendar.
         </p>
         <p>
           El uso y la transferencia de informacion recibida desde Google APIs

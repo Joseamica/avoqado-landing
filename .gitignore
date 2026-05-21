@@ -25,3 +25,4 @@ pnpm-debug.log*
 .wrangler.toml
 .wrangler/.dev.vars
 .dev.vars
+.gstack/

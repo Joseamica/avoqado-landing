@@ -16,12 +16,23 @@ relatedArticles:
   - gestionar-clientes
 ---
 
-## Revisar lealtad
+## Antes de empezar
+
+Lealtad afecta la experiencia de clientes frecuentes. Antes de cambiar reglas, define como se acumulan beneficios, como se redimen y que pasa con clientes que ya tienen puntos o recompensas. Evita hacer cambios durante horas pico si el equipo esta usando el programa en operacion.
+
+Tambien revisa si el programa aplica a todas las sucursales o solo a una. Las reglas deben coincidir con lo que se comunica al cliente.
+
+## Pasos
 
 1. Abre **Clientes > Lealtad**.
-2. Revisa reglas de acumulacion, canje y estado del programa.
-3. Guarda cambios solo cuando las reglas esten confirmadas.
+2. Revisa si el programa esta activo.
+3. Valida reglas de acumulacion, canje, expiracion y restricciones.
+4. Ajusta solo los campos necesarios.
+5. Guarda cambios y revisa que el estado final sea el esperado.
+6. Comunica al equipo cualquier cambio que afecte atencion al cliente.
 
-## Impacto en clientes
+## Problemas frecuentes
 
-Los cambios pueden modificar como los clientes acumulan o usan beneficios. Documenta internamente cualquier ajuste importante antes de activarlo.
+Si un cliente no acumula puntos, revisa si el programa esta activo y si la compra cumple condiciones. Si no puede redimir, valida saldo, reglas y vigencia. Si los puntos parecen incorrectos, revisa historial y sucursal. Si no ves la seccion, puede faltar permiso o la funcion no estar habilitada.
+
+Cuando hagas una correccion, registra el caso internamente con cliente, fecha y motivo para que el equipo pueda explicar el cambio.

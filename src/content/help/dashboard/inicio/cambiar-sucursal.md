@@ -15,12 +15,21 @@ sourceRepo: avoqado-web-dashboard
 popular: true
 ---
 
-## Cambiar sucursal
+## Antes de empezar
 
-1. Abre el selector de sucursales del Dashboard.
-2. Selecciona el local que quieres revisar.
-3. Confirma que el menu lateral y los reportes cambiaron al local elegido.
+Cambiar de sucursal cambia el contexto de todo el Dashboard. Pagos, pedidos, inventario, reportes, terminales y clientes se cargan para el local seleccionado. Antes de hacer cambios operativos, confirma que estas en la sucursal correcta, especialmente si administras varias ubicaciones.
 
-## Cuando no ves una sucursal
+El selector solo muestra locales a los que tu usuario tiene acceso. Si tienes rol administrativo en una sucursal y rol limitado en otra, veras distintas secciones despues de cambiar.
 
-Tu usuario necesita estar asignado a esa sucursal. Pide a un OWNER o ADMIN que revise tu acceso.
+## Pasos
+
+1. Abre el Dashboard y ubica el selector de sucursal.
+2. Haz clic en el local activo.
+3. Elige la sucursal que quieres consultar.
+4. Espera a que el Dashboard recargue datos.
+5. Revisa el menu lateral: algunas opciones pueden aparecer o desaparecer segun permisos y configuracion del local.
+6. Antes de descargar reportes o cambiar configuracion, vuelve a validar el nombre de la sucursal.
+
+## Problemas frecuentes
+
+Si no ves una sucursal, tu usuario no esta asignado o el local no esta disponible para tu cuenta. Si al cambiar de sucursal faltan ventas o pedidos, revisa el rango de fechas y confirma que el local activo sea el esperado. Si ves la sucursal pero no puedes editar, tu rol puede ser solo de lectura.

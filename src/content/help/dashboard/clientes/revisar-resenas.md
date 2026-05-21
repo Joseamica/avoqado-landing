@@ -16,12 +16,23 @@ relatedArticles:
   - gestionar-clientes
 ---
 
-## Ver resenas
+## Antes de empezar
+
+Resenas sirve para dar seguimiento a comentarios y calificaciones de clientes. Antes de responder o escalar un caso, revisa el contexto: fecha, fuente, calificacion, comentario y si hay una visita o pedido relacionado.
+
+Si las resenas vienen de una integracion externa, como Google, la sincronizacion puede depender de que la integracion este conectada en configuracion.
+
+## Pasos
 
 1. Abre **Clientes > Resenas**.
-2. Revisa calificacion, comentario y fecha.
-3. Usa la informacion para dar seguimiento operativo o mejorar servicio.
+2. Revisa resumen de calificaciones y comentarios recientes.
+3. Filtra o identifica resenas negativas que requieren seguimiento.
+4. Abre la resena para ver detalle.
+5. Si corresponde, coordina respuesta o accion operativa con el equipo.
+6. Usa tendencias recurrentes para detectar problemas de servicio, tiempos o producto.
 
-## Cuando no hay resultados
+## Problemas frecuentes
 
-Confirma que estes en la sucursal correcta y que la integracion o fuente de resenas este activa para el local.
+Si no aparecen resenas, revisa sucursal e integracion. Si falta una resena reciente, espera sincronizacion o valida la fuente externa. Si no puedes responder, puede faltar permiso de respuesta. Si una resena negativa se repite, documenta el patron y revisa operacion antes de responder de forma generica.
+
+Para seguimiento, registra quien tomo el caso, que accion se hara y si se necesita contactar al cliente por otro canal.

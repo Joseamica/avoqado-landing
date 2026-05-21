@@ -40,3 +40,20 @@ Usa **Ventas > Ligas de Pago > Ajustes generales** para revisar comportamiento g
 ## Si algo no aparece
 
 Verifica que tu local ya pueda aceptar pagos y que la funcion de ligas de pago este activa para tu cuenta.
+
+## Pasos
+
+1. Entra a **Ventas > Ligas de Pago**.
+2. Revisa si vas a crear una liga nueva o reutilizar una existente.
+3. Captura monto, concepto y descripcion con texto claro para el cliente.
+4. Guarda la liga y confirma que el enlace se genero correctamente.
+5. Copia el enlace y compartelo por el canal acordado con el cliente.
+6. Despues de compartirla, revisa el estado del pago desde la lista de ligas o desde **Ventas > Transacciones**.
+
+## Que revisar antes de compartir
+
+Confirma que el monto incluya impuestos, descuentos o cargos adicionales que correspondan. Si la liga representa una reservacion, anticipo o pedido especial, usa un concepto que el equipo pueda reconocer despues. Si tu local maneja marca personalizada, revisa **Ajustes** y **Marca** antes de enviar ligas a clientes.
+
+## Problemas frecuentes
+
+Si la liga no se crea, revisa permisos y que el local pueda aceptar pagos. Si el cliente dice que pago pero no aparece la transaccion, busca por fecha, monto y metodo en **Transacciones**. Si el enlace se ve generico, revisa configuracion de marca. Si una liga se compartio con monto incorrecto, crea una nueva liga con datos correctos y evita reutilizar la anterior.
