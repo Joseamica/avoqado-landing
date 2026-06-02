@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import DemoDialog from './DemoDialog';
+import { pushEvent } from '../../lib/gtm';
 
 // Menu structure with nested items
 const menuItems = [
@@ -192,6 +193,7 @@ export default function MobileMenu() {
 							<button
 								onClick={() => {
 									closeMenu();
+									pushEvent('demo_dialog_open', { location: 'mobile_menu' });
 									setIsDemoOpen(true);
 								}}
 								className="px-6 py-3.5 bg-black text-white rounded-full font-semibold hover:bg-gray-800 transition-all text-center cursor-pointer"

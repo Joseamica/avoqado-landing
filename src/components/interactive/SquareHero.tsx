@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { pushEvent } from '../../lib/gtm';
 
 import img1 from '../../assets/hero/hero-tile-01.jpg';
 import img2 from '../../assets/hero/hero-tile-02.jpg';
@@ -157,10 +158,10 @@ export default function SquareHero() {
               Más barato que lo que ya pagas en pedacitos.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 md:gap-6 items-center">
-              <a href="https://calendly.com/joseamica/demo-avoqado-15-min" target="_blank" rel="noopener noreferrer" className="bg-white text-black px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer">
+              <a href="https://calendly.com/joseamica/demo-avoqado-15-min" target="_blank" rel="noopener noreferrer" onClick={() => pushEvent('demo_request', { demo_type: 'calendly_15min', location: 'hero' })} className="bg-white text-black px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer">
                 Ver demo de 15 min
               </a>
-              <a href="https://dashboard.avoqado.io/signup" className="bg-black/60 text-white px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer border-2 border-white/30">
+              <a href="https://dashboard.avoqado.io/signup" onClick={() => pushEvent('sign_up_start', { location: 'hero' })} className="bg-black/60 text-white px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer border-2 border-white/30">
                 Comienza gratis
               </a>
             </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { pushEvent } from '../../lib/gtm';
 
 interface FormErrors {
 	name?: string;
@@ -75,6 +76,8 @@ export default function ContactForm() {
 			const data = await response.json();
 
 			if (data.success) {
+				// Conversion: qualified lead from the contact / demo-request form.
+				pushEvent('generate_lead', { form_name: 'contact', method: 'website_form' });
 				setMessage({
 					type: 'success',
 					text: '¡Gracias! Te contactaremos pronto.',

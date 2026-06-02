@@ -3,6 +3,13 @@ import type { MiddlewareHandler } from 'astro';
 // Google Tag Manager container ID.
 const GTM_ID = 'GTM-PBD8C8RM';
 
+// Consent Mode v2 defaults — MUST run before the GTM container so no Google tag
+// stores data before the user has chosen. Repeat visitors get their previously
+// stored choice (localStorage `cookieConsent`) applied immediately. The runtime
+// `consent` 'update' is fired from the CookieConsent island via src/lib/gtm.ts.
+const GTM_CONSENT_DEFAULT = `<!-- Consent Mode v2 defaults -->
+<script>(function(){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;var c={analytics:false,marketing:false};try{var s=JSON.parse(localStorage.getItem('cookieConsent')||'null');if(s){c.analytics=!!s.analytics;c.marketing=!!s.marketing;}}catch(e){}gtag('consent','default',{ad_storage:c.marketing?'granted':'denied',ad_user_data:c.marketing?'granted':'denied',ad_personalization:c.marketing?'granted':'denied',analytics_storage:c.analytics?'granted':'denied',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});})();</script>`;
+
 // Head snippet — injected as high in <head> as possible (GTM requirement).
 const GTM_HEAD = `<!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -49,7 +56,7 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
 	// Inject once. The guard prevents double-loading GTM if the snippet is ever
 	// already present in the rendered HTML.
 	if (!html.includes(GTM_ID)) {
-		html = html.replace('<head>', () => `<head>\n${GTM_HEAD}`);
+		html = html.replace('<head>', () => `<head>\n${GTM_CONSENT_DEFAULT}\n${GTM_HEAD}`);
 		html = html.replace(/<body[^>]*>/i, (match) => `${match}\n${GTM_BODY}`);
 	}
 

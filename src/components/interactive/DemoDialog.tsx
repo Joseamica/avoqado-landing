@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { pushEvent } from '../../lib/gtm';
 
 interface DemoDialogProps {
   isOpen: boolean;
@@ -85,6 +86,7 @@ export default function DemoDialog({ isOpen, onClose }: DemoDialogProps) {
           {/* Full demo with sales - RECOMMENDED */}
           <a
             href="/contact"
+            onClick={() => pushEvent('demo_request', { demo_type: 'full_demo' })}
             className="group relative block p-6 bg-black rounded-2xl hover:bg-gray-900 transition-all"
           >
             {/* Recommended badge */}
@@ -120,6 +122,7 @@ export default function DemoDialog({ isOpen, onClose }: DemoDialogProps) {
           {/* Dashboard interactive demo */}
           <a
             href="https://demo.dashboard.avoqado.io"
+            onClick={() => pushEvent('demo_request', { demo_type: 'interactive_dashboard' })}
             className="group block p-6 border-2 border-gray-200 rounded-2xl hover:border-avoqado-green hover:bg-avoqado-green/5 transition-all"
           >
             <div className="flex items-start gap-4">

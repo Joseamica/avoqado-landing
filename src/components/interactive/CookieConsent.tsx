@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { updateConsent } from '../../lib/gtm';
 
 interface CookiePreferences {
   necessary: boolean;
@@ -30,6 +31,7 @@ export default function CookieConsent() {
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem('cookieConsent', JSON.stringify(allAccepted));
+    updateConsent({ analytics: true, marketing: true });
     setShowBanner(false);
     setShowSettings(false);
   };
@@ -42,6 +44,7 @@ export default function CookieConsent() {
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem('cookieConsent', JSON.stringify(onlyNecessary));
+    updateConsent({ analytics: false, marketing: false });
     setShowBanner(false);
     setShowSettings(false);
   };
@@ -52,6 +55,7 @@ export default function CookieConsent() {
       timestamp: new Date().toISOString(),
     };
     localStorage.setItem('cookieConsent', JSON.stringify(saved));
+    updateConsent({ analytics: preferences.analytics, marketing: preferences.marketing });
     setShowBanner(false);
     setShowSettings(false);
   };
