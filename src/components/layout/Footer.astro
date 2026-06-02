@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import CookieConsent from '../interactive/CookieConsent';
+import AdWhatsAppPrompt from '../interactive/AdWhatsAppPrompt';
 
 const SUPPORT_WHATSAPP_URL = 'https://wa.me/525640070001';
 ---
@@ -55,3 +56,6 @@ const SUPPORT_WHATSAPP_URL = 'https://wa.me/525640070001';
 
 <!-- Cookie consent banner (singleton — safe to also render via Layout.astro) -->
 <CookieConsent client:idle />
+
+<!-- WhatsApp prompt for visitors arriving from paid ads (self-gates; no-op otherwise) -->
+<AdWhatsAppPrompt client:idle />
