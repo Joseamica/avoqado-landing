@@ -1,0 +1,36 @@
+---
+/**
+ * Internal asset-export stage — NOT for production users.
+ *
+ * Used only by `npm run assets:export` to capture the HTML/CSS product mockups
+ * (LivingPreview components) as high-res PNGs + video. noindex + excluded from the
+ * sitemap (see astro.config.mjs). Safe to leave in the repo; it links from nowhere.
+ *
+ * Usage (against `npm run dev`):
+ *   http://localhost:4321/export-stage?c=dashboard&p=0.37
+ */
+export const prerender = true;
+import '../styles/global.css';
+import ExportStage from '../components/interactive/ExportStage.tsx';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Export Stage (internal)</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #0a0a0b;
+      }
+    </style>
+  </head>
+  <body>
+    <ExportStage client:only="react" />
+  </body>
+</html>

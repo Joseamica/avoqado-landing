@@ -3,6 +3,9 @@ dist/
 # generated types
 .astro/
 
+# generated marketing assets (regenerate with `npm run assets:export`)
+exports/
+
 # dependencies
 node_modules/
 

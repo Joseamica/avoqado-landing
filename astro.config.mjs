@@ -79,7 +79,10 @@ export default defineConfig({
 
   integrations: [
     react(),
-    sitemap(),
+    sitemap({
+      // Keep the internal asset-export stage out of the public sitemap
+      filter: (page) => !page.includes('/export-stage'),
+    }),
     sentry()
   ],
   adapter: cloudflare()

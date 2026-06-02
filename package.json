@@ -7,6 +7,7 @@
     "build": "astro build",
     "help:inventory": "node scripts/help-inventory.mjs",
     "help:check": "node scripts/help-check.mjs",
+    "assets:export": "node scripts/export-marketing-assets.mjs",
     "preview": "cloudflared tunnel run --url http://localhost:4321 avoqado-dev",
     "astro": "astro"
   },
@@ -33,6 +34,7 @@
     "tailwindcss": "^4.1.14"
   },
   "devDependencies": {
-    "baseline-browser-mapping": "^2.9.11"
+    "baseline-browser-mapping": "^2.9.11",
+    "playwright": "^1.60.0"
   }
 }
