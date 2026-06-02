@@ -8,6 +8,7 @@ interface CookiePreferences {
 }
 
 export default function CookieConsent() {
+  const [isPrimary, setIsPrimary] = useState(false);
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [preferences, setPreferences] = useState<CookiePreferences>({
@@ -17,10 +18,22 @@ export default function CookieConsent() {
   });
 
   useEffect(() => {
+    // Singleton guard: this component is rendered from both Layout.astro and
+    // Footer.astro, so some pages mount it twice. Only the first instance to
+    // claim the global flag renders the banner — the rest no-op.
+    const w = window as Window & { __avoCookieConsentClaimed?: boolean };
+    if (w.__avoCookieConsentClaimed) return;
+    w.__avoCookieConsentClaimed = true;
+    setIsPrimary(true);
+
     const consent = localStorage.getItem('cookieConsent');
     if (!consent) {
       setShowBanner(true);
     }
+
+    return () => {
+      w.__avoCookieConsentClaimed = false;
+    };
   }, []);
 
   const acceptAll = () => {
@@ -60,7 +73,7 @@ export default function CookieConsent() {
     setShowSettings(false);
   };
 
-  if (!showBanner) return null;
+  if (!isPrimary || !showBanner) return null;
 
   return (
     <>

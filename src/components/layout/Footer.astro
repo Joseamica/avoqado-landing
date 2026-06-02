@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import CookieConsent from '../interactive/CookieConsent';
 
 const SUPPORT_WHATSAPP_URL = 'https://wa.me/525640070001';
 ---
@@ -51,3 +52,6 @@ const SUPPORT_WHATSAPP_URL = 'https://wa.me/525640070001';
 		</div>
 	</div>
 </footer>
+
+<!-- Cookie consent banner (singleton — safe to also render via Layout.astro) -->
+<CookieConsent client:idle />
