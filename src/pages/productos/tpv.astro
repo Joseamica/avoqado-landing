@@ -53,27 +53,33 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 						</div>
 					</div>
 					<!-- Terminals composition — floating with 3 devices -->
-					<div class="hidden lg:flex justify-center items-center relative" style="min-height: 520px;">
-						<!-- Green glow underneath -->
+					<div class="hidden lg:flex justify-center items-center relative" style="min-height: 520px; perspective: 1400px;" data-terminals-root>
+						<!-- Green glow underneath (ambient — stays put) -->
 						<div class="absolute bottom-8 left-1/2 -translate-x-1/2 w-72 h-16 rounded-full blur-3xl animate-terminal-glow" style="background: #69E185; opacity: 0.15;"></div>
 
-						<!-- PAX A910S — main, center-left, largest -->
-						<img src="/pax-avoqado.png" alt="Terminal PAX A910S con Avoqado"
-							class="max-h-[480px] w-auto animate-terminal-float relative z-20"
-							style="filter: drop-shadow(0 25px 50px rgba(0,0,0,0.6)); transform-origin: center bottom;"
-							loading="eager" />
+						<!-- 3D stage — the group subtly turns to face the cursor -->
+						<div class="absolute inset-0 flex justify-center items-center" style="transform-style: preserve-3d; will-change: transform;" data-terminals-stage>
+							<!-- PAX A910S — main, center-left, largest -->
+							<img src="/pax-avoqado.png" alt="Terminal PAX A910S con Avoqado"
+								class="max-h-[480px] w-auto animate-terminal-float relative z-20"
+								style="filter: drop-shadow(0 25px 50px rgba(0,0,0,0.6)); transform-origin: center bottom; will-change: transform;"
+								data-depth="14"
+								loading="eager" />
 
-						<!-- Nexgo compact — right, smaller, offset down -->
-						<img src="/nexgo-avoqado.png" alt="Terminal Nexgo con Avoqado"
-							class="max-h-[220px] w-auto absolute right-0 bottom-16 z-10 animate-terminal-float"
-							style="filter: drop-shadow(0 15px 30px rgba(0,0,0,0.4)); animation-delay: -1.8s;"
-							loading="eager" />
+							<!-- Nexgo compact — right, smaller, offset down -->
+							<img src="/nexgo-avoqado.png" alt="Terminal Nexgo con Avoqado"
+								class="max-h-[220px] w-auto absolute right-0 bottom-16 z-10 animate-terminal-float"
+								style="filter: drop-shadow(0 15px 30px rgba(0,0,0,0.4)); animation-delay: -1.8s; will-change: transform;"
+								data-depth="24"
+								loading="eager" />
 
-						<!-- Nexgo N86 — left-back, angled, behind PAX -->
-						<img src="/nexgo86-avoqado.png" alt="Terminal Nexgo N86 con Avoqado"
-							class="max-h-[260px] w-auto absolute -left-8 bottom-4 z-0 animate-terminal-float"
-							style="filter: drop-shadow(0 15px 30px rgba(0,0,0,0.4)); animation-delay: -3.2s; opacity: 0.85;"
-							loading="eager" />
+							<!-- Nexgo N86 — left-back, angled, behind PAX -->
+							<img src="/nexgo86-avoqado.png" alt="Terminal Nexgo N86 con Avoqado"
+								class="max-h-[260px] w-auto absolute -left-8 bottom-4 z-0 animate-terminal-float"
+								style="filter: drop-shadow(0 15px 30px rgba(0,0,0,0.4)); animation-delay: -3.2s; opacity: 0.85; will-change: transform;"
+								data-depth="9"
+								loading="eager" />
+						</div>
 					</div>
 				</div>
 			</div>
@@ -555,10 +561,10 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 
 		<style>
 			@keyframes terminal-float {
-				0%, 100% { transform: translateY(0px) rotate(0deg); }
-				25% { transform: translateY(-12px) rotate(0.5deg); }
-				50% { transform: translateY(-6px) rotate(-0.3deg); }
-				75% { transform: translateY(-14px) rotate(0.2deg); }
+				0%, 100% { transform: translate(var(--mx, 0px), calc(0px + var(--my, 0px))) rotate(0deg); }
+				25% { transform: translate(var(--mx, 0px), calc(-12px + var(--my, 0px))) rotate(0.5deg); }
+				50% { transform: translate(var(--mx, 0px), calc(-6px + var(--my, 0px))) rotate(-0.3deg); }
+				75% { transform: translate(var(--mx, 0px), calc(-14px + var(--my, 0px))) rotate(0.2deg); }
 			}
 			@keyframes terminal-glow {
 				0%, 100% { opacity: 0.1; transform: translateX(-50%) scale(1); }
@@ -583,5 +589,92 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 			to { background-position: -200% 0; }
 		}
 	</style>
+
+	<script>
+		// TPV hero — the terminals subtly turn to "look at" the cursor.
+		// The whole group tilts in 3D toward the mouse, and each device drifts
+		// by a different amount (its data-depth) for a parallax sense of depth.
+		// Desktop + fine pointer only; disabled under prefers-reduced-motion.
+		const root = document.querySelector('[data-terminals-root]');
+		const stage = document.querySelector('[data-terminals-stage]');
+
+		if (root && stage) {
+			const layers = Array.from(stage.querySelectorAll('img[data-depth]')).map((el) => ({
+				el,
+				depth: parseFloat(el.getAttribute('data-depth')) || 0,
+			}));
+
+			const MAX_ROT = 6; // degrees of group tilt at full deflection
+			const EASE = 0.09; // lower = smoother, more trailing
+			const EPS = 0.0004;
+
+			let tx = 0, ty = 0; // target offset, normalized to [-1, 1]
+			let cx = 0, cy = 0; // current (eased) offset
+			let raf = 0;
+			let bound = false;
+
+			const fine = window.matchMedia('(min-width: 1024px) and (pointer: fine)');
+			const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+			const render = () => {
+				stage.style.transform =
+					`rotateX(${(-cy * MAX_ROT).toFixed(3)}deg) rotateY(${(cx * MAX_ROT).toFixed(3)}deg)`;
+				for (const { el, depth } of layers) {
+					el.style.setProperty('--mx', `${(cx * depth).toFixed(2)}px`);
+					el.style.setProperty('--my', `${(cy * depth).toFixed(2)}px`);
+				}
+			};
+
+			const tick = () => {
+				cx += (tx - cx) * EASE;
+				cy += (ty - cy) * EASE;
+				render();
+				raf = (Math.abs(tx - cx) > EPS || Math.abs(ty - cy) > EPS)
+					? requestAnimationFrame(tick)
+					: 0;
+			};
+
+			const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
+
+			const onMove = (e) => {
+				const hw = window.innerWidth / 2;
+				const hh = window.innerHeight / 2;
+				tx = Math.max(-1, Math.min(1, (e.clientX - hw) / hw));
+				ty = Math.max(-1, Math.min(1, (e.clientY - hh) / hh));
+				kick();
+			};
+
+			const recenter = () => { tx = 0; ty = 0; kick(); };
+			const onOut = (e) => { if (!e.relatedTarget) recenter(); };
+
+			const bind = () => {
+				if (bound) return;
+				bound = true;
+				window.addEventListener('mousemove', onMove, { passive: true });
+				document.addEventListener('mouseout', onOut, { passive: true });
+				window.addEventListener('blur', recenter);
+			};
+
+			const unbind = () => {
+				if (!bound) return;
+				bound = false;
+				window.removeEventListener('mousemove', onMove);
+				document.removeEventListener('mouseout', onOut);
+				window.removeEventListener('blur', recenter);
+				tx = ty = cx = cy = 0;
+				if (raf) { cancelAnimationFrame(raf); raf = 0; }
+				stage.style.transform = '';
+				for (const { el } of layers) {
+					el.style.removeProperty('--mx');
+					el.style.removeProperty('--my');
+				}
+			};
+
+			const apply = () => { (fine.matches && !reduce.matches) ? bind() : unbind(); };
+			apply();
+			fine.addEventListener('change', apply);
+			reduce.addEventListener('change', apply);
+		}
+	</script>
 	</body>
 </html>
