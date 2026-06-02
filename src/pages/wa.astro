@@ -1,0 +1,114 @@
+---
+/**
+ * WhatsApp click bridge for ad campaigns.
+ *
+ * Use this as the ad destination URL instead of a raw wa.me link so the click
+ * is measured before the user leaves to WhatsApp (you can't run a pixel inside
+ * WhatsApp). GTM is injected site-wide via middleware, so this page fires a
+ * `whatsapp_click` dataLayer event (→ GA4, and later Google Ads / LinkedIn
+ * conversions) and then redirects to WhatsApp.
+ *
+ * Examples:
+ *   https://avoqado.io/wa?src=googleads_demo
+ *   https://avoqado.io/wa?src=linkedin&text=Hola,%20vi%20su%20anuncio%20en%20LinkedIn
+ *
+ * Query params:
+ *   src  – campaign source label (googleads, linkedin, ig_bio, etc.)  [optional]
+ *   text – override the pre-filled WhatsApp message                    [optional]
+ *
+ * Google Ads auto-tagging appends ?gclid=... to this URL automatically; the
+ * Google Ads conversion tag in GTM reads it from the page URL, so attribution
+ * works without any extra handling here.
+ */
+export const prerender = true;
+
+const WHATSAPP_NUMBER = '525640070001';
+const DEFAULT_MESSAGE = 'Hola, me interesa Avoqado. Vengo de un anuncio.';
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="robots" content="noindex, nofollow" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+		<title>Conectando con WhatsApp… | Avoqado</title>
+		<style>
+			:root { color-scheme: dark; }
+			* { margin: 0; padding: 0; box-sizing: border-box; }
+			body {
+				min-height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: #0b0f0d;
+				color: #e8efe9;
+				font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+				text-align: center;
+				padding: 1.5rem;
+			}
+			.wrap { max-width: 22rem; }
+			.spinner {
+				width: 56px;
+				height: 56px;
+				margin: 0 auto 1.5rem;
+				border: 4px solid rgba(37, 211, 102, 0.2);
+				border-top-color: #25d366;
+				border-radius: 50%;
+				animation: spin 0.8s linear infinite;
+			}
+			@keyframes spin { to { transform: rotate(360deg); } }
+			h1 { font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem; }
+			p { font-size: 0.9rem; color: #9fb3a6; line-height: 1.5; }
+			a { color: #25d366; text-decoration: underline; }
+			@media (prefers-reduced-motion: reduce) {
+				.spinner { animation: none; border-top-color: rgba(37, 211, 102, 0.2); }
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="spinner" aria-hidden="true"></div>
+			<h1>Conectando con WhatsApp…</h1>
+			<p id="fallback">
+				Si no abre automáticamente,
+				<a id="manual" href="#" rel="noopener">toca aquí para continuar</a>.
+			</p>
+		</div>
+
+		<script define:vars={{ WHATSAPP_NUMBER, DEFAULT_MESSAGE }}>
+			(function () {
+				var params = new URLSearchParams(window.location.search);
+				var src = params.get('src') || 'direct';
+				var text = params.get('text') || DEFAULT_MESSAGE;
+				var dest = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text);
+
+				// Manual fallback link (also works if JS redirect is blocked).
+				var manual = document.getElementById('manual');
+				if (manual) manual.href = dest;
+
+				var redirected = false;
+				function go() {
+					if (redirected) return;
+					redirected = true;
+					window.location.replace(dest);
+				}
+
+				// Fire the conversion event. GTM calls eventCallback after the
+				// tags for this event finish, then we redirect. The timeout is a
+				// safety net in case GTM is slow or blocked by an ad blocker.
+				window.dataLayer = window.dataLayer || [];
+				window.dataLayer.push({
+					event: 'whatsapp_click',
+					wa_source: src,
+					wa_page_location: window.location.href,
+					eventCallback: go,
+					eventTimeout: 1200,
+				});
+
+				setTimeout(go, 1200);
+			})();
+		</script>
+	</body>
+</html>
