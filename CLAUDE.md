@@ -403,3 +403,15 @@ Detail pages (`/productos/dashboard`, `/productos/tpv`, etc.) also alternate sec
 - **Dashboard:** `/Users/amieva/Documents/Programming/Avoqado/avoqado-web-dashboard`
 - **Backend (new):** `/Users/amieva/Documents/Programming/Avoqado/avoqado-server`
 - **Backend (old):** `/Users/amieva/Documents/Programming/React/avo-pwa/server`
+
+## 🔴 CRITICAL — Keep the Avoqado MCP in sync
+
+The Avoqado MCP (`avoqado-server/scripts/mcp/`) is a **first-class interface**: it exposes
+the platform's data and actions to AI agents (internal ops today, customer-facing tomorrow).
+It must never fall behind the platform.
+
+**Whenever you add or change a feature, Prisma model, service, endpoint, permission, or any
+capability the MCP should expose, you MUST add or update the matching MCP tool in
+`avoqado-server/scripts/mcp/` as part of the SAME change — never "later".** A capability that
+exists but isn't reachable through the MCP is unfinished. Treat the MCP like permissions: kept
+in lockstep, never an afterthought.
