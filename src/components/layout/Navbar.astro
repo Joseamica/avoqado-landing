@@ -22,13 +22,16 @@ const transparentClasses = "bg-transparent border-transparent";
 // If transparentOnTop is true, start transparent (client script handles scroll)
 // If false, start solid.
 const initialClasses = transparentOnTop ? transparentClasses : solidClasses;
+
+// Founders banner CTA → WhatsApp Business (same number used across the site)
+const FOUNDERS_WHATSAPP_URL = 'https://wa.me/525640070001?text=Hola%2C%20quiero%20apartar%20uno%20de%20los%20100%20lugares%20de%20Fundador%20con%2050%25%20de%20descuento%20de%20por%20vida';
 ---
 
 <!-- FOUNDERS BANNER — sits above the navbar on every page (Navbar.astro is included in all pages) -->
 <!-- whitespace-nowrap + overflow-hidden keeps height locked to 36px so top-[36px] (nav) and -->
 <!-- top-[88px] (mobile drawer) in NavigationMenu.tsx stay correct on every viewport -->
 <div class="fixed top-0 left-0 right-0 z-[400] bg-gradient-to-r from-green-900 to-green-700 text-white text-center py-2 px-4 text-sm font-medium whitespace-nowrap overflow-hidden">
-    <a href="https://calendly.com/joseamica/demo-avoqado-15-min" target="_blank" rel="noopener noreferrer" class="hover:underline">
+    <a id="founders-banner-cta" href={FOUNDERS_WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="hover:underline">
         <span class="hidden sm:inline">Quedan 47 de 100 lugares de Fundador — <strong>50% de descuento de por vida</strong></span>
         <span class="sm:hidden"><strong>50% de descuento de por vida</strong> · 47 lugares</span>
         <span class="ml-2 inline-block bg-white/20 px-2 py-0.5 rounded-full text-xs">Apartar →</span>
@@ -122,4 +125,12 @@ const initialClasses = transparentOnTop ? transparentClasses : solidClasses;
         // Listen for scroll
         window.addEventListener('scroll', updateNavbar, { passive: true });
     }
+</script>
+
+<script>
+    // Founders banner CTA → tracked as a demo_request conversion (WhatsApp channel)
+    document.getElementById('founders-banner-cta')?.addEventListener('click', () => {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: 'demo_request', demo_type: 'whatsapp', location: 'founders_banner' });
+    });
 </script>
