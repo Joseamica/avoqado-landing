@@ -53,6 +53,24 @@ Backend nuevo (chico): endpoints `demo-sim` token-scoped a la sesión liveDemo:
 - (Acto 3 no necesita endpoint: el widget real `<avoqado-booking>` apunta al slug del
   venue demo — los venues demo bypasean el plan-gate público por diseño.)
 
+### Contrato de handoff tour → dashboard (✅ implementado, lado landing)
+
+El CTA final del tour ("Siguiente: míralo en TU dashboard →") abre en **nueva pestaña**
+(`window.open(..., '_blank', 'noopener,noreferrer')`) la jornada del dashboard demo:
+
+```
+${PUBLIC_DEMO_DASHBOARD_URL}/?demoTour=venta-tpv&amountCents=<int>&tipCents=<int>
+```
+
+- `demoTour=venta-tpv` — id de la jornada J1 (driver tour del dashboard, F2).
+- `amountCents` / `tipCents` — el último pago simulado del tour **en centavos**
+  (`Math.round(pesos * 100)`); defaults `29500` / `5310` si no hubiera `PaymentInfo`.
+- `PUBLIC_DEMO_DASHBOARD_URL` — env del landing (Astro, expuesta al cliente), default
+  `https://demo.dashboard.avoqado.io`. Declarada en `.env.example`.
+
+F2 consume estos params en el dashboard: tras el auto-login liveDemo, dispara el driver
+tour `venta-tpv` y usa los montos para señalar "ahí está TU cobro".
+
 ## 4. Motor "spotlight" (≈150-200 líneas, sin librerías)
 
 - Overlay absoluto sobre el marco del dispositivo con `pointer-events: all` EXCEPTO un
@@ -137,9 +155,17 @@ elige FSR/QSR).
 
 ## 8. Fases (re-ordenadas a las jornadas v1)
 
-1. **F1** Motor spotlight + réplica TPV pago-rápido completa (client-side) — el corazón.
+1. **F1 ✅ (2026-06-11)** Motor spotlight + réplica TPV pago-rápido completa (client-side)
+   — el corazón. Código: `src/components/interactive/tour/` — `AvoqadoTour.tsx` (isla
+   raíz, props públicas `onPaymentComplete?: (info: PaymentInfo) => void`), `engine.ts`
+   (motor spotlight), `flows.ts` (guiones A/B + estado TPV), `ChapterPanel.tsx`,
+   `TerminalFrame.tsx`, `screens/`, `tour.css`; página `src/pages/demo.astro`. Incluye
+   los DOS flujos (Pago rápido + Cobrar) y el CTA final ya abre la jornada del dashboard
+   con el contrato de §3 (`?demoTour=venta-tpv&amountCents&tipCents`, nueva pestaña,
+   `PUBLIC_DEMO_DASHBOARD_URL`).
 2. **F2** Sesión liveDemo desde el tour + endpoint sim fast-payment + **J1 completa**
-   (incl. driver tour `venta-tpv` en el dashboard + seeder retail).
+   (incl. driver tour `venta-tpv` en el dashboard — consume el contrato de handoff de §3 —
+   + seeder retail).
 3. **F3** **J2**: driver tour `liga-de-pago` + checkout embebido + endpoint sim-pay liga.
 4. **F4** **J3**: seeder servicios + widget + driver tour `reserva`.
 5. **F5** QA browser + `impeccable` + analítica de abandono por paso + CTA → /setup.

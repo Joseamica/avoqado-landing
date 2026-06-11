@@ -1,8 +1,8 @@
 /**
  * Chapter panel (Square-style): 3 value-copy chapters with the active one
  * pulsing, flow selector pills ("Pago rápido" | "Cobrar") and the final
- * CTA that unlocks when the tour completes (F2 wires it to the live
- * dashboard journey — for now it surfaces a "Próximamente" toast).
+ * CTA that unlocks when the tour completes and opens the demo-dashboard
+ * journey (`?demoTour=venta-tpv`) in a new tab.
  */
 import type { FlowId } from './engine';
 

@@ -9,13 +9,17 @@
  * F2 seam: `onPaymentComplete` fires when the simulated payment is
  * approved (success screen) — that's where the real demo-sim POST to the
  * visitor's live demo venue hooks in. No-op by default.
+ *
+ * J1 handoff: when the tour completes, the chapter-panel CTA opens the
+ * demo-dashboard journey in a new tab:
+ * `${PUBLIC_DEMO_DASHBOARD_URL}/?demoTour=venta-tpv&amountCents&tipCents`.
  */
 import { useReducer, useRef, useState } from 'react';
 import './tour.css';
 
 import { useTourEngine } from './engine';
 import type { FlowId } from './engine';
-import { INITIAL_TPV_STATE, TOUR_FLOWS, tpvReducer } from './flows';
+import { DEMO_BASE_AMOUNT, DEMO_TIP_AMOUNT, INITIAL_TPV_STATE, TOUR_FLOWS, tpvReducer } from './flows';
 import type { PaymentInfo, StepCtx } from './flows';
 
 import TerminalFrame from './TerminalFrame';
@@ -39,10 +43,16 @@ export interface AvoqadoTourProps {
   onPaymentComplete?: (info: PaymentInfo) => void;
 }
 
-const TOAST_MS = 2600;
+/** Demo dashboard the final CTA hands off to (J1 journey). */
+const DEMO_DASHBOARD_URL: string = (
+  import.meta.env.PUBLIC_DEMO_DASHBOARD_URL || 'https://demo.dashboard.avoqado.io'
+).replace(/\/$/, '');
 
 export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
   const [tpv, dispatch] = useReducer(tpvReducer, INITIAL_TPV_STATE);
+
+  /** Last completed (simulated) payment — feeds the dashboard handoff URL. */
+  const [lastPayment, setLastPayment] = useState<PaymentInfo | null>(null);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const screensRef = useRef<HTMLDivElement>(null);
@@ -64,29 +74,28 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
     buildCtx: helpers => ({
       ...helpers,
       dispatch,
-      notifyPayment: info => onPaymentRef.current?.(info),
+      notifyPayment: info => {
+        setLastPayment(info);
+        onPaymentRef.current?.(info);
+      },
     }),
     onReset: () => dispatch({ type: 'reset' }),
   });
 
-  /* ---------- toast ---------- */
-  const [toastMsg, setToastMsg] = useState('');
-  const [toastShow, setToastShow] = useState(false);
-  const toastTimer = useRef<number | undefined>(undefined);
-
-  const showToast = (msg: string) => {
-    setToastMsg(msg);
-    setToastShow(true);
-    window.clearTimeout(toastTimer.current);
-    toastTimer.current = window.setTimeout(() => setToastShow(false), TOAST_MS);
-  };
-
   const handleSelectFlow = (flow: FlowId) => engine.reset(flow);
 
+  /** J1 handoff: continue the journey in the visitor's demo dashboard. */
   const handleCtaClick = () => {
     if (!engine.done) return;
-    /* F2 wires this to the live dashboard journey (J1). */
-    showToast('Próximamente: el tour continúa en TU dashboard real');
+    /* Graceful fallback: the tour can't complete without a payment, but if
+       PaymentInfo is somehow missing we still hand off with the demo amounts. */
+    const amount = lastPayment?.amount ?? DEMO_BASE_AMOUNT;
+    const tip = lastPayment?.tip ?? DEMO_TIP_AMOUNT;
+    const url =
+      `${DEMO_DASHBOARD_URL}/?demoTour=venta-tpv` +
+      `&amountCents=${Math.round(amount * 100)}` +
+      `&tipCents=${Math.round(tip * 100)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -141,10 +150,6 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
           onSelectFlow={handleSelectFlow}
           onCtaClick={handleCtaClick}
         />
-      </div>
-
-      <div className={`toast${toastShow ? ' show' : ''}`} role="status">
-        {toastMsg}
       </div>
     </div>
   );
