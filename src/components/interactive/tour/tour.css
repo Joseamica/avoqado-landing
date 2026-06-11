@@ -1,0 +1,1482 @@
+/* ============================================================
+   Avoqado Tour — scoped styles for the interactive guided demo.
+   Faithful port of the approved mockup:
+   docs/superpowers/specs/mockups/2026-06-10-avoqado-tour-mockup.html
+
+   Everything is scoped under .avq-tour so the TPV replica's exact
+   design tokens (extracted from the real TPV Compose theme) never
+   leak into — nor get polluted by — the landing's Tailwind styles.
+   ============================================================ */
+
+.avq-tour {
+  /* Design tokens — extracted from the real TPV Compose theme */
+  --avq-green: #10b981;
+  --avq-green-light: #34d399;
+  --avq-green-press: #059669;
+  --avq-bg: #1c1c1c; /* TPV screen background */
+  --avq-surface: #2a2a2a;
+  --avq-text: #fafafa;
+  --avq-text2: #b5b5b5;
+  --avq-error: #eb5757;
+  --avq-outline: #383838;
+  --avq-gold: #fbbf24;
+
+  width: 100%;
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  color: var(--avq-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.avq-tour button {
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: none;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================================
+   Demo layout — terminal + chapter panel
+   ============================================================ */
+.avq-tour .demo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 64px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Stage (device + floating tour layer) ---------- */
+.avq-tour .stage {
+  position: relative;
+  padding: 8px 48px;
+}
+
+.avq-tour .reset-btn {
+  position: absolute;
+  top: -18px;
+  right: -10px;
+  z-index: 60;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--avq-surface);
+  color: var(--avq-text2);
+  border: 1px solid var(--avq-outline);
+  font-size: 18px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.25s ease;
+}
+.avq-tour .reset-btn:hover {
+  color: var(--avq-green-light);
+  border-color: var(--avq-green);
+  transform: rotate(-90deg);
+}
+
+/* ---------- PAX A910S frame (white body + gray printer cap, faithful to hardware) ---------- */
+.avq-tour .device {
+  width: 362px;
+  padding: 0 16px 12px;
+  border-radius: 28px;
+  background: linear-gradient(168deg, #ffffff 0%, #f5f7f9 55%, #e9edf0 100%);
+  box-shadow:
+    0 40px 90px rgba(0, 0, 0, 0.55),
+    0 4px 18px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  user-select: none;
+}
+/* top printer module: tapa gris con volumen + rim azul + marca contactless + papel dentado */
+.avq-tour .printer-cap {
+  margin: 0 -16px 12px;
+  height: 62px;
+  border-radius: 26px 26px 9px 9px;
+  background:
+    radial-gradient(130% 100% at 50% -30%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 48%),
+    linear-gradient(180deg, #8a9098 0%, #71777f 38%, #585e66 82%, #4a4f56 100%);
+  position: relative;
+  display: grid;
+  place-items: center;
+  box-shadow:
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.3),
+    inset 0 -6px 9px rgba(0, 0, 0, 0.32),
+    0 4px 8px rgba(0, 0, 0, 0.18);
+}
+.avq-tour .printer-cap::before {
+  /* rim azul sutil con glow, inset del borde (como el hardware) */
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 24px;
+  right: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(79, 134, 255, 0) 0%,
+    #4f86ff 18%,
+    #8db4ff 50%,
+    #4f86ff 82%,
+    rgba(79, 134, 255, 0) 100%
+  );
+  box-shadow: 0 0 7px rgba(79, 134, 255, 0.55);
+}
+.avq-tour .printer-cap::after {
+  /* borde dentado del papel saliendo de la impresora */
+  content: '';
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  bottom: -8px;
+  height: 8px;
+  --paper: #eef0f3;
+  background:
+    linear-gradient(-45deg, transparent 74%, var(--paper) 75%) 0 0 / 9px 9px repeat-x,
+    linear-gradient(45deg, transparent 74%, var(--paper) 75%) 4.5px 0 / 9px 9px repeat-x,
+    linear-gradient(180deg, var(--paper), var(--paper)) 0 -4px / 100% 6px no-repeat;
+  filter: drop-shadow(0 1.5px 1px rgba(0, 0, 0, 0.22));
+}
+/* branding del bisel: PAX (izq) · A910S (der) */
+.avq-tour .bezel-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 8px 7px;
+  font-size: 11.5px;
+  letter-spacing: 0.4px;
+}
+.avq-tour .bezel-brand .pax {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 700;
+  color: #8b929a;
+}
+.avq-tour .bezel-brand .pax i {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2.2px solid #8b929a;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+.avq-tour .bezel-brand .pax i::after {
+  content: '';
+  position: absolute;
+  inset: 1px -3px -3px 4px;
+  border-radius: 50%;
+  border-top: 2.2px solid #8b929a;
+  transform: rotate(-38deg);
+}
+.avq-tour .bezel-brand .model {
+  color: #80878f;
+  font-weight: 600;
+}
+.avq-tour .bezel-brand .model b {
+  font-weight: 800;
+}
+/* botones capacitivos Android del chin blanco */
+.avq-tour .android-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 11px 44px 3px;
+  color: #b3bac1;
+}
+.avq-tour .android-nav svg {
+  display: block;
+  opacity: 0.9;
+}
+/* riel lateral gris (lector de tarjeta) */
+.avq-tour .side-rail {
+  position: absolute;
+  right: -7px;
+  top: 128px;
+  width: 9px;
+  height: 236px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #c2c8ce, #9aa1a8 60%, #878e95);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.55),
+    2px 5px 9px rgba(0, 0, 0, 0.22);
+}
+.avq-tour .side-rail::after {
+  /* marca de tarjeta chip */
+  content: '';
+  position: absolute;
+  top: 102px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 13px;
+  border-radius: 1.5px;
+  border: 1px solid #6d757e;
+}
+
+.avq-tour .tpv {
+  width: 330px;
+  height: 586px;
+  border-radius: 16px;
+  background: var(--avq-bg);
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 0 0 1px #000,
+    inset 0 0 24px rgba(0, 0, 0, 0.45),
+    0 0 48px rgba(16, 185, 129, 0.08);
+}
+
+/* ---------- Faux Android status bar ---------- */
+.avq-tour .statusbar {
+  height: 24px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 500;
+  color: #8d8d8d;
+}
+.avq-tour .statusbar .right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.avq-tour .sig {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5px;
+}
+.avq-tour .sig i {
+  display: block;
+  width: 2.5px;
+  background: #8d8d8d;
+  border-radius: 1px;
+}
+.avq-tour .sig i:nth-child(1) {
+  height: 4px;
+}
+.avq-tour .sig i:nth-child(2) {
+  height: 6px;
+}
+.avq-tour .sig i:nth-child(3) {
+  height: 8px;
+}
+.avq-tour .batt {
+  width: 16px;
+  height: 8px;
+  border: 1px solid #8d8d8d;
+  border-radius: 2px;
+  position: relative;
+}
+.avq-tour .batt::before {
+  content: '';
+  position: absolute;
+  inset: 1px 5px 1px 1px;
+  background: #8d8d8d;
+  border-radius: 1px;
+}
+.avq-tour .batt::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: 2px;
+  width: 2px;
+  height: 4px;
+  background: #8d8d8d;
+  border-radius: 0 1px 1px 0;
+}
+
+/* ---------- Screen stack ---------- */
+.avq-tour .screens {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.avq-tour .tpv-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    visibility 0.2s;
+}
+.avq-tour .tpv-screen.active {
+  opacity: 1;
+  visibility: visible;
+}
+.avq-tour .tpv-screen.enter {
+  transform: translateX(44px);
+  opacity: 0;
+  visibility: visible;
+}
+.avq-tour .tpv-screen.enter.entering {
+  transform: translateX(0);
+  opacity: 1;
+}
+.avq-tour .tpv-screen.active.exit {
+  transform: translateX(-32px);
+  opacity: 0;
+}
+
+/* ---------- Shared TPV pieces ---------- */
+.avq-tour .topbar {
+  display: grid;
+  grid-template-columns: 32px 1fr 32px;
+  align-items: center;
+  min-height: 54px;
+  padding: 8px 12px 4px;
+}
+.avq-tour .topbar .back {
+  font-size: 26px;
+  color: var(--avq-text2);
+  line-height: 1;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0 0 4px 2px;
+}
+.avq-tour .topbar .titles {
+  text-align: center;
+}
+.avq-tour .topbar .title {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+.avq-tour .topbar .subtitle {
+  font-size: 12px;
+  color: var(--avq-text2);
+  margin-top: 2px;
+}
+
+.avq-tour .btn {
+  border: none;
+  border-radius: 12px;
+  height: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease;
+}
+.avq-tour .btn-green {
+  background: var(--avq-green);
+  color: #052e22;
+}
+.avq-tour .btn-green:active {
+  background: var(--avq-green-press);
+}
+.avq-tour .btn-outline {
+  background: var(--avq-surface);
+  color: var(--avq-text);
+  border: 1px solid var(--avq-outline);
+}
+
+.avq-tour .link-btn {
+  background: none;
+  border: none;
+  color: var(--avq-text2);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ============================================================
+   Screen: FastPaymentEntry
+   ============================================================ */
+.avq-tour .fast-instruction {
+  text-align: center;
+  font-size: 13px;
+  color: var(--avq-text2);
+  margin-top: 6px;
+}
+.avq-tour .fast-amount-wrap {
+  flex: 1;
+  display: grid;
+  place-items: center;
+}
+.avq-tour .fast-amount {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+.avq-tour .fast-amount.zero {
+  color: #5c5c5c;
+}
+.avq-tour .fast-amount.pop {
+  animation: avq-pop-amt 0.18s ease;
+}
+@keyframes avq-pop-amt {
+  50% {
+    transform: scale(1.07);
+  }
+}
+
+.avq-tour .keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 0 12px 14px;
+}
+.avq-tour .key {
+  height: 50px;
+  border-radius: 12px;
+  background: var(--avq-surface);
+  border: 1px solid var(--avq-outline);
+  color: var(--avq-text);
+  font-size: 21px;
+  font-weight: 500;
+  transition: background 0.12s ease;
+}
+.avq-tour .key:active {
+  background: #353535;
+}
+.avq-tour .key-del {
+  font-size: 17px;
+  color: var(--avq-text2);
+}
+.avq-tour .key-clear {
+  color: var(--avq-error);
+  font-size: 17px;
+  font-weight: 600;
+}
+.avq-tour .key-confirm {
+  grid-column: span 2;
+  background: var(--avq-green);
+  border-color: var(--avq-green);
+  color: #052e22;
+  font-size: 22px;
+  font-weight: 700;
+}
+.avq-tour .key-confirm:active {
+  background: var(--avq-green-press);
+}
+
+/* ============================================================
+   Screen: Review (Calificación)
+   ============================================================ */
+.avq-tour .review-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding-bottom: 40px;
+}
+.avq-tour .stars {
+  display: flex;
+  gap: 10px;
+}
+.avq-tour .star {
+  background: none;
+  border: none;
+  padding: 2px;
+  border-radius: 12px;
+}
+.avq-tour .star svg {
+  display: block;
+  width: 42px;
+  height: 42px;
+}
+.avq-tour .star svg path {
+  fill: none;
+  stroke: #6f6f6f;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  transition:
+    fill 0.15s ease,
+    stroke 0.15s ease;
+}
+.avq-tour .star.filled svg path {
+  fill: var(--avq-gold);
+  stroke: var(--avq-gold);
+}
+.avq-tour .star.filled svg {
+  animation: avq-star-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes avq-star-pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.35) rotate(-6deg);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   Screen: Tip (Propina)
+   ============================================================ */
+.avq-tour .tip-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px 14px 14px;
+}
+.avq-tour .tip-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.avq-tour .tip-card {
+  background: var(--avq-surface);
+  border: 1.5px solid var(--avq-outline);
+  border-radius: 12px;
+  padding: 16px 4px;
+  text-align: center;
+  color: var(--avq-text);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+.avq-tour .tip-card .pct {
+  font-size: 20px;
+  font-weight: 700;
+}
+.avq-tour .tip-card .amt {
+  font-size: 12px;
+  color: var(--avq-text2);
+  margin-top: 4px;
+}
+.avq-tour .tip-card.selected {
+  border-color: var(--avq-green);
+  background: rgba(16, 185, 129, 0.1);
+}
+.avq-tour .tip-card.selected .amt {
+  color: var(--avq-green-light);
+}
+.avq-tour .tip-custom {
+  background: var(--avq-surface);
+  border: 1.5px solid var(--avq-outline);
+  border-radius: 12px;
+  height: 50px;
+  color: var(--avq-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+.avq-tour .tip-skip {
+  text-align: center;
+  margin-top: 4px;
+}
+.avq-tour .tip-spacer {
+  flex: 1;
+}
+
+/* ============================================================
+   Screen: MerchantSelection (Seleccionar Cuenta)
+   ============================================================ */
+.avq-tour .merchant-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 14px 16px;
+}
+.avq-tour .m-total {
+  text-align: center;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.8px;
+  margin-top: 8px;
+}
+.avq-tour .m-breakdown {
+  text-align: center;
+  font-size: 13px;
+  color: var(--avq-text2);
+  margin-top: 6px;
+}
+.avq-tour .m-stars {
+  text-align: center;
+  font-size: 17px;
+  letter-spacing: 3px;
+  color: var(--avq-gold);
+  margin-top: 8px;
+}
+
+.avq-tour .merchant-card {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1.5px solid var(--avq-green);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.avq-tour .m-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--avq-green);
+  color: #052e22;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.avq-tour .m-info {
+  flex: 1;
+  min-width: 0;
+}
+.avq-tour .m-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+.avq-tour .m-sub {
+  font-size: 12px;
+  color: var(--avq-text2);
+  margin-top: 2px;
+}
+.avq-tour .m-check {
+  color: var(--avq-green-light);
+  flex-shrink: 0;
+}
+
+.avq-tour .m-label {
+  margin-top: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--avq-text2);
+}
+.avq-tour .seg-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+.avq-tour .seg {
+  height: 48px;
+  border-radius: 12px;
+  background: var(--avq-surface);
+  border: 1.5px solid var(--avq-outline);
+  color: var(--avq-text);
+  font-size: 14px;
+  font-weight: 600;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.avq-tour .seg.selected {
+  border-color: var(--avq-green);
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--avq-green-light);
+}
+
+/* ============================================================
+   Screen: DetectingCard
+   ============================================================ */
+.avq-tour .detect-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.avq-tour .detect-amount {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.avq-tour .detect-icon {
+  margin-top: 36px;
+}
+.avq-tour .detect-icon .wave {
+  animation: avq-wave-pulse 1.6s ease infinite;
+}
+.avq-tour .detect-icon .wave.w2 {
+  animation-delay: 0.25s;
+}
+@keyframes avq-wave-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+.avq-tour .detect-text {
+  margin-top: 26px;
+  font-size: 14px;
+  color: var(--avq-text2);
+}
+
+.avq-tour .pay-card {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  width: 212px;
+  height: 132px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0e3f30 0%, #10b981 130%);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  padding: 16px;
+  transform: translate(-50%, 320px) rotate(6deg);
+  opacity: 0;
+}
+.avq-tour .screen-detecting.active .pay-card {
+  animation: avq-card-up 1.4s cubic-bezier(0.2, 0.85, 0.3, 1) 0.15s forwards;
+}
+@keyframes avq-card-up {
+  from {
+    transform: translate(-50%, 320px) rotate(6deg);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0) rotate(0deg);
+    opacity: 1;
+  }
+}
+.avq-tour .pay-card .chip {
+  width: 34px;
+  height: 25px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #f5d77a, #c9a23f);
+}
+.avq-tour .pay-card .num {
+  margin-top: 30px;
+  font-size: 15px;
+  letter-spacing: 2.5px;
+  color: rgba(250, 250, 250, 0.92);
+  font-weight: 500;
+}
+.avq-tour .pay-card .holder {
+  margin-top: 10px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: rgba(250, 250, 250, 0.6);
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   Screen: Processing
+   ============================================================ */
+.avq-tour .proc-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding-bottom: 30px;
+}
+.avq-tour .spinner {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 4px solid rgba(250, 250, 250, 0.1);
+  border-top-color: var(--avq-green);
+  animation: avq-spin 0.85s linear infinite;
+}
+@keyframes avq-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.avq-tour .proc-text {
+  font-size: 15px;
+  color: var(--avq-text2);
+}
+
+/* ============================================================
+   Screen: Success (Aprobado)
+   ============================================================ */
+.avq-tour .success-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding-bottom: 36px;
+  position: relative;
+  overflow: hidden;
+}
+.avq-tour .success-svg {
+  width: 118px;
+  height: 118px;
+}
+.avq-tour .sc-circle,
+.avq-tour .sc-check {
+  fill: none;
+  stroke: var(--avq-green);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+.avq-tour .sc-circle {
+  stroke-width: 5;
+}
+.avq-tour .sc-check {
+  stroke-width: 6;
+}
+.avq-tour .screen-success.active .sc-circle {
+  animation: avq-dash-draw 0.6s ease-out forwards;
+}
+.avq-tour .screen-success.active .sc-check {
+  animation: avq-dash-draw 0.45s ease-out 0.5s forwards;
+}
+.avq-tour .screen-success.active .success-svg {
+  animation: avq-badge-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.55s;
+}
+@keyframes avq-dash-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes avq-badge-pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.avq-tour .success-title {
+  font-size: 26px;
+  font-weight: 600;
+  opacity: 0;
+}
+.avq-tour .success-amount {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.6px;
+  opacity: 0;
+}
+.avq-tour .screen-success.active .success-title {
+  animation: avq-fade-up 0.4s ease 0.75s forwards;
+}
+.avq-tour .screen-success.active .success-amount {
+  animation: avq-fade-up 0.4s ease 0.9s forwards;
+}
+@keyframes avq-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.avq-tour .confetti-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.avq-tour .confetti-layer i {
+  position: absolute;
+  top: -16px;
+  display: block;
+  border-radius: 2px;
+  animation: avq-confetti-fall linear forwards;
+}
+@keyframes avq-confetti-fall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--dx), 600px, 0) rotate(var(--rot));
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   Screen: Receipt
+   ============================================================ */
+.avq-tour .receipt-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 14px 14px;
+}
+.avq-tour .ticket {
+  background: #fafaf8;
+  color: #1c1c1c;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.avq-tour .ticket .qr {
+  width: 124px;
+  height: 124px;
+  border-radius: 8px;
+  background: #fff;
+  padding: 6px;
+  border: 1px solid #e6e6e2;
+}
+.avq-tour .ticket .qr svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.avq-tour .ticket .qr-copy {
+  margin-top: 10px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: #585852;
+  text-align: center;
+  max-width: 230px;
+}
+.avq-tour .ticket .dash {
+  width: 100%;
+  border: none;
+  border-top: 1.5px dashed #c9c9c2;
+  margin: 12px 0;
+}
+.avq-tour .ticket .row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #4a4a45;
+  margin-top: 6px;
+}
+.avq-tour .ticket .row.total {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1c1c1c;
+  margin-top: 0;
+}
+.avq-tour .ticket .row.total b {
+  font-size: 18px;
+}
+.avq-tour .receipt-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.avq-tour .receipt-actions .btn {
+  height: 42px;
+  font-size: 13px;
+}
+
+/* ============================================================
+   Screen: "Cobrar" — módulo unificado real del TPV (Flow B)
+   tabs Teclado | Shortcuts | Todos los productos | Configurar
+   + catálogo + panel de carrito "Cobrar $X.XX"
+   ============================================================ */
+.avq-tour .cobrar-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.avq-tour .cobrar-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px 10px;
+  overflow: hidden;
+}
+.avq-tour .cobrar-tab {
+  flex: 0 0 auto;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 16px;
+  background: var(--avq-surface);
+  color: var(--avq-text2);
+  border: 1px solid var(--avq-outline);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.avq-tour .cobrar-tab.active {
+  background: rgba(16, 185, 129, 0.16);
+  color: var(--avq-green-light);
+  border-color: var(--avq-green);
+}
+.avq-tour .cobrar-view {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: none;
+}
+.avq-tour .cobrar-view.active {
+  display: block;
+}
+/* vista Teclado (default, no guiada): pad fantasma compacto */
+.avq-tour .mini-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  padding: 6px 14px;
+  opacity: 0.55;
+}
+.avq-tour .mini-pad span {
+  height: 44px;
+  border-radius: 10px;
+  background: var(--avq-surface);
+  border: 1px solid var(--avq-outline);
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--avq-text2);
+}
+.avq-tour .mini-amount {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 700;
+  color: #5d5d5d;
+  padding: 12px 0 6px;
+}
+/* vista Productos: catálogo 2 cols */
+.avq-tour .prod-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  padding: 4px 12px 10px;
+}
+.avq-tour .prod-card {
+  position: relative;
+  background: var(--avq-surface);
+  border: 1.5px solid var(--avq-outline);
+  border-radius: 12px;
+  padding: 10px 10px 11px;
+  text-align: left;
+  color: var(--avq-text);
+  transition:
+    border-color 0.15s ease,
+    transform 0.12s ease;
+}
+.avq-tour .prod-card .thumb {
+  height: 42px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #3a3f44, #2b2f33);
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+}
+.avq-tour .prod-card .pn {
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.avq-tour .prod-card .pp {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--avq-green-light);
+  margin-top: 5px;
+}
+.avq-tour .prod-card .qty-badge {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 11px;
+  background: var(--avq-green);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: none;
+  place-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+.avq-tour .prod-card.added {
+  border-color: var(--avq-green);
+}
+.avq-tour .prod-card.added .qty-badge {
+  display: grid;
+  animation: avq-badge-pop 0.3s ease;
+}
+/* panel de carrito (abajo, como CartPanelView) */
+.avq-tour .cart-panel {
+  padding: 10px 14px 14px;
+  border-top: 1px solid var(--avq-outline);
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.avq-tour .cart-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  color: var(--avq-text2);
+}
+.avq-tour .cart-meta b {
+  color: var(--avq-text);
+  font-weight: 600;
+}
+
+/* ============================================================
+   Tour layer — pulsing dot + green pill (the spotlight engine)
+   ============================================================ */
+.avq-tour .tour-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+.avq-tour .tour-layer.off {
+  opacity: 0;
+}
+
+.avq-tour .tour-dot {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--avq-green);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.9);
+  transform: translate(-50%, -50%);
+  transition:
+    left 0.28s cubic-bezier(0.3, 0.9, 0.35, 1),
+    top 0.28s cubic-bezier(0.3, 0.9, 0.35, 1);
+}
+.avq-tour .tour-dot::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.55);
+  animation: avq-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+  z-index: -1;
+}
+@keyframes avq-ping {
+  0% {
+    transform: scale(0.55);
+    opacity: 0.9;
+  }
+  75%,
+  100% {
+    transform: scale(2.7);
+    opacity: 0;
+  }
+}
+
+.avq-tour .tour-pill {
+  position: absolute;
+  background: var(--avq-green);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  padding: 9px 14px;
+  border-radius: 12px;
+  box-shadow:
+    0 8px 22px rgba(16, 185, 129, 0.38),
+    0 2px 6px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition:
+    left 0.28s cubic-bezier(0.3, 0.9, 0.35, 1),
+    top 0.28s cubic-bezier(0.3, 0.9, 0.35, 1);
+}
+.avq-tour .tour-pill .chev {
+  font-size: 15px;
+  opacity: 0.85;
+  line-height: 1;
+}
+.avq-tour .tour-layer.jump .tour-dot,
+.avq-tour .tour-layer.jump .tour-pill {
+  transition: none;
+}
+
+.avq-tour .tour-pill.shake {
+  animation: avq-pill-shake 0.35s ease;
+}
+@keyframes avq-pill-shake {
+  20% {
+    transform: translateX(-4px);
+  }
+  45% {
+    transform: translateX(4px);
+  }
+  70% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* current target affordance */
+.avq-tour .tour-target {
+  position: relative;
+}
+.avq-tour .tour-target::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 1.5px solid rgba(16, 185, 129, 0.55);
+  pointer-events: none;
+}
+
+/* ============================================================
+   Chapter panel (Square-style)
+   ============================================================ */
+.avq-tour .panel {
+  width: 332px;
+  padding-top: 8px;
+}
+.avq-tour .panel h2 {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin-bottom: 18px;
+}
+
+.avq-tour .chapters {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.avq-tour .chapter {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  opacity: 0.5;
+  transition:
+    opacity 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+.avq-tour .chapter.active {
+  opacity: 1;
+  background: rgba(16, 185, 129, 0.06);
+  border-color: rgba(16, 185, 129, 0.28);
+}
+.avq-tour .chapter.done {
+  opacity: 0.85;
+}
+
+.avq-tour .ch-num {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid var(--avq-outline);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--avq-text2);
+  position: relative;
+  margin-top: 1px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+.avq-tour .chapter.active .ch-num {
+  background: var(--avq-green);
+  border-color: var(--avq-green);
+  color: #052e22;
+}
+.avq-tour .chapter.active .ch-num::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.45);
+  animation: avq-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+  z-index: -1;
+}
+.avq-tour .chapter.done .ch-num {
+  border-color: var(--avq-green);
+  color: var(--avq-green-light);
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.avq-tour .ch-copy {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--avq-text);
+  margin: 0;
+}
+.avq-tour .ch-copy b {
+  font-weight: 600;
+}
+.avq-tour .ch-copy span {
+  color: var(--avq-text2);
+}
+
+.avq-tour .flow-label {
+  margin: 26px 0 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #7a7a7a;
+}
+.avq-tour .flow-pills {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.avq-tour .flow-pill {
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--avq-outline);
+  background: transparent;
+  color: var(--avq-text2);
+  font-size: 13px;
+  font-weight: 600;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+.avq-tour .flow-pill:hover {
+  border-color: #555;
+  color: var(--avq-text);
+}
+.avq-tour .flow-pill.active {
+  background: var(--avq-green);
+  border-color: var(--avq-green);
+  color: #052e22;
+}
+
+.avq-tour .cta-next {
+  margin-top: 26px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid var(--avq-outline);
+  color: #6f6f6f;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: not-allowed;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.avq-tour .cta-next.ready {
+  border-color: var(--avq-green);
+  color: var(--avq-green-light);
+  cursor: pointer;
+  box-shadow: 0 0 26px rgba(16, 185, 129, 0.16);
+}
+.avq-tour .cta-next.ready:hover {
+  background: rgba(16, 185, 129, 0.08);
+}
+
+/* ============================================================
+   Toast
+   ============================================================ */
+.avq-tour .toast {
+  position: fixed;
+  left: 50%;
+  bottom: 34px;
+  z-index: 200;
+  transform: translate(-50%, 14px);
+  background: var(--avq-surface);
+  border: 1px solid var(--avq-outline);
+  color: var(--avq-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 13px 20px;
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+.avq-tour .toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ============================================================
+   Responsive — stack panel under terminal; keep terminal inside
+   small viewports (scale strategy, improved over the mockup)
+   ============================================================ */
+@media (max-width: 880px) {
+  .avq-tour .demo {
+    gap: 36px;
+  }
+  .avq-tour .stage {
+    padding: 8px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .avq-tour .stage {
+    padding: 8px 0;
+  }
+  .avq-tour .reset-btn {
+    right: 2px;
+  }
+  .avq-tour .panel {
+    width: 100%;
+    max-width: 362px;
+  }
+}
+
+/* The device is 362px wide + page padding: scale it down (visual only)
+   on very narrow phones so it never overflows. The spotlight math uses
+   getBoundingClientRect, which already accounts for the transform. */
+@media (max-width: 430px) {
+  .avq-tour .device {
+    transform: scale(0.92);
+    transform-origin: top center;
+    margin-bottom: -56px; /* compensate the layout height the scale frees up */
+  }
+}
+@media (max-width: 380px) {
+  .avq-tour .device {
+    transform: scale(0.86);
+    margin-bottom: -100px;
+  }
+}
