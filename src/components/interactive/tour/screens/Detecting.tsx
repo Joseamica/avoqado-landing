@@ -18,9 +18,28 @@ export default function Detecting() {
         </svg>
         <p className="detect-text">Acerca o inserta la tarjeta</p>
         <div className="pay-card" aria-hidden="true">
-          <div className="chip" />
-          <div className="num">&bull;&bull;&bull;&bull;&nbsp; &bull;&bull;&bull;&bull;&nbsp; &bull;&bull;&bull;&bull;&nbsp; 4242</div>
-          <div className="holder">Cliente Demo</div>
+          <div className="pc-top">
+            <span className="pc-brand">avoqado</span>
+            <svg className="pc-ctl" width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M5 6.5a5 5 0 0 1 0 5" stroke="rgba(255,255,255,0.55)" strokeWidth="1.4" strokeLinecap="round" />
+              <path d="M8 4.5a8.2 8.2 0 0 1 0 9" stroke="rgba(255,255,255,0.55)" strokeWidth="1.4" strokeLinecap="round" />
+              <path d="M11 2.5a11.5 11.5 0 0 1 0 13" stroke="rgba(255,255,255,0.55)" strokeWidth="1.4" strokeLinecap="round" />
+            </svg>
+          </div>
+          <div className="pc-chip" />
+          <div className="pc-num">
+            <span>&bull;&bull;&bull;&bull;</span>
+            <span>&bull;&bull;&bull;&bull;</span>
+            <span>&bull;&bull;&bull;&bull;</span>
+            <span>4242</span>
+          </div>
+          <div className="pc-bottom">
+            <div>
+              <span className="pc-exp">12/29</span>
+              <span className="pc-holder">Cliente Demo</span>
+            </div>
+            <span className="pc-visa">VISA</span>
+          </div>
         </div>
       </div>
     </section>

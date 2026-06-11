@@ -729,18 +729,36 @@
   color: var(--avq-text2);
 }
 
+/* The customer's card: charcoal premium look with a green sheen — the flat
+   green rectangle read as "fake y chafa" in founder QA. */
 .avq-tour .pay-card {
   position: absolute;
   left: 50%;
-  bottom: 34px;
-  width: 212px;
-  height: 132px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #0e3f30 0%, #10b981 130%);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
-  padding: 16px;
+  bottom: 30px;
+  width: 232px;
+  height: 146px;
+  border-radius: 16px;
+  background:
+    radial-gradient(120% 160% at 88% -20%, rgba(16, 185, 129, 0.3) 0%, rgba(16, 185, 129, 0) 55%),
+    linear-gradient(135deg, #31363c 0%, #1a1d21 52%, #24282d 100%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow:
+    0 22px 44px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  padding: 14px 17px 13px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   transform: translate(-50%, 320px) rotate(6deg);
   opacity: 0;
+}
+.avq-tour .pay-card::before {
+  /* diagonal light streak across the plastic */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 42%, rgba(255, 255, 255, 0.05) 50%, transparent 58%);
+  pointer-events: none;
 }
 .avq-tour .screen-detecting.active .pay-card {
   animation: avq-card-up 1.4s cubic-bezier(0.2, 0.85, 0.3, 1) 0.15s forwards;
@@ -755,25 +773,84 @@
     opacity: 1;
   }
 }
-.avq-tour .pay-card .chip {
-  width: 34px;
-  height: 25px;
-  border-radius: 5px;
-  background: linear-gradient(135deg, #f5d77a, #c9a23f);
+.avq-tour .pay-card .pc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.avq-tour .pay-card .num {
-  margin-top: 30px;
-  font-size: 15px;
-  letter-spacing: 2.5px;
-  color: rgba(250, 250, 250, 0.92);
-  font-weight: 500;
+.avq-tour .pay-card .pc-brand {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: rgba(255, 255, 255, 0.85);
 }
-.avq-tour .pay-card .holder {
+.avq-tour .pay-card .pc-ctl {
+  opacity: 0.85;
+}
+.avq-tour .pay-card .pc-chip {
+  width: 37px;
+  height: 27px;
   margin-top: 10px;
+  border-radius: 6px;
+  background: linear-gradient(140deg, #e8c878 0%, #b8923f 55%, #d9b860 100%);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+.avq-tour .pay-card .pc-chip::before {
+  content: '';
+  position: absolute;
+  inset: 4px 3px;
+  border: 1px solid rgba(60, 42, 8, 0.45);
+  border-radius: 3px;
+}
+.avq-tour .pay-card .pc-chip::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  top: 50%;
+  height: 1px;
+  background: rgba(60, 42, 8, 0.45);
+}
+.avq-tour .pay-card .pc-num {
+  margin-top: 12px;
+  display: flex;
+  gap: 13px;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: 2.2px;
+  color: #e8eaec;
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.7),
+    0 -0.5px 0 rgba(255, 255, 255, 0.18);
+}
+.avq-tour .pay-card .pc-bottom {
+  margin-top: auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.avq-tour .pay-card .pc-exp {
+  display: block;
+  font-size: 8.5px;
+  letter-spacing: 1.2px;
+  color: rgba(255, 255, 255, 0.45);
+}
+.avq-tour .pay-card .pc-holder {
+  display: block;
+  margin-top: 3px;
   font-size: 10px;
-  letter-spacing: 1.5px;
-  color: rgba(250, 250, 250, 0.6);
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  color: rgba(255, 255, 255, 0.72);
   text-transform: uppercase;
+}
+.avq-tour .pay-card .pc-visa {
+  font-size: 15px;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0.8px;
+  color: #f4f6f8;
 }
 
 /* ============================================================
@@ -1212,10 +1289,40 @@
     left 0.28s cubic-bezier(0.3, 0.9, 0.35, 1),
     top 0.28s cubic-bezier(0.3, 0.9, 0.35, 1);
 }
-.avq-tour .tour-pill .chev {
-  font-size: 15px;
-  opacity: 0.85;
-  line-height: 1;
+/* Tooltip tail: a rotated square on the edge facing the dot. data-pos is the
+   side of the TARGET the spotlight sits on, so the tail goes on the opposite
+   edge of the pill (pos="right" → pill is to the right → tail on its LEFT).
+   --tail-x (set by the engine) keeps it pointing at the dot when the pill
+   gets clamped against the stage edge. */
+.avq-tour .tour-pill::before {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--avq-green);
+  border-radius: 2px;
+  transform: rotate(45deg);
+  z-index: -1;
+}
+.avq-tour .tour-pill[data-pos='right']::before {
+  left: -4px;
+  top: 50%;
+  margin-top: -5px;
+}
+.avq-tour .tour-pill[data-pos='left']::before {
+  right: -4px;
+  top: 50%;
+  margin-top: -5px;
+}
+.avq-tour .tour-pill[data-pos='bottom']::before {
+  top: -4px;
+  left: var(--tail-x, 50%);
+  margin-left: -5px;
+}
+.avq-tour .tour-pill[data-pos='top']::before {
+  bottom: -4px;
+  left: var(--tail-x, 50%);
+  margin-left: -5px;
 }
 .avq-tour .tour-layer.jump .tour-dot,
 .avq-tour .tour-layer.jump .tour-pill {

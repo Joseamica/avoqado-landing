@@ -94,11 +94,11 @@ export interface TourEngineApi {
 
 const SCREEN_TRANSITION_MS = 230;
 const DEFAULT_TAP_DELAY = 60;
-/** Gap between the target's edge and the pulsing dot. */
-const DOT_GAP = 13;
-/** Gap between the dot and the pill. */
-const PILL_GAP_SIDE = 15;
-const PILL_GAP_VERT = 13;
+/** The dot sits ON the target's edge (founder QA: a floating dot reads as "no atina"). */
+const DOT_EDGE_INSET = 1;
+/** Gap between the dot and the pill (room for the ping ring + the pill's tail). */
+const PILL_GAP_SIDE = 20;
+const PILL_GAP_VERT = 17;
 /** How far the pill may overflow the stage horizontally. */
 const PILL_OVERHANG = 28;
 
@@ -165,17 +165,17 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     let dy: number;
 
     if (pos === 'right') {
-      dx = tr.right - sr.left + DOT_GAP;
+      dx = tr.right - sr.left - DOT_EDGE_INSET;
       dy = cy;
     } else if (pos === 'left') {
-      dx = tr.left - sr.left - DOT_GAP;
+      dx = tr.left - sr.left + DOT_EDGE_INSET;
       dy = cy;
     } else if (pos === 'bottom') {
       dx = cx;
-      dy = tr.bottom - sr.top + DOT_GAP;
+      dy = tr.bottom - sr.top - DOT_EDGE_INSET;
     } else {
       dx = cx;
-      dy = tr.top - sr.top - DOT_GAP;
+      dy = tr.top - sr.top + DOT_EDGE_INSET;
     }
 
     if (jump) layer.classList.add('jump');
@@ -187,6 +187,7 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     const ph = pill.offsetHeight;
     let px: number;
     let py: number;
+    let tailPos: PillPos = pos;
 
     if (pos === 'right') {
       px = dx + PILL_GAP_SIDE;
@@ -205,10 +206,25 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     /* keep the pill near the stage (it may overflow the bezel — that's the look) */
     const minX = -PILL_OVERHANG;
     const maxX = sr.width - pw + PILL_OVERHANG;
-    px = Math.max(minX, Math.min(maxX, px));
+    const clampedX = Math.max(minX, Math.min(maxX, px));
+
+    /* A side pill the clamp would drag back over the dot drops below/above the
+       dot instead (founder QA: the pill covering the dot reads as "no atina"). */
+    if ((pos === 'right' || pos === 'left') && Math.abs(clampedX - px) > 2) {
+      tailPos = dy + PILL_GAP_VERT + ph <= sr.height ? 'bottom' : 'top';
+      py = tailPos === 'bottom' ? dy + PILL_GAP_VERT : dy - PILL_GAP_VERT - ph;
+      px = Math.max(minX, Math.min(maxX, dx - pw / 2));
+    } else {
+      px = clampedX;
+    }
 
     pill.style.left = `${px}px`;
     pill.style.top = `${py}px`;
+
+    /* The tooltip tail points back at the dot. The pill may have been clamped
+       or flipped, so the tail side + x are computed, not assumed. */
+    pill.dataset.pos = tailPos;
+    pill.style.setProperty('--tail-x', `${Math.max(14, Math.min(pw - 14, dx - px))}px`);
 
     if (jump) {
       void layer.offsetWidth; /* flush so the next move animates */

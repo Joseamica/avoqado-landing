@@ -135,9 +135,10 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
               Classes off/jump and inline positions are engine-managed. */}
           <div className="tour-layer off jump" ref={layerRef} aria-hidden="true">
             <div className="tour-dot" ref={dotRef} />
+            {/* data-pos + --tail-x (set by the engine) drive the tooltip tail
+                that points back at the dot — no chevron glyph. */}
             <div className="tour-pill" ref={pillRef}>
               <span>{engine.pillText}</span>
-              <span className="chev">&#8250;</span>
             </div>
           </div>
         </div>
