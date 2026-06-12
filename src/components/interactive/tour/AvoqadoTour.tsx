@@ -1,28 +1,39 @@
 /**
- * AvoqadoTour — interactive guided demo of the Avoqado TPV (F1).
+ * AvoqadoTour — interactive guided demo of the Avoqado platform.
  *
- * Square-style spotlight tour over a pixel-faithful PAX A910S replica:
- * stage (terminal + floating dot/pill layer) + chapter panel + flow
- * selector + final CTA. The engine lives in engine.ts; the step scripts
- * and screen state in flows.ts; the screens in screens/.
+ * Square-style spotlight tour over four guided flows:
+ *   A/B (TPV)  — pixel-faithful PAX A910S replica (pago rápido / Cobrar).
+ *   R (web)    — the booking widget on a venue's page (phone browser).
+ *   L (web)    — the dashboard "Ligas de pago" journey (desktop browser).
  *
- * F2 seam: `onPaymentComplete` fires when the simulated payment is
- * approved (success screen) — that's where the real demo-sim POST to the
- * visitor's live demo venue hooks in. No-op by default.
+ * The engine lives in engine.ts; step scripts + screen state in flows.ts /
+ * flows-web.ts; screens in screens/ (TPV) and screens-web/ (browser).
  *
- * J1 handoff: when the tour completes, the chapter-panel CTA opens the
- * demo-dashboard journey in a new tab:
- * `${PUBLIC_DEMO_DASHBOARD_URL}/?demoTour=venta-tpv&amountCents&tipCents`.
+ * J1 handoff: when a TPV flow completes, the chapter-panel CTA opens the
+ * demo-dashboard journey (`?demoTour=venta-tpv`) in a new tab; web flows
+ * hand off to the plain live-demo dashboard.
  */
-import { useReducer, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import './tour.css';
+import './tour-web.css';
+import './tour-resv.css';
+import './tour-liga.css';
 
 import { useTourEngine } from './engine';
 import type { FlowId } from './engine';
-import { DEMO_BASE_AMOUNT, DEMO_TIP_AMOUNT, INITIAL_TPV_STATE, TOUR_FLOWS, tpvReducer } from './flows';
+import {
+  DEMO_BASE_AMOUNT,
+  DEMO_TIP_AMOUNT,
+  INITIAL_TPV_STATE,
+  INITIAL_WEB_STATE,
+  TOUR_FLOWS,
+  tpvReducer,
+  webReducer,
+} from './flows';
 import type { PaymentInfo, StepCtx } from './flows';
 
 import TerminalFrame from './TerminalFrame';
+import BrowserFrame from './BrowserFrame';
 import ChapterPanel from './ChapterPanel';
 import FastPaymentEntry from './screens/FastPaymentEntry';
 import Cobrar from './screens/Cobrar';
@@ -32,6 +43,14 @@ import MerchantSelection from './screens/MerchantSelection';
 import Detecting from './screens/Detecting';
 import Processing from './screens/Processing';
 import { ReceiptScreen, SuccessScreen } from './screens/SuccessReceipt';
+import ResvLanding from './screens-web/ResvLanding';
+import ResvServices from './screens-web/ResvServices';
+import ResvDateTime from './screens-web/ResvDateTime';
+import ResvCheckout from './screens-web/ResvCheckout';
+import ResvDone from './screens-web/ResvDone';
+import LigaList from './screens-web/LigaList';
+import LigaPurpose from './screens-web/LigaPurpose';
+import LigaForm from './screens-web/LigaForm';
 
 export type { PaymentInfo };
 
@@ -50,6 +69,7 @@ const DEMO_DASHBOARD_URL: string = (
 
 export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
   const [tpv, dispatch] = useReducer(tpvReducer, INITIAL_TPV_STATE);
+  const [web, webDispatch] = useReducer(webReducer, INITIAL_WEB_STATE);
 
   /** Last completed (simulated) payment — feeds the dashboard handoff URL. */
   const [lastPayment, setLastPayment] = useState<PaymentInfo | null>(null);
@@ -59,6 +79,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
   const layerRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const pillRef = useRef<HTMLDivElement>(null);
+  const panelWrapRef = useRef<HTMLDivElement>(null);
 
   const onPaymentRef = useRef(onPaymentComplete);
   onPaymentRef.current = onPaymentComplete;
@@ -74,34 +95,56 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
     buildCtx: helpers => ({
       ...helpers,
       dispatch,
+      webDispatch,
       notifyPayment: info => {
         setLastPayment(info);
         onPaymentRef.current?.(info);
       },
     }),
-    onReset: () => dispatch({ type: 'reset' }),
+    onReset: () => {
+      dispatch({ type: 'reset' });
+      webDispatch({ type: 'reset' });
+    },
   });
 
   const handleSelectFlow = (flow: FlowId) => engine.reset(flow);
 
-  /** J1 handoff: continue the journey in the visitor's demo dashboard. */
+  /* Mobile fold fix (founder QA): the panel + CTA live below the stage on
+     small screens — when the tour completes, bring the unlocked CTA into
+     view so the conversion moment is never invisible. */
+  useEffect(() => {
+    if (!engine.done) return;
+    if (window.innerWidth >= 880) return;
+    const t = window.setTimeout(() => {
+      panelWrapRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 450);
+    return () => window.clearTimeout(t);
+  }, [engine.done]);
+
+  /** Handoff: TPV flows deep-link the simulated charge; web flows open the demo dashboard. */
   const handleCtaClick = () => {
     if (!engine.done) return;
-    /* Graceful fallback: the tour can't complete without a payment, but if
-       PaymentInfo is somehow missing we still hand off with the demo amounts. */
-    const amount = lastPayment?.amount ?? DEMO_BASE_AMOUNT;
-    const tip = lastPayment?.tip ?? DEMO_TIP_AMOUNT;
-    const url =
-      `${DEMO_DASHBOARD_URL}/?demoTour=venta-tpv` +
-      `&amountCents=${Math.round(amount * 100)}` +
-      `&tipCents=${Math.round(tip * 100)}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    if (engine.flow === 'A' || engine.flow === 'B') {
+      /* Graceful fallback: the tour can't complete without a payment, but if
+         PaymentInfo is somehow missing we still hand off with the demo amounts. */
+      const amount = lastPayment?.amount ?? DEMO_BASE_AMOUNT;
+      const tip = lastPayment?.tip ?? DEMO_TIP_AMOUNT;
+      const url =
+        `${DEMO_DASHBOARD_URL}/?demoTour=venta-tpv` +
+        `&amountCents=${Math.round(amount * 100)}` +
+        `&tipCents=${Math.round(tip * 100)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } else {
+      window.open(DEMO_DASHBOARD_URL, '_blank', 'noopener,noreferrer');
+    }
   };
+
+  const isTpvFlow = engine.flow === 'A' || engine.flow === 'B';
 
   return (
     <div className="avq-tour">
-      <div className="demo">
-        {/* ====================== STAGE: terminal + tour layer ====================== */}
+      <div className={`demo flow-${engine.flow.toLowerCase()}`}>
+        {/* ====================== STAGE: device/browser + tour layer ====================== */}
         <div className="stage" ref={stageRef}>
           <button
             type="button"
@@ -113,23 +156,45 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
             &#8634;
           </button>
 
-          <TerminalFrame screensRef={screensRef} onTpvClick={engine.handleTpvClick}>
-            <FastPaymentEntry amount={tpv.amount} popKey={tpv.amountPopKey} />
-            <Cobrar
-              view={tpv.cobrarView}
-              cartPlayera={tpv.cartPlayera}
-              cartGorra={tpv.cartGorra}
-              cartItems={tpv.cartItems}
-              cartButtonLabel={tpv.cartButtonLabel}
-            />
-            <Review starsFilled={tpv.starsFilled} />
-            <Tip selected={tpv.tipSelected} totalLabel={tpv.tipTotalLabel} />
-            <MerchantSelection cardSelected={tpv.cardSelected} />
-            <Detecting />
-            <Processing />
-            <SuccessScreen confettiKey={tpv.confettiKey} />
-            <ReceiptScreen />
-          </TerminalFrame>
+          {isTpvFlow ? (
+            <TerminalFrame screensRef={screensRef} onTpvClick={engine.handleTpvClick}>
+              <FastPaymentEntry amount={tpv.amount} popKey={tpv.amountPopKey} />
+              <Cobrar
+                view={tpv.cobrarView}
+                cartPlayera={tpv.cartPlayera}
+                cartGorra={tpv.cartGorra}
+                cartItems={tpv.cartItems}
+                cartButtonLabel={tpv.cartButtonLabel}
+                cartSheetOpen={tpv.cartSheetOpen}
+              />
+              <Review starsFilled={tpv.starsFilled} />
+              <Tip selected={tpv.tipSelected} totalLabel={tpv.tipTotalLabel} />
+              <MerchantSelection cardSelected={tpv.cardSelected} />
+              <Detecting />
+              <Processing />
+              <SuccessScreen confettiKey={tpv.confettiKey} />
+              <ReceiptScreen />
+            </TerminalFrame>
+          ) : engine.flow === 'R' ? (
+            <BrowserFrame variant="phone" url="book.avoqado.io/estetica-bella" screensRef={screensRef} onTpvClick={engine.handleTpvClick}>
+              <ResvLanding />
+              <ResvServices serviceAdded={web.resvServiceAdded} />
+              <ResvDateTime day={web.resvDay} slot={web.resvSlot} />
+              <ResvCheckout />
+              <ResvDone />
+            </BrowserFrame>
+          ) : (
+            <BrowserFrame
+              variant="desktop"
+              url="dashboard.avoqado.io/venues/estudio-lumina/payment-links"
+              screensRef={screensRef}
+              onTpvClick={engine.handleTpvClick}
+            >
+              <LigaList saved={web.ligaSaved} waOpen={web.ligaWaOpen} waSent={web.ligaWaSent} paid={web.ligaPaid} toast={web.ligaToast} />
+              <LigaPurpose purpose={web.ligaPurpose} />
+              <LigaForm amountTyped={web.ligaAmount} />
+            </BrowserFrame>
+          )}
 
           {/* Floating spotlight: pulsing dot + green pill (Square-style).
               Classes off/jump and inline positions are engine-managed. */}
@@ -144,13 +209,15 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
         </div>
 
         {/* ====================== CHAPTER PANEL ====================== */}
-        <ChapterPanel
-          chapter={engine.chapter}
-          done={engine.done}
-          flow={engine.flow}
-          onSelectFlow={handleSelectFlow}
-          onCtaClick={handleCtaClick}
-        />
+        <div className="panel-wrap" ref={panelWrapRef}>
+          <ChapterPanel
+            chapter={engine.chapter}
+            done={engine.done}
+            flow={engine.flow}
+            onSelectFlow={handleSelectFlow}
+            onCtaClick={handleCtaClick}
+          />
+        </div>
       </div>
     </div>
   );

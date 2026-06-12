@@ -11,8 +11,9 @@ import { DEMO_BASE_LABEL, DEMO_TIP_LABEL, DEMO_TOTAL_LABEL } from '../flows';
 /* ==========================================================
    Confetti — 44 piezas regeneradas en cada aprobación
    ========================================================== */
-const CONFETTI_COLORS = ['#10B981', '#34D399', '#FBBF24', '#F472B6', '#60A5FA', '#FAFAFA'];
-const CONFETTI_COUNT = 44;
+/* Paleta real del TPV (PaymentApprovedScreen.kt) */
+const CONFETTI_COLORS = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#F38181', '#7B68EE', '#22C55E', '#3B82F6'];
+const CONFETTI_COUNT = 50;
 
 function buildConfettiStyles(): CSSProperties[] {
   return Array.from({ length: CONFETTI_COUNT }, (_, i) => {
@@ -112,9 +113,28 @@ export function ReceiptScreen() {
   return (
     <section className="tpv-screen" data-screen="receipt">
       <div className="receipt-body">
-        <button type="button" className="btn btn-green" data-action="new-payment">
-          Nuevo Pago
-        </button>
+        {/* toolbar real: Home (outline) + "Nuevo Pago" neutro + detalles */}
+        <div className="receipt-toolbar">
+          <button type="button" className="icon-btn" aria-label="Inicio">
+            <svg width="19" height="18" viewBox="0 0 17 16" fill="none" aria-hidden="true">
+              <path
+                d="M2 7.2 8.5 1.8 15 7.2V13a1.4 1.4 0 0 1-1.4 1.4H3.4A1.4 1.4 0 0 1 2 13V7.2Z"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+          <button type="button" className="btn btn-neutral" data-action="new-payment">
+            Nuevo Pago
+          </button>
+          <button type="button" className="icon-btn" aria-label="Detalles de la orden">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+        {/* ticket oscuro (surfaceVariant #282828) con QR en caja blanca, como el real */}
         <div className="ticket">
           <div className="qr">
             <svg viewBox={`0 0 ${QR_SIZE} ${QR_SIZE}`} shapeRendering="crispEdges" role="img" aria-label="Código QR del recibo (demo)">
@@ -138,14 +158,25 @@ export function ReceiptScreen() {
             <span>{DEMO_TIP_LABEL}</span>
           </div>
         </div>
-        <div className="receipt-actions">
-          <button type="button" className="btn btn-outline">
+        {/* barra segmentada de acciones con iconos (real), WA en #25D366 */}
+        <div className="receipt-segbar">
+          <button type="button">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9V3h12v6M6 18h12v3H6v-3zM4 9h16a2 2 0 0 1 2 2v5h-4M2 16h4v-5a2 2 0 0 1 2-2" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+            </svg>
             Imprimir
           </button>
-          <button type="button" className="btn btn-outline">
+          <button type="button">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.6" />
+              <path d="m4 7 8 6 8-6" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+            </svg>
             Email
           </button>
-          <button type="button" className="btn btn-outline">
+          <button type="button" className="wa">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.2 1.1-1.7 1.2-.4 0-.9.2-3.1-.6-2.6-1-4.3-3.7-4.4-3.9-.1-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4l.9 2.1c.1.2.1.4 0 .6l-.4.6-.5.5c-.2.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1.1 2.2 1.4 2.5 1.5.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4 0 .1 0 .7-.2 1.3z" />
+            </svg>
             WhatsApp
           </button>
         </div>

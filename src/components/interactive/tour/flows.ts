@@ -12,6 +12,11 @@
  */
 import type { Dispatch } from 'react';
 import type { EngineCtx, FlowId, TourStep } from './engine';
+import { RESERVA_STEPS, LIGA_STEPS } from './flows-web';
+import type { WebAction } from './flows-web';
+
+export type { WebAction, WebState } from './flows-web';
+export { INITIAL_WEB_STATE, webReducer } from './flows-web';
 
 /* ==========================================================
    Demo amounts (single source for steps, screens and the F2 seam)
@@ -34,16 +39,16 @@ export interface PaymentInfo {
    TPV screen state — everything visible inside the screens
    ========================================================== */
 export interface TpvState {
-  /** FastPaymentEntry display. */
+  /** FastPaymentEntry display — raw as typed, like the real app ('$0', '$295'). */
   amount: string;
   /** Increments per keypress to retrigger the amount "pop" animation. */
   amountPopKey: number;
   /** Review screen: stars filled so far (0–5, staggered by timers). */
   starsFilled: number;
-  /** Tip screen: 18% card selected + header total updated. */
+  /** Tip screen: 18% card selected + header subtitle updated (Subtotal → Total). */
   tipSelected: boolean;
   tipTotalLabel: string;
-  /** MerchantSelection: "Tarjeta" segment selected. */
+  /** MerchantSelection: "Tarjeta" row selected. */
   cardSelected: boolean;
   /** Increments per approval to (re)play the confetti burst; 0 = none. */
   confettiKey: number;
@@ -53,14 +58,16 @@ export interface TpvState {
   cartGorra: boolean;
   cartItems: number;
   cartButtonLabel: string;
+  /** Real flow: "Cobrar" opens the CartDetailsSheet before payment. */
+  cartSheetOpen: boolean;
 }
 
 export const INITIAL_TPV_STATE: TpvState = {
-  amount: '$0.00',
+  amount: '$0',
   amountPopKey: 0,
   starsFilled: 0,
   tipSelected: false,
-  tipTotalLabel: `Total: ${DEMO_BASE_LABEL}`,
+  tipTotalLabel: `Subtotal: ${DEMO_BASE_LABEL} MXN`,
   cardSelected: false,
   confettiKey: 0,
   cobrarView: 'teclado',
@@ -68,6 +75,7 @@ export const INITIAL_TPV_STATE: TpvState = {
   cartGorra: false,
   cartItems: 0,
   cartButtonLabel: 'Cobrar',
+  cartSheetOpen: false,
 };
 
 export type TpvAction =
@@ -78,6 +86,7 @@ export type TpvAction =
   | { type: 'confetti' }
   | { type: 'cobrarShowProducts' }
   | { type: 'cobrarAdd'; product: 'playera' | 'gorra'; totalDisplay: string }
+  | { type: 'cobrarOpenSheet' }
   | { type: 'reset' };
 
 export function tpvReducer(state: TpvState, action: TpvAction): TpvState {
@@ -87,7 +96,7 @@ export function tpvReducer(state: TpvState, action: TpvAction): TpvState {
     case 'setStars':
       return { ...state, starsFilled: action.count };
     case 'selectTip':
-      return { ...state, tipSelected: true, tipTotalLabel: `Total: ${DEMO_TOTAL_LABEL}` };
+      return { ...state, tipSelected: true, tipTotalLabel: `Total: ${DEMO_TOTAL_LABEL} MXN` };
     case 'selectCard':
       return { ...state, cardSelected: true };
     case 'confetti':
@@ -102,6 +111,8 @@ export function tpvReducer(state: TpvState, action: TpvAction): TpvState {
         cartItems: state.cartItems + 1,
         cartButtonLabel: `Cobrar ${action.totalDisplay}`,
       };
+    case 'cobrarOpenSheet':
+      return { ...state, cartSheetOpen: true };
     case 'reset':
       return INITIAL_TPV_STATE;
   }
@@ -112,6 +123,8 @@ export function tpvReducer(state: TpvState, action: TpvAction): TpvState {
    ========================================================== */
 export interface StepCtx extends EngineCtx {
   dispatch: Dispatch<TpvAction>;
+  /** Web flows (R reserva / L liga de pago) mutate their own state slice. */
+  webDispatch: Dispatch<WebAction>;
   notifyPayment: (info: PaymentInfo) => void;
 }
 
@@ -168,7 +181,7 @@ function tailSteps(): TourStep<StepCtx>[] {
     { screen: 'processing', auto: 1300, ch: 3 },
     {
       screen: 'success',
-      auto: 2100,
+      auto: 2500 /* duración real del Aprobado en el TPV */,
       ch: 3,
       onEnter: ctx => {
         ctx.dispatch({ type: 'confetti' });
@@ -185,13 +198,15 @@ function tailSteps(): TourStep<StepCtx>[] {
 }
 
 export const TOUR_FLOWS: Record<FlowId, TourStep<StepCtx>[]> = {
-  /* Flow A — "Pago rápido": guided keypad sequence, amount grows per key. */
+  /* Flow A — "Pago rápido": guided keypad sequence; the amount renders raw
+     as typed ('$2' → '$295'), like the real app (decimals apply on submit).
+     pos:'top' keeps the pill off the neighboring keys (founder QA). */
   A: [
     {
       screen: 'fast',
       target: '[data-key="2"]',
       pill: 'Marca el monto',
-      pos: 'right',
+      pos: 'top',
       ch: 1,
       onTap: ctx => ctx.dispatch({ type: 'setAmount', value: '$2' }),
       tapDelay: 80,
@@ -200,7 +215,7 @@ export const TOUR_FLOWS: Record<FlowId, TourStep<StepCtx>[]> = {
       screen: 'fast',
       target: '[data-key="9"]',
       pill: 'Marca el monto',
-      pos: 'right',
+      pos: 'top',
       ch: 1,
       onTap: ctx => ctx.dispatch({ type: 'setAmount', value: '$29' }),
       tapDelay: 80,
@@ -209,16 +224,16 @@ export const TOUR_FLOWS: Record<FlowId, TourStep<StepCtx>[]> = {
       screen: 'fast',
       target: '[data-key="5"]',
       pill: 'Marca el monto',
-      pos: 'right',
+      pos: 'top',
       ch: 1,
-      onTap: ctx => ctx.dispatch({ type: 'setAmount', value: DEMO_BASE_LABEL }),
+      onTap: ctx => ctx.dispatch({ type: 'setAmount', value: '$295' }),
       tapDelay: 80,
     },
     {
       screen: 'fast',
       target: '[data-t="key-confirm"]',
       pill: 'Confirma',
-      pos: 'right',
+      pos: 'left',
       ch: 1,
       tapDelay: 180,
     },
@@ -260,8 +275,25 @@ export const TOUR_FLOWS: Record<FlowId, TourStep<StepCtx>[]> = {
       pill: 'Cobra',
       pos: 'top',
       ch: 1,
+      onTap: ctx => ctx.dispatch({ type: 'cobrarOpenSheet' }),
+      tapDelay: 320,
+    },
+    /* Real flow: "Cobrar" opens the CartDetailsSheet first; the definitive
+       charge happens from the sheet's own Cobrar button. */
+    {
+      screen: 'cobrar',
+      target: '[data-t="sheet-cobrar"]',
+      pill: 'Confirma el cobro',
+      pos: 'top',
+      ch: 1,
       tapDelay: 200,
     },
     ...tailSteps(),
   ],
+
+  /* Flow R — "Reserva en línea": the booking widget on the venue's page. */
+  R: RESERVA_STEPS,
+
+  /* Flow L — "Liga de pago": create + share a payment link in the dashboard. */
+  L: LIGA_STEPS,
 };

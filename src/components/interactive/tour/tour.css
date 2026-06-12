@@ -9,17 +9,26 @@
    ============================================================ */
 
 .avq-tour {
-  /* Design tokens — extracted from the real TPV Compose theme */
+  /* Design tokens — extracted from the real TPV Compose theme (dark, el
+     default del TPV): primary es GRIS CLARO #E8E8E8, no verde — el verde
+     queda para la marca del tour (pill/dot/CTA) y statusSuccess. */
   --avq-green: #10b981;
   --avq-green-light: #34d399;
   --avq-green-press: #059669;
+  --avq-on-green: #052e22;
   --avq-bg: #1c1c1c; /* TPV screen background */
   --avq-surface: #2a2a2a;
+  --avq-surface-variant: #282828;
+  --avq-surface-press: #353535;
+  --avq-primary: #e8e8e8; /* DarkPrimary real */
+  --avq-on-primary: #2a2a2a;
+  --avq-primary-container: #505050;
+  --avq-success: #34d399; /* statusSuccess real en dark */
   --avq-text: #fafafa;
   --avq-text2: #b5b5b5;
+  --avq-text-dim: #6f6f6f;
   --avq-error: #eb5757;
   --avq-outline: #383838;
-  --avq-gold: #fbbf24;
 
   width: 100%;
   font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
@@ -338,27 +347,32 @@
 }
 
 /* ---------- Shared TPV pieces ---------- */
+/* AvoqadoTopBar real: franja surface con borde inferior, 48dp, ArrowBack completo */
 .avq-tour .topbar {
   display: grid;
-  grid-template-columns: 32px 1fr 32px;
+  grid-template-columns: 36px 1fr 36px;
   align-items: center;
-  min-height: 54px;
-  padding: 8px 12px 4px;
+  min-height: 48px;
+  padding: 4px 10px;
+  background: var(--avq-surface);
+  border-bottom: 1px solid var(--avq-outline);
 }
 .avq-tour .topbar .back {
-  font-size: 26px;
-  color: var(--avq-text2);
-  line-height: 1;
+  color: var(--avq-text);
+  line-height: 0;
   text-align: left;
   background: none;
   border: none;
-  padding: 0 0 4px 2px;
+  padding: 4px;
 }
 .avq-tour .topbar .titles {
   text-align: center;
 }
+.avq-tour .topbar.left .titles {
+  text-align: left;
+}
 .avq-tour .topbar .title {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.2px;
 }
@@ -378,26 +392,37 @@
     background 0.15s ease,
     transform 0.1s ease;
 }
-.avq-tour .btn-green {
-  background: var(--avq-green);
-  color: #052e22;
+/* AvoqadoButton real (dark): primary #E8E8E8 con texto oscuro */
+.avq-tour .btn-primary {
+  background: var(--avq-primary);
+  color: var(--avq-on-primary);
 }
-.avq-tour .btn-green:active {
-  background: var(--avq-green-press);
+.avq-tour .btn-primary.disabled {
+  background: var(--avq-surface-variant);
+  color: var(--avq-text2);
 }
-.avq-tour .btn-outline {
+/* botón neutro (toolbar del recibo real): surface con texto claro */
+.avq-tour .btn-neutral {
   background: var(--avq-surface);
   color: var(--avq-text);
   border: 1px solid var(--avq-outline);
+  flex: 1;
 }
-
-.avq-tour .link-btn {
+.avq-tour .btn-outline {
+  background: var(--avq-surface);
+  color: var(--avq-primary);
+  border: 1px solid var(--avq-outline);
+}
+.avq-tour .icon-btn {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  border: 1px solid var(--avq-outline);
   background: none;
-  border: none;
-  color: var(--avq-text2);
-  font-size: 14px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  color: var(--avq-text);
+  display: grid;
+  place-items: center;
 }
 
 /* ============================================================
@@ -420,7 +445,7 @@
   letter-spacing: -1px;
 }
 .avq-tour .fast-amount.zero {
-  color: #5c5c5c;
+  color: var(--avq-text-dim);
 }
 .avq-tour .fast-amount.pop {
   animation: avq-pop-amt 0.18s ease;
@@ -431,44 +456,53 @@
   }
 }
 
+/* CustomKeyboard real: grid de dígitos 3×4 (fila final C 0 .) + columna de
+   acciones a la derecha con backspace arriba y confirmar ALTO #E8E8E8 */
 .avq-tour .keypad {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   gap: 8px;
   padding: 0 12px 14px;
 }
+.avq-tour .keypad-digits {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.avq-tour .keypad-actions {
+  width: 74px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 .avq-tour .key {
-  height: 50px;
+  height: 54px;
   border-radius: 12px;
   background: var(--avq-surface);
   border: 1px solid var(--avq-outline);
   color: var(--avq-text);
-  font-size: 21px;
-  font-weight: 500;
+  font-size: 22px;
+  font-weight: 700;
   transition: background 0.12s ease;
 }
 .avq-tour .key:active {
-  background: #353535;
+  background: var(--avq-surface-press);
 }
 .avq-tour .key-del {
-  font-size: 17px;
-  color: var(--avq-text2);
-}
-.avq-tour .key-clear {
-  color: var(--avq-error);
-  font-size: 17px;
-  font-weight: 600;
+  color: var(--avq-text);
+  display: grid;
+  place-items: center;
 }
 .avq-tour .key-confirm {
-  grid-column: span 2;
-  background: var(--avq-green);
-  border-color: var(--avq-green);
-  color: #052e22;
-  font-size: 22px;
+  flex: 1;
+  background: var(--avq-primary);
+  border-color: var(--avq-primary);
+  color: var(--avq-on-primary);
+  font-size: 24px;
   font-weight: 700;
 }
 .avq-tour .key-confirm:active {
-  background: var(--avq-green-press);
+  background: #d4d4d4;
 }
 
 /* ============================================================
@@ -480,12 +514,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 28px;
-  padding-bottom: 40px;
 }
 .avq-tour .stars {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 .avq-tour .star {
   background: none;
@@ -495,21 +527,37 @@
 }
 .avq-tour .star svg {
   display: block;
-  width: 42px;
-  height: 42px;
+  width: 46px;
+  height: 46px;
 }
 .avq-tour .star svg path {
   fill: none;
-  stroke: #6f6f6f;
+  stroke: var(--avq-text2);
   stroke-width: 1.6;
   stroke-linejoin: round;
   transition:
     fill 0.15s ease,
     stroke 0.15s ease;
 }
+/* estrellas llenas en primary #E8E8E8 (AvoqadoRatingInput real), no doradas */
 .avq-tour .star.filled svg path {
-  fill: var(--avq-gold);
-  stroke: var(--avq-gold);
+  fill: var(--avq-primary);
+  stroke: var(--avq-primary);
+}
+/* caption "N de 5 estrellas" siempre reserva su línea (bodySmall real) */
+.avq-tour .stars-caption {
+  min-height: 18px;
+  margin-top: 12px;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--avq-text2);
+}
+/* "Saltar" real: AvoqadoSecondaryButton outlined full-width en el footer */
+.avq-tour .review-footer {
+  padding: 0 14px 16px;
+}
+.avq-tour .review-footer .btn {
+  width: 100%;
 }
 .avq-tour .star.filled svg {
   animation: avq-star-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -561,12 +609,14 @@
   color: var(--avq-text2);
   margin-top: 4px;
 }
+/* selección real (dark): borde 2dp primary + fondo primaryContainer #505050 */
 .avq-tour .tip-card.selected {
-  border-color: var(--avq-green);
-  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--avq-primary);
+  background: var(--avq-primary-container);
 }
+.avq-tour .tip-card.selected .pct,
 .avq-tour .tip-card.selected .amt {
-  color: var(--avq-green-light);
+  color: var(--avq-primary);
 }
 .avq-tour .tip-custom {
   background: var(--avq-surface);
@@ -581,6 +631,14 @@
   text-align: center;
   margin-top: 4px;
 }
+/* "Sin propina" real: texto primary Medium, SIN subrayado */
+.avq-tour .tip-skip-btn {
+  background: none;
+  border: none;
+  color: var(--avq-primary);
+  font-size: 14px;
+  font-weight: 500;
+}
 .avq-tour .tip-spacer {
   flex: 1;
 }
@@ -594,137 +652,91 @@
   flex-direction: column;
   padding: 8px 14px 16px;
 }
+/* hero real: monto en primary, desglose en dos líneas apiladas, ⭐ emoji */
 .avq-tour .m-total {
   text-align: center;
-  font-size: 36px;
+  font-size: 38px;
   font-weight: 700;
   letter-spacing: -0.8px;
-  margin-top: 8px;
+  margin-top: 10px;
+  color: var(--avq-primary);
 }
 .avq-tour .m-breakdown {
   text-align: center;
   font-size: 13px;
   color: var(--avq-text2);
-  margin-top: 6px;
+  margin-top: 5px;
 }
 .avq-tour .m-stars {
   text-align: center;
-  font-size: 17px;
-  letter-spacing: 3px;
-  color: var(--avq-gold);
-  margin-top: 8px;
-}
-
-.avq-tour .merchant-card {
-  margin-top: 18px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(16, 185, 129, 0.08);
-  border: 1.5px solid var(--avq-green);
-  border-radius: 12px;
-  padding: 12px 14px;
-}
-.avq-tour .m-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--avq-green);
-  color: #052e22;
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.avq-tour .m-info {
-  flex: 1;
-  min-width: 0;
-}
-.avq-tour .m-name {
-  font-size: 14px;
-  font-weight: 600;
-}
-.avq-tour .m-sub {
-  font-size: 12px;
-  color: var(--avq-text2);
-  margin-top: 2px;
-}
-.avq-tour .m-check {
-  color: var(--avq-green-light);
-  flex-shrink: 0;
+  font-size: 15px;
+  letter-spacing: 2px;
+  margin-top: 10px;
 }
 
 .avq-tour .m-label {
-  margin-top: 20px;
+  margin-top: 26px;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--avq-text2);
 }
-.avq-tour .seg-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+/* método de pago real: filas full-width; selección = borde 2dp primary + tinte */
+.avq-tour .method-list {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
   margin-top: 10px;
 }
-.avq-tour .seg {
-  height: 48px;
+.avq-tour .method-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 14px;
   border-radius: 12px;
   background: var(--avq-surface);
   border: 1.5px solid var(--avq-outline);
   color: var(--avq-text);
   font-size: 14px;
   font-weight: 600;
+  text-align: left;
   transition:
     border-color 0.15s ease,
-    background 0.15s ease,
-    color 0.15s ease;
+    background 0.15s ease;
 }
-.avq-tour .seg.selected {
-  border-color: var(--avq-green);
-  background: rgba(16, 185, 129, 0.12);
-  color: var(--avq-green-light);
+.avq-tour .method-row.selected {
+  border-color: var(--avq-primary);
+  background: rgba(232, 232, 232, 0.08);
+  color: var(--avq-primary);
 }
 
 /* ============================================================
    Screen: DetectingCard
    ============================================================ */
+/* PaymentDetectingCard real: icono contactless monocromo ARRIBA → monto →
+   instrucción (con el top bar "Pago con Tarjeta" visible). */
 .avq-tour .detect-body {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 48px;
+  padding-top: 26px;
   position: relative;
   overflow: hidden;
 }
 .avq-tour .detect-amount {
-  font-size: 30px;
+  margin-top: 22px;
+  font-size: 34px;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.6px;
 }
 .avq-tour .detect-icon {
-  margin-top: 36px;
-}
-.avq-tour .detect-icon .wave {
-  animation: avq-wave-pulse 1.6s ease infinite;
-}
-.avq-tour .detect-icon .wave.w2 {
-  animation-delay: 0.25s;
-}
-@keyframes avq-wave-pulse {
-  0%,
-  100% {
-    opacity: 0.25;
-  }
-  40% {
-    opacity: 1;
-  }
+  margin-top: 6px;
 }
 .avq-tour .detect-text {
-  margin-top: 26px;
+  margin-top: 14px;
   font-size: 14px;
   color: var(--avq-text2);
 }
@@ -862,15 +874,25 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 24px;
   padding-bottom: 30px;
 }
+/* PaymentLoadingContent real: card surface con spinner 64dp primary */
+.avq-tour .proc-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  background: var(--avq-surface);
+  border: 1px solid var(--avq-outline);
+  border-radius: 16px;
+  padding: 40px 52px;
+}
 .avq-tour .spinner {
-  width: 54px;
-  height: 54px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  border: 4px solid rgba(250, 250, 250, 0.1);
-  border-top-color: var(--avq-green);
+  border: 5px solid rgba(250, 250, 250, 0.1);
+  border-top-color: var(--avq-primary);
   animation: avq-spin 0.85s linear infinite;
 }
 @keyframes avq-spin {
@@ -904,7 +926,7 @@
 .avq-tour .sc-circle,
 .avq-tour .sc-check {
   fill: none;
-  stroke: var(--avq-green);
+  stroke: var(--avq-success); /* statusSuccess #34D399 real */
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 100;
@@ -1007,10 +1029,21 @@
   gap: 12px;
   padding: 12px 14px 14px;
 }
+/* toolbar real: Home (outline) + "Nuevo Pago" neutro + detalles */
+.avq-tour .receipt-toolbar {
+  display: flex;
+  gap: 8px;
+}
+.avq-tour .receipt-toolbar .btn {
+  height: 48px;
+  font-size: 14px;
+}
+/* ticket real: textura surfaceVariant OSCURA con QR en caja blanca */
 .avq-tour .ticket {
-  background: #fafaf8;
-  color: #1c1c1c;
-  border-radius: 14px;
+  background: var(--avq-surface-variant);
+  color: var(--avq-text);
+  border: 1px solid var(--avq-outline);
+  border-radius: 18px;
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
@@ -1018,12 +1051,12 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 .avq-tour .ticket .qr {
-  width: 124px;
-  height: 124px;
-  border-radius: 8px;
+  width: 128px;
+  height: 128px;
+  border-radius: 18px;
   background: #fff;
-  padding: 6px;
-  border: 1px solid #e6e6e2;
+  padding: 7px;
+  border: 7px solid var(--avq-outline);
 }
 .avq-tour .ticket .qr svg {
   display: block;
@@ -1034,14 +1067,14 @@
   margin-top: 10px;
   font-size: 11px;
   line-height: 1.45;
-  color: #585852;
+  color: var(--avq-text2);
   text-align: center;
   max-width: 230px;
 }
 .avq-tour .ticket .dash {
   width: 100%;
   border: none;
-  border-top: 1.5px dashed #c9c9c2;
+  border-top: 1.5px dashed #4a4a4a;
   margin: 12px 0;
 }
 .avq-tour .ticket .row {
@@ -1049,26 +1082,43 @@
   display: flex;
   justify-content: space-between;
   font-size: 13px;
-  color: #4a4a45;
+  color: var(--avq-text2);
   margin-top: 6px;
 }
 .avq-tour .ticket .row.total {
   font-size: 15px;
   font-weight: 700;
-  color: #1c1c1c;
+  color: var(--avq-text);
   margin-top: 0;
 }
 .avq-tour .ticket .row.total b {
   font-size: 18px;
 }
-.avq-tour .receipt-actions {
+/* acciones reales: barra segmentada con iconos, WhatsApp en #25D366 */
+.avq-tour .receipt-segbar {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  background: var(--avq-surface);
+  border: 1px solid var(--avq-outline);
+  border-radius: 12px;
+  overflow: hidden;
 }
-.avq-tour .receipt-actions .btn {
-  height: 42px;
-  font-size: 13px;
+.avq-tour .receipt-segbar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 46px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--avq-text);
+  border-left: 1px solid var(--avq-outline);
+}
+.avq-tour .receipt-segbar button:first-child {
+  border-left: none;
+}
+.avq-tour .receipt-segbar .wa svg {
+  color: #25d366;
 }
 
 /* ============================================================
@@ -1081,29 +1131,65 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
+  position: relative;
 }
+/* SearchBarView real: píldora Buscar + icon boxes refrescar / escanear */
+.avq-tour .cobrar-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px 2px;
+}
+.avq-tour .search-pill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(40, 40, 40, 0.5);
+  color: var(--avq-text2);
+  font-size: 13px;
+}
+.avq-tour .icon-box {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  border: 1px solid var(--avq-outline);
+  display: grid;
+  place-items: center;
+  color: var(--avq-text2);
+}
+/* tabs reales: ScrollableTabRow con indicador subrayado, sin verde */
 .avq-tour .cobrar-tabs {
   display: flex;
-  gap: 6px;
-  padding: 8px 12px 10px;
-  overflow: hidden;
+  gap: 4px;
+  padding: 4px 8px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--avq-outline);
+}
+.avq-tour .cobrar-tabs::-webkit-scrollbar {
+  display: none;
 }
 .avq-tour .cobrar-tab {
   flex: 0 0 auto;
-  height: 32px;
-  padding: 0 12px;
-  border-radius: 16px;
-  background: var(--avq-surface);
+  height: 38px;
+  padding: 0 10px;
+  background: none;
   color: var(--avq-text2);
-  border: 1px solid var(--avq-outline);
+  border: none;
+  border-bottom: 2.5px solid transparent;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   white-space: nowrap;
 }
 .avq-tour .cobrar-tab.active {
-  background: rgba(16, 185, 129, 0.16);
-  color: var(--avq-green-light);
-  border-color: var(--avq-green);
+  color: var(--avq-primary);
+  font-weight: 700;
+  border-bottom-color: var(--avq-primary);
 }
 .avq-tour .cobrar-view {
   flex: 1;
@@ -1114,16 +1200,41 @@
 .avq-tour .cobrar-view.active {
   display: block;
 }
-/* vista Teclado (default, no guiada): pad fantasma compacto */
+/* vista Teclado (default, no guiada): monto a la izquierda + quick amounts
+   + pad fantasma con fila final C 0 + (como NumericKeypadView) */
+.avq-tour .mini-amount {
+  text-align: left;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--avq-text);
+  padding: 12px 18px 4px;
+}
+.avq-tour .quick-row {
+  display: flex;
+  gap: 7px;
+  padding: 4px 14px 6px;
+  opacity: 0.55;
+}
+.avq-tour .quick-row span {
+  flex: 1;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--avq-outline);
+  display: grid;
+  place-items: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--avq-text2);
+}
 .avq-tour .mini-pad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 7px;
-  padding: 6px 14px;
+  padding: 2px 14px 6px;
   opacity: 0.55;
 }
 .avq-tour .mini-pad span {
-  height: 44px;
+  height: 42px;
   border-radius: 10px;
   background: var(--avq-surface);
   border: 1px solid var(--avq-outline);
@@ -1133,92 +1244,150 @@
   font-weight: 600;
   color: var(--avq-text2);
 }
-.avq-tour .mini-amount {
-  text-align: center;
-  font-size: 30px;
-  font-weight: 700;
-  color: #5d5d5d;
-  padding: 12px 0 6px;
+.avq-tour .mini-pad span.plus {
+  color: var(--avq-primary);
+  border-color: var(--avq-primary);
 }
-/* vista Productos: catálogo 2 cols */
+/* vista Productos: 3 columnas, tiles sin borde con iniciales sobre tinte
+   de categoría y precio apagado (ProductGridView real, sin qty badge) */
 .avq-tour .prod-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 9px;
-  padding: 4px 12px 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 10px 12px;
 }
 .avq-tour .prod-card {
   position: relative;
-  background: var(--avq-surface);
-  border: 1.5px solid var(--avq-outline);
+  background: none;
+  border: none;
   border-radius: 12px;
-  padding: 10px 10px 11px;
+  padding: 0;
   text-align: left;
   color: var(--avq-text);
-  transition:
-    border-color 0.15s ease,
-    transform 0.12s ease;
+  transition: transform 0.12s ease;
 }
 .avq-tour .prod-card .thumb {
-  height: 42px;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, #3a3f44, #2b2f33);
-  display: grid;
-  place-items: center;
-  font-size: 19px;
+  aspect-ratio: 1.2;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: flex-end;
+  padding: 6px 8px;
+  opacity: 0.92;
+}
+.avq-tour .prod-card .thumb span {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
 }
 .avq-tour .prod-card .pn {
-  font-size: 12.5px;
+  font-size: 11px;
   font-weight: 600;
   line-height: 1.25;
 }
 .avq-tour .prod-card .pp {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--avq-green-light);
-  margin-top: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--avq-text2);
+  margin-top: 2px;
 }
-.avq-tour .prod-card .qty-badge {
-  position: absolute;
-  top: -7px;
-  right: -7px;
-  min-width: 22px;
-  height: 22px;
-  padding: 0 6px;
-  border-radius: 11px;
-  background: var(--avq-green);
-  color: #fff;
-  font-size: 12px;
-  font-weight: 700;
-  display: none;
-  place-items: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+.avq-tour .prod-card.added .thumb {
+  outline: 2px solid var(--avq-primary);
+  outline-offset: 1px;
 }
-.avq-tour .prod-card.added {
-  border-color: var(--avq-green);
-}
-.avq-tour .prod-card.added .qty-badge {
-  display: grid;
-  animation: avq-badge-pop 0.3s ease;
-}
-/* panel de carrito (abajo, como CartPanelView) */
+/* panel real (CartPanelView): solo divisor + botón píldora */
 .avq-tour .cart-panel {
   padding: 10px 14px 14px;
   border-top: 1px solid var(--avq-outline);
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
 }
-.avq-tour .cart-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12.5px;
+/* botón Cobrar real: píldora 52dp, primary #E8E8E8 (dark theme) */
+.avq-tour .btn-cobrar {
+  width: 100%;
+  height: 52px;
+  border: none;
+  border-radius: 26px;
+  background: var(--avq-primary);
+  color: var(--avq-on-primary);
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.15s ease;
+}
+.avq-tour .btn-cobrar.empty {
+  background: var(--avq-surface-variant);
   color: var(--avq-text2);
 }
-.avq-tour .cart-meta b {
-  color: var(--avq-text);
-  font-weight: 600;
+/* CartDetailsSheet real: bottom sheet con resumen + Cobrar definitivo */
+.avq-tour .cart-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--avq-surface);
+  border: 1px solid var(--avq-outline);
+  border-bottom: none;
+  border-radius: 18px 18px 0 0;
+  padding: 8px 14px 14px;
+  box-shadow: 0 -14px 34px rgba(0, 0, 0, 0.45);
+  transform: translateY(105%);
+  transition: transform 0.26s cubic-bezier(0.3, 0.9, 0.35, 1);
+  z-index: 4;
+}
+.avq-tour .cart-sheet.open {
+  transform: translateY(0);
+}
+.avq-tour .sheet-grab {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--avq-outline);
+  margin: 0 auto 10px;
+}
+.avq-tour .sheet-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+.avq-tour .sheet-head b {
+  font-size: 14px;
+}
+.avq-tour .sheet-head span {
+  font-size: 12px;
+  color: var(--avq-text2);
+}
+.avq-tour .sheet-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 0;
+  font-size: 13px;
+  border-top: 1px solid var(--avq-outline);
+}
+.avq-tour .sheet-item .qty {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--avq-surface-variant);
+  border: 1px solid var(--avq-outline);
+  display: grid;
+  place-items: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.avq-tour .sheet-item .name {
+  flex: 1;
+  min-width: 0;
+}
+.avq-tour .sheet-item .price {
+  color: var(--avq-text2);
+}
+.avq-tour .sheet-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0 10px;
+  border-top: 1px solid var(--avq-outline);
+  font-size: 14px;
 }
 
 /* ============================================================
@@ -1272,7 +1441,7 @@
 .avq-tour .tour-pill {
   position: absolute;
   background: var(--avq-green);
-  color: #fff;
+  color: var(--avq-on-green); /* contraste AA sobre verde (como .key-confirm) */
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.1px;
@@ -1425,7 +1594,7 @@
 .avq-tour .chapter.active .ch-num {
   background: var(--avq-green);
   border-color: var(--avq-green);
-  color: #052e22;
+  color: var(--avq-on-green);
 }
 .avq-tour .chapter.active .ch-num::before {
   content: '';
@@ -1456,15 +1625,16 @@
 }
 
 .avq-tour .flow-label {
-  margin: 26px 0 0;
+  margin: 22px 0 0;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 1.2px;
   text-transform: uppercase;
-  color: #7a7a7a;
+  color: var(--avq-text-dim);
 }
 .avq-tour .flow-pills {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 10px;
 }
@@ -1482,13 +1652,13 @@
     border-color 0.15s ease;
 }
 .avq-tour .flow-pill:hover {
-  border-color: #555;
+  border-color: var(--avq-primary-container);
   color: var(--avq-text);
 }
 .avq-tour .flow-pill.active {
   background: var(--avq-green);
   border-color: var(--avq-green);
-  color: #052e22;
+  color: var(--avq-on-green);
 }
 
 .avq-tour .cta-next {
@@ -1498,7 +1668,7 @@
   border-radius: 12px;
   background: transparent;
   border: 1px solid var(--avq-outline);
-  color: #6f6f6f;
+  color: var(--avq-text-dim);
   font-size: 14px;
   font-weight: 600;
   cursor: not-allowed;
@@ -1518,31 +1688,25 @@
 }
 
 /* ============================================================
-   Toast
+   Reduced motion — apaga las animaciones infinitas/intensas
+   (ping del dot y del capítulo, confetti, spinner queda por ser
+   indicador de progreso real del paso automático)
    ============================================================ */
-.avq-tour .toast {
-  position: fixed;
-  left: 50%;
-  bottom: 34px;
-  z-index: 200;
-  transform: translate(-50%, 14px);
-  background: var(--avq-surface);
-  border: 1px solid var(--avq-outline);
-  color: var(--avq-text);
-  font-size: 14px;
-  font-weight: 500;
-  padding: 13px 20px;
-  border-radius: 12px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    opacity 0.25s ease,
-    transform 0.25s ease;
-}
-.avq-tour .toast.show {
-  opacity: 1;
-  transform: translate(-50%, 0);
+@media (prefers-reduced-motion: reduce) {
+  .avq-tour .tour-dot::before,
+  .avq-tour .chapter.active .ch-num::before,
+  .avq-tour .confetti-layer i,
+  .avq-tour .star.filled svg,
+  .avq-tour .fast-amount.pop {
+    animation: none !important;
+  }
+  .avq-tour .tour-dot,
+  .avq-tour .tour-pill,
+  .avq-tour .cart-sheet,
+  .avq-tour .tpv-screen,
+  .avq-tour .web-screen {
+    transition: none !important;
+  }
 }
 
 /* ============================================================

@@ -1,6 +1,9 @@
 /**
  * 2. Review — "Calificación": 5 estrellas que se llenan en cascada
- * (timers del engine) al tocar la 5ª, fiel al flujo real del TPV.
+ * (timers del engine) al tocar la 5ª, fiel al TPV real: estrellas en
+ * primary #E8E8E8 (no doradas), caption "N de 5 estrellas" reservado
+ * bajo las estrellas, y "Saltar" como botón outlined full-width
+ * (AvoqadoSecondaryButton) en el footer.
  */
 import TopBar from './TopBar';
 import { DEMO_BASE_LABEL } from '../flows';
@@ -19,22 +22,28 @@ export default function Review({ starsFilled }: Props) {
     <section className="tpv-screen" data-screen="review">
       <TopBar title="Calificación" subtitle={`Paso 1 de 3 · ${DEMO_BASE_LABEL}`} />
       <div className="review-body">
-        <div className="stars">
-          {STARS.map(n => (
-            <button
-              key={n}
-              type="button"
-              className={`star${starsFilled >= n ? ' filled' : ''}`}
-              data-t={n === 5 ? 'star5' : undefined}
-              aria-label={n === 1 ? '1 estrella' : `${n} estrellas`}
-            >
-              <svg viewBox="0 0 24 24">
-                <path d={STAR_PATH} />
-              </svg>
-            </button>
-          ))}
+        <div>
+          <div className="stars">
+            {STARS.map(n => (
+              <button
+                key={n}
+                type="button"
+                className={`star${starsFilled >= n ? ' filled' : ''}`}
+                data-t={n === 5 ? 'star5' : undefined}
+                aria-label={n === 1 ? '1 estrella' : `${n} estrellas`}
+              >
+                <svg viewBox="0 0 24 24">
+                  <path d={STAR_PATH} />
+                </svg>
+              </button>
+            ))}
+          </div>
+          {/* caption siempre reserva su línea, como AvoqadoRatingInput */}
+          <div className="stars-caption">{starsFilled > 0 ? `${starsFilled} de 5 estrellas` : ' '}</div>
         </div>
-        <button type="button" className="link-btn">
+      </div>
+      <div className="review-footer">
+        <button type="button" className="btn btn-outline">
           Saltar
         </button>
       </div>

@@ -1,6 +1,8 @@
 /**
  * 3. Tip — "Propina": cards 15/18/20% + monto personalizado + sin propina.
- * Elegir 18% actualiza el total del header (TpvState.tipTotalLabel).
+ * Fiel al TPV real: header "Subtotal: $X MXN" → "Total: $X MXN" al elegir,
+ * card seleccionada en primary #E8E8E8 (no verde), "Sin propina" como texto
+ * primary sin subrayar, y "Continuar" deshabilitado hasta seleccionar.
  */
 import TopBar from './TopBar';
 
@@ -32,12 +34,12 @@ export default function Tip({ selected, totalLabel }: Props) {
           Monto personalizado
         </button>
         <div className="tip-skip">
-          <button type="button" className="link-btn">
+          <button type="button" className="tip-skip-btn">
             Sin propina
           </button>
         </div>
         <div className="tip-spacer" />
-        <button type="button" className="btn btn-green" data-t="tip-continue">
+        <button type="button" className={`btn btn-primary${selected ? '' : ' disabled'}`} data-t="tip-continue">
           Continuar
         </button>
       </div>

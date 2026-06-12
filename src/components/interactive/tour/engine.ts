@@ -27,7 +27,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { MouseEvent as ReactMouseEvent, RefObject } from 'react';
 
-export type FlowId = 'A' | 'B';
+export type FlowId = 'A' | 'B' | 'R' | 'L';
 export type PillPos = 'top' | 'bottom' | 'left' | 'right';
 
 /** Helpers the engine injects into every step callback. */
@@ -235,7 +235,12 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
   const showTour = (step: TourStep<Ctx>) => {
     if (!step.target) return;
     const target = screenEl(step.screen)?.querySelector<HTMLElement>(step.target) ?? null;
-    if (!target) return;
+    if (!target) {
+      /* A missing selector soft-locks the tour (no pill, clicks ignored).
+         All targets are static JSX, so this only fires on a typo — make it loud in dev. */
+      if (import.meta.env.DEV) console.warn(`[avq-tour] target "${step.target}" not found on screen "${step.screen}"`);
+      return;
+    }
     curTargetRef.current = target;
     target.classList.add('tour-target');
     pendingPlaceRef.current = { pos: step.pos ?? 'top', jump: !tourVisibleRef.current };
@@ -369,12 +374,17 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     hideTour();
     const first = stepsRef.current[0];
     if (!first) return;
-    setScreenInstant(first.screen);
     idxRef.current = 0;
     setUi({ flow, chapter: first.ch, done: false });
 
+    /* setScreenInstant runs AFTER React commits: switching to a flow that
+       lives in a different frame (terminal ⇄ browser) swaps the screens
+       container, so the first screen's element may not exist until then. */
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => enterStep(first));
+      requestAnimationFrame(() => {
+        setScreenInstant(first.screen);
+        enterStep(first);
+      });
     });
   };
 

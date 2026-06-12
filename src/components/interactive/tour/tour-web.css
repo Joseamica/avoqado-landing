@@ -1,0 +1,190 @@
+/*
+ * tour-web.css — base de los flujos web del Avoqado Tour:
+ * la clase `.web-screen` (visibilidad + transiciones, espejo de
+ * `.tpv-screen`) y los marcos de navegador (phone / desktop) con su
+ * estrategia de escala con compensación de margen.
+ */
+
+/* ---------- Pantallas web: mismo ciclo active/enter/exit del engine ----------
+   La regla de ocultar usa especificidad alta a propósito: los archivos de
+   cada flujo (.rsv/.lg) declaran su propio display y se cargan después. */
+.avq-tour .web-screen {
+  position: absolute;
+  inset: 0;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+.avq-tour .screens .web-screen:not(.active):not(.enter) {
+  display: none;
+}
+.avq-tour .web-screen.enter {
+  transform: translateX(32px);
+  opacity: 0;
+}
+.avq-tour .web-screen.enter.entering {
+  transform: translateX(0);
+  opacity: 1;
+}
+.avq-tour .web-screen.active.exit {
+  transform: translateX(-32px);
+  opacity: 0;
+}
+
+/* ---------- Marco de navegador ---------- */
+.avq-tour .bframe {
+  border-radius: 14px;
+  background: #1f2123;
+  box-shadow:
+    0 40px 90px rgba(0, 0, 0, 0.55),
+    0 4px 18px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  user-select: none;
+}
+.avq-tour .b-toolbar {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  background: #2a2d30;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.avq-tour .b-lights {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.avq-tour .b-lights i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.avq-tour .b-lights .r {
+  background: #ff5f57;
+}
+.avq-tour .b-lights .y {
+  background: #febc2e;
+}
+.avq-tour .b-lights .g {
+  background: #28c840;
+}
+.avq-tour .b-lights-spacer {
+  width: 4px;
+}
+.avq-tour .b-url {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #b9bec3;
+  font-size: 11.5px;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.avq-tour .b-toolbar-end {
+  width: 36px;
+  flex-shrink: 0;
+}
+.avq-tour .b-content {
+  position: relative;
+  background: #fff;
+}
+
+/* phone: huella similar a la terminal (~366px) */
+.avq-tour .bframe.phone {
+  width: 366px;
+}
+.avq-tour .bframe.phone .b-content {
+  width: 100%;
+  height: 568px;
+}
+.avq-tour .bframe.phone .screens {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* desktop: canvas fijo 700×500 (las pantallas .lg están diseñadas a ese tamaño) */
+.avq-tour .bframe.desktop .b-content {
+  width: 700px;
+  height: 500px;
+}
+.avq-tour .bframe.desktop .screens {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* ---------- Escala con compensación de margen (igual que .device) ----------
+   El frame desktop mide 700px + chrome; en viewports angostos se escala
+   visualmente — el spotlight usa getBoundingClientRect, que ya considera
+   el transform. El wrap fija el alto liberado para no dejar hueco. */
+.avq-tour .bframe-wrap.desktop {
+  width: 700px;
+  max-width: 100%;
+}
+@media (max-width: 1340px) {
+  .avq-tour .bframe-wrap.desktop .bframe {
+    transform: scale(0.92);
+    transform-origin: top left;
+    margin-bottom: -43px;
+    margin-right: -56px;
+  }
+}
+@media (max-width: 1180px) {
+  .avq-tour .bframe-wrap.desktop {
+    width: auto;
+  }
+  .avq-tour .bframe-wrap.desktop .bframe {
+    transform: scale(0.84);
+    margin-bottom: -86px;
+    margin-right: -112px;
+  }
+}
+@media (max-width: 880px) {
+  .avq-tour .bframe-wrap.desktop .bframe {
+    transform: scale(0.74);
+    transform-origin: top center;
+    margin: 0 -91px -140px;
+  }
+}
+@media (max-width: 760px) {
+  .avq-tour .bframe-wrap.desktop .bframe {
+    transform: scale(0.6);
+    margin: 0 -140px -215px;
+  }
+}
+@media (max-width: 560px) {
+  .avq-tour .bframe-wrap.desktop .bframe {
+    transform: scale(0.46);
+    margin: 0 -189px -291px;
+  }
+}
+@media (max-width: 430px) {
+  .avq-tour .bframe-wrap.desktop .bframe {
+    transform: scale(0.4);
+    margin: 0 -210px -323px;
+  }
+}
+
+/* phone frame en pantallas muy angostas */
+@media (max-width: 430px) {
+  .avq-tour .bframe.phone {
+    transform: scale(0.92);
+    transform-origin: top center;
+    margin-bottom: -49px;
+  }
+}
+@media (max-width: 380px) {
+  .avq-tour .bframe.phone {
+    transform: scale(0.86);
+    margin-bottom: -86px;
+  }
+}
