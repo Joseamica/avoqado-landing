@@ -121,7 +121,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
     return () => window.clearTimeout(t);
   }, [engine.done]);
 
-  /** Handoff: TPV flows deep-link the simulated charge; web flows open the demo dashboard. */
+  /** Handoff: each flow deep-links its own journey in the demo dashboard. */
   const handleCtaClick = () => {
     if (!engine.done) return;
     if (engine.flow === 'A' || engine.flow === 'B') {
@@ -134,6 +134,10 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
         `&amountCents=${Math.round(amount * 100)}` +
         `&tipCents=${Math.round(tip * 100)}`;
       window.open(url, '_blank', 'noopener,noreferrer');
+    } else if (engine.flow === 'R') {
+      /* Journey "reserva": the dashboard creates a REAL reservation in the
+         visitor's demo venue and tours the Reservations calendar. */
+      window.open(`${DEMO_DASHBOARD_URL}/?demoTour=reserva`, '_blank', 'noopener,noreferrer');
     } else {
       window.open(DEMO_DASHBOARD_URL, '_blank', 'noopener,noreferrer');
     }

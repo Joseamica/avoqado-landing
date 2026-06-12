@@ -237,6 +237,15 @@ export default function NavigationMenu() {
               Labs
             </a>
             <a
+              href="/demo"
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 inline-flex items-center gap-1.5 ${
+                useDarkAssets ? 'text-white/80 hover:text-white hover:bg-white/8' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-avoqado-green animate-pulse" aria-hidden="true" />
+              Demo
+            </a>
+            <a
               href="/pricing"
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                 useDarkAssets ? 'text-white/80 hover:text-white hover:bg-white/8' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
@@ -378,6 +387,16 @@ function MobileDrawer({ open, section, onSectionToggle }: MobileDrawerProps) {
           className="flex items-center justify-between w-full py-4 text-base font-semibold text-gray-900 border-b border-gray-100"
         >
           Labs
+          <ArrowRight className="w-4 h-4 text-gray-400" />
+        </a>
+        <a
+          href="/demo"
+          className="flex items-center justify-between w-full py-4 text-base font-semibold text-gray-900 border-b border-gray-100"
+        >
+          <span className="inline-flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-avoqado-green animate-pulse" aria-hidden="true" />
+            Prueba el demo
+          </span>
           <ArrowRight className="w-4 h-4 text-gray-400" />
         </a>
         <a
