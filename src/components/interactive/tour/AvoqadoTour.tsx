@@ -139,7 +139,9 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
          visitor's demo venue and tours the Reservations calendar. */
       window.open(`${DEMO_DASHBOARD_URL}/?demoTour=reserva`, '_blank', 'noopener,noreferrer');
     } else {
-      window.open(DEMO_DASHBOARD_URL, '_blank', 'noopener,noreferrer');
+      /* Journey "liga": the dashboard creates a REAL payment link + its web
+         payment and tours Ligas de Pago → Transacciones. */
+      window.open(`${DEMO_DASHBOARD_URL}/?demoTour=liga`, '_blank', 'noopener,noreferrer');
     }
   };
 
