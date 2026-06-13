@@ -76,6 +76,8 @@ export interface UseTourEngineOptions<Ctx extends EngineCtx> {
   buildCtx: (engine: EngineCtx) => Ctx;
   /** Caller resets its own screen state (cart, stars, tip, confetti…). */
   onReset: (flow: FlowId) => void;
+  /** Optional analytics seam: step taps, completion, resets. */
+  onEvent?: (event: { type: 'tap' | 'complete' | 'reset'; flow: FlowId; stepIndex?: number }) => void;
 }
 
 export interface TourEngineApi {
@@ -333,6 +335,7 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     if (step.final) {
       hideTour();
       busyRef.current = false;
+      optsRef.current.onEvent?.({ type: 'complete', flow: flowRef.current });
       return;
     }
 
@@ -352,6 +355,7 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     busyRef.current = true;
     const step = stepsRef.current[idxRef.current];
     curTargetRef.current?.classList.remove('tour-target');
+    optsRef.current.onEvent?.({ type: 'tap', flow: flowRef.current, stepIndex: idxRef.current });
     step?.onTap?.(makeCtx());
     setTimer(() => goTo(idxRef.current + 1), step?.tapDelay ?? DEFAULT_TAP_DELAY);
   };

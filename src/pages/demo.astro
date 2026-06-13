@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Navbar from '../components/layout/Navbar.astro';
 import Footer from '../components/layout/Footer.astro';
+import SEO from '../components/layout/SEO.astro';
 import AvoqadoTour from '../components/interactive/tour/AvoqadoTour';
 ---
 
@@ -10,10 +11,11 @@ import AvoqadoTour from '../components/interactive/tour/AvoqadoTour';
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Prueba Avoqado — demo interactivo</title>
-		<meta
-			name="description"
-			content="Prueba Avoqado sin registrarte: cobra en una terminal real, recibe una reserva en línea y crea una liga de pago — demos interactivos guiados en tu navegador."
+		<SEO
+			title="Prueba Avoqado en 60 segundos — demo interactivo"
+			description="Cobra en una terminal real, recibe una reserva en línea y crea una liga de pago — sin registro, sin tarjeta. Demos guiados en tu navegador."
+			image="/og/demo.png"
+			url="/demo"
 		/>
 		<link rel="icon" type="image/png" href="/favicon.png" />
 	</head>

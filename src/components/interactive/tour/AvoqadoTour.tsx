@@ -32,6 +32,7 @@ import {
 } from './flows';
 import type { PaymentInfo, StepCtx } from './flows';
 
+import { flowName, trackTour } from './analytics';
 import TerminalFrame from './TerminalFrame';
 import BrowserFrame from './BrowserFrame';
 import ChapterPanel from './ChapterPanel';
@@ -84,6 +85,9 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
   const onPaymentRef = useRef(onPaymentComplete);
   onPaymentRef.current = onPaymentComplete;
 
+  /** Flows the visitor actually engaged with (first tap = tour_start). */
+  const startedFlowsRef = useRef<Set<FlowId>>(new Set());
+
   const engine = useTourEngine<StepCtx>({
     flows: TOUR_FLOWS,
     initialFlow: 'A',
@@ -105,9 +109,28 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
       dispatch({ type: 'reset' });
       webDispatch({ type: 'reset' });
     },
+    onEvent: e => {
+      if (e.type === 'tap') {
+        if (!startedFlowsRef.current.has(e.flow)) {
+          startedFlowsRef.current.add(e.flow);
+          trackTour('tour_start', { tour_flow: flowName(e.flow) });
+        }
+        trackTour('tour_step', { tour_flow: flowName(e.flow), tour_step: e.stepIndex });
+      } else if (e.type === 'complete') {
+        trackTour('tour_complete', { tour_flow: flowName(e.flow) });
+      }
+    },
   });
 
-  const handleSelectFlow = (flow: FlowId) => engine.reset(flow);
+  /* tour_view: una vez por carga — la persona VE el demo */
+  useEffect(() => {
+    trackTour('tour_view');
+  }, []);
+
+  const handleSelectFlow = (flow: FlowId) => {
+    if (flow !== engine.flow) trackTour('tour_flow_switch', { tour_flow: flowName(flow), tour_from: flowName(engine.flow) });
+    engine.reset(flow);
+  };
 
   /* Mobile fold fix (founder QA): the panel + CTA live below the stage on
      small screens — when the tour completes, bring the unlocked CTA into
@@ -124,6 +147,8 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
   /** Handoff: each flow deep-links its own journey in the demo dashboard. */
   const handleCtaClick = () => {
     if (!engine.done) return;
+    /* LA conversión de /demo: del tour al dashboard demo propio */
+    trackTour('tour_cta_click', { tour_flow: flowName(engine.flow) });
     if (engine.flow === 'A' || engine.flow === 'B') {
       /* Graceful fallback: the tour can't complete without a payment, but if
          PaymentInfo is somehow missing we still hand off with the demo amounts. */
@@ -157,7 +182,10 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
             className="reset-btn"
             title="Reiniciar demo"
             aria-label="Reiniciar demo"
-            onClick={() => engine.reset(engine.flow)}
+            onClick={() => {
+              trackTour('tour_reset', { tour_flow: flowName(engine.flow) });
+              engine.reset(engine.flow);
+            }}
           >
             &#8634;
           </button>
