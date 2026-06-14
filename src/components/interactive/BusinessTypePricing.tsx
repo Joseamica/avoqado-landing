@@ -8,6 +8,12 @@ const AVOQADO_MARGIN = 0.2;
 const PRO_DISCOUNT = 0.1; // Pro plans get 0.1% less
 const PREMIUM_DISCOUNT = 0.2; // Premium plans get 0.2% less
 
+// Where the plan CTAs point: Free/Pro/Premium → real signup (the onboarding wizard picks the tier);
+// Enterprise → WhatsApp sales (no self-serve). The interactive demo lives in its own nav link / CTA,
+// not on the plan cards — a high-intent "Comenzar/Prueba gratis" click should start signup, not a tour.
+const SIGNUP_URL = 'https://dashboard.avoqado.io/signup';
+const SALES_WHATSAPP_URL = 'https://wa.me/525640070001?text=Hola%2C%20me%20interesa%20el%20plan%20Enterprise%20de%20Avoqado.';
+
 // Base rates by business type (from Blumon)
 const baseRatesByType: Record<BusinessType, { credito: number; debito: number }> = {
   restaurants: { credito: 2.30, debito: 1.68 }, // Restaurantes
@@ -442,7 +448,9 @@ export default function BusinessTypePricing() {
                   </ul>
 
                   <a
-                    href="/contact"
+                    href={plan.name === 'Enterprise' ? SALES_WHATSAPP_URL : SIGNUP_URL}
+                    target={plan.name === 'Enterprise' ? '_blank' : undefined}
+                    rel={plan.name === 'Enterprise' ? 'noopener noreferrer' : undefined}
                     className="block w-full text-center py-3 px-6 rounded-full font-semibold transition-all mt-auto bg-black text-white hover:bg-gray-800"
                   >
                     {plan.cta}
