@@ -120,14 +120,26 @@ export default function NavigationMenu() {
     });
   }, []);
 
-  // Detect pages whose top content is light even if body remains dark.
+  // Detect pages whose top content is light even if body remains dark, and keep the navbar's
+  // text/logo color visible against it. Re-checks after paint AND full load — island hydration
+  // (client:load/client:visible) can leave the first mount sample stale, which is what left the
+  // navbar white-on-white on light pages like /pricing — and on scroll so it keeps adapting to
+  // whatever section sits under it.
   useEffect(() => {
-    const isLight = detectLightUnderNav();
-    setIsLightUnderNav(isLight);
-
-    const onResize = () => setIsLightUnderNav(detectLightUnderNav());
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
+    const update = () => setIsLightUnderNav(detectLightUnderNav());
+    update();
+    const raf = requestAnimationFrame(update);
+    const timer = setTimeout(update, 250);
+    window.addEventListener('load', update);
+    window.addEventListener('resize', update);
+    window.addEventListener('scroll', update, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+      window.removeEventListener('load', update);
+      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', update);
+    };
   }, [detectLightUnderNav]);
 
   useEffect(() => {

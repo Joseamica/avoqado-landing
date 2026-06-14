@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 type BusinessType = 'restaurants' | 'retail' | 'services' | 'beauty';
@@ -6,6 +6,7 @@ type BusinessType = 'restaurants' | 'retail' | 'services' | 'beauty';
 // Avoqado margin on top of Blumon rates
 const AVOQADO_MARGIN = 0.2;
 const PRO_DISCOUNT = 0.1; // Pro plans get 0.1% less
+const PREMIUM_DISCOUNT = 0.2; // Premium plans get 0.2% less
 
 // Base rates by business type (from Blumon)
 const baseRatesByType: Record<BusinessType, { credito: number; debito: number }> = {
@@ -32,6 +33,19 @@ interface BusinessPricing {
   plans: PricingPlan[];
 }
 
+// Subscription prices are UNIFORM across sectors (Free $0 / Pro $999 / Premium $1,699 /
+// Enterprise a la medida). What changes per sector is the per-transaction COMMISSION rate
+// (see baseRatesByType + getTransactionFee). Tier feature sets mirror the product catalog
+// (avoqado-web-dashboard/src/config/plan-catalog.ts PLAN_TIERS): everything is bundled into a
+// tier — Avoqado no longer sells à-la-carte modules.
+const ENTERPRISE_FEATURES = [
+  'Todo de Premium +',
+  'Marca blanca (white-label)',
+  'API e integraciones a la medida',
+  'Account manager dedicado',
+  'SLA garantizado',
+];
+
 const pricingData: Record<BusinessType, BusinessPricing> = {
   restaurants: {
     title: 'Alimentos y Bebidas',
@@ -45,29 +59,47 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         tierDiscount: 0,
         features: [
           'Pagos con QR ilimitados',
-          'Menu digital básico',
-          'Dashboard de reportes',
+          'Menú digital',
           'Propinas digitales',
+          'Reportes del día',
           'Soporte por email',
         ],
         cta: 'Comenzar gratis',
       },
       {
         name: 'Pro',
-        price: '$599',
+        price: '$999',
         period: '/mes',
         description: 'Para restaurantes en crecimiento',
         tierDiscount: PRO_DISCOUNT,
         features: [
-          'Todo de QR Pagos +',
-          'TPV Movil completo',
-          'Gestion de mesas',
-          'Inventario básico',
-          'Integraciones POS',
-          'Soporte prioritario 24/7',
+          'Todo de Básico +',
+          'Reservaciones en línea',
+          'Pedidos en línea',
+          'Reportes con historial',
+          'Lealtad y referidos',
+          'Promociones y descuentos',
+          'Usuarios ilimitados',
         ],
         cta: 'Prueba 14 dias gratis',
         highlighted: true,
+      },
+      {
+        name: 'Premium',
+        price: '$1,699',
+        period: '/mes',
+        description: 'Para operaciones que facturan',
+        tierDiscount: PREMIUM_DISCOUNT,
+        features: [
+          'Todo de Pro +',
+          'Facturación CFDI 4.0',
+          'Control de inventario (FIFO)',
+          'Reorden automático',
+          'Analíticas predictivas',
+          'Multi-sucursal',
+          'Soporte prioritario 24/7',
+        ],
+        cta: 'Prueba 14 dias gratis',
       },
       {
         name: 'Enterprise',
@@ -75,14 +107,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         period: '',
         description: 'Para cadenas y grupos',
         tierDiscount: -1, // -1 means "Negociable"
-        features: [
-          'Todo de Pro +',
-          'Multi-sucursal',
-          'API personalizada',
-          'Account manager dedicado',
-          'SLA garantizado',
-          'Integraciones custom',
-        ],
+        features: ENTERPRISE_FEATURES,
         cta: 'Contactar ventas',
       },
     ],
@@ -95,33 +120,50 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         name: 'Básico',
         price: '$0',
         period: '/mes',
-        description: 'Para pequenos comercios',
+        description: 'Para pequeños comercios',
         tierDiscount: 0,
         features: [
           'Pagos con tarjeta',
-          'Catalogo de productos',
-          'Reportes básicos',
+          'Catálogo de productos',
           'Recibos digitales',
+          'Reportes del día',
           'Soporte por email',
         ],
         cta: 'Comenzar gratis',
       },
       {
         name: 'Pro',
-        price: '$499',
+        price: '$999',
         period: '/mes',
         description: 'Para tiendas en crecimiento',
         tierDiscount: PRO_DISCOUNT,
         features: [
           'Todo de Básico +',
-          'Control de inventario',
-          'Gestion de empleados',
-          'Programa de lealtad',
-          'Integraciones e-commerce',
-          'Soporte 24/7',
+          'Pedidos en línea',
+          'Reportes con historial',
+          'Lealtad y referidos',
+          'Promociones y descuentos',
+          'Usuarios ilimitados',
         ],
         cta: 'Prueba 14 dias gratis',
         highlighted: true,
+      },
+      {
+        name: 'Premium',
+        price: '$1,699',
+        period: '/mes',
+        description: 'Para tiendas con inventario',
+        tierDiscount: PREMIUM_DISCOUNT,
+        features: [
+          'Todo de Pro +',
+          'Facturación CFDI 4.0',
+          'Control de inventario (FIFO)',
+          'Inventario serializado',
+          'Reorden automático',
+          'Analíticas predictivas',
+          'Multi-sucursal',
+        ],
+        cta: 'Prueba 14 dias gratis',
       },
       {
         name: 'Enterprise',
@@ -129,14 +171,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         period: '',
         description: 'Multi-tienda',
         tierDiscount: -1,
-        features: [
-          'Todo de Pro +',
-          'Multi-sucursal',
-          'Reportes consolidados',
-          'API avanzada',
-          'Account manager',
-          'SLA garantizado',
-        ],
+        features: ENTERPRISE_FEATURES,
         cta: 'Contactar ventas',
       },
     ],
@@ -154,7 +189,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         features: [
           'Agenda de citas',
           'Pagos con tarjeta',
-          'Recordatorios SMS',
+          'Recordatorios',
           'Perfil de negocio',
           'Soporte por email',
         ],
@@ -162,20 +197,37 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
       },
       {
         name: 'Pro',
-        price: '$399',
+        price: '$999',
         period: '/mes',
-        description: 'Para equipos pequenos',
+        description: 'Para equipos pequeños',
         tierDiscount: PRO_DISCOUNT,
         features: [
           'Todo de Básico +',
-          'Multiples calendarios',
-          'Gestion de clientes',
-          'Facturacion automatica',
-          'Reportes avanzados',
-          'Soporte prioritario',
+          'Reservaciones en línea',
+          'Múltiples calendarios',
+          'Lealtad y referidos',
+          'Reportes con historial',
+          'Usuarios ilimitados',
         ],
         cta: 'Prueba 14 dias gratis',
         highlighted: true,
+      },
+      {
+        name: 'Premium',
+        price: '$1,699',
+        period: '/mes',
+        description: 'Para clínicas y despachos',
+        tierDiscount: PREMIUM_DISCOUNT,
+        features: [
+          'Todo de Pro +',
+          'Facturación CFDI 4.0',
+          'Comisiones de personal',
+          'Control de asistencia',
+          'Analíticas predictivas',
+          'Multi-sucursal',
+          'Soporte prioritario 24/7',
+        ],
+        cta: 'Prueba 14 dias gratis',
       },
       {
         name: 'Enterprise',
@@ -183,14 +235,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         period: '',
         description: 'Para empresas',
         tierDiscount: -1,
-        features: [
-          'Todo de Pro +',
-          'Multi-ubicacion',
-          'Integraciones custom',
-          'API completa',
-          'Account manager',
-          'SLA garantizado',
-        ],
+        features: ENTERPRISE_FEATURES,
         cta: 'Contactar ventas',
       },
     ],
@@ -206,30 +251,47 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         description: 'Para estilistas independientes',
         tierDiscount: 0,
         features: [
-          'Reservas online',
+          'Catálogo de servicios',
           'Pagos con tarjeta',
-          'Recordatorios automaticos',
-          'Catalogo de servicios',
+          'Recordatorios',
+          'Perfil de negocio',
           'Soporte por email',
         ],
         cta: 'Comenzar gratis',
       },
       {
         name: 'Pro',
-        price: '$449',
+        price: '$999',
         period: '/mes',
         description: 'Para salones',
         tierDiscount: PRO_DISCOUNT,
         features: [
           'Todo de Básico +',
-          'Gestion de empleados',
-          'Control de comisiones',
-          'Inventario de productos',
-          'Marketing por email',
-          'Soporte 24/7',
+          'Reservas en línea',
+          'Lealtad y referidos',
+          'Promociones y descuentos',
+          'Reportes con historial',
+          'Usuarios ilimitados',
         ],
         cta: 'Prueba 14 dias gratis',
         highlighted: true,
+      },
+      {
+        name: 'Premium',
+        price: '$1,699',
+        period: '/mes',
+        description: 'Para spas y multi-sucursal',
+        tierDiscount: PREMIUM_DISCOUNT,
+        features: [
+          'Todo de Pro +',
+          'Facturación CFDI 4.0',
+          'Inventario de productos (FIFO)',
+          'Comisiones de personal',
+          'Control de asistencia',
+          'Analíticas predictivas',
+          'Multi-sucursal',
+        ],
+        cta: 'Prueba 14 dias gratis',
       },
       {
         name: 'Enterprise',
@@ -237,14 +299,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         period: '',
         description: 'Multi-sucursal',
         tierDiscount: -1,
-        features: [
-          'Todo de Pro +',
-          'Multi-ubicacion',
-          'Reportes consolidados',
-          'API avanzada',
-          'Account manager',
-          'SLA garantizado',
-        ],
+        features: ENTERPRISE_FEATURES,
         cta: 'Contactar ventas',
       },
     ],
@@ -329,13 +384,13 @@ export default function BusinessTypePricing() {
             </p>
 
             {/* Pricing Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-6">
               {currentPricing.plans.map((plan) => (
                 <div
                   key={plan.name}
                   className={`relative rounded-3xl p-8 transition-all flex flex-col ${
                     plan.highlighted
-                      ? 'bg-white text-black border-2 border-black shadow-2xl scale-[1.02]'
+                      ? 'bg-white text-black border-2 border-black shadow-2xl lg:scale-[1.02]'
                       : 'bg-white text-black border border-gray-200 hover:shadow-lg'
                   }`}
                 >

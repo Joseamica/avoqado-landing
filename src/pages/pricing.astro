@@ -3,7 +3,6 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/layout/Navbar.astro';
 import PricingCalculator from '../components/interactive/PricingCalculator';
 import BusinessTypePricing from '../components/interactive/BusinessTypePricing';
-import PricingAddons from '../components/interactive/PricingAddons';
 import PricingFAQ from '../components/interactive/PricingFAQ';
 import Footer from '../components/layout/Footer.astro';
 ---
@@ -11,6 +10,7 @@ import Footer from '../components/layout/Footer.astro';
 <Layout
 	title="Precios y Comisiones | Avoqado"
 	description="Conoce los precios y comisiones de Avoqado. Sin costos ocultos, sin contratos largos. Comienza gratis hoy."
+	navLight={true}
 >
 	<!-- Navbar with solid white background -->
 	<Navbar position="fixed" transparentOnTop={false} />
@@ -22,8 +22,8 @@ import Footer from '../components/layout/Footer.astro';
 		<!-- Business Type Pricing Tabs -->
 		<BusinessTypePricing client:visible />
 
-		<!-- Addons Section -->
-		<PricingAddons client:visible />
+		<!-- Addons section removed: Avoqado no longer sells à-la-carte modules — every feature
+		     is bundled into a tier (Free/Pro/Premium/Enterprise). See BusinessTypePricing. -->
 
 		<!-- FAQ Section -->
 		<PricingFAQ client:visible />
