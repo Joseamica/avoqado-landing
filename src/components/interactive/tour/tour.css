@@ -85,6 +85,53 @@
     border-color 0.15s ease,
     transform 0.25s ease;
 }
+/* ---------- PAX A920Pro real-photo frame (TPV flows) ----------
+   Design unit is 882px wide so the transparent screen cutout = 330px (the
+   screens' native design width). A single scale transform sizes the unit for
+   display; the spotlight engine reads getBoundingClientRect so it stays exact.
+   Cutout geometry measured from pax-a920pro.png (1834²): L 31.08% / T 24.537%
+   / W 37.405% / H 75.409%  →  in the 882 unit: left 274 / top 216 / 330×665. */
+.avq-tour .pax-photo-wrap {
+  --pax-scale: 0.77;
+  width: calc(882px * var(--pax-scale));
+  height: calc(882px * var(--pax-scale));
+  position: relative;
+  flex-shrink: 0;
+}
+.avq-tour .pax-photo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 882px;
+  height: 882px;
+  transform: scale(var(--pax-scale));
+  transform-origin: top left;
+  user-select: none;
+}
+.avq-tour .pax-screen {
+  position: absolute;
+  left: 274px;
+  top: 216px;
+  width: 330px;
+  height: 665px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--avq-bg);
+  z-index: 1;
+}
+.avq-tour .pax-photo-img {
+  position: absolute;
+  inset: 0;
+  width: 882px;
+  height: 882px;
+  pointer-events: none;
+  z-index: 2;
+  -webkit-user-drag: none;
+  user-select: none;
+  /* lift the white device off the dark stage */
+  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.5));
+}
+
 .avq-tour .reset-btn:hover {
   color: var(--avq-green-light);
   border-color: var(--avq-green);
@@ -1722,6 +1769,14 @@
   }
 }
 
+/* PAX photo frame fits the viewport by shrinking --pax-scale (visual only;
+   the spotlight uses getBoundingClientRect so positioning stays exact). */
+@media (max-width: 760px) {
+  .avq-tour .pax-photo-wrap {
+    --pax-scale: 0.62;
+  }
+}
+
 @media (max-width: 480px) {
   .avq-tour .stage {
     padding: 8px 0;
@@ -1732,6 +1787,9 @@
   .avq-tour .panel {
     width: 100%;
     max-width: 362px;
+  }
+  .avq-tour .pax-photo-wrap {
+    --pax-scale: 0.5;
   }
 }
 
@@ -1744,10 +1802,16 @@
     transform-origin: top center;
     margin-bottom: -56px; /* compensate the layout height the scale frees up */
   }
+  .avq-tour .pax-photo-wrap {
+    --pax-scale: 0.44;
+  }
 }
 @media (max-width: 380px) {
   .avq-tour .device {
     transform: scale(0.86);
     margin-bottom: -100px;
+  }
+  .avq-tour .pax-photo-wrap {
+    --pax-scale: 0.39;
   }
 }

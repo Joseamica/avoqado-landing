@@ -33,7 +33,7 @@ import {
 import type { PaymentInfo, StepCtx } from './flows';
 
 import { flowName, trackTour } from './analytics';
-import TerminalFrame from './TerminalFrame';
+import PaxPhotoFrame from './PaxPhotoFrame';
 import BrowserFrame from './BrowserFrame';
 import ChapterPanel from './ChapterPanel';
 import FastPaymentEntry from './screens/FastPaymentEntry';
@@ -191,7 +191,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
           </button>
 
           {isTpvFlow ? (
-            <TerminalFrame screensRef={screensRef} onTpvClick={engine.handleTpvClick}>
+            <PaxPhotoFrame screensRef={screensRef} onTpvClick={engine.handleTpvClick}>
               <FastPaymentEntry amount={tpv.amount} popKey={tpv.amountPopKey} />
               <Cobrar
                 view={tpv.cobrarView}
@@ -208,7 +208,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
               <Processing />
               <SuccessScreen confettiKey={tpv.confettiKey} />
               <ReceiptScreen />
-            </TerminalFrame>
+            </PaxPhotoFrame>
           ) : engine.flow === 'R' ? (
             <BrowserFrame variant="phone" url="book.avoqado.io/estetica-bella" screensRef={screensRef} onTpvClick={engine.handleTpvClick}>
               <ResvLanding />
