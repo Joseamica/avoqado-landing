@@ -64,7 +64,7 @@ const gridItems = [
 export default function InteractiveHero({ 
     title, 
     subtitle,
-    videoSrc = "/video3.webm",
+    videoSrc = "/video4.webm",
     gridTextLine1,
     gridTextLine2,
     ctaPrimaryLink = "/contact",
