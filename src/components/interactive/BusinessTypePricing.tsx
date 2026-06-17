@@ -99,6 +99,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         features: [
           'Todo de Pro +',
           'Facturación CFDI 4.0',
+          'Contabilidad y estados financieros',
           'Control de inventario (FIFO)',
           'Reorden automático',
           'Analíticas predictivas',
@@ -163,6 +164,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         features: [
           'Todo de Pro +',
           'Facturación CFDI 4.0',
+          'Contabilidad y estados financieros',
           'Control de inventario (FIFO)',
           'Inventario serializado',
           'Reorden automático',
@@ -227,6 +229,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         features: [
           'Todo de Pro +',
           'Facturación CFDI 4.0',
+          'Contabilidad y estados financieros',
           'Comisiones de personal',
           'Control de asistencia',
           'Analíticas predictivas',
@@ -291,6 +294,7 @@ const pricingData: Record<BusinessType, BusinessPricing> = {
         features: [
           'Todo de Pro +',
           'Facturación CFDI 4.0',
+          'Contabilidad y estados financieros',
           'Inventario de productos (FIFO)',
           'Comisiones de personal',
           'Control de asistencia',
