@@ -1,0 +1,435 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/layout/Navbar.astro';
+import Footer from '../../components/layout/Footer.astro';
+import FloatingChatbot from '../../components/interactive/FloatingChatbot';
+
+// Accounting accent — emerald (dinero, balance, utilidad). On-brand, distinct from
+// dashboard-blue. Positive/cuadra = emerald, pérdida = red.
+const EMERALD = 'oklch(0.74 0.15 162)';
+const RED = 'oklch(0.65 0.20 25)';
+const AMBER = 'oklch(0.78 0.14 75)';
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Contabilidad Automatica | Avoqado</title>
+		<meta name="description" content="Tu contabilidad se lleva sola. Cada venta se convierte en una poliza de doble partida y obtienes tu Estado de Resultados y Balance General en tiempo real, listos para el SAT y tu contador." />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+	</head>
+	<body class="bg-black m-0 p-0 w-full">
+		<Navbar position="fixed" transparentOnTop={true} />
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- HERO                                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="min-h-screen flex items-center pt-24 md:pt-32 pb-16 px-6">
+			<div class="max-w-[1400px] mx-auto w-full">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+					<!-- Text -->
+					<div>
+						<div class="flex items-center gap-3 mb-6">
+							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${EMERALD};`}>Contabilidad</span>
+							<span class="text-[10px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded-full" style={`color: ${EMERALD}; border: 1px solid ${EMERALD}; opacity: 0.85;`}>Premium</span>
+						</div>
+						<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-white mb-8">
+							Tu contabilidad<br/>se lleva sola.
+						</h1>
+						<p class="text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-10">
+							Cada venta, cobro y comision se convierte automaticamente en una poliza de doble partida. Tu Estado de Resultados y Balance General, en tiempo real y listos para el SAT — sin hojas de calculo, sin capturar nada.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4">
+							<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${EMERALD};`}>
+								Probar demo gratis
+							</a>
+							<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200">
+								Agendar demo
+							</a>
+						</div>
+					</div>
+
+					<!-- Browser mockup — Reportes contables (ER + Balance) -->
+					<div class="hidden lg:block">
+						<div class="rounded-xl overflow-hidden" style="transform: perspective(1200px) rotateY(-8deg) rotateX(2deg); box-shadow: 0 25px 80px rgba(0,0,0,0.4);">
+							<!-- Browser chrome -->
+							<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.18 0.005 155);">
+								<div class="flex gap-1.5">
+									<div class="w-3 h-3 rounded-full" style="background: #FF5F57;"></div>
+									<div class="w-3 h-3 rounded-full" style="background: #FEBC2E;"></div>
+									<div class="w-3 h-3 rounded-full" style="background: #28C840;"></div>
+								</div>
+								<div class="flex-1 flex items-center gap-1.5 mx-3 px-3 py-1 rounded-md" style="background: oklch(0.14 0.005 155);">
+									<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="oklch(0.45 0.005 155)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+									<span class="text-[10px]" style="color: oklch(0.45 0.005 155);">dashboard.avoqado.io/contabilidad/reportes</span>
+								</div>
+							</div>
+							<!-- Screen -->
+							<div class="p-4" style="background: oklch(0.10 0.005 155); min-height: 360px;">
+								<div class="flex items-center justify-between mb-3">
+									<span class="text-[11px] text-white font-medium">Reportes contables</span>
+									<span class="text-[9px] px-2 py-0.5 rounded" style="background: oklch(0.16 0.005 155); color: oklch(0.50 0.005 155);">Junio 2026</span>
+								</div>
+								<div class="grid grid-cols-2 gap-3">
+									<!-- Estado de Resultados -->
+									<div class="rounded-lg p-3" style="background: oklch(0.13 0.005 155);">
+										<div class="text-[9px] font-semibold text-white mb-2.5">Estado de Resultados</div>
+										<div class="space-y-1.5">
+											<div class="flex justify-between text-[8px]"><span class="text-gray-500">Ingresos</span><span class="text-gray-300 tabular-nums">$10,000</span></div>
+											<div class="flex justify-between text-[8px]"><span class="text-gray-500">Costos</span><span class="text-gray-300 tabular-nums">$4,000</span></div>
+											<div class="flex justify-between text-[8px] px-1.5 py-1 rounded" style="background: oklch(0.16 0.005 155);"><span class="text-gray-400">Utilidad bruta</span><span class="text-white tabular-nums">$6,000</span></div>
+											<div class="flex justify-between text-[8px]"><span class="text-gray-500">Gastos</span><span class="text-gray-300 tabular-nums">$2,000</span></div>
+											<div class="flex justify-between text-[9px] px-1.5 py-1.5 rounded font-semibold" style={`background: oklch(0.74 0.15 162 / 0.12); color: ${EMERALD};`}><span>Utilidad</span><span class="tabular-nums">$4,000</span></div>
+										</div>
+									</div>
+									<!-- Balance General -->
+									<div class="rounded-lg p-3" style="background: oklch(0.13 0.005 155);">
+										<div class="text-[9px] font-semibold text-white mb-2.5">Balance General</div>
+										<div class="flex items-center gap-1 mb-2 px-1.5 py-1 rounded text-[7px]" style={`background: oklch(0.74 0.15 162 / 0.08); color: ${EMERALD};`}>
+											<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+											<span>El balance cuadra</span>
+										</div>
+										<div class="space-y-1.5">
+											<div class="flex justify-between text-[8px]"><span class="text-gray-500">Activo</span><span class="text-gray-300 tabular-nums">$5,600</span></div>
+											<div class="flex justify-between text-[8px]"><span class="text-gray-500">Pasivo</span><span class="text-gray-300 tabular-nums">$1,600</span></div>
+											<div class="flex justify-between text-[8px]"><span class="text-gray-500">Capital</span><span class="text-gray-300 tabular-nums">$4,000</span></div>
+											<div class="flex justify-between text-[8px] px-1.5 py-1 rounded mt-1" style="background: oklch(0.16 0.005 155);"><span class="text-gray-400">A = P + C</span><span class="text-white tabular-nums">$5,600</span></div>
+										</div>
+									</div>
+								</div>
+								<div class="mt-3 flex items-center gap-1.5 text-[7px]" style="color: oklch(0.45 0.005 155);">
+									<div class="w-1 h-1 rounded-full" style={`background: ${EMERALD};`}></div>
+									<span>Se calcula al vuelo desde tus polizas. No capturas nada.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 1. DE LA VENTA A LA POLIZA                   -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${EMERALD};`}>Pólizas automáticas</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							De la venta a la póliza,<br/>sin capturar nada.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Cada cobro genera su asiento de doble partida con la cuenta correcta: ingreso, IVA trasladado, comisiones del procesador y el depósito a banco. El sistema dicta las pólizas — tú solo vendes.
+						</p>
+						<div class="space-y-4">
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Doble partida real</h3>
+								<p class="text-sm text-gray-500">Cada póliza cuadra debe = haber. Sin Excel, sin riesgo de capturar mal.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Configuración contable a tu medida</h3>
+								<p class="text-sm text-gray-500">Decides a qué cuenta va cada tipo de movimiento. Lo configuras una vez y se aplica para siempre.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Libro diario completo</h3>
+								<p class="text-sm text-gray-500">Toda la actividad del negocio, asentada y auditable por periodo.</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Libro diario mockup (browser frame) -->
+					<div>
+						<div class="rounded-xl overflow-hidden border border-black/10" style="box-shadow: 0 20px 50px rgba(0,0,0,0.12);">
+							<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.18 0.005 155);">
+								<div class="flex gap-1.5">
+									<div class="w-2.5 h-2.5 rounded-full" style="background: #FF5F57;"></div>
+									<div class="w-2.5 h-2.5 rounded-full" style="background: #FEBC2E;"></div>
+									<div class="w-2.5 h-2.5 rounded-full" style="background: #28C840;"></div>
+								</div>
+								<span class="text-[9px] ml-2" style="color: oklch(0.50 0.005 155);">dashboard.avoqado.io/contabilidad/libro-diario</span>
+							</div>
+							<div class="p-4" style="background: oklch(0.10 0.005 155);">
+								<div class="flex items-center justify-between mb-3">
+									<span class="text-[11px] text-white font-medium">Libro diario · Pólizas</span>
+									<span class="text-[8px] px-2 py-0.5 rounded" style={`background: oklch(0.74 0.15 162 / 0.12); color: ${EMERALD};`}>Generada automáticamente</span>
+								</div>
+								<div class="rounded-lg p-3" style="background: oklch(0.13 0.005 155);">
+									<div class="flex items-center justify-between mb-2.5">
+										<span class="text-[9px] text-white font-medium">Venta del día — 16 jun</span>
+										<span class="text-[7px]" style="color: oklch(0.50 0.005 155);">Póliza #1042</span>
+									</div>
+									<div class="grid grid-cols-12 text-[7px] mb-1.5 pb-1.5 border-b" style="border-color: oklch(0.18 0.005 155); color: oklch(0.45 0.005 155);">
+										<span class="col-span-6">Cuenta</span>
+										<span class="col-span-3 text-right">Debe</span>
+										<span class="col-span-3 text-right">Haber</span>
+									</div>
+									<div class="space-y-1.5">
+										<div class="grid grid-cols-12 text-[8px] items-center">
+											<span class="col-span-6 text-gray-300"><span class="font-mono text-[7px] text-gray-600">102.01</span> Bancos nacionales</span>
+											<span class="col-span-3 text-right text-white tabular-nums">$5,800</span>
+											<span class="col-span-3 text-right text-gray-600 tabular-nums">—</span>
+										</div>
+										<div class="grid grid-cols-12 text-[8px] items-center">
+											<span class="col-span-6 text-gray-300"><span class="font-mono text-[7px] text-gray-600">208.01</span> IVA trasladado</span>
+											<span class="col-span-3 text-right text-gray-600 tabular-nums">—</span>
+											<span class="col-span-3 text-right text-white tabular-nums">$800</span>
+										</div>
+										<div class="grid grid-cols-12 text-[8px] items-center">
+											<span class="col-span-6 text-gray-300"><span class="font-mono text-[7px] text-gray-600">401.01</span> Ventas tasa general</span>
+											<span class="col-span-3 text-right text-gray-600 tabular-nums">—</span>
+											<span class="col-span-3 text-right text-white tabular-nums">$5,000</span>
+										</div>
+									</div>
+									<div class="grid grid-cols-12 text-[8px] items-center mt-2 pt-1.5 border-t font-semibold" style="border-color: oklch(0.18 0.005 155);">
+										<span class="col-span-6" style={`color: ${EMERALD};`}>Cuadrada</span>
+										<span class="col-span-3 text-right tabular-nums" style={`color: ${EMERALD};`}>$5,800</span>
+										<span class="col-span-3 text-right tabular-nums" style={`color: ${EMERALD};`}>$5,800</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 2. LISTO PARA EL SAT Y TU CONTADOR          -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Catálogo / balanza mockup -->
+					<div class="order-2 lg:order-1">
+						<div class="rounded-xl overflow-hidden" style="box-shadow: 0 20px 50px rgba(0,0,0,0.4);">
+							<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.18 0.005 155);">
+								<div class="flex gap-1.5">
+									<div class="w-2.5 h-2.5 rounded-full" style="background: #FF5F57;"></div>
+									<div class="w-2.5 h-2.5 rounded-full" style="background: #FEBC2E;"></div>
+									<div class="w-2.5 h-2.5 rounded-full" style="background: #28C840;"></div>
+								</div>
+								<span class="text-[9px] ml-2" style="color: oklch(0.50 0.005 155);">dashboard.avoqado.io/contabilidad/catalogo</span>
+							</div>
+							<div class="p-4" style="background: oklch(0.10 0.005 155);">
+								<div class="flex items-center justify-between mb-3">
+									<span class="text-[11px] text-white font-medium">Catálogo de cuentas</span>
+									<span class="text-[8px] px-2 py-0.5 rounded" style="background: oklch(0.16 0.005 155); color: oklch(0.50 0.005 155);">Código agrupador SAT</span>
+								</div>
+								<div class="space-y-1.5">
+									{[
+										{ code: '102.01', name: 'Bancos nacionales', sat: '102.01' },
+										{ code: '208.01', name: 'IVA trasladado cobrado', sat: '208.01' },
+										{ code: '401.01', name: 'Ventas tasa general', sat: '401.01' },
+										{ code: '501.01', name: 'Costo de venta', sat: '501.01' },
+										{ code: '601.01', name: 'Sueldos y salarios', sat: '601.84' },
+									].map((row) => (
+										<div class="flex items-center justify-between px-2.5 py-1.5 rounded text-[8px]" style="background: oklch(0.13 0.005 155);">
+											<span class="text-gray-300"><span class="font-mono text-[7px] text-gray-600">{row.code}</span> {row.name}</span>
+											<span class="font-mono tabular-nums px-1.5 py-0.5 rounded" style={`background: oklch(0.74 0.15 162 / 0.10); color: ${EMERALD};`}>{row.sat}</span>
+										</div>
+									))}
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${EMERALD};`}>Cumplimiento fiscal</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Listo para el SAT<br/>y para tu contador.
+						</h2>
+						<p class="text-gray-500 text-lg leading-relaxed mb-8">
+							Catálogo de cuentas con código agrupador del SAT, balanza de comprobación que cuadra al centavo, y todo exportable. Tu contador recibe la información como la espera — empaquetado con Facturación CFDI 4.0.
+						</p>
+						<div class="space-y-4">
+							<div class="border-t border-white/5 pt-3">
+								<h3 class="text-base text-white font-medium mb-1">Catálogo SAT por giro</h3>
+								<p class="text-sm text-gray-500">Se siembra el catálogo base según tu tipo de negocio, con el código agrupador correcto.</p>
+							</div>
+							<div class="border-t border-white/5 pt-3">
+								<h3 class="text-base text-white font-medium mb-1">Balanza de comprobación</h3>
+								<p class="text-sm text-gray-500">Saldos deudores y acreedores por cuenta, siempre cuadrados, por periodo.</p>
+							</div>
+							<div class="border-t border-white/5 pt-3">
+								<h3 class="text-base text-white font-medium mb-1">Facturación CFDI 4.0 incluida</h3>
+								<p class="text-sm text-gray-500">Timbrado, factura global y buzón de CFDIs — todo en el mismo plan Premium.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 3. CONCILIACIÓN BANCARIA CON IA             -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${EMERALD};`}>Conciliación con IA</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Concilia tu banco<br/>en segundos, con IA.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Sube tu estado de cuenta y la IA empata cada movimiento contra tus ventas y depósitos. Lo que cuadra se concilia solo; lo que no, te lo marca para revisar. Adiós a las noches cuadrando a mano.
+						</p>
+						<div class="flex flex-wrap gap-2">
+							<span class="text-sm px-3 py-1.5 rounded-full border border-black/10 text-gray-700">Estado de cuenta → conciliado</span>
+							<span class="text-sm px-3 py-1.5 rounded-full border border-black/10 text-gray-700">Detección de diferencias</span>
+							<span class="text-sm px-3 py-1.5 rounded-full border border-black/10 text-gray-700">Bancos y cajas</span>
+						</div>
+					</div>
+
+					<!-- Conciliación mockup -->
+					<div>
+						<div class="rounded-xl overflow-hidden border border-black/10" style="box-shadow: 0 20px 50px rgba(0,0,0,0.12);">
+							<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.18 0.005 155);">
+								<div class="flex gap-1.5">
+									<div class="w-2.5 h-2.5 rounded-full" style="background: #FF5F57;"></div>
+									<div class="w-2.5 h-2.5 rounded-full" style="background: #FEBC2E;"></div>
+									<div class="w-2.5 h-2.5 rounded-full" style="background: #28C840;"></div>
+								</div>
+								<span class="text-[9px] ml-2" style="color: oklch(0.50 0.005 155);">dashboard.avoqado.io/contabilidad/conciliacion</span>
+							</div>
+							<div class="p-4" style="background: oklch(0.10 0.005 155);">
+								<div class="flex items-center justify-between mb-3">
+									<span class="text-[11px] text-white font-medium">Conciliación bancaria</span>
+									<span class="text-[8px] px-2 py-0.5 rounded flex items-center gap-1" style={`background: oklch(0.74 0.15 162 / 0.12); color: ${EMERALD};`}>
+										<svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v4M3 5h4M6 17v4M4 19h4M13 3l2.5 6.5L22 12l-6.5 2.5L13 21l-2.5-6.5L4 12l6.5-2.5L13 3Z"/></svg>
+										IA
+									</span>
+								</div>
+								<div class="space-y-1.5">
+									<div class="flex items-center justify-between px-2.5 py-2 rounded text-[8px]" style="background: oklch(0.13 0.005 155);">
+										<div class="flex items-center gap-2">
+											<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={EMERALD} stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+											<span class="text-gray-300">Depósito BBVA — 14 jun</span>
+										</div>
+										<span class="text-white tabular-nums">$12,480</span>
+									</div>
+									<div class="flex items-center justify-between px-2.5 py-2 rounded text-[8px]" style="background: oklch(0.13 0.005 155);">
+										<div class="flex items-center gap-2">
+											<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={EMERALD} stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+											<span class="text-gray-300">Terminal Visa — 14 jun</span>
+										</div>
+										<span class="text-white tabular-nums">$8,930</span>
+									</div>
+									<div class="flex items-center justify-between px-2.5 py-2 rounded text-[8px]" style={`background: oklch(0.78 0.14 75 / 0.08); border: 1px solid oklch(0.78 0.14 75 / 0.25);`}>
+										<div class="flex items-center gap-2">
+											<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={AMBER} stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+											<span class="text-gray-300">Cargo sin identificar</span>
+										</div>
+										<span class="tabular-nums" style={`color: ${AMBER};`}>$1,200</span>
+									</div>
+								</div>
+								<div class="mt-3 flex items-center justify-between text-[8px]">
+									<span style="color: oklch(0.50 0.005 155);">38 de 39 movimientos conciliados</span>
+									<span style={`color: ${EMERALD};`}>97%</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 4. TODO LO QUE INCLUYE                       -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="max-w-2xl mb-16">
+					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${EMERALD};`}>El módulo completo</span>
+					<h2 class="text-3xl md:text-5xl font-light tracking-tight text-white leading-tight mb-6">
+						Todo lo que tu contabilidad necesita.
+					</h2>
+					<p class="text-gray-500 text-lg leading-relaxed">
+						Una vista gerencial para ti y un expediente contable completo para tu contador — conectados a la misma operación, en tiempo real.
+					</p>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-6">
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1">Estado de Resultados</h3>
+						<p class="text-gray-600 text-sm">Ingresos, costos, utilidad bruta, gastos y resultado del ejercicio, acumulados del año fiscal.</p>
+					</div>
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1">Balance General</h3>
+						<p class="text-gray-600 text-sm">Activo, pasivo y capital. Cuadra solo por diseño: A = P + C, siempre.</p>
+					</div>
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1">Libro diario · Pólizas</h3>
+						<p class="text-gray-600 text-sm">Asientos de doble partida generados desde cada venta, cobro y comisión.</p>
+					</div>
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1">Balanza de comprobación</h3>
+						<p class="text-gray-600 text-sm">Saldos deudores y acreedores por cuenta, cuadrados por periodo.</p>
+					</div>
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1">Catálogo de cuentas SAT</h3>
+						<p class="text-gray-600 text-sm">Código agrupador del SAT, sembrado por giro y editable a tu medida.</p>
+					</div>
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1">Conciliación bancaria con IA</h3>
+						<p class="text-gray-600 text-sm">Sube tu estado de cuenta y la IA empata movimientos automáticamente.</p>
+					</div>
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1">Bancos y cajas</h3>
+						<p class="text-gray-600 text-sm">Entradas por método de cobro, separando caja (efectivo) de banco (neto de comisiones).</p>
+					</div>
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1 flex items-center gap-2">Buzón de CFDIs <span class="text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded" style="background: oklch(0.18 0.005 155); color: oklch(0.55 0.005 155);">Pronto</span></h3>
+						<p class="text-gray-600 text-sm">CFDIs recibidos de proveedores, listos para deducir.</p>
+					</div>
+					<div class="border-t border-white/5 pt-3">
+						<h3 class="text-white font-medium text-base mb-1 flex items-center gap-2">IVA en flujo · DIOT <span class="text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded" style="background: oklch(0.18 0.005 155); color: oklch(0.55 0.005 155);">Pronto</span></h3>
+						<p class="text-gray-600 text-sm">IVA por flujo de efectivo y declaración informativa de operaciones con terceros.</p>
+					</div>
+				</div>
+
+				<!-- Included-in-all-plans note -->
+				<div class="mt-14 flex items-start gap-3 p-5 rounded-2xl" style="background: oklch(0.14 0.005 155); border: 1px solid oklch(0.22 0.005 155);">
+					<div class="w-2 h-2 rounded-full mt-1.5 shrink-0" style={`background: ${EMERALD};`}></div>
+					<p class="text-sm text-gray-400 leading-relaxed">
+						<span class="text-white font-medium">¿Cuánto gané?</span> — la vista gerencial de ingresos y resumen del negocio está incluida en todos los planes. La contabilidad fiscal completa (pólizas, balanza, estados financieros y catálogo SAT) vive en el plan <span style={`color: ${EMERALD};`}>Premium</span>, junto con Facturación CFDI 4.0.
+					</p>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- CTA                                         -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-avoqado-dark-surface border-t border-white/5">
+			<div class="max-w-3xl mx-auto text-center">
+				<h2 class="text-3xl md:text-5xl font-light tracking-tight text-white mb-8">
+					Tu contabilidad, en piloto automático.
+				</h2>
+				<p class="text-lg text-gray-500 mb-12 max-w-xl mx-auto">
+					Mientras vendes, Avoqado lleva tus libros. Pruébalo con datos reales en la demo — sin tarjeta, sin compromiso.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" class="px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 text-lg" style={`background: ${EMERALD};`}>
+						Probar demo gratis
+					</a>
+					<a href="/pricing" class="px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200 text-lg">
+						Ver planes
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<FloatingChatbot client:idle />
+		<Footer />
+	</body>
+</html>
