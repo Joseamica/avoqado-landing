@@ -1,0 +1,220 @@
+---
+/**
+ * Campaign landing page for the Google Ads "AVOQADO · Search · WhatsApp" estéticas campaign.
+ * Ad final URL: avoqado.io/esteticas/whatsapp
+ *
+ * Conversion-focused lander: every primary CTA points to the /wa bridge
+ * (`/wa?src=esteticas-ads`) which fires the `whatsapp_click` dataLayer event →
+ * Google Ads conversion (AW-18201754401 / cvaUCLOG-b0cEKH2oudD) → then redirects
+ * to WhatsApp. Theme matches the ad: estética / salón de belleza, Programa Fundador.
+ */
+import '../../styles/global.css';
+import Navbar from '../../components/layout/Navbar.astro';
+import Footer from '../../components/layout/Footer.astro';
+
+const GREEN = '#69E185';
+const WA = '#25d366';
+const MAGENTA = 'oklch(0.72 0.15 340)';
+
+// WhatsApp CTA → /wa bridge (fires whatsapp_click conversion, then opens WhatsApp)
+const WA_TEXT = 'Hola, vi su anuncio y me interesa Avoqado para mi estética.';
+const WA_HREF = `/wa?src=esteticas-ads&text=${encodeURIComponent(WA_TEXT)}`;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>El sistema para tu estética | Citas, cobros e inventario — Avoqado</title>
+		<meta name="description" content="Software todo-en-uno para tu estética o salón de belleza: citas, cobros e inventario en un solo sistema. Escríbenos por WhatsApp. Programa Fundador: 50% de descuento de por vida + soporte VIP. Hecho en México." />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+		<meta name="robots" content="index, follow" />
+	</head>
+	<body class="bg-black m-0 p-0 w-full overflow-x-hidden">
+		<Navbar position="fixed" transparentOnTop={true} />
+
+		<!-- ═══════════════ HERO ═══════════════ -->
+		<section class="relative min-h-screen flex items-center pt-28 md:pt-32 pb-16 px-6">
+			<div class="absolute inset-0 -z-10" style={`background: radial-gradient(ellipse 80% 60% at 70% 30%, ${MAGENTA}14, transparent 60%);`}></div>
+			<div class="max-w-[1280px] mx-auto w-full">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+					<!-- Text -->
+					<div>
+						<div class="inline-flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full" style={`background: ${MAGENTA}1a; border: 1px solid ${MAGENTA}33;`}>
+							<span class="w-1.5 h-1.5 rounded-full" style={`background: ${MAGENTA};`}></span>
+							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${MAGENTA};`}>Avoqado para Estéticas</span>
+						</div>
+						<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-white mb-7">
+							El sistema para<br/>tu estética.
+						</h1>
+						<p class="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed mb-7">
+							<strong class="text-white font-medium">Citas, cobros e inventario</strong> en un solo lugar. Deja de pelear con mil apps y administra tu salón desde una sola plataforma — incluso por WhatsApp.
+						</p>
+
+						<!-- Founder offer badge -->
+						<div class="inline-flex items-center gap-3 mb-8 px-4 py-3 rounded-2xl" style="background: rgba(105,225,133,0.08); border: 1px solid rgba(105,225,133,0.25);">
+							<div class="flex items-center justify-center w-9 h-9 rounded-xl shrink-0" style={`background: ${GREEN}; color: #0b0f0d;`}>
+								<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21l2.3-7.4-6-4.6h7.6z"/></svg>
+							</div>
+							<div class="text-sm leading-snug">
+								<span class="text-white font-semibold">Programa Fundador:</span>
+								<span class="text-gray-300"> 50% de descuento de por vida + soporte VIP.</span>
+								<span class="text-avoqado-green font-medium"> Lugares limitados.</span>
+							</div>
+						</div>
+
+						<!-- CTAs -->
+						<div class="flex flex-col sm:flex-row gap-4 mb-6">
+							<a href={WA_HREF} rel="noopener" class="inline-flex items-center justify-center gap-2.5 px-8 py-4 font-semibold rounded-full text-white hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${WA}; box-shadow: 0 10px 30px ${WA}40;`}>
+								<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49 0 1.47 1.07 2.89 1.22 3.09.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35zM12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.06L2 22l5.06-1.34A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+								Escríbenos por WhatsApp
+							</a>
+							<a href="/signup" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200">
+								Comienza gratis
+							</a>
+						</div>
+
+						<!-- Trust line -->
+						<div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-gray-500">
+							<span class="inline-flex items-center gap-1.5"><span style={`color:${GREEN}`}>✓</span> Hecho en México</span>
+							<span class="inline-flex items-center gap-1.5"><span style={`color:${GREEN}`}>✓</span> Soporte VIP en &lt;2 horas</span>
+							<span class="inline-flex items-center gap-1.5"><span style={`color:${GREEN}`}>✓</span> Sin compromiso</span>
+						</div>
+					</div>
+
+					<!-- WhatsApp chat mockup (iPhone) -->
+					<div class="flex justify-center items-center">
+						<div class="relative" style="width: 300px;">
+							<div style="background: linear-gradient(145deg,#4a4a4c,#1c1c1e 45%,#3a3a3c); border-radius: 44px; padding: 10px; box-shadow: 0 30px 80px rgba(0,0,0,.6), inset 0 0 3px 1px rgba(255,255,255,.18);">
+								<div class="relative overflow-hidden" style="border-radius: 36px; background: #0b141a; height: 600px;">
+									<!-- WA header -->
+									<div class="flex items-center gap-3 px-4 pt-9 pb-3" style="background: #1f2c34;">
+										<div class="w-9 h-9 rounded-full flex items-center justify-center text-black font-semibold text-sm" style={`background:${GREEN};`}>SM</div>
+										<div class="leading-tight">
+											<div class="text-white text-sm font-medium">Studio Mavé</div>
+											<div class="text-[11px]" style={`color:${WA};`}>en línea</div>
+										</div>
+									</div>
+									<!-- chat -->
+									<div class="px-3 py-4 space-y-2" style="background:#0b141a;">
+										<div class="max-w-[78%] ml-auto px-3 py-2 rounded-xl rounded-tr-sm text-[13px] leading-snug text-white" style="background:#005c4b;">
+											Hola, ¿tienen espacio mañana para corte y color? 💇‍♀️
+										</div>
+										<div class="max-w-[80%] px-3 py-2 rounded-xl rounded-tl-sm text-[13px] leading-snug text-white" style="background:#202c33;">
+											¡Claro! Te agendo mañana 4:00 pm con Ana. ¿Te mando la liga para el anticipo?
+										</div>
+										<div class="max-w-[60%] ml-auto px-3 py-2 rounded-xl rounded-tr-sm text-[13px] leading-snug text-white" style="background:#005c4b;">
+											Sí porfa 🙌
+										</div>
+										<div class="max-w-[82%] px-3 py-2 rounded-xl rounded-tl-sm text-[13px] leading-snug text-white" style="background:#202c33;">
+											Listo. Aquí tu liga segura:
+											<div class="mt-1.5 px-2.5 py-2 rounded-lg flex items-center gap-2" style="background:#0b141a;border:1px solid #2a3942;">
+												<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={GREEN} stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg>
+												<span class="text-[12px] font-mono" style="color:#cfe0d6;">pay.avoqado.io/l/ana500</span>
+											</div>
+											<div class="text-[11px] mt-1.5" style="color:#8aa;">Tu cita queda confirmada al pagar ✓</div>
+										</div>
+									</div>
+									<!-- input -->
+									<div class="absolute bottom-0 left-0 right-0 flex items-center gap-2 px-3 py-3" style="background:#1f2c34;">
+										<div class="flex-1 px-3 py-2 rounded-full text-[12px]" style="background:#2a3942;color:#8696a0;">Mensaje</div>
+										<div class="w-9 h-9 rounded-full flex items-center justify-center" style={`background:${WA};`}>
+											<svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M3 20l18-8L3 4v6l13 2-13 2z"/></svg>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ═══════════════ VALUE PROPS ═══════════════ -->
+		<section class="px-6 py-20 border-t border-white/5">
+			<div class="max-w-[1100px] mx-auto">
+				<p class="text-center text-sm uppercase tracking-widest font-semibold mb-3" style={`color:${MAGENTA};`}>Todo-en-uno</p>
+				<h2 class="text-center text-3xl md:text-4xl font-light text-white mb-14">Lo que tu estética necesita, sin mil apps</h2>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+					<!-- Citas -->
+					<div class="p-7 rounded-2xl bg-white/[0.02] border border-white/10">
+						<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={`background:${MAGENTA}1f;color:${MAGENTA};`}>
+							<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+						</div>
+						<h3 class="text-xl font-medium text-white mb-2">Citas y agenda</h3>
+						<p class="text-gray-400 leading-relaxed text-[15px]">Reservaciones online, recordatorios automáticos y anticipos para bajar tus inasistencias. Cada estilista con su agenda.</p>
+					</div>
+					<!-- Cobros -->
+					<div class="p-7 rounded-2xl bg-white/[0.02] border border-white/10">
+						<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={`background:${GREEN}1f;color:${GREEN};`}>
+							<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+						</div>
+						<h3 class="text-xl font-medium text-white mb-2">Cobros</h3>
+						<p class="text-gray-400 leading-relaxed text-[15px]">Tarjeta, QR, efectivo o liga de pago por WhatsApp. Propinas y comisiones por estilista calculadas solas.</p>
+					</div>
+					<!-- Inventario -->
+					<div class="p-7 rounded-2xl bg-white/[0.02] border border-white/10">
+						<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={`background:${'oklch(0.72 0.14 240)'}1f;color:${'oklch(0.72 0.14 240)'};`}>
+							<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.3 7L12 12l8.7-5M12 22V12"/></svg>
+						</div>
+						<h3 class="text-xl font-medium text-white mb-2">Inventario</h3>
+						<p class="text-gray-400 leading-relaxed text-[15px]">Controla tus productos (tintes, shampoo, retail) con alertas de bajo stock. Vende producto y servicio en el mismo ticket.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ═══════════════ PROGRAMA FUNDADOR ═══════════════ -->
+		<section class="px-6 py-20 border-t border-white/5">
+			<div class="max-w-[920px] mx-auto rounded-3xl p-10 md:p-14 text-center" style="background: linear-gradient(160deg, rgba(105,225,133,0.10), rgba(11,15,13,0.4)); border: 1px solid rgba(105,225,133,0.25);">
+				<p class="text-sm uppercase tracking-widest font-semibold mb-4" style={`color:${GREEN};`}>Programa Fundador · Lugares limitados</p>
+				<h2 class="text-3xl md:text-5xl font-light text-white mb-5 leading-tight">50% de descuento<br/><span class="font-normal">de por vida</span></h2>
+				<p class="text-lg text-gray-300 max-w-xl mx-auto mb-9 leading-relaxed">Sé de los primeros salones en Avoqado y conserva el precio fundador para siempre — más <strong class="text-white font-medium">soporte VIP en menos de 2 horas</strong>. Sin compromiso, cancelas cuando quieras.</p>
+				<a href={WA_HREF} rel="noopener" class="inline-flex items-center justify-center gap-2.5 px-9 py-4 font-semibold rounded-full text-white hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${WA}; box-shadow: 0 10px 30px ${WA}40;`}>
+					<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49 0 1.47 1.07 2.89 1.22 3.09.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35zM12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.06L2 22l5.06-1.34A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+					Aparta tu lugar por WhatsApp
+				</a>
+			</div>
+		</section>
+
+		<!-- ═══════════════ CÓMO FUNCIONA ═══════════════ -->
+		<section class="px-6 py-20 border-t border-white/5">
+			<div class="max-w-[1000px] mx-auto">
+				<h2 class="text-center text-3xl md:text-4xl font-light text-white mb-14">Empieza en el mismo día</h2>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+					<div class="text-center">
+						<div class="w-11 h-11 mx-auto rounded-full flex items-center justify-center text-black font-semibold mb-4" style={`background:${GREEN};`}>1</div>
+						<h3 class="text-lg font-medium text-white mb-2">Escríbenos por WhatsApp</h3>
+						<p class="text-gray-400 text-[15px] leading-relaxed">Te respondemos en menos de 2 horas y vemos juntos qué necesita tu salón.</p>
+					</div>
+					<div class="text-center">
+						<div class="w-11 h-11 mx-auto rounded-full flex items-center justify-center text-black font-semibold mb-4" style={`background:${GREEN};`}>2</div>
+						<h3 class="text-lg font-medium text-white mb-2">Lo configuramos por ti</h3>
+						<p class="text-gray-400 text-[15px] leading-relaxed">Cargamos tus servicios, estilistas y productos. Tú solo apruebas.</p>
+					</div>
+					<div class="text-center">
+						<div class="w-11 h-11 mx-auto rounded-full flex items-center justify-center text-black font-semibold mb-4" style={`background:${GREEN};`}>3</div>
+						<h3 class="text-lg font-medium text-white mb-2">Empiezas a cobrar y agendar</h3>
+						<p class="text-gray-400 text-[15px] leading-relaxed">Citas, cobros e inventario funcionando el mismo día. Con precio fundador.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ═══════════════ FINAL CTA ═══════════════ -->
+		<section class="px-6 py-24 border-t border-white/5 text-center">
+			<div class="max-w-[760px] mx-auto">
+				<h2 class="text-4xl md:text-5xl font-light text-white mb-6 leading-tight">Tu estética merece<br/>un solo sistema.</h2>
+				<p class="text-lg text-gray-400 mb-10">Citas, cobros e inventario en un solo lugar. Escríbenos y arrancamos hoy.</p>
+				<a href={WA_HREF} rel="noopener" class="inline-flex items-center justify-center gap-2.5 px-10 py-5 font-semibold rounded-full text-white text-lg hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${WA}; box-shadow: 0 14px 40px ${WA}45;`}>
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49 0 1.47 1.07 2.89 1.22 3.09.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35zM12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.06L2 22l5.06-1.34A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+				Escríbenos por WhatsApp
+				</a>
+				<p class="text-sm text-gray-600 mt-5">Hecho en México · Soporte VIP &lt;2h · Sin compromiso</p>
+			</div>
+		</section>
+
+		<Footer />
+	</body>
+</html>
