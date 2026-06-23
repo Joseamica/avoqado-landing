@@ -2,7 +2,7 @@ const WHATSAPP_NUMBER = '525640070001';
 const WHATSAPP_MESSAGE = 'Hola, me interesa saber mas sobre Avoqado';
 
 export default function WhatsAppButton() {
-  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+  const whatsappUrl = `/wa?src=floating_btn&text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
   return (
     <div className="fixed bottom-6 right-6 z-50">

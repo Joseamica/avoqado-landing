@@ -12,7 +12,7 @@ const PREMIUM_DISCOUNT = 0.2; // Premium plans get 0.2% less
 // Enterprise → WhatsApp sales (no self-serve). The interactive demo lives in its own nav link / CTA,
 // not on the plan cards — a high-intent "Comenzar/Prueba gratis" click should start signup, not a tour.
 const SIGNUP_URL = 'https://dashboard.avoqado.io/signup';
-const SALES_WHATSAPP_URL = 'https://wa.me/525640070001?text=Hola%2C%20me%20interesa%20el%20plan%20Enterprise%20de%20Avoqado.';
+const SALES_WHATSAPP_URL = '/wa?src=pricing_enterprise&text=Hola%2C%20me%20interesa%20el%20plan%20Enterprise%20de%20Avoqado.';
 
 // Base rates by business type (from Blumon)
 const baseRatesByType: Record<BusinessType, { credito: number; debito: number }> = {

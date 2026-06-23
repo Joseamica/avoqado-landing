@@ -127,7 +127,7 @@ export default function FloatingChatbot() {
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+  const whatsappUrl = `/wa?src=floating_chat&text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
   // Check mobile state
   useEffect(() => {

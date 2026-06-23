@@ -96,13 +96,13 @@ export default function AdWhatsAppPrompt() {
 	const onWhatsAppClick = () => {
 		markDone();
 		// Conversion event — same name the /wa bridge uses, so one GA4 tag covers both.
-		pushEvent('whatsapp_click', { wa_source: source, wa_placement: 'ad_prompt' });
+		/* whatsapp_click + Google Ads conversion now fire from the /wa bridge (waUrl), which waits for tags before redirecting — no manual push here to avoid double-counting. */
 		setOpen(false);
 	};
 
 	if (!mounted || !open) return null;
 
-	const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+	const waUrl = `/wa?src=ad_${source}&text=${encodeURIComponent(message)}`;
 
 	const modal = (
 		<div
