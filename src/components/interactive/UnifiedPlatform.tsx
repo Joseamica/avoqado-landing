@@ -170,6 +170,90 @@ const DATA_SOURCES: DataSource[] = [
     angle: 315,
     radius: 205,
   },
+  {
+    id: 'contabilidad',
+    name: 'Contabilidad',
+    icon: (
+      <svg viewBox="0 0 40 40" fill="none" className="w-9 h-9">
+        <defs>
+          <linearGradient id="cont-grad" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#A5B4FC" />
+            <stop offset="1" stopColor="#6366F1" />
+          </linearGradient>
+        </defs>
+        <rect x="9" y="4" width="22" height="32" rx="3" fill="url(#cont-grad)" />
+        <rect x="13" y="8" width="14" height="6" rx="1" fill="white" fillOpacity="0.3" />
+        <circle cx="15" cy="21" r="1.6" fill="white" fillOpacity="0.7" />
+        <circle cx="20" cy="21" r="1.6" fill="white" fillOpacity="0.7" />
+        <circle cx="25" cy="21" r="1.6" fill="white" fillOpacity="0.7" />
+        <circle cx="15" cy="27" r="1.6" fill="white" fillOpacity="0.7" />
+        <circle cx="20" cy="27" r="1.6" fill="white" fillOpacity="0.7" />
+        <circle cx="25" cy="27" r="1.6" fill="white" fillOpacity="0.7" />
+      </svg>
+    ),
+    color: '#818CF8',
+    angle: 20,
+    radius: 200,
+  },
+  {
+    id: 'facturacion',
+    name: 'Facturación',
+    icon: (
+      <svg viewBox="0 0 40 40" fill="none" className="w-9 h-9">
+        <defs>
+          <linearGradient id="fact-grad" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#FDBA74" />
+            <stop offset="1" stopColor="#F97316" />
+          </linearGradient>
+        </defs>
+        <path d="M9 6a2 2 0 012-2h13l7 7v23a2 2 0 01-2 2H11a2 2 0 01-2-2V6z" fill="url(#fact-grad)" />
+        <path d="M24 4v7h7" fill="white" fillOpacity="0.25" />
+        <path d="M14 18h12M14 24h12M14 30h8" stroke="white" strokeOpacity="0.55" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    ),
+    color: '#FB923C',
+    angle: 70,
+    radius: 195,
+  },
+  {
+    id: 'ligas',
+    name: 'Ligas de Pago',
+    icon: (
+      <svg viewBox="0 0 40 40" fill="none" className="w-9 h-9">
+        <defs>
+          <linearGradient id="liga-grad" x1="6" y1="6" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#7DD3FC" />
+            <stop offset="1" stopColor="#0EA5E9" />
+          </linearGradient>
+        </defs>
+        <path d="M16 24l8-8" stroke="url(#liga-grad)" strokeWidth="3" strokeLinecap="round" />
+        <path d="M22 11l2.5-2.5a6 6 0 018.5 8.5L30 20.5a6 6 0 01-8.5 0" stroke="url(#liga-grad)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <path d="M18 29l-2.5 2.5a6 6 0 01-8.5-8.5L10 19.5a6 6 0 018.5 0" stroke="url(#liga-grad)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      </svg>
+    ),
+    color: '#38BDF8',
+    angle: 130,
+    radius: 210,
+  },
+  {
+    id: 'ecommerce',
+    name: 'E-commerce',
+    icon: (
+      <svg viewBox="0 0 40 40" fill="none" className="w-9 h-9">
+        <defs>
+          <linearGradient id="ecom-grad" x1="20" y1="6" x2="20" y2="36" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#FDA4AF" />
+            <stop offset="1" stopColor="#F43F5E" />
+          </linearGradient>
+        </defs>
+        <path d="M10 12h20l-1.8 21a2.5 2.5 0 01-2.5 2.3H14.3a2.5 2.5 0 01-2.5-2.3L10 12z" fill="url(#ecom-grad)" />
+        <path d="M15 14v-2a5 5 0 0110 0v2" stroke="white" strokeOpacity="0.6" strokeWidth="2" strokeLinecap="round" fill="none" />
+      </svg>
+    ),
+    color: '#FB7185',
+    angle: 290,
+    radius: 195,
+  },
 ];
 
 const MAX_RADIUS = 230;
@@ -264,8 +348,9 @@ const CleanCard: React.FC<{
   scrollY: any;
   index: number;
 }> = ({ source, position, scrollY, index }) => {
-  // Stagger appearance based on index
-  const start = 0.2 + (index * 0.04);
+  // Stagger appearance based on index — scale the cadence to the number of sources
+  // so every card is in before the connection lines start drawing (~0.55).
+  const start = 0.2 + (index * (0.3 / DATA_SOURCES.length));
   const opacity = useTransform(scrollY, [start, start + 0.1], [0, 1]);
   const scale = useTransform(scrollY, [start, start + 0.1], [0.8, 1]);
 
@@ -328,21 +413,24 @@ export const UnifiedPlatform: React.FC = () => {
 
   const getNodeCenter = (source: DataSource, index: number) => {
 
-    // "Organic Staggered Grid" (Hive Layout)
+    // "Organic Staggered Grid" (Hive Layout) — auto-fits any number of sources
     const col = index % 2; // 0 (Left), 1 (Right)
-    const row = Math.floor(index / 2); // 0, 1, 2, 3
+    const row = Math.floor(index / 2);
+    const numRows = Math.ceil(DATA_SOURCES.length / 2);
 
     // Horizontal Positions
     const xBase = 60;
     const xStep = 160; // Distance between columns
-    
-    // Vertical Positions
-    const yBase = 70;
-    const yStep = 125; // Vertical distance between items in same column
-    const yStagger = 62.5; // Offset for second column (half of yStep)
 
-    const x = xBase + col * xStep; 
-    const y = yBase + (row * yStep) + (col * yStagger);
+    // Vertical Positions — spread node centers across a fixed band, centered on the core,
+    // so the cluster scales gracefully as more sources are added without overflowing.
+    const verticalSpan = 480; // total vertical band for node centers
+    const yStep = numRows > 1 ? verticalSpan / (numRows - 0.5) : 0;
+    const yStagger = yStep / 2; // offset for second column (half a step)
+    const topY = coreY - verticalSpan / 2; // center the whole cluster around the core
+
+    const x = xBase + col * xStep;
+    const y = topY + (row * yStep) + (col * yStagger);
 
     return { x, y };
   };
@@ -384,6 +472,22 @@ export const UnifiedPlatform: React.FC = () => {
             <stop stopColor="#2DD4BF" />
             <stop offset="1" stopColor="#14B8A6" />
           </linearGradient>
+          <linearGradient id="cont-grad" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#A5B4FC" />
+            <stop offset="1" stopColor="#6366F1" />
+          </linearGradient>
+          <linearGradient id="fact-grad" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#FDBA74" />
+            <stop offset="1" stopColor="#F97316" />
+          </linearGradient>
+          <linearGradient id="liga-grad" x1="6" y1="6" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#7DD3FC" />
+            <stop offset="1" stopColor="#0EA5E9" />
+          </linearGradient>
+          <linearGradient id="ecom-grad" x1="20" y1="6" x2="20" y2="36" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#FDA4AF" />
+            <stop offset="1" stopColor="#F43F5E" />
+          </linearGradient>
         </defs>
       </svg>
       <div className="sticky top-16 h-[calc(100vh-4rem)] flex items-start lg:items-center z-10 pt-4 lg:pt-0">
@@ -410,8 +514,9 @@ export const UnifiedPlatform: React.FC = () => {
                 style={{ opacity: useTransform(scrollYProgress, [0.1, 0.2], [0, 1]) }}
                 className="hidden lg:block text-gray-500 text-sm lg:text-lg leading-relaxed max-w-lg"
               >
-                Múltiples terminales, pagos en efectivo, tarjetas, QR y conexiones POS.
-                Todo registrado automáticamente en un solo lugar.
+                Terminales, efectivo, tarjetas, QR, ligas de pago y e-commerce, más tu
+                facturación y contabilidad. Todo registrado y conciliado automáticamente
+                en un solo lugar.
               </motion.p>
 
               <motion.div
@@ -595,9 +700,9 @@ const WaterfallCard: React.FC<{
           width: cardWidth,
           zIndex: 10,
         }}
-        className="flex flex-col items-center justify-center p-2 rounded-xl bg-neutral-900/90 border border-white/10 shadow-lg backdrop-blur"
+        className="flex flex-col items-center justify-center p-1.5 rounded-xl bg-neutral-900/90 border border-white/10 shadow-lg backdrop-blur"
       >
-        <div className="scale-90 mb-1">{source.icon}</div>
+        <div className="scale-[0.8] -my-0.5">{source.icon}</div>
         <span className="text-[9px] text-white font-medium text-center leading-tight">{source.name}</span>
       </motion.div>
 
