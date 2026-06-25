@@ -5,7 +5,7 @@ import { ChevronDown, Search, Menu, X, ArrowRight, ArrowUpRight } from 'lucide-r
 // ─── Product data with real accent colors ───
 const products = [
   { name: 'Dashboard Web', desc: 'Inventario, personal, reportes y IA', href: '/productos/dashboard', accent: 'oklch(0.72 0.14 240)', num: '01' },
-  { name: 'Avoqado TPV', desc: 'Ordenes y cobros en terminal con NFC, chip y banda', href: '/productos/tpv', accent: '#69E185', num: '02' },
+  { name: 'Avoqado TPV', desc: 'Ordenes y cobros en terminal con NFC, chip y banda', href: '/productos/tpv', accent: '#7ADD2C', num: '02' },
   { name: 'Avoqado POS', desc: 'Punto de venta para cualquier negocio', href: '/productos/pos', accent: 'oklch(0.68 0.15 290)', num: '03' },
   { name: 'Avoqado QR', desc: 'Escanear, pedir y pagar en 30 segundos', href: '/productos/qr', accent: 'oklch(0.78 0.14 75)', num: '04' },
   { name: 'Asistente IA', desc: 'Pregunta en lenguaje natural, obtiene respuestas', href: '/productos/ai', accent: 'oklch(0.75 0.14 195)', num: '05' },

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 
-const GREEN = '#69E185';
+const GREEN = '#7ADD2C';
 const TEAL = 'oklch(0.75 0.14 195)';
 const BLUE = 'oklch(0.72 0.14 240)';
 const AMBER = 'oklch(0.78 0.14 75)';

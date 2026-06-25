@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 
 const MAGENTA = 'oklch(0.72 0.15 340)';
-const GREEN = '#69E185';
+const GREEN = '#7ADD2C';
 const AMBER = 'oklch(0.78 0.14 75)';
 const TEAL = 'oklch(0.75 0.14 195)';
 const N600 = 'oklch(0.40 0.005 155)';
@@ -44,7 +44,7 @@ function TimelineDot({ progress, activateAt, completeAt, color }: {
   const border = useTransform(progress, (v) => v >= completeAt ? GREEN : v >= activateAt ? color : N800);
   const shadow = useTransform(progress, (v) =>
     v >= activateAt && v < completeAt ? `0 0 12px oklch(0.72 0.15 340 / 0.5)` :
-    v >= completeAt ? `0 0 8px oklch(0.78 0.18 155 / 0.3)` : 'none'
+    v >= completeAt ? `0 0 8px oklch(0.78 0.18 135 / 0.3)` : 'none'
   );
   const scale = useTransform(progress, [activateAt - 0.01, activateAt, activateAt + 0.015], [1, 1.3, 1]);
 

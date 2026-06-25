@@ -40,7 +40,7 @@ export default function WidgetLivingPreview({ scrollYProgress }: Props) {
   // ─── Colors ───
   const ACCENT = 'oklch(0.72 0.15 340)';
   const ACCENT_DIM = 'oklch(0.45 0.10 340)';
-  const GREEN = '#69E185';
+  const GREEN = '#7ADD2C';
   const AMBER = 'oklch(0.78 0.14 75)';
   const LABEL_BG = 'oklch(0.12 0.005 155)';
   const N600 = 'oklch(0.40 0.005 155)';

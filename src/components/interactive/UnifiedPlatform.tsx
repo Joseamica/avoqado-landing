@@ -20,7 +20,7 @@ const DATA_SOURCES: DataSource[] = [
       <svg viewBox="0 0 40 40" fill="none" className="w-9 h-9">
         <defs>
           <linearGradient id="tpv-grad" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#69E185" />
+            <stop stopColor="#7ADD2C" />
             <stop offset="1" stopColor="#22C55E" />
           </linearGradient>
         </defs>
@@ -29,7 +29,7 @@ const DATA_SOURCES: DataSource[] = [
         <circle cx="20" cy="31" r="2" fill="white" fillOpacity="0.5" />
       </svg>
     ),
-    color: '#69E185',
+    color: '#7ADD2C',
     angle: 270,
     radius: 200,
   },
@@ -441,7 +441,7 @@ export const UnifiedPlatform: React.FC = () => {
       <svg width="0" height="0" style={{ position: 'absolute' }}>
         <defs>
           <linearGradient id="tpv-grad" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#69E185" />
+            <stop stopColor="#7ADD2C" />
             <stop offset="1" stopColor="#22C55E" />
           </linearGradient>
           <linearGradient id="dash-grad" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">

@@ -165,7 +165,7 @@ export default function FAQ() {
              <motion.path
                d={arrowPathD}
                fill="none"
-               stroke="#69E185"
+               stroke="#7ADD2C"
                strokeWidth="5"
                strokeLinecap="round"
                strokeDasharray="15 10 5 10" // Organic chalk
@@ -179,7 +179,7 @@ export default function FAQ() {
              <motion.path
                 d={arrowHeadD}
                 fill="none"
-                stroke="#69E185"
+                stroke="#7ADD2C"
                 strokeWidth="5"
                 strokeLinecap="round"
                 style={{ opacity: arrowHeadOpacity }} 
@@ -189,7 +189,7 @@ export default function FAQ() {
              <motion.path
                 d={scribblePathD}
                 fill="none"
-                stroke="#69E185"
+                stroke="#7ADD2C"
                 strokeWidth="3" // Slightly thinner for the scribble to look detailed
                 strokeDasharray="20 5 10 5" 
                 style={{ 

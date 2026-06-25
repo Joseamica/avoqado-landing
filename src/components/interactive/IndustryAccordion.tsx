@@ -234,8 +234,8 @@ export default function IndustryAccordion() {
             <div
                 className="text-7xl  text-avoqado-green uppercase leading-none font-black"
                 style={{
-                    textShadow: '0 0 10px #69E185, 0 0 20px #69E185, 0 0 30px #69E185, 0 0 40px #69E185, 3px 3px 0px rgba(0,0,0,0.8)',
-                    filter: 'drop-shadow(0 0 10px #69E185)'
+                    textShadow: '0 0 10px #7ADD2C, 0 0 20px #7ADD2C, 0 0 30px #7ADD2C, 0 0 40px #7ADD2C, 3px 3px 0px rgba(0,0,0,0.8)',
+                    filter: 'drop-shadow(0 0 10px #7ADD2C)'
                 }}
             >
                 {hoveredIndex !== null ? industries[hoveredIndex].cursorText : 'Ver'}

@@ -28,7 +28,7 @@ export default function WhatsAppButton() {
             <div className="absolute inset-0 w-full h-full flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               <svg viewBox="0 0 732.5 893.3" className="w-full h-full drop-shadow-lg">
                 <path
-                  fill="#69E185"
+                  fill="#7ADD2C"
                   d="M712.7,486.2c-3.3-83.5-37.8-157.2-99.8-213.1c-27.9-28.7-63.2-57.2-104.9-84.8c16-81.7,12.9-116.7-31.4-155.5
                     l-2.4-2.1l-3.1-0.9c-33-9.4-58.6-7.7-78.1,5.1c-29.8,19.5-39.9,60.9-45.2,117.3c-131.6,12.1-242.1,95.5-296.3,224.2
                     c-56.5,134-37,280.8,49.8,374.1c3.4,3.5,10.3,10.6,157,98l1.1,0.7l1.2,0.5c36,13.2,72.6,19.8,108.8,19.8
@@ -36,7 +36,7 @@ export default function WhatsAppButton() {
                     c-0.3,58-40.2,116.3-118.7,173.3C374.3,744.2,279.3,710,228,651.3c-43.8-50-65.3-119.8-56.1-182c4.8-32.5,20.5-77.7,68-108.3
                     c64.6-41.7,110-56.7,144.4-56.7c45.6,0,71.8,26.4,97.4,52.4c10.4,10.5,20.2,20.4,31.3,28.6C545.7,409.4,580.5,454.2,580.3,507.4z"
                 />
-                <ellipse cx="362" cy="520" rx="106" ry="130" fill="#C9712F" />
+                <ellipse cx="362" cy="520" rx="106" ry="130" fill="#D97452" />
               </svg>
             </div>
           </div>

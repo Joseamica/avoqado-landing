@@ -23,8 +23,8 @@
   --z-menu-panel: 500;
 
   /* Avoqado Brand Colors */
-  --color-avoqado-green: #69E185;
-  --color-avoqado-orange: #C9712F;
+  --color-avoqado-green: #7ADD2C;
+  --color-avoqado-orange: #D97452;
   --color-avoqado-black: #000000;
   --color-avoqado-light: #F8F8F8;
   --color-avoqado-dark-bg: #0A0A0A;
@@ -43,8 +43,8 @@
   --animate-slide-in-right: slide-in-right 0.3s ease-out;
 
   /* Box Shadows */
-  --shadow-glow-green: 0 0 30px rgb(105 225 133 / 0.3);
-  --shadow-glow-orange: 0 0 30px rgb(201 113 47 / 0.3);
+  --shadow-glow-green: 0 0 30px rgb(122 221 44 / 0.3);
+  --shadow-glow-orange: 0 0 30px rgb(217 116 82 / 0.3);
 
   /* Border Radius */
   --radius-4xl: 2rem;
@@ -54,7 +54,7 @@
 /* Product accent colors (used in /productos pages) */
 :root {
   --color-product-dashboard: oklch(0.72 0.14 240);
-  --color-product-tpv: oklch(0.78 0.18 155);
+  --color-product-tpv: oklch(0.81 0.22 135);
   --color-product-pos: oklch(0.68 0.15 290);
   --color-product-qr: oklch(0.78 0.14 75);
   --color-product-ai: oklch(0.75 0.14 195);
@@ -196,11 +196,11 @@ button:focus-visible {
   --labs-ink: oklch(0.98 0.003 155);           /* near-white */
   --labs-ink-muted: oklch(0.62 0.008 155);     /* muted gray on dark */
   --labs-rule: #3a3a3a;
-  --labs-accent: oklch(0.78 0.18 155);         /* avoqado mint green */
-  --labs-accent-hover: oklch(0.72 0.18 155);   /* darker mint */
+  --labs-accent: oklch(0.81 0.22 135);         /* avoqado lime green */
+  --labs-accent-hover: oklch(0.74 0.22 135);   /* darker lime */
   --labs-accent-soft: color-mix(in oklab, var(--labs-accent) 14%, #212121);
   --labs-shadow-soft: 0 1px 3px oklch(0 0 0 / 0.4), 0 4px 12px oklch(0 0 0 / 0.3);
-  --labs-shadow-pop: 0 8px 24px oklch(0.78 0.18 155 / 0.18), 0 2px 6px oklch(0.78 0.18 155 / 0.12);
+  --labs-shadow-pop: 0 8px 24px oklch(0.81 0.22 135 / 0.18), 0 2px 6px oklch(0.81 0.22 135 / 0.12);
 
   background-color: var(--labs-bg);
   color: var(--labs-ink);

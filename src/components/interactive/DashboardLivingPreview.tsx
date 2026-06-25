@@ -56,7 +56,7 @@ export default function DashboardLivingPreview({ scrollYProgress }: Props) {
   const NEUTRAL_800 = 'oklch(0.22 0.005 155)'; // dimmer elements
   const NEUTRAL_900 = 'oklch(0.16 0.005 155)'; // card backgrounds
   // Brand & semantic colors
-  const GREEN = '#69E185';           // --color-avoqado-green
+  const GREEN = '#7ADD2C';           // --color-avoqado-green
   const AMBER = 'oklch(0.78 0.14 75)'; // product-qr accent, warnings
   const RED = 'oklch(0.65 0.20 25)';   // alerts, low stock
 
@@ -343,7 +343,7 @@ function StaffCard({ name, role, status, commission, color }: {
           <span className="text-[10px] sm:text-xs text-white truncate">{name}</span>
           <span className="text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded-full" style={{
             background: isActive ? 'oklch(0.20 0.02 155)' : 'oklch(0.20 0.02 75)',
-            color: isActive ? '#69E185' : 'oklch(0.65 0.10 75)',
+            color: isActive ? '#7ADD2C' : 'oklch(0.65 0.10 75)',
           }}>
             {status}
           </span>

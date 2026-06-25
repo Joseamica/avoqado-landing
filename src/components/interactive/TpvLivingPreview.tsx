@@ -40,7 +40,7 @@ export default function TpvLivingPreview({ scrollYProgress }: Props) {
   // State 4: Check
   const checkScale = useTransform(scrollYProgress, [0.78, 0.85], [0, 1]);
 
-  const GREEN = '#69E185';
+  const GREEN = '#7ADD2C';
   const LABEL_BG = 'oklch(0.12 0.005 155)';
   const N600 = 'oklch(0.40 0.005 155)';
   const N700 = 'oklch(0.30 0.005 155)';
@@ -118,7 +118,7 @@ export default function TpvLivingPreview({ scrollYProgress }: Props) {
                   </motion.div>
                   <motion.div style={{ opacity: item3 }} className="rounded-lg p-2 flex flex-col">
                     <div className="w-full aspect-square rounded mb-1.5 flex items-center justify-center" style={{ background: 'oklch(0.14 0.005 155)' }}>
-                      <div className="w-4 h-4 rounded" style={{ background: 'oklch(0.55 0.14 155)' }} />
+                      <div className="w-4 h-4 rounded" style={{ background: 'oklch(0.55 0.14 135)' }} />
                     </div>
                     <div className="text-[8px] sm:text-[9px] text-white font-medium">Guacamole</div>
                     <div className="text-[7px] sm:text-[8px]" style={{ color: 'oklch(0.78 0.14 75)' }}>$85</div>

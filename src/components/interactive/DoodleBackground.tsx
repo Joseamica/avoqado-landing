@@ -307,7 +307,7 @@ const doodleConfigs: DoodleConfig[] = [
 ];
 
 const COLORS = {
-  green: '#69E185',
+  green: '#7ADD2C',
   white: '#FFFFFF',
 };
 

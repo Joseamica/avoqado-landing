@@ -36,7 +36,7 @@ export default function ProductsScrollHero() {
   // Phase 6: Four product pills stagger in (0.5 - 0.85)
   const products = [
     { num: '01', name: 'Dashboard', color: 'oklch(0.72 0.14 240)' },
-    { num: '02', name: 'TPV', color: '#69E185' },
+    { num: '02', name: 'TPV', color: '#7ADD2C' },
     { num: '03', name: 'POS', color: 'oklch(0.68 0.15 290)' },
     { num: '04', name: 'QR', color: 'oklch(0.78 0.14 75)' },
   ];

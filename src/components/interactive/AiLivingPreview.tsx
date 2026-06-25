@@ -19,7 +19,7 @@ interface Props {
 // ─── Color constants (green-tinted neutrals, hue 155) ───
 const ACCENT = 'oklch(0.75 0.14 195)';
 const ACCENT_DIM = 'oklch(0.45 0.10 195)';
-const GREEN = '#69E185';
+const GREEN = '#7ADD2C';
 const AMBER = 'oklch(0.78 0.14 75)';
 const LABEL_BG = 'oklch(0.12 0.005 155)';
 const N700 = 'oklch(0.30 0.005 155)';

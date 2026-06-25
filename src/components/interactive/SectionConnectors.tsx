@@ -18,9 +18,9 @@ const CONNECTIONS: ConnectionLine[] = [
     id: 'hero-to-chatbot',
     startY: 15,  // From bottom of SquareHero
     endY: 30,    // To top of ChatbotCTA
-    color: '#69E185',
+    color: '#7ADD2C',
     gradient: {
-      from: '#69E185',
+      from: '#7ADD2C',
       to: '#60A5FA',
     },
   },

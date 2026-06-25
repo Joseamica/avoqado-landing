@@ -33,7 +33,7 @@ export default function PosLivingPreview({ scrollYProgress }: Props) {
   const ordersValue = useTransform(scrollYProgress, [0.82, 0.90], [0, 34]);
   const ordersDisplay = useTransform(ordersValue, (v) => `${Math.round(v)}`);
 
-  const GREEN = '#69E185';
+  const GREEN = '#7ADD2C';
   const INDIGO = 'oklch(0.68 0.15 290)';
   const AMBER = 'oklch(0.78 0.14 75)';
   const LABEL_BG = 'oklch(0.12 0.005 155)';
