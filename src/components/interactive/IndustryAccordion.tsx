@@ -285,8 +285,10 @@ function IndustryPanel({ industry, isHovered, isAnyHovered, onHover, onLeave, sc
     scrollStyles: { opacity: any, y: any }
 }) {
     return (
-        <motion.div
-            className="relative flex-1 min-h-0 md:h-full rounded-xl sm:rounded-2xl overflow-hidden cursor-none"
+        <motion.a
+            href={industry.link}
+            aria-label={`Conocer más sobre ${industry.title}`}
+            className="relative block flex-1 min-h-0 md:h-full rounded-xl sm:rounded-2xl overflow-hidden cursor-none"
             onMouseEnter={onHover}
             onMouseLeave={onLeave}
             style={{
@@ -344,6 +346,6 @@ function IndustryPanel({ industry, isHovered, isAnyHovered, onHover, onLeave, sc
                     </motion.div>
                  </motion.div>
             </div>
-        </motion.div>
+        </motion.a>
     );
 }
