@@ -32,7 +32,7 @@ const DEFAULT_MESSAGE = 'Hola, me interesa Avoqado. Vengo de un anuncio.';
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="robots" content="noindex, nofollow" />
-		<link rel="icon" type="image/png" href="/favicon.png?v=2" />
+		<link rel="icon" type="image/png" href="/favicon.png?v=3" />
 		<title>Conectando con WhatsApp… | Avoqado</title>
 		<style>
 			:root { color-scheme: dark; }
@@ -81,6 +81,7 @@ const DEFAULT_MESSAGE = 'Hola, me interesa Avoqado. Vengo de un anuncio.';
 			(function () {
 				var params = new URLSearchParams(window.location.search);
 				var src = params.get('src') || 'direct';
+				var page = params.get('page') || '';
 				var text = params.get('text') || DEFAULT_MESSAGE;
 				var dest = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text);
 
@@ -95,6 +96,15 @@ const DEFAULT_MESSAGE = 'Hola, me interesa Avoqado. Vengo de un anuncio.';
 					window.location.replace(dest);
 				}
 
+				// Mirror to PostHog (product-analytics funnel). This is the single
+				// PostHog capture point for whatsapp_click, so every WhatsApp CTA
+				// routed through /wa (ad prompt, navbar, footer, hero…) lands in the
+				// funnel exactly once. No-op until the user consents — PostHog inits
+				// opted-out. `page` is where the click came from (passed via ?page=).
+				try {
+					window.posthog && window.posthog.capture('whatsapp_click', { wa_source: src, wa_page: page });
+				} catch (e) {}
+
 				// Fire the conversion event. GTM calls eventCallback after the
 				// tags for this event finish, then we redirect. The timeout is a
 				// safety net in case GTM is slow or blocked by an ad blocker.
@@ -102,6 +112,7 @@ const DEFAULT_MESSAGE = 'Hola, me interesa Avoqado. Vengo de un anuncio.';
 				window.dataLayer.push({
 					event: 'whatsapp_click',
 					wa_source: src,
+					wa_page: page,
 					wa_page_location: window.location.href,
 					eventCallback: go,
 					eventTimeout: 1200,

@@ -52,7 +52,7 @@ export default function AdWhatsAppPrompt() {
 
 		const t = setTimeout(() => {
 			setOpen(true);
-			pushEvent('whatsapp_prompt_shown', { wa_source: source });
+			pushEvent('whatsapp_prompt_shown', { wa_source: source, wa_page: window.location.pathname });
 		}, SHOW_DELAY_MS);
 		return () => clearTimeout(t);
 	}, []);
@@ -90,7 +90,7 @@ export default function AdWhatsAppPrompt() {
 	const dismiss = () => {
 		markDone();
 		setOpen(false);
-		pushEvent('whatsapp_prompt_dismissed', { wa_source: source });
+		pushEvent('whatsapp_prompt_dismissed', { wa_source: source, wa_page: window.location.pathname });
 	};
 
 	const onWhatsAppClick = () => {
@@ -102,13 +102,13 @@ export default function AdWhatsAppPrompt() {
 
 	const onSetupClick = () => {
 		markDone();
-		pushEvent('sign_up_start', { method: 'ad_prompt', wa_source: source });
+		pushEvent('sign_up_start', { method: 'ad_prompt', wa_source: source, wa_page: window.location.pathname });
 		setOpen(false);
 	};
 
 	if (!mounted || !open) return null;
 
-	const waUrl = `/wa?src=ad_${source}&text=${encodeURIComponent(message)}`;
+	const waUrl = `/wa?src=ad_${source}&page=${encodeURIComponent(window.location.pathname)}&text=${encodeURIComponent(message)}`;
 
 	const modal = (
 		<div
