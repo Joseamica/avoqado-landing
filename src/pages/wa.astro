@@ -32,7 +32,11 @@ const DEFAULT_MESSAGE = 'Hola, me interesa Avoqado. Vengo de un anuncio.';
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="robots" content="noindex, nofollow" />
-		<link rel="icon" type="image/png" href="/favicon.png?v=3" />
+		<link rel="preconnect" href="https://www.googletagmanager.com" />
+			<link rel="preconnect" href="https://www.google-analytics.com" />
+			<link rel="preconnect" href="https://www.googleadservices.com" />
+			<link rel="preconnect" href="https://www.google.com" />
+			<link rel="icon" type="image/png" href="/favicon.png?v=3" />
 		<title>Conectando con WhatsApp… | Avoqado</title>
 		<style>
 			:root { color-scheme: dark; }
@@ -115,10 +119,10 @@ const DEFAULT_MESSAGE = 'Hola, me interesa Avoqado. Vengo de un anuncio.';
 					wa_page: page,
 					wa_page_location: window.location.href,
 					eventCallback: go,
-					eventTimeout: 1200,
+					eventTimeout: 3000,
 				});
 
-				setTimeout(go, 1200);
+				setTimeout(go, 3000);
 			})();
 		</script>
 	</body>
