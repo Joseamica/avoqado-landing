@@ -70,7 +70,11 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
 	// redirects, and the internal /export-stage capture page (noindex, driven by
 	// the Playwright asset-export script — analytics there would be noise).
 	const contentType = response.headers.get('content-type') ?? '';
-	if (!contentType.includes('text/html') || url.pathname.startsWith('/export-stage')) {
+	// Skip the /wa bridge: it fires its OWN direct gtag conversion (fast, before the
+	// redirect). Injecting the full GTM container there would double-config gtag and
+	// double-count the conversion — so /wa is intentionally self-contained.
+	const path = url.pathname.replace(/\/$/, '');
+	if (!contentType.includes('text/html') || url.pathname.startsWith('/export-stage') || path === '/wa') {
 		return response;
 	}
 

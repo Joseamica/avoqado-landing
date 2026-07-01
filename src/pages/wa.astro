@@ -43,6 +43,10 @@ const DEFAULT_MESSAGE = 'Hola, me interesa Avoqado. Vengo de un anuncio.';
 			<script is:inline>
 				window.dataLayer = window.dataLayer || [];
 				function gtag(){ dataLayer.push(arguments); }
+				// /wa is a conversion bridge reached from a WhatsApp CTA (ad/CTA traffic) —
+				// grant consent for the conversion (México opt-out; mirrors the site's hybrid
+				// default). GTM is NOT injected here (see middleware), so this is the only config.
+				gtag('consent', 'default', { ad_storage:'granted', ad_user_data:'granted', ad_personalization:'granted', analytics_storage:'granted', functionality_storage:'granted', security_storage:'granted' });
 				gtag('js', new Date());
 				gtag('config', 'AW-18201754401');
 				gtag('config', 'G-F6JCDF9K3P', { send_page_view: false });
