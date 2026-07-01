@@ -36,6 +36,17 @@ const DEFAULT_MESSAGE = 'Hola, me interesa Avoqado. Vengo de un anuncio.';
 			<link rel="preconnect" href="https://www.google-analytics.com" />
 			<link rel="preconnect" href="https://www.googleadservices.com" />
 			<link rel="preconnect" href="https://www.google.com" />
+			<!-- Eager, direct gtag: fires the WhatsApp conversion FAST (gtag.js loads ~0.5s),
+			     independent of the full GTM container, which loads too slowly on this redirect
+			     bridge to fire the custom-event conversion before we leave to WhatsApp. -->
+			<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=AW-18201754401"></script>
+			<script is:inline>
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){ dataLayer.push(arguments); }
+				gtag('js', new Date());
+				gtag('config', 'AW-18201754401');
+				gtag('config', 'G-F6JCDF9K3P', { send_page_view: false });
+			</script>
 			<link rel="icon" type="image/png" href="/favicon.png?v=3" />
 		<title>Conectando con WhatsApp… | Avoqado</title>
 		<style>
@@ -109,23 +120,28 @@ const DEFAULT_MESSAGE = 'Hola, me interesa Avoqado. Vengo de un anuncio.';
 					window.posthog && window.posthog.capture('whatsapp_click', { wa_source: src, wa_page: page });
 				} catch (e) {}
 
-				// Fire the conversion event. GTM calls eventCallback as soon as the
-				// tags for this event finish (usually ~1s), then we redirect — so the
-				// common case stays fast. The timeout is the ceiling for the SLOW case:
-				// the GTM container can take ~4s to load on this bridge page, and a
-				// shorter ceiling redirected before the conversion tag fired, dropping
-				// the conversion. 5s covers that worst case; beacon delivers in-flight.
-				window.dataLayer = window.dataLayer || [];
-				window.dataLayer.push({
-					event: 'whatsapp_click',
-					wa_source: src,
-					wa_page: page,
-					wa_page_location: window.location.href,
-					eventCallback: go,
-					eventTimeout: 5000,
-				});
+				// Fire the Google Ads conversion + GA4 event DIRECTLY via the eager gtag
+				// loaded in <head> — NOT through the full GTM container, which loads too
+				// slowly on this redirect bridge to fire the custom-event conversion before
+				// we leave to WhatsApp (CDP-verified: only page-level tags fired in time).
+				// transport_type:beacon delivers the hit even as the page unloads; the
+				// conversion's event_callback redirects as soon as it's sent (~0.5s). No
+				// dataLayer 'whatsapp_click' push here, so the GTM tags don't double-count.
+				try {
+					gtag('event', 'conversion', {
+						send_to: 'AW-18201754401/cvaUCLOG-b0cEKH2oudD',
+						transport_type: 'beacon',
+						event_callback: go,
+					});
+					gtag('event', 'whatsapp_click', {
+						send_to: 'G-F6JCDF9K3P',
+						wa_source: src,
+						wa_page: page,
+						transport_type: 'beacon',
+					});
+				} catch (e) {}
 
-				setTimeout(go, 5000);
+				setTimeout(go, 3000);
 			})();
 		</script>
 	</body>
