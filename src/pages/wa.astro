@@ -109,9 +109,12 @@ const DEFAULT_MESSAGE = 'Hola, me interesa Avoqado. Vengo de un anuncio.';
 					window.posthog && window.posthog.capture('whatsapp_click', { wa_source: src, wa_page: page });
 				} catch (e) {}
 
-				// Fire the conversion event. GTM calls eventCallback after the
-				// tags for this event finish, then we redirect. The timeout is a
-				// safety net in case GTM is slow or blocked by an ad blocker.
+				// Fire the conversion event. GTM calls eventCallback as soon as the
+				// tags for this event finish (usually ~1s), then we redirect — so the
+				// common case stays fast. The timeout is the ceiling for the SLOW case:
+				// the GTM container can take ~4s to load on this bridge page, and a
+				// shorter ceiling redirected before the conversion tag fired, dropping
+				// the conversion. 5s covers that worst case; beacon delivers in-flight.
 				window.dataLayer = window.dataLayer || [];
 				window.dataLayer.push({
 					event: 'whatsapp_click',
@@ -119,10 +122,10 @@ const DEFAULT_MESSAGE = 'Hola, me interesa Avoqado. Vengo de un anuncio.';
 					wa_page: page,
 					wa_page_location: window.location.href,
 					eventCallback: go,
-					eventTimeout: 3000,
+					eventTimeout: 5000,
 				});
 
-				setTimeout(go, 3000);
+				setTimeout(go, 5000);
 			})();
 		</script>
 	</body>
