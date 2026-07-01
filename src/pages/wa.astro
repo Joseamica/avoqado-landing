@@ -108,6 +108,9 @@ const DEFAULT_MESSAGE = 'Hola, me interesa Avoqado. Vengo de un anuncio.';
 				function go() {
 					if (redirected) return;
 					redirected = true;
+					// Debug mode (?debug=1): keep the page instead of redirecting, so the
+					// conversion tags can be observed firing/sending. No user ever hits this.
+					if (params.get('debug') === '1') return;
 					window.location.replace(dest);
 				}
 
