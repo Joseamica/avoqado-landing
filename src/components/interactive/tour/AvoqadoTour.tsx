@@ -30,6 +30,7 @@ import {
   webReducer,
 } from './flows';
 import type { PaymentInfo, StepCtx } from './flows';
+import { INITIAL_CHAIN_STATE, chainReducer } from './flows-chain';
 
 import { flowName, trackTour } from './analytics';
 import PaxPhotoFrame from './PaxPhotoFrame';
@@ -51,6 +52,9 @@ import ResvDone from './screens-web/ResvDone';
 import LigaList from './screens-web/LigaList';
 import LigaPurpose from './screens-web/LigaPurpose';
 import LigaForm from './screens-web/LigaForm';
+import DashLive from './screens-dash/DashLive';
+import DashInventory from './screens-dash/DashInventory';
+import DashCfdi from './screens-dash/DashCfdi';
 
 export type { PaymentInfo };
 
@@ -65,6 +69,7 @@ export interface AvoqadoTourProps {
 export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
   const [tpv, dispatch] = useReducer(tpvReducer, INITIAL_TPV_STATE);
   const [web, webDispatch] = useReducer(webReducer, INITIAL_WEB_STATE);
+  const [chain, chainDispatch] = useReducer(chainReducer, INITIAL_CHAIN_STATE);
 
   /** Last completed (simulated) payment — feeds the dashboard handoff URL. */
   const [lastPayment, setLastPayment] = useState<PaymentInfo | null>(null);
@@ -94,6 +99,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
       ...helpers,
       dispatch,
       webDispatch,
+      chainDispatch,
       notifyPayment: info => {
         setLastPayment(info);
         onPaymentRef.current?.(info);
@@ -102,6 +108,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
     onReset: () => {
       dispatch({ type: 'reset' });
       webDispatch({ type: 'reset' });
+      chainDispatch({ type: 'reset' });
     },
     onEvent: e => {
       if (e.type === 'tap') {
@@ -205,11 +212,9 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
                 </div>
                 <div className={`frame-slot${showDesktop ? '' : ' is-hidden'}`}>
                   <BrowserFrame variant="desktop" url="dashboard.avoqado.io/venues/estudio-lumina" onTpvClick={engine.handleTpvClick}>
-                    {/* TEMPORARY placeholder — Phase 1 crossfade validation only.
-                        Later phases replace this with the real chain screens. */}
-                    <section className="web-screen" data-screen="dash-live">
-                      Dashboard placeholder — Phase 1 crossfade test
-                    </section>
+                    <DashLive saleRowIn={chain.saleRowIn} cascadeShown={chain.cascadeShown} flow={engine.flow === 'A' ? 'A' : 'B'} />
+                    <DashInventory counted={chain.invCounted} />
+                    <DashCfdi />
                   </BrowserFrame>
                 </div>
               </>

@@ -14,6 +14,8 @@ import type { Dispatch } from 'react';
 import type { EngineCtx, FlowId, TourStep } from './engine';
 import { RESERVA_STEPS, LIGA_STEPS } from './flows-web';
 import type { WebAction } from './flows-web';
+import { chainSteps } from './flows-chain';
+import type { ChainAction } from './flows-chain';
 
 export type { WebAction, WebState } from './flows-web';
 export { INITIAL_WEB_STATE, webReducer } from './flows-web';
@@ -125,6 +127,8 @@ export interface StepCtx extends EngineCtx {
   dispatch: Dispatch<TpvAction>;
   /** Web flows (R reserva / L liga de pago) mutate their own state slice. */
   webDispatch: Dispatch<WebAction>;
+  /** Post-sale chain screens (dash-*) mutate their own state slice. */
+  chainDispatch: Dispatch<ChainAction>;
   notifyPayment: (info: PaymentInfo) => void;
 }
 
@@ -193,7 +197,7 @@ function tailSteps(): TourStep<StepCtx>[] {
         });
       },
     },
-    { screen: 'receipt', final: true, ch: 3 },
+    { screen: 'receipt', auto: 2200, ch: 3 },
   ];
 }
 
@@ -238,6 +242,7 @@ export const TOUR_FLOWS: Record<FlowId, TourStep<StepCtx>[]> = {
       tapDelay: 180,
     },
     ...tailSteps(),
+    ...chainSteps('A'),
   ],
 
   /* Flow B — "Cobrar" module: tabs + retail catalog + cart panel. */
@@ -289,6 +294,7 @@ export const TOUR_FLOWS: Record<FlowId, TourStep<StepCtx>[]> = {
       tapDelay: 200,
     },
     ...tailSteps(),
+    ...chainSteps('B'),
   ],
 
   /* Flow R — "Reserva en línea": the booking widget on the venue's page. */
