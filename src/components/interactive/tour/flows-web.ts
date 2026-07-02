@@ -185,7 +185,7 @@ export const RESERVA_STEPS: TourStep<StepCtx>[] = [
     frame: 'desktop',
     target: '[data-t="nav-ventas"]',
     pill: 'Mira: ya es una venta',
-    pos: 'right',
+    pos: 'bottom',
     ch: 4,
   },
   { screen: 'dash-resv-sales', frame: 'desktop', final: true, ch: 4 },

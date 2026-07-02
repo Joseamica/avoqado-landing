@@ -1846,3 +1846,22 @@
     --pax-scale: 0.39;
   }
 }
+
+/* ---------- Pill compacto en pantallas chicas (founder QA) ----------
+   El frame del mock se escala en móvil pero el pill vive en la capa del
+   stage (sin escalar): a tamaño completo tapaba media pantalla del mock.
+   Se compacta en dos cortes para bajar su cobertura visual. */
+@media (max-width: 560px) {
+  .avq-tour .tour-pill {
+    font-size: 11.5px;
+    padding: 7px 11px;
+    border-radius: 10px;
+    gap: 5px;
+  }
+}
+@media (max-width: 430px) {
+  .avq-tour .tour-pill {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
