@@ -141,6 +141,10 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
   const tourVisibleRef = useRef(false);
   const timersRef = useRef<number[]>([]);
   const rafsRef = useRef<number[]>([]);
+  /** Target-follow loop (see startTargetWatch) — lifecycle-managed by
+   *  show/hide, NOT part of the cancel-on-reset rAF pool. */
+  const watchRafRef = useRef<number | null>(null);
+  const lastRectKeyRef = useRef('');
   const pendingPlaceRef = useRef<{ pos: PillPos; jump: boolean } | null>(null);
 
   /* ==========================================================
@@ -273,6 +277,70 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     setPlaceTick(t => t + 1); // placement happens after the pill text renders (we need its width)
   };
 
+  /* Founder QA: on small screens a bottom-of-frame target (e.g. the booking
+     widget's "Siguiente") can sit below the page fold — the visitor had to
+     hunt for the next step by scrolling. Bring the target into view whenever
+     it isn't fully visible (88px allowance for the fixed navbar, 24px for
+     the pill hanging under bottom targets). */
+  const scrollTargetIntoView = (target: HTMLElement) => {
+    const r = target.getBoundingClientRect();
+    if (r.top < 88 || r.bottom > window.innerHeight - 24) {
+      target.scrollIntoView({
+        block: 'center',
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      });
+    }
+  };
+
+  /** Stage-relative fingerprint of the target's box — page scrolling doesn't
+   *  change it, only real layout shifts do. */
+  const targetRectKey = (target: HTMLElement, stage: HTMLElement): string => {
+    const sr = stage.getBoundingClientRect();
+    const tr = target.getBoundingClientRect();
+    return `${Math.round(tr.top - sr.top)}:${Math.round(tr.left - sr.left)}:${Math.round(tr.width)}:${Math.round(tr.height)}`;
+  };
+
+  const stopTargetWatch = () => {
+    if (watchRafRef.current !== null) {
+      window.cancelAnimationFrame(watchRafRef.current);
+      watchRafRef.current = null;
+    }
+  };
+
+  /* Founder QA round 2: the layout can shift UNDER an already-placed spotlight
+     (picking a service expands the booking summary with a height animation,
+     pushing "Siguiente" down) — the dot/pill were left pointing at the
+     target's OLD position, covering other content. While a target is visible,
+     glue the spotlight to it: re-place on any stage-relative movement, and
+     once the shift settles (~6 quiet frames), re-run the fold check. Manual
+     page scrolling never changes the stage-relative box, so this doesn't
+     fight the user's own scrolling. */
+  const startTargetWatch = () => {
+    stopTargetWatch();
+    let movedSinceScroll = false;
+    let quietFrames = 0;
+    const loop = () => {
+      const target = curTargetRef.current;
+      const stage = optsRef.current.stageRef.current;
+      if (!target || !stage || !tourVisibleRef.current) {
+        watchRafRef.current = null;
+        return;
+      }
+      const key = targetRectKey(target, stage);
+      if (key !== lastRectKeyRef.current) {
+        lastRectKeyRef.current = key;
+        placeTour(target, stepsRef.current[idxRef.current]?.pos ?? 'top', false);
+        movedSinceScroll = true;
+        quietFrames = 0;
+      } else if (movedSinceScroll && ++quietFrames >= 6) {
+        movedSinceScroll = false;
+        scrollTargetIntoView(target);
+      }
+      watchRafRef.current = window.requestAnimationFrame(loop);
+    };
+    watchRafRef.current = window.requestAnimationFrame(loop);
+  };
+
   /* Measure + place after React commits the new pill text. */
   useIsomorphicLayoutEffect(() => {
     const pending = pendingPlaceRef.current;
@@ -283,21 +351,14 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     optsRef.current.layerRef.current?.classList.remove('off');
     tourVisibleRef.current = true;
 
-    /* Founder QA: on small screens a bottom-of-frame target (e.g. the booking
-       widget's "Siguiente") can sit below the page fold — the visitor had to
-       hunt for the next step by scrolling. Bring the target into view whenever
-       it isn't fully visible (64px allowance for the fixed navbar, 24px for
-       the pill hanging under bottom targets). */
-    const r = target.getBoundingClientRect();
-    if (r.top < 88 || r.bottom > window.innerHeight - 24) {
-      target.scrollIntoView({
-        block: 'center',
-        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-      });
-    }
+    scrollTargetIntoView(target);
+    const stage = optsRef.current.stageRef.current;
+    if (stage) lastRectKeyRef.current = targetRectKey(target, stage);
+    startTargetWatch();
   }, [placeTick]);
 
   const hideTour = () => {
+    stopTargetWatch();
     optsRef.current.layerRef.current?.classList.add('off');
     tourVisibleRef.current = false;
     curTargetRef.current?.classList.remove('tour-target');
@@ -473,6 +534,7 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     return () => {
       window.removeEventListener('resize', reposition);
       clearTimers();
+      stopTargetWatch();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- engine state lives in refs; boot once
   }, []);
