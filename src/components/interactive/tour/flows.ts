@@ -193,7 +193,7 @@ function tailSteps(): TourStep<StepCtx>[] {
         });
       },
     },
-    { screen: 'receipt', final: true, ch: 3 },
+    { screen: 'receipt', auto: 2200, ch: 3 },
   ];
 }
 
@@ -238,6 +238,9 @@ export const TOUR_FLOWS: Record<FlowId, TourStep<StepCtx>[]> = {
       tapDelay: 180,
     },
     ...tailSteps(),
+    /* TEMPORARY placeholder — Phase 1 crossfade validation only.
+       Later phases replace this with the real chain steps/screens. */
+    { screen: 'dash-live', frame: 'desktop', final: true, ch: 4 },
   ],
 
   /* Flow B — "Cobrar" module: tabs + retail catalog + cart panel. */
@@ -289,6 +292,9 @@ export const TOUR_FLOWS: Record<FlowId, TourStep<StepCtx>[]> = {
       tapDelay: 200,
     },
     ...tailSteps(),
+    /* TEMPORARY placeholder — Phase 1 crossfade validation only.
+       Later phases replace this with the real chain steps/screens. */
+    { screen: 'dash-live', frame: 'desktop', final: true, ch: 4 },
   ],
 
   /* Flow R — "Reserva en línea": the booking widget on the venue's page. */

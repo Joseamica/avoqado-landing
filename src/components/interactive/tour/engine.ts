@@ -49,6 +49,8 @@ export interface TourStep<Ctx extends EngineCtx = EngineCtx> {
   pos?: PillPos;
   /** Chapter (panel) this step belongs to. */
   ch: number;
+  /** Which frame slot is active for this step (TPV flows only). Absent = the flow's default frame. */
+  frame?: 'desktop';
   /** Side effect when the target is tapped (before advancing). */
   onTap?: (ctx: Ctx) => void;
   /** ms to wait after the tap before moving to the next step. */
@@ -77,7 +79,7 @@ export interface UseTourEngineOptions<Ctx extends EngineCtx> {
   /** Caller resets its own screen state (cart, stars, tip, confetti…). */
   onReset: (flow: FlowId) => void;
   /** Optional analytics seam: step taps, completion, resets. */
-  onEvent?: (event: { type: 'tap' | 'complete' | 'reset'; flow: FlowId; stepIndex?: number }) => void;
+  onEvent?: (event: { type: 'tap' | 'complete' | 'reset'; flow: FlowId; stepIndex?: number; stepName?: string }) => void;
 }
 
 export interface TourEngineApi {
@@ -88,6 +90,8 @@ export interface TourEngineApi {
   done: boolean;
   /** Current pill copy (rendered by the caller inside .tour-pill). */
   pillText: string;
+  /** Active frame slot (TPV flows only) — derived from the current step. */
+  frame: 'desktop' | undefined;
   /** Restart (same flow) or switch flow — works from ANY state. */
   reset: (flow: FlowId) => void;
   /** Single click-capture handler to attach on the .tpv element. */
@@ -111,10 +115,16 @@ interface UiState {
   flow: FlowId;
   chapter: number;
   done: boolean;
+  frame: 'desktop' | undefined;
 }
 
 export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<Ctx>): TourEngineApi {
-  const [ui, setUi] = useState<UiState>({ flow: opts.initialFlow, chapter: opts.flows[opts.initialFlow][0]?.ch ?? 1, done: false });
+  const [ui, setUi] = useState<UiState>({
+    flow: opts.initialFlow,
+    chapter: opts.flows[opts.initialFlow][0]?.ch ?? 1,
+    done: false,
+    frame: opts.flows[opts.initialFlow][0]?.frame,
+  });
   const [pillText, setPillText] = useState('');
   const [placeTick, setPlaceTick] = useState(0);
 
@@ -319,7 +329,7 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     const step = stepsRef.current[i];
     if (!step) return;
     doneRef.current = !!step.final;
-    setUi(u => ({ ...u, chapter: step.ch, done: !!step.final }));
+    setUi(u => ({ ...u, chapter: step.ch, done: !!step.final, frame: step.frame }));
 
     if (step.screen !== curScreenRef.current) {
       hideTour();
@@ -355,7 +365,7 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     busyRef.current = true;
     const step = stepsRef.current[idxRef.current];
     curTargetRef.current?.classList.remove('tour-target');
-    optsRef.current.onEvent?.({ type: 'tap', flow: flowRef.current, stepIndex: idxRef.current });
+    optsRef.current.onEvent?.({ type: 'tap', flow: flowRef.current, stepIndex: idxRef.current, stepName: step?.screen });
     step?.onTap?.(makeCtx());
     setTimer(() => goTo(idxRef.current + 1), step?.tapDelay ?? DEFAULT_TAP_DELAY);
   };
@@ -379,7 +389,7 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     const first = stepsRef.current[0];
     if (!first) return;
     idxRef.current = 0;
-    setUi({ flow, chapter: first.ch, done: false });
+    setUi({ flow, chapter: first.ch, done: false, frame: first.frame });
 
     /* setScreenInstant runs AFTER React commits: switching to a flow that
        lives in a different frame (terminal ⇄ browser) swaps the screens
@@ -444,6 +454,7 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     chapter: ui.chapter,
     done: ui.done,
     pillText,
+    frame: ui.frame,
     reset: resetFlow,
     handleTpvClick,
   };

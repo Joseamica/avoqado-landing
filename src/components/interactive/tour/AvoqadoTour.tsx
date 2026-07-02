@@ -18,12 +18,11 @@ import './tour.css';
 import './tour-web.css';
 import './tour-resv.css';
 import './tour-liga.css';
+import './tour-dash.css';
 
 import { useTourEngine } from './engine';
 import type { FlowId } from './engine';
 import {
-  DEMO_BASE_AMOUNT,
-  DEMO_TIP_AMOUNT,
   INITIAL_TPV_STATE,
   INITIAL_WEB_STATE,
   TOUR_FLOWS,
@@ -62,11 +61,6 @@ export interface AvoqadoTourProps {
    */
   onPaymentComplete?: (info: PaymentInfo) => void;
 }
-
-/** Demo dashboard the final CTA hands off to (J1 journey). */
-const DEMO_DASHBOARD_URL: string = (
-  import.meta.env.PUBLIC_DEMO_DASHBOARD_URL || 'https://demo.dashboard.avoqado.io'
-).replace(/\/$/, '');
 
 export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
   const [tpv, dispatch] = useReducer(tpvReducer, INITIAL_TPV_STATE);
@@ -144,33 +138,29 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
     return () => window.clearTimeout(t);
   }, [engine.done]);
 
-  /** Handoff: each flow deep-links its own journey in the demo dashboard. */
+  /** Handoff: tour completed → contact sales on WhatsApp, routed through the
+   *  /wa bridge so the Google Ads whatsapp_click conversion fires (beacon). */
   const handleCtaClick = () => {
     if (!engine.done) return;
-    /* LA conversión de /demo: del tour al dashboard demo propio */
+    /* LA conversión de /demo: tour completado → contactar a ventas por WhatsApp */
     trackTour('tour_cta_click', { tour_flow: flowName(engine.flow) });
-    if (engine.flow === 'A' || engine.flow === 'B') {
-      /* Graceful fallback: the tour can't complete without a payment, but if
-         PaymentInfo is somehow missing we still hand off with the demo amounts. */
-      const amount = lastPayment?.amount ?? DEMO_BASE_AMOUNT;
-      const tip = lastPayment?.tip ?? DEMO_TIP_AMOUNT;
-      const url =
-        `${DEMO_DASHBOARD_URL}/?demoTour=venta-tpv` +
-        `&amountCents=${Math.round(amount * 100)}` +
-        `&tipCents=${Math.round(tip * 100)}`;
-      window.open(url, '_blank', 'noopener,noreferrer');
-    } else if (engine.flow === 'R') {
-      /* Journey "reserva": the dashboard creates a REAL reservation in the
-         visitor's demo venue and tours the Reservations calendar. */
-      window.open(`${DEMO_DASHBOARD_URL}/?demoTour=reserva`, '_blank', 'noopener,noreferrer');
-    } else {
-      /* Journey "liga": the dashboard creates a REAL payment link + its web
-         payment and tours Ligas de Pago → Transacciones. */
-      window.open(`${DEMO_DASHBOARD_URL}/?demoTour=liga`, '_blank', 'noopener,noreferrer');
-    }
+    const src =
+      engine.flow === 'A' || engine.flow === 'B'
+        ? 'demo_tour_tpv'
+        : engine.flow === 'R'
+        ? 'demo_tour_reserva'
+        : 'demo_tour_liga';
+    const text =
+      engine.flow === 'A' || engine.flow === 'B'
+        ? 'Hola, acabo de probar el demo de cobros de Avoqado y quiero hablar con ventas.'
+        : engine.flow === 'R'
+        ? 'Hola, acabo de probar el demo de reservas de Avoqado y quiero hablar con ventas.'
+        : 'Hola, acabo de probar el demo de ligas de pago de Avoqado y quiero hablar con ventas.';
+    window.location.href = `/wa?src=${src}&text=${encodeURIComponent(text)}`;
   };
 
   const isTpvFlow = engine.flow === 'A' || engine.flow === 'B';
+  const showDesktop = isTpvFlow && engine.frame === 'desktop';
 
   return (
     <div className="avq-tour">
@@ -190,45 +180,59 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
             &#8634;
           </button>
 
-          {isTpvFlow ? (
-            <PaxPhotoFrame screensRef={screensRef} onTpvClick={engine.handleTpvClick}>
-              <FastPaymentEntry amount={tpv.amount} popKey={tpv.amountPopKey} />
-              <Cobrar
-                view={tpv.cobrarView}
-                cartPlayera={tpv.cartPlayera}
-                cartGorra={tpv.cartGorra}
-                cartItems={tpv.cartItems}
-                cartButtonLabel={tpv.cartButtonLabel}
-                cartSheetOpen={tpv.cartSheetOpen}
-              />
-              <Review starsFilled={tpv.starsFilled} />
-              <Tip selected={tpv.tipSelected} totalLabel={tpv.tipTotalLabel} />
-              <MerchantSelection cardSelected={tpv.cardSelected} />
-              <Detecting />
-              <Processing />
-              <SuccessScreen confettiKey={tpv.confettiKey} />
-              <ReceiptScreen />
-            </PaxPhotoFrame>
-          ) : engine.flow === 'R' ? (
-            <BrowserFrame variant="phone" url="book.avoqado.io/estetica-bella" screensRef={screensRef} onTpvClick={engine.handleTpvClick}>
-              <ResvLanding />
-              <ResvServices serviceAdded={web.resvServiceAdded} />
-              <ResvDateTime day={web.resvDay} slot={web.resvSlot} />
-              <ResvCheckout />
-              <ResvDone />
-            </BrowserFrame>
-          ) : (
-            <BrowserFrame
-              variant="desktop"
-              url="dashboard.avoqado.io/venues/estudio-lumina/payment-links"
-              screensRef={screensRef}
-              onTpvClick={engine.handleTpvClick}
-            >
-              <LigaList saved={web.ligaSaved} waOpen={web.ligaWaOpen} waSent={web.ligaWaSent} paid={web.ligaPaid} toast={web.ligaToast} />
-              <LigaPurpose purpose={web.ligaPurpose} />
-              <LigaForm amountTyped={web.ligaAmount} />
-            </BrowserFrame>
-          )}
+          <div className="frames" ref={screensRef}>
+            {isTpvFlow ? (
+              <>
+                <div className={`frame-slot${showDesktop ? ' is-hidden' : ''}`}>
+                  <PaxPhotoFrame onTpvClick={engine.handleTpvClick}>
+                    <FastPaymentEntry amount={tpv.amount} popKey={tpv.amountPopKey} />
+                    <Cobrar
+                      view={tpv.cobrarView}
+                      cartPlayera={tpv.cartPlayera}
+                      cartGorra={tpv.cartGorra}
+                      cartItems={tpv.cartItems}
+                      cartButtonLabel={tpv.cartButtonLabel}
+                      cartSheetOpen={tpv.cartSheetOpen}
+                    />
+                    <Review starsFilled={tpv.starsFilled} />
+                    <Tip selected={tpv.tipSelected} totalLabel={tpv.tipTotalLabel} />
+                    <MerchantSelection cardSelected={tpv.cardSelected} />
+                    <Detecting />
+                    <Processing />
+                    <SuccessScreen confettiKey={tpv.confettiKey} />
+                    <ReceiptScreen />
+                  </PaxPhotoFrame>
+                </div>
+                <div className={`frame-slot${showDesktop ? '' : ' is-hidden'}`}>
+                  <BrowserFrame variant="desktop" url="dashboard.avoqado.io/venues/estudio-lumina" onTpvClick={engine.handleTpvClick}>
+                    {/* TEMPORARY placeholder — Phase 1 crossfade validation only.
+                        Later phases replace this with the real chain screens. */}
+                    <section className="web-screen" data-screen="dash-live">
+                      Dashboard placeholder — Phase 1 crossfade test
+                    </section>
+                  </BrowserFrame>
+                </div>
+              </>
+            ) : engine.flow === 'R' ? (
+              <BrowserFrame variant="phone" url="book.avoqado.io/estetica-bella" onTpvClick={engine.handleTpvClick}>
+                <ResvLanding />
+                <ResvServices serviceAdded={web.resvServiceAdded} />
+                <ResvDateTime day={web.resvDay} slot={web.resvSlot} />
+                <ResvCheckout />
+                <ResvDone />
+              </BrowserFrame>
+            ) : (
+              <BrowserFrame
+                variant="desktop"
+                url="dashboard.avoqado.io/venues/estudio-lumina/payment-links"
+                onTpvClick={engine.handleTpvClick}
+              >
+                <LigaList saved={web.ligaSaved} waOpen={web.ligaWaOpen} waSent={web.ligaWaSent} paid={web.ligaPaid} toast={web.ligaToast} />
+                <LigaPurpose purpose={web.ligaPurpose} />
+                <LigaForm amountTyped={web.ligaAmount} />
+              </BrowserFrame>
+            )}
+          </div>
 
           {/* Floating spotlight: pulsing dot + green pill (Square-style).
               Classes off/jump and inline positions are engine-managed. */}

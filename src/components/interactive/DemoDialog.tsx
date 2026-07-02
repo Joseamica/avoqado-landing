@@ -121,8 +121,8 @@ export default function DemoDialog({ isOpen, onClose }: DemoDialogProps) {
 
           {/* Dashboard interactive demo */}
           <a
-            href="https://demo.dashboard.avoqado.io"
-            onClick={() => pushEvent('demo_request', { demo_type: 'interactive_dashboard' })}
+            href="https://avoqado.io/demo"
+            onClick={() => pushEvent('demo_request', { demo_type: 'interactive_tour' })}
             className="group block p-6 border-2 border-gray-200 rounded-2xl hover:border-avoqado-green hover:bg-avoqado-green/5 transition-all"
           >
             <div className="flex items-start gap-4">

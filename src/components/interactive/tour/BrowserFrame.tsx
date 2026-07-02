@@ -4,20 +4,22 @@
  *  - variant "desktop": ventana macOS (el dashboard, canvas fijo 700×500
  *    escalado por CSS en viewports angostos).
  *
- * Igual que TerminalFrame: las pantallas viven en `.screens` (mismo ref
- * que consume el engine) y un único click-capture alimenta los rieles.
+ * Igual que TerminalFrame: las pantallas viven en `.screens` y un único
+ * click-capture alimenta los rieles. El `screensRef` que consume el engine
+ * vive en el wrapper `.frames` de AvoqadoTour (ancestro compartido de cada
+ * `div.screens`) — engine.screenEl() busca `[data-screen]` por descendencia,
+ * así que la profundidad de anidamiento no importa.
  */
-import type { MouseEvent as ReactMouseEvent, ReactNode, RefObject } from 'react';
+import type { MouseEvent as ReactMouseEvent, ReactNode } from 'react';
 
 interface Props {
   variant: 'phone' | 'desktop';
   url: string;
-  screensRef: RefObject<HTMLDivElement>;
   onTpvClick: (e: ReactMouseEvent<HTMLElement>) => void;
   children: ReactNode;
 }
 
-export default function BrowserFrame({ variant, url, screensRef, onTpvClick, children }: Props) {
+export default function BrowserFrame({ variant, url, onTpvClick, children }: Props) {
   return (
     <div className={`bframe-wrap ${variant}`}>
       <div className={`bframe ${variant}`}>
@@ -41,9 +43,7 @@ export default function BrowserFrame({ variant, url, screensRef, onTpvClick, chi
           <span className="b-toolbar-end" />
         </div>
         <div className="b-content" onClick={onTpvClick}>
-          <div className="screens" ref={screensRef}>
-            {children}
-          </div>
+          <div className="screens">{children}</div>
         </div>
       </div>
     </div>

@@ -1,0 +1,46 @@
+/**
+ * tour-dash.css — Phase 1: frame stack + crossfade only.
+ *
+ * `.frames` is the new wrapper around every tour frame (PaxPhotoFrame /
+ * BrowserFrame). For TPV flows (A/B) it stacks TWO frames — PAX + desktop
+ * BrowserFrame — in the same grid cell so swapping between them (post-recibo
+ * crossfade) never moves the panel or changes the stage height. R and L keep
+ * mounting a single frame inside this same wrapper (no `.frame-slot`, no
+ * visual change).
+ *
+ * Explicitly OUT OF SCOPE here (left untouched on purpose):
+ *  - `.avq-tour .bframe-wrap.desktop .bframe` scale/margin compensation
+ *    (tour-web.css:129-174) — the desktop canvas sizing mechanism.
+ *  - The PAX responsive scale rules (tour.css:1774-1817).
+ * Both mechanisms operate INSIDE a `.frame-slot`, which is a normal-flow
+ * container, so they keep working unmodified inside the stack.
+ */
+
+/* Both frames (or the single R/L frame) occupy the same grid cell, centered
+   like `.stage` centers a single frame today. */
+.avq-tour .frames {
+  display: grid;
+  justify-items: center;
+  align-items: start;
+}
+
+.avq-tour .frame-slot {
+  grid-area: 1 / 1;
+}
+
+/* Inactive slot: invisible, non-interactive, but crossfades out instead of
+   popping — the incoming slot's entering screen only starts becoming visible
+   once the frame itself is visible (visibility flips at the END of the opacity
+   transition), so there's no separate ordering to coordinate with switchScreen. */
+.avq-tour .frame-slot.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 260ms ease, visibility 0s 260ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avq-tour .frame-slot.is-hidden {
+    transition: none;
+  }
+}

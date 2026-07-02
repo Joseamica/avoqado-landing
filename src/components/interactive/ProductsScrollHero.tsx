@@ -96,7 +96,7 @@ export default function ProductsScrollHero() {
             <a href="/contact" className="inline-flex items-center justify-center px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors">
               Agendar demo
             </a>
-            <a href="https://demo.dashboard.avoqado.io" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 transition-colors">
+            <a href="https://avoqado.io/demo" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 transition-colors">
               Probar gratis
             </a>
           </motion.div>

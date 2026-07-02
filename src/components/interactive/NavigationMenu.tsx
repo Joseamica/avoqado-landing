@@ -484,7 +484,7 @@ function ProductsDropdown() {
             <p className="text-sm text-gray-600 leading-relaxed">Accede al dashboard con datos de ejemplo. Sin tarjeta, sin compromiso.</p>
           </div>
           <a
-            href="https://demo.dashboard.avoqado.io"
+            href="https://avoqado.io/demo"
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-avoqado-green hover:underline"

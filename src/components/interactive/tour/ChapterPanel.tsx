@@ -29,12 +29,12 @@ const FLOW_META: Record<FlowId, FlowMeta> = {
   A: {
     title: 'Terminal Avoqado',
     chapters: TPV_CHAPTERS,
-    cta: 'Siguiente: míralo en tu dashboard →',
+    cta: 'Contactar a ventas →',
   },
   B: {
     title: 'Terminal Avoqado',
     chapters: TPV_CHAPTERS,
-    cta: 'Siguiente: míralo en tu dashboard →',
+    cta: 'Contactar a ventas →',
   },
   R: {
     title: 'Reservas en línea',
@@ -43,7 +43,7 @@ const FLOW_META: Record<FlowId, FlowMeta> = {
       { n: 2, title: 'Horario y datos en segundos', detail: '— sin llamadas ni mensajes' },
       { n: 3, title: 'Directo a tu calendario', detail: '— con recordatorios por WhatsApp' },
     ],
-    cta: 'Siguiente: explora tu dashboard demo →',
+    cta: 'Contactar a ventas →',
   },
   L: {
     title: 'Ligas de pago',
@@ -52,7 +52,7 @@ const FLOW_META: Record<FlowId, FlowMeta> = {
       { n: 2, title: 'Compártela', detail: '— WhatsApp, QR o link directo' },
       { n: 3, title: 'Cobra en línea', detail: '— y míralo reflejado al instante' },
     ],
-    cta: 'Siguiente: explora tu dashboard demo →',
+    cta: 'Contactar a ventas →',
   },
 };
 

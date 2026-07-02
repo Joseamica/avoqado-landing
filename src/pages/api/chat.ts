@@ -287,7 +287,7 @@ INFORMACION CLAVE DE AVOQADO:
 - 6 procesadores de pago: Blumon, AngelPay, Stripe, B4Bit (crypto), transferencia bancaria
 - Sede: Mexico. Optimizado para mercado mexicano (RFC, INE, CLABE, MXN)
 - Contacto: avoqado.io/contact o WhatsApp +52 564 007 0001
-- Demo: demo.dashboard.avoqado.io (sin tarjeta, sin compromiso)
+- Demo: avoqado.io/demo (demo interactivo, sin registro ni tarjeta)
 - Registro: dashboard.avoqado.io/signup
 
 LOS 6 PRODUCTOS:
