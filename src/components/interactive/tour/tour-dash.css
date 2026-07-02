@@ -655,3 +655,75 @@
     opacity: 1;
   }
 }
+
+/* ==========================================================
+   dash-resv-cal — Reservaciones · Calendario (flujo R payoff)
+   ========================================================== */
+.avq-tour .lg .dash-cal-day {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--lg-muted);
+}
+.avq-tour .lg .dash-cal {
+  display: flex;
+  flex-direction: column;
+}
+.avq-tour .lg .dash-cal-row {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  border-top: 1px solid var(--lg-border);
+  padding: 5px 0;
+}
+.avq-tour .lg .dash-cal-row:last-child {
+  border-bottom: 1px solid var(--lg-border);
+}
+.avq-tour .lg .dash-cal-time {
+  width: 38px;
+  flex: none;
+  font-size: 10.5px;
+  color: var(--lg-muted);
+  padding-top: 4px;
+}
+.avq-tour .lg .dash-cal-empty {
+  flex: 1;
+  min-height: 22px;
+}
+.avq-tour .lg .dash-cal-card {
+  flex: 1;
+  background: var(--lg-soft);
+  border: 1px solid var(--lg-border);
+  border-left: 3px solid var(--lg-muted);
+  border-radius: 6px;
+  padding: 5px 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.avq-tour .lg .dash-cal-card-title {
+  font-size: 11.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.avq-tour .lg .dash-cal-card-detail {
+  font-size: 10.5px;
+  color: var(--lg-muted);
+}
+/* La reserva del visitante: entra deslizándose cuando la pantalla se activa. */
+.avq-tour .lg .dash-cal-card-new {
+  border-left-color: var(--lg-success, #059669);
+  background: #ecfdf5;
+}
+.avq-tour .lg [data-screen='dash-resv-cal'].active .dash-cal-card-new {
+  animation: dash-sale-in 480ms ease 260ms backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avq-tour .lg [data-screen='dash-resv-cal'].active .dash-cal-card-new {
+    animation: none;
+  }
+}

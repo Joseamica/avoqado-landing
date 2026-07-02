@@ -33,6 +33,12 @@ const ic = {
       <circle cx="8" cy="8" r="1.7" />
     </>
   ),
+  reservas: (
+    <>
+      <rect x="2.5" y="3.5" width="11" height="10" rx="1.5" />
+      <path d="M2.5 6.5h11M5.5 2.2v2.2M10.5 2.2v2.2" />
+    </>
+  ),
   inventario: (
     <>
       <path d="M2.5 5.2 8 2.5l5.5 2.7L8 7.9Z" />
@@ -93,6 +99,7 @@ interface NavEntry {
 const ITEMS: NavEntry[] = [
   { id: 'inicio', label: 'Inicio', icon: ic.inicio },
   { id: 'ventas', label: 'Ventas', icon: ic.ventas },
+  { id: 'reservas', label: 'Reservaciones', icon: ic.reservas },
   { id: 'inventario', label: 'Inventario', icon: ic.inventario, dataT: 'nav-inv' },
   { id: 'facturacion', label: 'Facturación', icon: ic.factura, dataT: 'nav-cfdi' },
   { id: 'equipo', label: 'Equipo', icon: ic.equipo, dataT: 'nav-equipo' },

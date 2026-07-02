@@ -21,14 +21,17 @@ interface DashShellProps {
    * The new ChainNav screens have no footer, so this is omitted for them.
    */
   sideFoot?: ReactNode;
+  /** Venue shown in the sidebar header. Defaults to the TPV/liga demo venue;
+   *  the reserva flow's calendar scene runs at Estética Bella instead. */
+  venue?: string;
 }
 
-export default function DashShell({ nav, children, sideFoot }: DashShellProps) {
+export default function DashShell({ nav, children, sideFoot, venue = 'Estudio Lumina' }: DashShellProps) {
   return (
     <div className="lg-shell">
       <aside className="lg-side">
         <div className="lg-venue">
-          <b>Estudio Lumina</b>
+          <b>{venue}</b>
           <span>Dashboard</span>
         </div>
         <nav className="lg-nav">{nav}</nav>

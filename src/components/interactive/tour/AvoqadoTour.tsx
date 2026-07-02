@@ -54,6 +54,7 @@ import ResvDone from './screens-web/ResvDone';
 import LigaList from './screens-web/LigaList';
 import LigaPurpose from './screens-web/LigaPurpose';
 import LigaForm from './screens-web/LigaForm';
+import DashResvCal from './screens-dash/DashResvCal';
 import DashLive from './screens-dash/DashLive';
 import DashInventory from './screens-dash/DashInventory';
 import DashCfdi from './screens-dash/DashCfdi';
@@ -201,7 +202,9 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
   };
 
   const isTpvFlow = engine.flow === 'A' || engine.flow === 'B';
-  const showDesktop = isTpvFlow && engine.frame === 'desktop';
+  /* Which frame-slot is visible on flows that stack two (A/B: PAX ⇄ dashboard;
+     R: booking phone ⇄ dashboard calendar). L renders a single desktop frame. */
+  const showDesktop = engine.frame === 'desktop';
 
   return (
     <div className="avq-tour">
@@ -257,13 +260,22 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
                 </div>
               </>
             ) : engine.flow === 'R' ? (
-              <BrowserFrame variant="phone" url="book.avoqado.io/estetica-bella" onTpvClick={engine.handleTpvClick}>
-                <ResvLanding />
-                <ResvServices serviceAdded={web.resvServiceAdded} />
-                <ResvDateTime day={web.resvDay} slot={web.resvSlot} />
-                <ResvCheckout />
-                <ResvDone />
-              </BrowserFrame>
+              <>
+                <div className={`frame-slot${showDesktop ? ' is-hidden' : ''}`}>
+                  <BrowserFrame variant="phone" url="book.avoqado.io/estetica-bella" onTpvClick={engine.handleTpvClick}>
+                    <ResvLanding />
+                    <ResvServices serviceAdded={web.resvServiceAdded} />
+                    <ResvDateTime day={web.resvDay} slot={web.resvSlot} />
+                    <ResvCheckout />
+                    <ResvDone />
+                  </BrowserFrame>
+                </div>
+                <div className={`frame-slot${showDesktop ? '' : ' is-hidden'}`}>
+                  <BrowserFrame variant="desktop" url="dashboard.avoqado.io/venues/estetica-bella" onTpvClick={engine.handleTpvClick}>
+                    <DashResvCal />
+                  </BrowserFrame>
+                </div>
+              </>
             ) : (
               <BrowserFrame
                 variant="desktop"

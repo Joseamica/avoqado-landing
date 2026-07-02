@@ -141,7 +141,11 @@ export const RESERVA_STEPS: TourStep<StepCtx>[] = [
     ch: 2,
     tapDelay: 320,
   },
-  { screen: 'r-done', final: true, ch: 3 },
+  { screen: 'r-done', auto: 2600, ch: 3 },
+  /* Payoff (founder request): crossfade phone → dashboard and watch the
+     reservation land in the venue's calendar — same "everything fires from
+     one action" beat the TPV chain closes on. */
+  { screen: 'dash-resv-cal', frame: 'desktop', final: true, ch: 3 },
 ];
 
 /* ==========================================================
