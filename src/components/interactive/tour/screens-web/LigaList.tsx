@@ -5,6 +5,7 @@
  * Puramente presentacional — el engine del tour controla todo via props.
  */
 import type { ReactNode } from 'react';
+import DashShell from '../screens-dash/DashShell';
 
 interface Props {
   saved: boolean;
@@ -151,99 +152,96 @@ function WaDialog({ sent }: { sent: boolean }) {
   );
 }
 
+const ligaNav = (
+  <>
+    <span className="lg-nav-item"><Ic p={ic.inicio} />Inicio</span>
+    <span className="lg-nav-item"><Ic p={ic.menu} />Menú</span>
+    <span className="lg-nav-item active"><Ic p={ic.ventas} />Ventas</span>
+    <div className="lg-subnav">
+      <span className="lg-sub-item">Transacciones</span>
+      <span className="lg-sub-item">Pedidos</span>
+      <span className="lg-sub-item active">Ligas de Pago</span>
+      <span className="lg-sub-item">Terminal Virtual</span>
+    </div>
+    <span className="lg-nav-item"><Ic p={ic.reservas} />Reservaciones</span>
+    <span className="lg-nav-item"><Ic p={ic.equipo} />Equipo</span>
+    <span className="lg-nav-item"><Ic p={ic.reportes} />Reportes</span>
+    <span className="lg-nav-item"><Ic p={ic.config} />Configuración</span>
+  </>
+);
+
+const ligaSideFoot = (
+  <div className="lg-side-foot">
+    <span className="lg-tile"><Ic p={ic.ventas} size={12} /></span>
+    Aceptar pago
+  </div>
+);
+
 export default function LigaList({ saved, waOpen, waSent, paid, toast }: Props) {
   return (
     <section className="web-screen lg" data-screen="l-list">
-      <div className="lg-shell">
-        <aside className="lg-side">
-          <div className="lg-venue">
-            <b>Estudio Lumina</b>
-            <span>Dashboard</span>
+      <DashShell nav={ligaNav} sideFoot={ligaSideFoot}>
+        <div className="lg-head">
+          <div>
+            <h1 className="lg-h1">Ligas de pago</h1>
+            <p className="lg-subtitle">Crea y comparte ligas de pago con tus clientes</p>
           </div>
-          <nav className="lg-nav">
-            <span className="lg-nav-item"><Ic p={ic.inicio} />Inicio</span>
-            <span className="lg-nav-item"><Ic p={ic.menu} />Menú</span>
-            <span className="lg-nav-item active"><Ic p={ic.ventas} />Ventas</span>
-            <div className="lg-subnav">
-              <span className="lg-sub-item">Transacciones</span>
-              <span className="lg-sub-item">Pedidos</span>
-              <span className="lg-sub-item active">Ligas de Pago</span>
-              <span className="lg-sub-item">Terminal Virtual</span>
+          <button type="button" className="lg-btn-primary" data-t="liga-create">+ Crear liga</button>
+        </div>
+
+        <div className="lg-pills">
+          <span className="lg-pill active">Todas</span>
+          <span className="lg-pill">Activas</span>
+          <span className="lg-pill">Usadas</span>
+          <span className="lg-pill">Pausadas</span>
+        </div>
+
+        <div className="lg-cards">
+          <div className="lg-card"><span className="lg-card-label">Ligas</span><span className="lg-card-value">{saved ? '13' : '12'}</span></div>
+          <div className="lg-card"><span className="lg-card-label">Cobrado</span><span className="lg-card-value">{paid ? '$18,800.00' : '$18,450.00'}</span></div>
+          <div className="lg-card"><span className="lg-card-label">Tasa de uso</span><span className="lg-card-value">64%</span></div>
+        </div>
+
+        <div className="lg-table">
+          <div className="lg-tr lg-th">
+            <span>Título</span><span>Monto</span><span>Estado</span><span>Pagos</span><span>Creada</span><span />
+          </div>
+          {saved && (
+            <div className="lg-tr lg-row-new">
+              <span className="lg-tcell">
+                <span className="lg-row-ic"><Ic p={ic.link} size={11} /></span>
+                <b>Sesión de fotos</b>
+              </span>
+              <span>$350.00</span>
+              <span><span className="lg-badge">Activa</span></span>
+              <span>{paid ? '1' : '0'}</span>
+              <span className="lg-date">Hoy</span>
+              <Actions waTarget />
             </div>
-            <span className="lg-nav-item"><Ic p={ic.reservas} />Reservaciones</span>
-            <span className="lg-nav-item"><Ic p={ic.equipo} />Equipo</span>
-            <span className="lg-nav-item"><Ic p={ic.reportes} />Reportes</span>
-            <span className="lg-nav-item"><Ic p={ic.config} />Configuración</span>
-          </nav>
-          <div className="lg-side-foot">
-            <span className="lg-tile"><Ic p={ic.ventas} size={12} /></span>
-            Aceptar pago
-          </div>
-        </aside>
-
-        <main className="lg-main">
-          <div className="lg-head">
-            <div>
-              <h1 className="lg-h1">Ligas de pago</h1>
-              <p className="lg-subtitle">Crea y comparte ligas de pago con tus clientes</p>
+          )}
+          {ROWS.map(r => (
+            <div className="lg-tr" key={r.t}>
+              <span className="lg-tcell">
+                <span className="lg-row-ic"><Ic p={ic.link} size={11} /></span>
+                <b>{r.t}</b>
+              </span>
+              <span className={r.open ? 'lg-open' : ''}>{r.m}</span>
+              <span><span className="lg-badge">Activa</span></span>
+              <span>{r.p}</span>
+              <span className="lg-date">{r.c}</span>
+              <Actions />
             </div>
-            <button type="button" className="lg-btn-primary" data-t="liga-create">+ Crear liga</button>
-          </div>
+          ))}
+        </div>
+      </DashShell>
 
-          <div className="lg-pills">
-            <span className="lg-pill active">Todas</span>
-            <span className="lg-pill">Activas</span>
-            <span className="lg-pill">Usadas</span>
-            <span className="lg-pill">Pausadas</span>
-          </div>
-
-          <div className="lg-cards">
-            <div className="lg-card"><span className="lg-card-label">Ligas</span><span className="lg-card-value">{saved ? '13' : '12'}</span></div>
-            <div className="lg-card"><span className="lg-card-label">Cobrado</span><span className="lg-card-value">{paid ? '$18,800.00' : '$18,450.00'}</span></div>
-            <div className="lg-card"><span className="lg-card-label">Tasa de uso</span><span className="lg-card-value">64%</span></div>
-          </div>
-
-          <div className="lg-table">
-            <div className="lg-tr lg-th">
-              <span>Título</span><span>Monto</span><span>Estado</span><span>Pagos</span><span>Creada</span><span />
-            </div>
-            {saved && (
-              <div className="lg-tr lg-row-new">
-                <span className="lg-tcell">
-                  <span className="lg-row-ic"><Ic p={ic.link} size={11} /></span>
-                  <b>Sesión de fotos</b>
-                </span>
-                <span>$350.00</span>
-                <span><span className="lg-badge">Activa</span></span>
-                <span>{paid ? '1' : '0'}</span>
-                <span className="lg-date">Hoy</span>
-                <Actions waTarget />
-              </div>
-            )}
-            {ROWS.map(r => (
-              <div className="lg-tr" key={r.t}>
-                <span className="lg-tcell">
-                  <span className="lg-row-ic"><Ic p={ic.link} size={11} /></span>
-                  <b>{r.t}</b>
-                </span>
-                <span className={r.open ? 'lg-open' : ''}>{r.m}</span>
-                <span><span className="lg-badge">Activa</span></span>
-                <span>{r.p}</span>
-                <span className="lg-date">{r.c}</span>
-                <Actions />
-              </div>
-            ))}
-          </div>
-        </main>
-
-        {waOpen && <WaDialog sent={waSent} />}
-        {toast && (
-          <div className="lg-toast">
-            {paid && <span className="lg-dot" />}
-            {toast}
-          </div>
-        )}
-      </div>
+      {waOpen && <WaDialog sent={waSent} />}
+      {toast && (
+        <div className="lg-toast">
+          {paid && <span className="lg-dot" />}
+          {toast}
+        </div>
+      )}
     </section>
   );
 }
