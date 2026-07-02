@@ -55,6 +55,9 @@ import LigaForm from './screens-web/LigaForm';
 import DashLive from './screens-dash/DashLive';
 import DashInventory from './screens-dash/DashInventory';
 import DashCfdi from './screens-dash/DashCfdi';
+import DashCommission from './screens-dash/DashCommission';
+import DashLoyalty from './screens-dash/DashLoyalty';
+import DashReport from './screens-dash/DashReport';
 
 export type { PaymentInfo };
 
@@ -215,6 +218,9 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
                     <DashLive saleRowIn={chain.saleRowIn} cascadeShown={chain.cascadeShown} flow={engine.flow === 'A' ? 'A' : 'B'} />
                     <DashInventory counted={chain.invCounted} />
                     <DashCfdi />
+                    <DashCommission />
+                    <DashLoyalty />
+                    <DashReport counted={chain.reportCounted} />
                   </BrowserFrame>
                 </div>
               </>

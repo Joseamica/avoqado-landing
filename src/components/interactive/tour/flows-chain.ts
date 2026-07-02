@@ -2,16 +2,20 @@
  * flows-chain.ts — the post-sale "cadena" chapters (4-5) that run after the
  * TPV receipt, on the desktop BrowserFrame (dashboard mock).
  *
- * PHASE 3 SCOPE: only steps 1-4 of the chain (dash-live cascade → dash-inventory
- * → dash-cfdi) are built here. dash-commission/dash-loyalty/dash-report/dash-ai
- * land in later phases (see docs/superpowers/specs/2026-07-02-avoqado-tour-cadena-post-venta.md).
- * The last step of each flow below is a TEMPORARY `final: true` so the tour
- * stays fully completable while the rest of the chain is built — clearly
- * marked at each site, same convention Phase 1 used for the placeholder.
+ * PHASE 4 SCOPE: steps 1-7 of the chain (dash-live cascade → dash-inventory →
+ * dash-cfdi → dash-commission → dash-loyalty → dash-report) are built here.
+ * dash-ai (steps 8-10) lands in a later phase (see
+ * docs/superpowers/specs/2026-07-02-avoqado-tour-cadena-post-venta.md).
+ * The last step of each flow below is a TEMPORARY `final: true` on
+ * `dash-report` so the tour stays fully completable while dash-ai is built —
+ * clearly marked at each site, same convention Phase 1/3 used for their
+ * placeholders.
  *
  * `ChainState`/`ChainAction` are written for the FULL chain (all 5 chapters)
  * so the type doesn't need to change again in later phases — only
- * saleIn/cascade/cascadeAll/invCount/reset are actually dispatched this phase.
+ * saleIn/cascade/cascadeAll/invCount/reportCount/reset are actually
+ * dispatched this phase (the aiAsk1/aiAsk2/aiAnswer1/aiAnswer2/aiTypingOn
+ * actions still wait for the dash-ai phase).
  */
 import type { TourStep } from './engine';
 import type { StepCtx } from './flows';
@@ -83,7 +87,8 @@ export function reducedMotion(): boolean {
 }
 
 /* ==========================================================
-   Steps — Phase 3: dash-live cascade + dash-inventory (B only) + dash-cfdi
+   Steps — Phase 4: dash-live cascade + dash-inventory (B only) + dash-cfdi
+   + dash-commission + dash-loyalty + dash-report
    ========================================================== */
 
 /** Flow B: 4-event cascade (inventario → facturación → comisiones → lealtad). */
@@ -129,7 +134,48 @@ function dashLiveStepA(): TourStep<StepCtx> {
   };
 }
 
-/** `chainSteps` — the ONLY steps built in this phase (see spec §"Steps nuevos"). */
+/** Shared tail from dash-cfdi through dash-report — same for both flows
+ *  (commission/loyalty/report scenes don't vary by flow). The last step is a
+ *  TEMPORARY `final: true` on dash-report until the dash-ai phase lands. */
+function chainTail(): TourStep<StepCtx>[] {
+  return [
+    {
+      screen: 'dash-cfdi',
+      frame: 'desktop',
+      target: '[data-t="nav-equipo"]',
+      pill: 'Ve lo que ganó tu equipo',
+      pos: 'right',
+      ch: 4,
+    },
+    {
+      screen: 'dash-commission',
+      frame: 'desktop',
+      target: '[data-t="nav-clientes"]',
+      pill: 'Y lo que ganó tu cliente',
+      pos: 'right',
+      ch: 4,
+    },
+    {
+      screen: 'dash-loyalty',
+      frame: 'desktop',
+      target: '[data-t="nav-reportes"]',
+      pill: 'Tu corte ya está listo',
+      pos: 'right',
+      ch: 4,
+    },
+    // TEMPORARY final — the dash-ai phase replaces this with a real target
+    // to nav-ia (dash-ai comes next in the full chain). See spec "Steps nuevos".
+    {
+      screen: 'dash-report',
+      frame: 'desktop',
+      final: true,
+      ch: 4,
+      onEnter: ctx => ctx.chainDispatch({ type: 'reportCount' }),
+    },
+  ];
+}
+
+/** `chainSteps` — steps built through Phase 4 (see spec §"Steps nuevos"). */
 export function chainSteps(flow: 'A' | 'B'): TourStep<StepCtx>[] {
   if (flow === 'B') {
     return [
@@ -151,9 +197,7 @@ export function chainSteps(flow: 'A' | 'B'): TourStep<StepCtx>[] {
         ch: 4,
         onEnter: ctx => ctx.chainDispatch({ type: 'invCount' }),
       },
-      // TEMPORARY final — Phase 4 replaces this with a real target to nav-equipo
-      // (dash-commission comes next in the full chain). See spec "Steps nuevos".
-      { screen: 'dash-cfdi', frame: 'desktop', final: true, ch: 4 },
+      ...chainTail(),
     ];
   }
 
@@ -167,8 +211,6 @@ export function chainSteps(flow: 'A' | 'B'): TourStep<StepCtx>[] {
       pos: 'left',
       ch: 4,
     },
-    // TEMPORARY final — Phase 4 replaces this with a real target to nav-equipo
-    // (dash-commission comes next in the full chain). See spec "Steps nuevos".
-    { screen: 'dash-cfdi', frame: 'desktop', final: true, ch: 4 },
+    ...chainTail(),
   ];
 }
