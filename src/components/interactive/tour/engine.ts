@@ -282,6 +282,19 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     placeTour(target, pending.pos, pending.jump);
     optsRef.current.layerRef.current?.classList.remove('off');
     tourVisibleRef.current = true;
+
+    /* Founder QA: on small screens a bottom-of-frame target (e.g. the booking
+       widget's "Siguiente") can sit below the page fold — the visitor had to
+       hunt for the next step by scrolling. Bring the target into view whenever
+       it isn't fully visible (64px allowance for the fixed navbar, 24px for
+       the pill hanging under bottom targets). */
+    const r = target.getBoundingClientRect();
+    if (r.top < 88 || r.bottom > window.innerHeight - 24) {
+      target.scrollIntoView({
+        block: 'center',
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      });
+    }
   }, [placeTick]);
 
   const hideTour = () => {
