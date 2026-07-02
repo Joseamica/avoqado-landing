@@ -34,7 +34,7 @@ import {
 import type { PaymentInfo, StepCtx } from './flows';
 import { INITIAL_CHAIN_STATE, chainReducer } from './flows-chain';
 
-import { flowName, trackTour } from './analytics';
+import { flowName, trackTour, trackTourBeforeNav } from './analytics';
 import PaxPhotoFrame from './PaxPhotoFrame';
 import BrowserFrame from './BrowserFrame';
 import ChapterPanel from './ChapterPanel';
@@ -178,11 +178,15 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
 
   /** Handoff: tour completed → contact sales on WhatsApp, routed through the
    *  /wa bridge so the Google Ads whatsapp_click conversion fires (beacon). */
-  const handlePrimaryCta = () => {
-    if (!engine.done) return;
-    /* LA conversión de /demo: tour completado → contactar a ventas por WhatsApp */
-    trackTour('tour_cta_click', { tour_flow: flowName(engine.flow), tour_cta: 'whatsapp' });
-    window.location.href = waHref;
+  const handlePrimaryCta = (e: Parameters<typeof trackTourBeforeNav>[0]) => {
+    if (!engine.done) {
+      e.preventDefault();
+      return;
+    }
+    /* LA conversión de /demo: tour completado → contactar a ventas por WhatsApp.
+       Navegación same-tab a /wa → el evento debe salir ANTES del unload
+       (eventCallback + tope 800ms); un push simple aquí nunca llegaba a GA4. */
+    trackTourBeforeNav(e, 'tour_cta_click', { tour_flow: flowName(engine.flow), tour_cta: 'whatsapp' });
   };
 
   /** Secondary handoff: tour completed → open the real demo dashboard journey

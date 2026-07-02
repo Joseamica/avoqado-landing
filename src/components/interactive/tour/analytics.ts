@@ -13,7 +13,8 @@
  * pushEvent es SSR-safe y nunca lanza; si GTM no cargó, el push queda en un
  * array huérfano sin efectos.
  */
-import { pushEvent } from '../../../lib/gtm';
+import { pushEvent, pushEventBeforeNav } from '../../../lib/gtm';
+import type { MeasuredClickEvent } from '../../../lib/gtm';
 
 export type TourFlowId = 'A' | 'B' | 'R' | 'L';
 
@@ -27,6 +28,16 @@ const FLOW_NAMES: Record<TourFlowId, string> = {
 
 export function trackTour(event: string, data: Record<string, unknown> = {}): void {
   pushEvent(event, { location: 'avoqado_tour', ...data });
+}
+
+/**
+ * trackTour para CTAs que navegan en la MISMA pestaña (p. ej. el handoff a
+ * /wa): retiene la navegación hasta que el evento salga (eventCallback / tope
+ * 800ms). Un push simple + navegación pierde la carrera contra el unload y el
+ * evento nunca llega a GA4 — fue exactamente el bug de sign_up_start.
+ */
+export function trackTourBeforeNav(e: MeasuredClickEvent, event: string, data: Record<string, unknown> = {}): void {
+  pushEventBeforeNav(e, event, { location: 'avoqado_tour', ...data });
 }
 
 export function flowName(flow: TourFlowId): string {

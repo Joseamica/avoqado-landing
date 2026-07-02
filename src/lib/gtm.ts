@@ -65,15 +65,7 @@ export function pushEvent(event: string, params: DataLayerParams = {}): void {
  * hero / pricing_hero / pricing_plans / pricing_page / chatbot_cta).
  */
 export function trackGetStarted(
-	e: {
-		preventDefault: () => void;
-		currentTarget: EventTarget | null;
-		metaKey?: boolean;
-		ctrlKey?: boolean;
-		shiftKey?: boolean;
-		altKey?: boolean;
-		button?: number;
-	},
+	e: MeasuredClickEvent,
 	source: string,
 	extra: DataLayerParams = {},
 ): void {
@@ -86,12 +78,39 @@ export function trackGetStarted(
 	} catch {
 		/* PostHog optional */
 	}
+	pushEventBeforeNav(e, 'get_started_click', params);
+}
+
+/** Structural click-event type (React MouseEvent satisfies it; no React dep). */
+export type MeasuredClickEvent = {
+	preventDefault: () => void;
+	currentTarget: EventTarget | null;
+	metaKey?: boolean;
+	ctrlKey?: boolean;
+	shiftKey?: boolean;
+	altKey?: boolean;
+	button?: number;
+};
+
+/**
+ * Push an event and — for a plain same-tab anchor click — hold the navigation
+ * until GTM confirms the tags ran (eventCallback) or an 800ms cap, whichever
+ * comes first. This is the generic engine behind `trackGetStarted`; use it for
+ * ANY measured CTA that navigates away in the same tab (`get_started_click`,
+ * `tour_cta_click`, …) — a bare push + navigation loses the unload race and
+ * the event never reaches GA4.
+ *
+ * Modified clicks (cmd/ctrl/shift/alt, middle button) and target="_blank"
+ * anchors keep their default behavior — the page stays alive, no race to win.
+ */
+export function pushEventBeforeNav(e: MeasuredClickEvent, event: string, params: DataLayerParams = {}): void {
+	if (typeof window === 'undefined') return;
 	const anchor = e.currentTarget instanceof HTMLAnchorElement ? e.currentTarget : null;
 	const href = anchor?.href;
 	const modified = Boolean(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) || (e.button ?? 0) !== 0;
 	if (!href || modified || anchor?.target === '_blank') {
 		// Page stays alive (new tab / no navigation) — plain push is safe.
-		pushEvent('get_started_click', params);
+		pushEvent(event, params);
 		return;
 	}
 	e.preventDefault();
@@ -103,9 +122,9 @@ export function trackGetStarted(
 	};
 	window.dataLayer = window.dataLayer || [];
 	// eventTimeout: GTM invokes eventCallback after N ms even if a tag hangs.
-	window.dataLayer.push({ event: 'get_started_click', ...params, eventCallback: go, eventTimeout: 800 });
+	window.dataLayer.push({ event, ...params, eventCallback: go, eventTimeout: 800 });
 	try {
-		window.posthog?.capture('get_started_click', params);
+		window.posthog?.capture(event, params);
 	} catch {
 		/* PostHog optional */
 	}

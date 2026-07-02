@@ -11,7 +11,9 @@ interface Props {
   flow: FlowId;
   onSelectFlow: (flow: FlowId) => void;
   waHref: string;
-  onPrimaryCta: () => void;
+  /** Receives the click event — the handler holds the same-tab navigation
+   *  until tour_cta_click leaves the page (see trackTourBeforeNav). */
+  onPrimaryCta: (e: import('react').MouseEvent<HTMLAnchorElement>) => void;
   onSecondaryCta: () => void;
 }
 
