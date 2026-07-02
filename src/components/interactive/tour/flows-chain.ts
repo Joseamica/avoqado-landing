@@ -2,20 +2,15 @@
  * flows-chain.ts — the post-sale "cadena" chapters (4-5) that run after the
  * TPV receipt, on the desktop BrowserFrame (dashboard mock).
  *
- * PHASE 4 SCOPE: steps 1-7 of the chain (dash-live cascade → dash-inventory →
- * dash-cfdi → dash-commission → dash-loyalty → dash-report) are built here.
- * dash-ai (steps 8-10) lands in a later phase (see
- * docs/superpowers/specs/2026-07-02-avoqado-tour-cadena-post-venta.md).
- * The last step of each flow below is a TEMPORARY `final: true` on
- * `dash-report` so the tour stays fully completable while dash-ai is built —
- * clearly marked at each site, same convention Phase 1/3 used for their
- * placeholders.
+ * PHASE 5 SCOPE: the full 10-step chain is built here — dash-live cascade →
+ * dash-inventory → dash-cfdi → dash-commission → dash-loyalty → dash-report →
+ * dash-ai (2 questions + final). `chainTail()`'s `dash-report` step now
+ * targets `nav-ia` (no longer `final`) and the chain ends on the last
+ * `dash-ai` step instead. See
+ * docs/superpowers/specs/2026-07-02-avoqado-tour-cadena-post-venta.md.
  *
- * `ChainState`/`ChainAction` are written for the FULL chain (all 5 chapters)
- * so the type doesn't need to change again in later phases — only
- * saleIn/cascade/cascadeAll/invCount/reportCount/reset are actually
- * dispatched this phase (the aiAsk1/aiAsk2/aiAnswer1/aiAnswer2/aiTypingOn
- * actions still wait for the dash-ai phase).
+ * `ChainState`/`ChainAction` cover the full chain; every action is now
+ * dispatched somewhere in `chainSteps`/`chainTail`.
  */
 import type { TourStep } from './engine';
 import type { StepCtx } from './flows';
@@ -87,8 +82,31 @@ export function reducedMotion(): boolean {
 }
 
 /* ==========================================================
-   Steps — Phase 4: dash-live cascade + dash-inventory (B only) + dash-cfdi
-   + dash-commission + dash-loyalty + dash-report
+   dash-ai copy — EXACT text from the spec's "Copy IA EXACTO" table,
+   word for word (customer-facing, approved verbatim). Do not paraphrase.
+   ========================================================== */
+export const AI_WELCOME = 'Pregúntale lo que sea a tu negocio — respondo con tus datos en vivo.';
+
+export const AI_CHIP_1 = '¿Qué vendí hoy?';
+
+export const AI_ANSWER_1: Record<'A' | 'B', string> = {
+  B: 'Hoy llevas 1 venta: $348.10 — 1 Playera básica blanca y 1 Gorra logo, cobrada por Ana con tarjeta ($295.00 + $53.10 de propina). María G. sumó 29 puntos y la autofactura ya está en su recibo.',
+  A: 'Hoy llevas 1 venta: $348.10, cobrada por Ana con tarjeta ($295.00 + $53.10 de propina). María G. sumó 29 puntos y la autofactura ya está en su recibo.',
+};
+
+export const AI_CHIP_2: Record<'A' | 'B', string> = {
+  B: '¿Qué me toca resurtir?',
+  A: '¿Cómo van las comisiones?',
+};
+
+export const AI_ANSWER_2: Record<'A' | 'B', string> = {
+  B: 'La Gorra logo bajó a 7 piezas — a tu ritmo de venta se agota en unas 2 semanas. ¿Te preparo la orden de compra al proveedor?',
+  A: 'Ana Torres lleva $312.40 de comisión en la quincena — 78% de su meta. Hoy sumó $29.50 por la venta de $295.00 (la comisión no incluye propina).',
+};
+
+/* ==========================================================
+   Steps — dash-live cascade + dash-inventory (B only) + dash-cfdi
+   + dash-commission + dash-loyalty + dash-report + dash-ai
    ========================================================== */
 
 /** Flow B: 4-event cascade (inventario → facturación → comisiones → lealtad). */
@@ -135,8 +153,8 @@ function dashLiveStepA(): TourStep<StepCtx> {
 }
 
 /** Shared tail from dash-cfdi through dash-report — same for both flows
- *  (commission/loyalty/report scenes don't vary by flow). The last step is a
- *  TEMPORARY `final: true` on dash-report until the dash-ai phase lands. */
+ *  (commission/loyalty/report scenes don't vary by flow). The last step
+ *  targets nav-ia — dashAiSteps() picks up from there. */
 function chainTail(): TourStep<StepCtx>[] {
   return [
     {
@@ -163,19 +181,62 @@ function chainTail(): TourStep<StepCtx>[] {
       pos: 'right',
       ch: 4,
     },
-    // TEMPORARY final — the dash-ai phase replaces this with a real target
-    // to nav-ia (dash-ai comes next in the full chain). See spec "Steps nuevos".
     {
       screen: 'dash-report',
       frame: 'desktop',
-      final: true,
+      target: '[data-t="nav-ia"]',
+      pill: 'Ahora pregúntale a tu negocio',
+      pos: 'right',
       ch: 4,
       onEnter: ctx => ctx.chainDispatch({ type: 'reportCount' }),
     },
   ];
 }
 
-/** `chainSteps` — steps built through Phase 4 (see spec §"Steps nuevos"). */
+/** dash-ai: 2 scripted Q&A steps + a final step. Shared by both flows — only
+ *  the copy (AI_CHIP_2/AI_ANSWER_1/AI_ANSWER_2) varies by flow, read at
+ *  render time from `flow` in ctx, not here (steps stay flow-agnostic data).
+ *  `tapDelay` is a plain number on TourStep (see engine.ts), so it can only
+ *  be evaluated once when chainSteps() builds the step list (per mount/flow
+ *  switch) — reducedMotion() here reflects the setting at BUILD time, same
+ *  limitation the rest of the codebase already accepts for non-reactive
+ *  fields. The onTap/onEnter bodies below DO call reducedMotion() at CALL
+ *  time (reactive), matching Phase 3's convention. */
+function dashAiSteps(): TourStep<StepCtx>[] {
+  return [
+    {
+      screen: 'dash-ai',
+      frame: 'desktop',
+      target: '[data-t="ai-q1"]',
+      pill: 'Pregúntale',
+      pos: 'top',
+      ch: 5,
+      onTap: ctx => {
+        ctx.chainDispatch({ type: 'aiAsk1' });
+        ctx.chainDispatch({ type: 'aiTypingOn' });
+        ctx.setTimer(() => ctx.chainDispatch({ type: 'aiAnswer1' }), reducedMotion() ? 150 : 1300);
+      },
+      tapDelay: reducedMotion() ? 300 : 1600,
+    },
+    {
+      screen: 'dash-ai',
+      frame: 'desktop',
+      target: '[data-t="ai-q2"]',
+      pill: 'Ahora algo más difícil',
+      pos: 'top',
+      ch: 5,
+      onTap: ctx => {
+        ctx.chainDispatch({ type: 'aiAsk2' });
+        ctx.chainDispatch({ type: 'aiTypingOn' });
+        ctx.setTimer(() => ctx.chainDispatch({ type: 'aiAnswer2' }), reducedMotion() ? 150 : 1400);
+      },
+      tapDelay: reducedMotion() ? 300 : 1700,
+    },
+    { screen: 'dash-ai', frame: 'desktop', final: true, ch: 5 },
+  ];
+}
+
+/** `chainSteps` — the full 10-step (B) / 9-step (A) chain (see spec §"Steps nuevos"). */
 export function chainSteps(flow: 'A' | 'B'): TourStep<StepCtx>[] {
   if (flow === 'B') {
     return [
@@ -198,6 +259,7 @@ export function chainSteps(flow: 'A' | 'B'): TourStep<StepCtx>[] {
         onEnter: ctx => ctx.chainDispatch({ type: 'invCount' }),
       },
       ...chainTail(),
+      ...dashAiSteps(),
     ];
   }
 
@@ -212,5 +274,6 @@ export function chainSteps(flow: 'A' | 'B'): TourStep<StepCtx>[] {
       ch: 4,
     },
     ...chainTail(),
+    ...dashAiSteps(),
   ];
 }

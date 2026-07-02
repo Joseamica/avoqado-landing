@@ -58,6 +58,7 @@ import DashCfdi from './screens-dash/DashCfdi';
 import DashCommission from './screens-dash/DashCommission';
 import DashLoyalty from './screens-dash/DashLoyalty';
 import DashReport from './screens-dash/DashReport';
+import DashAi from './screens-dash/DashAi';
 
 export type { PaymentInfo };
 
@@ -221,6 +222,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
                     <DashCommission />
                     <DashLoyalty />
                     <DashReport counted={chain.reportCounted} />
+                    <DashAi aiStage={chain.aiStage} aiTyping={chain.aiTyping} flow={engine.flow === 'A' ? 'A' : 'B'} />
                   </BrowserFrame>
                 </div>
               </>
