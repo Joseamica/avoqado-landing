@@ -10,31 +10,35 @@ interface Props {
   done: boolean;
   flow: FlowId;
   onSelectFlow: (flow: FlowId) => void;
-  onCtaClick: () => void;
+  waHref: string;
+  onPrimaryCta: () => void;
+  onSecondaryCta: () => void;
 }
 
 interface FlowMeta {
   title: string;
-  chapters: readonly { n: 1 | 2 | 3; title: string; detail: string }[];
-  cta: string;
+  chapters: readonly { n: number; title: string; detail: string }[];
+  secondaryCta: string;
 }
 
 const TPV_CHAPTERS = [
   { n: 1, title: 'Cobra en segundos', detail: '— monto directo o desde tu catálogo' },
   { n: 2, title: 'Propina y calificación', detail: '— tu cliente opina en el momento' },
   { n: 3, title: 'Aprobado al instante', detail: '— y reflejado en tu dashboard en vivo' },
+  { n: 4, title: 'Todo se dispara solo', detail: '— inventario, factura, comisiones y puntos' },
+  { n: 5, title: 'Pregúntale a tu negocio', detail: '— tu IA responde con tus datos' },
 ] as const;
 
 const FLOW_META: Record<FlowId, FlowMeta> = {
   A: {
     title: 'Terminal Avoqado',
     chapters: TPV_CHAPTERS,
-    cta: 'Contactar a ventas →',
+    secondaryCta: 'Explorar el dashboard demo →',
   },
   B: {
     title: 'Terminal Avoqado',
     chapters: TPV_CHAPTERS,
-    cta: 'Contactar a ventas →',
+    secondaryCta: 'Explorar el dashboard demo →',
   },
   R: {
     title: 'Reservas en línea',
@@ -43,7 +47,7 @@ const FLOW_META: Record<FlowId, FlowMeta> = {
       { n: 2, title: 'Horario y datos en segundos', detail: '— sin llamadas ni mensajes' },
       { n: 3, title: 'Directo a tu calendario', detail: '— con recordatorios por WhatsApp' },
     ],
-    cta: 'Contactar a ventas →',
+    secondaryCta: 'Ver tu reserva en el dashboard demo →',
   },
   L: {
     title: 'Ligas de pago',
@@ -52,9 +56,12 @@ const FLOW_META: Record<FlowId, FlowMeta> = {
       { n: 2, title: 'Compártela', detail: '— WhatsApp, QR o link directo' },
       { n: 3, title: 'Cobra en línea', detail: '— y míralo reflejado al instante' },
     ],
-    cta: 'Contactar a ventas →',
+    secondaryCta: 'Ver tu liga de pago en el dashboard demo →',
   },
 };
+
+/** Primary CTA label is fixed/shared across all flows (WhatsApp handoff). */
+const PRIMARY_CTA_LABEL = 'Contactar a ventas →';
 
 const FLOW_GROUPS: { label: string; pills: { id: FlowId; label: string }[] }[] = [
   {
@@ -73,7 +80,7 @@ const FLOW_GROUPS: { label: string; pills: { id: FlowId; label: string }[] }[] =
   },
 ];
 
-export default function ChapterPanel({ chapter, done, flow, onSelectFlow, onCtaClick }: Props) {
+export default function ChapterPanel({ chapter, done, flow, onSelectFlow, waHref, onPrimaryCta, onSecondaryCta }: Props) {
   const meta = FLOW_META[flow];
 
   return (
@@ -113,9 +120,22 @@ export default function ChapterPanel({ chapter, done, flow, onSelectFlow, onCtaC
         </div>
       ))}
 
-      <button type="button" className={`cta-next${done ? ' ready' : ''}`} disabled={!done} onClick={onCtaClick}>
-        {meta.cta}
-      </button>
+      <div className="cta-group">
+        {done ? (
+          <>
+            <a className="cta-next ready cta-wa" href={waHref} onClick={onPrimaryCta}>
+              {PRIMARY_CTA_LABEL}
+            </a>
+            <button type="button" className="cta-secondary" onClick={onSecondaryCta}>
+              {meta.secondaryCta}
+            </button>
+          </>
+        ) : (
+          <button type="button" className="cta-next" disabled>
+            {PRIMARY_CTA_LABEL}
+          </button>
+        )}
+      </div>
     </aside>
   );
 }

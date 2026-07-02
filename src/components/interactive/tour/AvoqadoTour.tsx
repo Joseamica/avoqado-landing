@@ -23,6 +23,8 @@ import './tour-dash.css';
 import { useTourEngine } from './engine';
 import type { FlowId } from './engine';
 import {
+  DEMO_BASE_AMOUNT,
+  DEMO_TIP_AMOUNT,
   INITIAL_TPV_STATE,
   INITIAL_WEB_STATE,
   TOUR_FLOWS,
@@ -61,6 +63,10 @@ import DashReport from './screens-dash/DashReport';
 import DashAi from './screens-dash/DashAi';
 
 export type { PaymentInfo };
+
+const DEMO_DASHBOARD_URL: string = (
+  import.meta.env.PUBLIC_DEMO_DASHBOARD_URL || 'https://demo.dashboard.avoqado.io'
+).replace(/\/$/, '');
 
 export interface AvoqadoTourProps {
   /**
@@ -107,12 +113,14 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
       notifyPayment: info => {
         setLastPayment(info);
         onPaymentRef.current?.(info);
+        trackTour('tour_payment_done', { tour_flow: flowName(helpers.flow) });
       },
     }),
     onReset: () => {
       dispatch({ type: 'reset' });
       webDispatch({ type: 'reset' });
       chainDispatch({ type: 'reset' });
+      setLastPayment(null);
     },
     onEvent: e => {
       if (e.type === 'tap') {
@@ -120,7 +128,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
           startedFlowsRef.current.add(e.flow);
           trackTour('tour_start', { tour_flow: flowName(e.flow) });
         }
-        trackTour('tour_step', { tour_flow: flowName(e.flow), tour_step: e.stepIndex });
+        trackTour('tour_step', { tour_flow: flowName(e.flow), tour_step: e.stepIndex, tour_step_name: e.stepName });
       } else if (e.type === 'complete') {
         trackTour('tour_complete', { tour_flow: flowName(e.flow) });
       }
@@ -149,25 +157,47 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
     return () => window.clearTimeout(t);
   }, [engine.done]);
 
+  /** Shared per-flow WhatsApp src/text so the href (for the <a>) and the
+   *  click handler (for the location redirect) never compute two different
+   *  URLs. */
+  const waSrc =
+    engine.flow === 'A' || engine.flow === 'B'
+      ? 'demo_tour_tpv'
+      : engine.flow === 'R'
+      ? 'demo_tour_reserva'
+      : 'demo_tour_liga';
+  const waText =
+    engine.flow === 'A' || engine.flow === 'B'
+      ? 'Hola, acabo de probar el demo de cobros de Avoqado y quiero hablar con ventas.'
+      : engine.flow === 'R'
+      ? 'Hola, acabo de probar el demo de reservas de Avoqado y quiero hablar con ventas.'
+      : 'Hola, acabo de probar el demo de ligas de pago de Avoqado y quiero hablar con ventas.';
+  const waHref = `/wa?src=${waSrc}&text=${encodeURIComponent(waText)}`;
+
   /** Handoff: tour completed → contact sales on WhatsApp, routed through the
    *  /wa bridge so the Google Ads whatsapp_click conversion fires (beacon). */
-  const handleCtaClick = () => {
+  const handlePrimaryCta = () => {
     if (!engine.done) return;
     /* LA conversión de /demo: tour completado → contactar a ventas por WhatsApp */
-    trackTour('tour_cta_click', { tour_flow: flowName(engine.flow) });
-    const src =
+    trackTour('tour_cta_click', { tour_flow: flowName(engine.flow), tour_cta: 'whatsapp' });
+    window.location.href = waHref;
+  };
+
+  /** Secondary handoff: tour completed → open the real demo dashboard journey
+   *  in a new tab, seeded with the simulated payment (TPV) or the flow's
+   *  journey (R/L). */
+  const handleSecondaryCta = () => {
+    if (!engine.done) return;
+    trackTour('tour_cta_click', { tour_flow: flowName(engine.flow), tour_cta: 'dashboard' });
+    const url =
       engine.flow === 'A' || engine.flow === 'B'
-        ? 'demo_tour_tpv'
+        ? `${DEMO_DASHBOARD_URL}/?demoTour=venta-tpv&amountCents=${Math.round(
+            (lastPayment?.amount ?? DEMO_BASE_AMOUNT) * 100
+          )}&tipCents=${Math.round((lastPayment?.tip ?? DEMO_TIP_AMOUNT) * 100)}`
         : engine.flow === 'R'
-        ? 'demo_tour_reserva'
-        : 'demo_tour_liga';
-    const text =
-      engine.flow === 'A' || engine.flow === 'B'
-        ? 'Hola, acabo de probar el demo de cobros de Avoqado y quiero hablar con ventas.'
-        : engine.flow === 'R'
-        ? 'Hola, acabo de probar el demo de reservas de Avoqado y quiero hablar con ventas.'
-        : 'Hola, acabo de probar el demo de ligas de pago de Avoqado y quiero hablar con ventas.';
-    window.location.href = `/wa?src=${src}&text=${encodeURIComponent(text)}`;
+        ? `${DEMO_DASHBOARD_URL}/?demoTour=reserva`
+        : `${DEMO_DASHBOARD_URL}/?demoTour=liga`;
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const isTpvFlow = engine.flow === 'A' || engine.flow === 'B';
@@ -266,7 +296,9 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
             done={engine.done}
             flow={engine.flow}
             onSelectFlow={handleSelectFlow}
-            onCtaClick={handleCtaClick}
+            waHref={waHref}
+            onPrimaryCta={handlePrimaryCta}
+            onSecondaryCta={handleSecondaryCta}
           />
         </div>
       </div>
