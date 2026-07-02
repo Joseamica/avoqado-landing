@@ -20,6 +20,9 @@ export interface WebState {
   resvServiceAdded: boolean;
   resvDay: number | null;
   resvSlot: string | null;
+  /** R — dashboard calendar payoff: show/no-show sobre la cita de Sofía. */
+  resvStatusOpen: boolean;
+  resvShowMarked: boolean;
   /** L — payment links. */
   ligaPurpose: boolean;
   ligaAmount: string;
@@ -34,6 +37,8 @@ export const INITIAL_WEB_STATE: WebState = {
   resvServiceAdded: false,
   resvDay: null,
   resvSlot: null,
+  resvStatusOpen: false,
+  resvShowMarked: false,
   ligaPurpose: false,
   ligaAmount: '',
   ligaSaved: false,
@@ -47,6 +52,8 @@ export type WebAction =
   | { type: 'resvAddService' }
   | { type: 'resvPickDay'; day: number }
   | { type: 'resvPickSlot'; slot: string }
+  | { type: 'resvOpenStatus' }
+  | { type: 'resvMarkShow' }
   | { type: 'ligaSelectPurpose' }
   | { type: 'ligaTypeAmount'; value: string }
   | { type: 'ligaSave' }
@@ -65,6 +72,10 @@ export function webReducer(state: WebState, action: WebAction): WebState {
       return { ...state, resvDay: action.day };
     case 'resvPickSlot':
       return { ...state, resvSlot: action.slot };
+    case 'resvOpenStatus':
+      return { ...state, resvStatusOpen: true };
+    case 'resvMarkShow':
+      return { ...state, resvShowMarked: true };
     case 'ligaSelectPurpose':
       return { ...state, ligaPurpose: true };
     case 'ligaTypeAmount':
@@ -144,8 +155,40 @@ export const RESERVA_STEPS: TourStep<StepCtx>[] = [
   { screen: 'r-done', auto: 2600, ch: 3 },
   /* Payoff (founder request): crossfade phone → dashboard and watch the
      reservation land in the venue's calendar — same "everything fires from
-     one action" beat the TPV chain closes on. */
-  { screen: 'dash-resv-cal', frame: 'desktop', final: true, ch: 3 },
+     one action" beat the TPV chain closes on. The auto beat lets Sofía's
+     card animate in before the guided part continues. */
+  { screen: 'dash-resv-cal', frame: 'desktop', auto: 2400, ch: 3 },
+  /* Founder request round 2: attendance closes the money loop — mark the
+     cita as show ("Llegó") and the $250 charge lands in Ventas. */
+  {
+    screen: 'dash-resv-cal',
+    frame: 'desktop',
+    target: '[data-t="resv-card"]',
+    pill: 'Terminó la cita — ¿llegó?',
+    pos: 'bottom',
+    ch: 4,
+    onTap: ctx => ctx.webDispatch({ type: 'resvOpenStatus' }),
+    tapDelay: 340,
+  },
+  {
+    screen: 'dash-resv-cal',
+    frame: 'desktop',
+    target: '[data-t="resv-show"]',
+    pill: 'Sí llegó — márcala',
+    pos: 'bottom',
+    ch: 4,
+    onTap: ctx => ctx.webDispatch({ type: 'resvMarkShow' }),
+    tapDelay: 700,
+  },
+  {
+    screen: 'dash-resv-cal',
+    frame: 'desktop',
+    target: '[data-t="nav-ventas"]',
+    pill: 'Mira: ya es una venta',
+    pos: 'right',
+    ch: 4,
+  },
+  { screen: 'dash-resv-sales', frame: 'desktop', final: true, ch: 4 },
 ];
 
 /* ==========================================================

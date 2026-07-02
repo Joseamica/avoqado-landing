@@ -98,7 +98,7 @@ interface NavEntry {
 
 const ITEMS: NavEntry[] = [
   { id: 'inicio', label: 'Inicio', icon: ic.inicio },
-  { id: 'ventas', label: 'Ventas', icon: ic.ventas },
+  { id: 'ventas', label: 'Ventas', icon: ic.ventas, dataT: 'nav-ventas' },
   { id: 'reservas', label: 'Reservaciones', icon: ic.reservas },
   { id: 'inventario', label: 'Inventario', icon: ic.inventario, dataT: 'nav-inv' },
   { id: 'facturacion', label: 'Facturación', icon: ic.factura, dataT: 'nav-cfdi' },

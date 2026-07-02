@@ -55,6 +55,7 @@ import LigaList from './screens-web/LigaList';
 import LigaPurpose from './screens-web/LigaPurpose';
 import LigaForm from './screens-web/LigaForm';
 import DashResvCal from './screens-dash/DashResvCal';
+import DashResvSales from './screens-dash/DashResvSales';
 import DashLive from './screens-dash/DashLive';
 import DashInventory from './screens-dash/DashInventory';
 import DashCfdi from './screens-dash/DashCfdi';
@@ -272,7 +273,8 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
                 </div>
                 <div className={`frame-slot${showDesktop ? '' : ' is-hidden'}`}>
                   <BrowserFrame variant="desktop" url="dashboard.avoqado.io/venues/estetica-bella" onTpvClick={engine.handleTpvClick}>
-                    <DashResvCal />
+                    <DashResvCal statusOpen={web.resvStatusOpen} showMarked={web.resvShowMarked} />
+                    <DashResvSales />
                   </BrowserFrame>
                 </div>
               </>

@@ -46,6 +46,7 @@ const FLOW_META: Record<FlowId, FlowMeta> = {
       { n: 1, title: 'Tu cliente reserva solo', detail: '— desde tu página, Google o redes' },
       { n: 2, title: 'Horario y datos en segundos', detail: '— sin llamadas ni mensajes' },
       { n: 3, title: 'Directo a tu calendario', detail: '— con recordatorios por WhatsApp' },
+      { n: 4, title: 'Llegó y cobraste', detail: '— la venta cae sola en tu dashboard' },
     ],
     secondaryCta: 'Ver tu reserva en el dashboard demo →',
   },

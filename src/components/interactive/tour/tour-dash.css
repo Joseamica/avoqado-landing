@@ -727,3 +727,69 @@
     animation: none;
   }
 }
+
+/* ---------- dash-resv-cal: show/no-show sobre la cita de Sofía ---------- */
+/* Siempre montado; oculto visualmente hasta que el paso lo revela (misma
+   lección que el chip 2 del asistente IA: un target renderizado
+   condicionalmente puede ganarle al motor y trabar el tour). */
+.avq-tour .lg .dash-cal-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  transition: opacity 200ms ease;
+}
+.avq-tour .lg .dash-cal-status-pending {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 0;
+  overflow: hidden;
+  margin: 0;
+}
+.avq-tour .lg .dash-cal-card-new {
+  position: relative;
+}
+.avq-tour .lg .dash-cal-status-q {
+  font-size: 10.5px;
+  color: var(--lg-muted);
+  margin-right: 2px;
+}
+.avq-tour .lg .dash-cal-status-btn {
+  font: inherit;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--lg-border);
+  background: #fff;
+  color: var(--lg-fg);
+  cursor: pointer;
+}
+.avq-tour .lg .dash-cal-status-show {
+  background: var(--lg-success, #059669);
+  border-color: var(--lg-success, #059669);
+  color: #fff;
+}
+/* Cita atendida: la card celebra el cobro. */
+.avq-tour .lg .dash-cal-card-attended {
+  background: #d1fae5;
+}
+
+/* ---------- dash-resv-sales: el cobro de la cita en Transacciones ---------- */
+.avq-tour .lg .dash-rsales-tr {
+  grid-template-columns: 1fr 1.2fr 1fr 0.6fr;
+}
+.avq-tour .lg [data-screen='dash-resv-sales'].active .dash-rsales-row-new {
+  animation: dash-sale-in 460ms ease 220ms backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avq-tour .lg .dash-cal-status {
+    transition: none;
+  }
+  .avq-tour .lg [data-screen='dash-resv-sales'].active .dash-rsales-row-new {
+    animation: none;
+  }
+}
