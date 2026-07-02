@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { trackGetStarted } from '../../lib/gtm';
 
 type BusinessType = 'restaurants' | 'retail' | 'services' | 'beauty';
 
@@ -455,6 +456,10 @@ export default function BusinessTypePricing() {
                     href={plan.name === 'Enterprise' ? SALES_WHATSAPP_URL : SIGNUP_URL}
                     target={plan.name === 'Enterprise' ? '_blank' : undefined}
                     rel={plan.name === 'Enterprise' ? 'noopener noreferrer' : undefined}
+                    onClick={e => {
+                      // Enterprise goes to WhatsApp sales (measured by the /wa bridge itself).
+                      if (plan.name !== 'Enterprise') trackGetStarted(e, 'pricing_plans', { plan: plan.name });
+                    }}
                     className="block w-full text-center py-3 px-6 rounded-full font-semibold transition-all mt-auto bg-black text-white hover:bg-gray-800"
                   >
                     {plan.cta}

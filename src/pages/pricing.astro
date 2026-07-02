@@ -39,11 +39,35 @@ import Footer from '../components/layout/Footer.astro';
 				</p>
 				<div class="flex flex-col sm:flex-row gap-4 justify-center">
 					<a
+						id="pricing-signup-cta"
 						href="https://dashboard.avoqado.io/signup"
 						class="px-8 py-4 bg-avoqado-green text-black font-bold rounded-full hover:bg-green-400 transition-all hover:scale-105 text-lg"
 					>
 						Comienza tu prueba gratis →
 					</a>
+					<script is:inline>
+						// get_started_click with the beacon-before-redirect pattern (static page —
+						// same logic as trackGetStarted in src/lib/gtm.ts for React islands): the
+						// destination is another subdomain, so the hit must leave before unload.
+						(function () {
+							var a = document.getElementById('pricing-signup-cta')
+							if (!a) return
+							a.addEventListener('click', function (e) {
+								if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+								e.preventDefault()
+								var done = false
+								var go = function () {
+									if (done) return
+									done = true
+									window.location.href = a.href
+								}
+								window.dataLayer = window.dataLayer || []
+								window.dataLayer.push({ event: 'get_started_click', source: 'pricing_page', eventCallback: go, eventTimeout: 800 })
+								try { window.posthog && window.posthog.capture('get_started_click', { source: 'pricing_page' }) } catch (err) {}
+								setTimeout(go, 800)
+							})
+						})()
+					</script>
 					<a
 						href="/contact"
 						class="px-8 py-4 border-2 border-white text-white font-semibold rounded-full hover:bg-white hover:text-black transition-all text-lg"

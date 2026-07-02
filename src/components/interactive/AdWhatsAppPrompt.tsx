@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { pushEvent } from '../../lib/gtm';
+import { pushEvent, trackGetStarted } from '../../lib/gtm';
 
 const WHATSAPP_NUMBER = '525640070001';
 const DEFAULT_MESSAGE = 'Hola, vengo de un anuncio y me interesa Avoqado.';
@@ -100,10 +100,11 @@ export default function AdWhatsAppPrompt() {
 		setOpen(false);
 	};
 
-	const onSetupClick = () => {
+	const onSetupClick = (e: Parameters<typeof trackGetStarted>[0]) => {
 		markDone();
-		pushEvent('sign_up_start', { method: 'ad_prompt', wa_source: source, wa_page: window.location.pathname });
-		setOpen(false);
+		// get_started_click with the beacon-before-redirect pattern: the destination
+		// is another subdomain, so the event must leave BEFORE the page unloads.
+		trackGetStarted(e, 'ad_popup', { wa_source: source, wa_page: window.location.pathname });
 	};
 
 	if (!mounted || !open) return null;

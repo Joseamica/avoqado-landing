@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { trackGetStarted } from '../../lib/gtm';
 
 export default function ChatbotCTA() {
   const [inputValue, setInputValue] = useState('');
@@ -161,7 +162,7 @@ export default function ChatbotCTA() {
                 </p>
 
                 <div className="w-full space-y-3">
-                  <a href="https://dashboard.avoqado.io/signup" className="block w-full bg-avoqado-green text-black font-baby py-4 rounded-xl hover:scale-[1.02] transition-transform text-center">
+                  <a href="https://dashboard.avoqado.io/signup" onClick={e => trackGetStarted(e, 'chatbot_cta')} className="block w-full bg-avoqado-green text-black font-baby py-4 rounded-xl hover:scale-[1.02] transition-transform text-center">
                     Comenzar prueba gratis
                   </a>
                   <a href="/contact" className="block w-full bg-white/5 text-white font-medium py-4 rounded-xl hover:bg-white/10 transition-colors border border-white/5 text-center">

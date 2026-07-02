@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { pushEvent } from '../../lib/gtm';
+import { pushEvent, trackGetStarted } from '../../lib/gtm';
 
 import img1 from '../../assets/hero/hero-tile-01.jpg';
 import img2 from '../../assets/hero/hero-tile-02.jpg';
@@ -161,7 +161,7 @@ export default function SquareHero() {
               <a href="/wa?src=hero_demo&text=Hola%2C%20me%20interesa%20una%20demo%20de%20Avoqado%20de%2015%20minutos" target="_blank" rel="noopener noreferrer" onClick={() => pushEvent('demo_request', { demo_type: 'whatsapp', location: 'hero' })} className="bg-white text-black px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer">
                 Agenda por WhatsApp
               </a>
-              <a href="https://dashboard.avoqado.io/signup" onClick={() => pushEvent('sign_up_start', { location: 'hero' })} className="bg-black/60 text-white px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer border-2 border-white/30">
+              <a href="https://dashboard.avoqado.io/signup" onClick={e => trackGetStarted(e, 'hero')} className="bg-black/60 text-white px-6 md:px-10 py-3 md:py-4 rounded-full font-bold text-lg md:text-2xl hover:scale-105 transition-transform cursor-pointer border-2 border-white/30">
                 Comienza gratis
               </a>
             </div>

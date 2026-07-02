@@ -47,6 +47,72 @@ export function pushEvent(event: string, params: DataLayerParams = {}): void {
 	}
 }
 
+/**
+ * Track a signup-intent CTA click (`Empieza ahora` / `Comienza…`) as
+ * `get_started_click` and — for plain same-tab clicks — hold the navigation
+ * just long enough for the hit to leave the page.
+ *
+ * Why: these CTAs navigate to dashboard.avoqado.io (another subdomain), and a
+ * bare dataLayer.push loses the race against the unload — GA4 recorded ZERO
+ * `sign_up_start` in 14 days while the target="_blank" WhatsApp CTAs arrived
+ * fine — so ad-driven signup intent never counted. Same cure as the /wa
+ * bridge: eventCallback + a hard timeout, capped below a perceivable delay.
+ *
+ * Modified clicks (cmd/ctrl/shift/alt, middle button) and target="_blank"
+ * anchors keep their default behavior — the page stays alive, no race to win.
+ *
+ * `source` identifies the CTA placement (ad_popup / navbar / mobile_menu /
+ * hero / pricing_hero / pricing_plans / pricing_page / chatbot_cta).
+ */
+export function trackGetStarted(
+	e: {
+		preventDefault: () => void;
+		currentTarget: EventTarget | null;
+		metaKey?: boolean;
+		ctrlKey?: boolean;
+		shiftKey?: boolean;
+		altKey?: boolean;
+		button?: number;
+	},
+	source: string,
+	extra: DataLayerParams = {},
+): void {
+	if (typeof window === 'undefined') return;
+	const params = { source, ...extra };
+	// Legacy PostHog mirror: the onboarding funnel predates get_started_click —
+	// keep feeding its original step name so the funnel doesn't go dark.
+	try {
+		window.posthog?.capture('sign_up_start', params);
+	} catch {
+		/* PostHog optional */
+	}
+	const anchor = e.currentTarget instanceof HTMLAnchorElement ? e.currentTarget : null;
+	const href = anchor?.href;
+	const modified = Boolean(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) || (e.button ?? 0) !== 0;
+	if (!href || modified || anchor?.target === '_blank') {
+		// Page stays alive (new tab / no navigation) — plain push is safe.
+		pushEvent('get_started_click', params);
+		return;
+	}
+	e.preventDefault();
+	let navigated = false;
+	const go = () => {
+		if (navigated) return;
+		navigated = true;
+		window.location.href = href;
+	};
+	window.dataLayer = window.dataLayer || [];
+	// eventTimeout: GTM invokes eventCallback after N ms even if a tag hangs.
+	window.dataLayer.push({ event: 'get_started_click', ...params, eventCallback: go, eventTimeout: 800 });
+	try {
+		window.posthog?.capture('get_started_click', params);
+	} catch {
+		/* PostHog optional */
+	}
+	// Hard fallback: GTM blocked / not yet loaded → eventCallback never runs.
+	window.setTimeout(go, 800);
+}
+
 export interface ConsentChoice {
 	analytics: boolean;
 	marketing: boolean;

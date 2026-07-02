@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { trackGetStarted } from '../../lib/gtm';
 
 export default function PricingHero() {
   return (
@@ -56,8 +57,9 @@ export default function PricingHero() {
           </div>
 
           {/* CTA */}
-          <motion.a 
+          <motion.a
             href="https://dashboard.avoqado.io/signup"
+            onClick={e => trackGetStarted(e, 'pricing_hero')}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white font-bold text-lg rounded-full hover:bg-gray-800 transition-colors"

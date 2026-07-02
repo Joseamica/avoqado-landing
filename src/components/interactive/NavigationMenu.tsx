@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronDown, Search, Menu, X, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { trackGetStarted } from '../../lib/gtm';
 
 // ─── Product data with real accent colors ───
 const products = [
@@ -285,6 +286,7 @@ export default function NavigationMenu() {
             </a>
             <a
               href="https://dashboard.avoqado.io/signup"
+              onClick={e => trackGetStarted(e, 'navbar')}
               className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
                 useDarkAssets
                   ? 'bg-white text-black hover:bg-gray-100 hover:-translate-y-0.5'
@@ -424,6 +426,7 @@ function MobileDrawer({ open, section, onSectionToggle }: MobileDrawerProps) {
         <div className="pt-6 space-y-3">
           <a
             href="https://dashboard.avoqado.io/signup"
+            onClick={e => trackGetStarted(e, 'mobile_menu')}
             className="flex items-center justify-center w-full p-3.5 rounded-xl bg-black text-white font-semibold text-sm"
           >
             Comienza
