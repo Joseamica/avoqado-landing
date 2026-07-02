@@ -133,13 +133,13 @@ export default function DemoDialog({ isOpen, onClose }: DemoDialogProps) {
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-black mb-1 group-hover:text-avoqado-green transition-colors">
-                  Probar Dashboard
+                  Probar demo interactivo
                 </h3>
                 <p className="text-gray-500 text-sm mb-2">
-                  Crea tu propio negocio de prueba y explora todas las funciones
+                  Cobra, agenda una reserva o crea una liga de pago
                 </p>
                 <p className="text-xs text-gray-400">
-                  100% interactivo
+                  En 60 segundos, sin registro ni tarjeta
                 </p>
               </div>
               <svg className="w-5 h-5 text-gray-300 group-hover:text-avoqado-green group-hover:translate-x-1 transition-all mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
