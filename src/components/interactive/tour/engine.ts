@@ -140,6 +140,7 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
   const doneRef = useRef(false);
   const tourVisibleRef = useRef(false);
   const timersRef = useRef<number[]>([]);
+  const rafsRef = useRef<number[]>([]);
   const pendingPlaceRef = useRef<{ pos: PillPos; jump: boolean } | null>(null);
 
   /* ==========================================================
@@ -149,9 +150,21 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     timersRef.current.push(window.setTimeout(fn, ms));
   };
 
+  /* rAF callbacks join the same cancel-on-reset pool as timers: a resetFlow
+     (flow switch / ↺) issued while a previous reset's or switchScreen's
+     deferred rAF is still pending must cancel it, or the stale callback runs
+     against the NEW flow's state — e.g. switching flows within ~1s of boot
+     left the old flow's target painted (.tour-target) and the click rails
+     rejecting every tap on the real target. */
+  const setRaf = (fn: FrameRequestCallback) => {
+    rafsRef.current.push(window.requestAnimationFrame(fn));
+  };
+
   const clearTimers = () => {
     timersRef.current.forEach(id => window.clearTimeout(id));
     timersRef.current = [];
+    rafsRef.current.forEach(id => window.cancelAnimationFrame(id));
+    rafsRef.current = [];
   };
 
   const makeCtx = (): Ctx => optsRef.current.buildCtx({ setTimer, flow: flowRef.current });
@@ -296,8 +309,8 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     if (!inc) return;
 
     inc.classList.add('active', 'enter');
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
+    setRaf(() => {
+      setRaf(() => {
         inc.classList.add('entering');
         out?.classList.add('exit');
       });
@@ -393,9 +406,11 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
 
     /* setScreenInstant runs AFTER React commits: switching to a flow that
        lives in a different frame (terminal ⇄ browser) swaps the screens
-       container, so the first screen's element may not exist until then. */
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
+       container, so the first screen's element may not exist until then.
+       Scheduled via the cancellable pool: a second reset before these fire
+       must void them (see setRaf). */
+    setRaf(() => {
+      setRaf(() => {
         setScreenInstant(first.screen);
         enterStep(first);
       });
