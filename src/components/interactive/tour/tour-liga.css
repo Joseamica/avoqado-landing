@@ -13,7 +13,7 @@
   --lg-border: #e8e5e2;
   --lg-side: #faf9f8;
   --lg-soft: #f6f5f4;
-  --lg-success: #059669;
+  --lg-success: #3f850f; /* lima profundo de marca */
 
   width: 700px;
   height: 500px;
@@ -373,7 +373,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #34d399;
+  background: #7add2c;
 }
 
 /* ---------- Modal del wizard (purpose + form) ---------- */

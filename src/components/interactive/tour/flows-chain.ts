@@ -23,7 +23,7 @@ export interface ChainState {
   cascadeShown: 0 | 1 | 2 | 3 | 4;
   invCounted: boolean;
   reportCounted: boolean;
-  aiStage: 0 | 1 | 2 | 3 | 4;
+  aiStage: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
   aiTyping: boolean;
 }
 
@@ -46,6 +46,10 @@ export type ChainAction =
   | { type: 'aiAnswer1' }
   | { type: 'aiAsk2' }
   | { type: 'aiAnswer2' }
+  | { type: 'aiAsk3' }
+  | { type: 'aiAnswer3' }
+  | { type: 'aiAsk4' }
+  | { type: 'aiAnswer4' }
   | { type: 'aiTypingOn' }
   | { type: 'reset' };
 
@@ -69,6 +73,14 @@ export function chainReducer(state: ChainState, action: ChainAction): ChainState
       return { ...state, aiStage: 3 };
     case 'aiAnswer2':
       return { ...state, aiStage: 4, aiTyping: false };
+    case 'aiAsk3':
+      return { ...state, aiStage: 5 };
+    case 'aiAnswer3':
+      return { ...state, aiStage: 6, aiTyping: false };
+    case 'aiAsk4':
+      return { ...state, aiStage: 7 };
+    case 'aiAnswer4':
+      return { ...state, aiStage: 8, aiTyping: false };
     case 'aiTypingOn':
       return { ...state, aiTyping: true };
     case 'reset':
@@ -104,6 +116,20 @@ export const AI_ANSWER_2: Record<'A' | 'B', string> = {
   A: 'Ana Torres lleva $312.40 de comisión en la quincena — 78% de su meta. Hoy sumó $29.50 por la venta de $295.00 (la comisión no incluye propina).',
 };
 
+/* Multi-merchant × IA (founder request): la IA responde POR CUENTA BANCARIA —
+   el visitante acaba de elegir la cuenta destino al cobrar, y aquí ve que la
+   IA entiende ese enrutamiento. Los montos cuadran con Reportes · Hoy:
+   $3,700.10 (BBVA) + $1,514.00 (Santander) = $5,214.10. */
+export const AI_CHIP_3 = '¿Cuánto he vendido en la cuenta BBVA?';
+
+export const AI_ANSWER_3 =
+  'A tu Cuenta Operativa (BBVA) hoy entraron $3,700.10 en 9 cobros — incluida tu venta de $348.10. El resto del día, $1,514.00, cayó en Cuenta Nómina (Santander).';
+
+export const AI_CHIP_4 = '¿Voy bien con el pago de créditos en Inbursa?';
+
+export const AI_ANSWER_4 =
+  'A Pago de créditos (Inbursa) le has enviado $18,400 este mes — 61% de tu meta de $30,000. A tu ritmo la completas el día 26, antes del corte. ¿Quieres que te avise si alguna semana se atrasa?';
+
 /* ==========================================================
    Steps — dash-live cascade + dash-inventory (B only) + dash-cfdi
    + dash-commission + dash-loyalty + dash-report + dash-ai
@@ -114,7 +140,7 @@ function dashLiveStepB(): TourStep<StepCtx> {
   return {
     screen: 'dash-live',
     frame: 'desktop',
-    auto: 3000,
+    auto: 2500,
     ch: 4,
     onEnter: ctx => {
       if (reducedMotion()) {
@@ -122,11 +148,11 @@ function dashLiveStepB(): TourStep<StepCtx> {
         ctx.chainDispatch({ type: 'cascadeAll', total: 4 });
         return;
       }
-      ctx.setTimer(() => ctx.chainDispatch({ type: 'saleIn' }), 400);
-      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 1 }), 1000);
-      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 2 }), 1450);
-      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 3 }), 1900);
-      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 4 }), 2350);
+      ctx.setTimer(() => ctx.chainDispatch({ type: 'saleIn' }), 300);
+      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 1 }), 750);
+      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 2 }), 1100);
+      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 3 }), 1450);
+      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 4 }), 1800);
     },
   };
 }
@@ -136,7 +162,7 @@ function dashLiveStepA(): TourStep<StepCtx> {
   return {
     screen: 'dash-live',
     frame: 'desktop',
-    auto: 2600,
+    auto: 2100,
     ch: 4,
     onEnter: ctx => {
       if (reducedMotion()) {
@@ -144,10 +170,10 @@ function dashLiveStepA(): TourStep<StepCtx> {
         ctx.chainDispatch({ type: 'cascadeAll', total: 3 });
         return;
       }
-      ctx.setTimer(() => ctx.chainDispatch({ type: 'saleIn' }), 400);
-      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 1 }), 1000);
-      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 2 }), 1450);
-      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 3 }), 1900);
+      ctx.setTimer(() => ctx.chainDispatch({ type: 'saleIn' }), 300);
+      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 1 }), 750);
+      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 2 }), 1100);
+      ctx.setTimer(() => ctx.chainDispatch({ type: 'cascade', shown: 3 }), 1450);
     },
   };
 }
@@ -231,6 +257,34 @@ function dashAiSteps(): TourStep<StepCtx>[] {
         ctx.setTimer(() => ctx.chainDispatch({ type: 'aiAnswer2' }), reducedMotion() ? 150 : 1400);
       },
       tapDelay: reducedMotion() ? 300 : 1700,
+    },
+    {
+      screen: 'dash-ai',
+      frame: 'desktop',
+      target: '[data-t="ai-q3"]',
+      pill: 'Pregúntale por cuenta',
+      pos: 'top',
+      ch: 5,
+      onTap: ctx => {
+        ctx.chainDispatch({ type: 'aiAsk3' });
+        ctx.chainDispatch({ type: 'aiTypingOn' });
+        ctx.setTimer(() => ctx.chainDispatch({ type: 'aiAnswer3' }), reducedMotion() ? 150 : 1400);
+      },
+      tapDelay: reducedMotion() ? 300 : 1700,
+    },
+    {
+      screen: 'dash-ai',
+      frame: 'desktop',
+      target: '[data-t="ai-q4"]',
+      pill: 'Hasta te aconseja',
+      pos: 'top',
+      ch: 5,
+      onTap: ctx => {
+        ctx.chainDispatch({ type: 'aiAsk4' });
+        ctx.chainDispatch({ type: 'aiTypingOn' });
+        ctx.setTimer(() => ctx.chainDispatch({ type: 'aiAnswer4' }), reducedMotion() ? 150 : 1500);
+      },
+      tapDelay: reducedMotion() ? 300 : 1800,
     },
     { screen: 'dash-ai', frame: 'desktop', final: true, ch: 5 },
   ];

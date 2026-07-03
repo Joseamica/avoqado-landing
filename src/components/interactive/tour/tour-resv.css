@@ -8,8 +8,8 @@
 
 /* ---------- Raíz / tokens ---------- */
 .avq-tour .rsv {
-  --rsv-accent: #10b981;
-  --rsv-accent-soft: rgba(16, 185, 129, 0.12);
+  --rsv-accent: #3f850f; /* lima profundo: legible sobre blanco */
+  --rsv-accent-soft: rgba(122, 221, 44, 0.16);
   --rsv-fg: #111827;
   --rsv-muted: #6b7280;
   --rsv-muted-2: #9ca3af;

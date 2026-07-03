@@ -1,25 +1,21 @@
 /**
  * DashAi — "Asistente IA" (dash-ai): the chain's closing scene. A scripted
- * chat where the visitor asks two questions and gets answers that cite the
- * exact sale they just made. `aiStage` numbering (confirmed against
- * `chainReducer` in flows-chain.ts, not assumed):
+ * chat where the visitor asks four questions and gets answers that cite the
+ * exact sale they just made — the last two BY BANK ACCOUNT (BBVA / Inbursa),
+ * showing the AI understands the multi-merchant routing they just used when
+ * paying. `aiStage` numbering (mirrors chainReducer, do not assume):
  *
- *   0 — nothing yet (welcome message only)
- *   1 — aiAsk1 dispatched: chip 1 tapped, user bubble for Q1 shows
- *   2 — aiAnswer1 dispatched: answer 1 revealed (aiTyping already false)
- *   3 — aiAsk2 dispatched: chip 2 tapped, user bubble for Q2 shows
- *   4 — aiAnswer2 dispatched: answer 2 revealed (aiTyping already false)
+ *   0 welcome only · 1 q1 asked · 2 a1 shown · 3 q2 asked · 4 a2 shown
+ *   · 5 q3 asked · 6 a3 shown · 7 q4 asked · 8 a4 shown (final)
  *
- * `aiTyping` is a separate flag (true between an aiAskN and its aiAnswerN)
- * — the typing-dots indicator renders whenever it's true, regardless of
- * which question is in flight.
- *
- * Copy is EXACT, imported from flows-chain.ts (word for word from the spec's
- * "Copy IA EXACTO" table) — never inlined/paraphrased here.
+ * `aiTyping` is a separate flag (true between an aiAskN and its aiAnswerN).
+ * Chips are ALWAYS mounted (visual state gated) — a tour target must exist
+ * in the DOM the instant its step activates, or the engine soft-locks.
+ * Copy is EXACT, imported from flows-chain.ts — never inlined/paraphrased.
  */
 import DashShell from './DashShell';
 import ChainNav from './ChainNav';
-import { AI_ANSWER_1, AI_ANSWER_2, AI_CHIP_1, AI_CHIP_2, AI_WELCOME } from '../flows-chain';
+import { AI_ANSWER_1, AI_ANSWER_2, AI_ANSWER_3, AI_ANSWER_4, AI_CHIP_1, AI_CHIP_2, AI_CHIP_3, AI_CHIP_4, AI_WELCOME } from '../flows-chain';
 
 interface Props {
   aiStage: number;
@@ -37,16 +33,30 @@ function TypingDots() {
   );
 }
 
+interface ChipProps {
+  dataT: string;
+  visible: boolean;
+  used: boolean;
+  label: string;
+}
+
+/** Always mounted; hidden-visual until `visible`, dimmed once `used`. */
+function Chip({ dataT, visible, used, label }: ChipProps) {
+  const cls = !visible ? ' dash-ai-chip-pending' : used ? ' dash-ai-chip-used' : '';
+  return (
+    <button type="button" className={`dash-ai-chip${cls}`} data-t={dataT} disabled={!visible || used} aria-hidden={!visible} tabIndex={visible && !used ? undefined : -1}>
+      {label}
+    </button>
+  );
+}
+
 export default function DashAi({ aiStage, aiTyping, flow }: Props) {
-  const q1Used = aiStage >= 1;
-  const answer1Shown = aiStage >= 2;
-  const q2Tapped = aiStage >= 3;
-  const answer2Shown = aiStage >= 4;
-  /* Chip 2 only becomes a valid/visible target once answer 1 has landed. */
-  const q2Visible = aiStage >= 2;
-  /* Typing dots follow whichever question is currently in flight. */
-  const typingForQ1 = aiTyping && aiStage === 1;
-  const typingForQ2 = aiTyping && aiStage === 3;
+  const qa = [
+    { asked: aiStage >= 1, answered: aiStage >= 2, typing: aiTyping && aiStage === 1, q: AI_CHIP_1, a: AI_ANSWER_1[flow] },
+    { asked: aiStage >= 3, answered: aiStage >= 4, typing: aiTyping && aiStage === 3, q: AI_CHIP_2[flow], a: AI_ANSWER_2[flow] },
+    { asked: aiStage >= 5, answered: aiStage >= 6, typing: aiTyping && aiStage === 5, q: AI_CHIP_3, a: AI_ANSWER_3 },
+    { asked: aiStage >= 7, answered: aiStage >= 8, typing: aiTyping && aiStage === 7, q: AI_CHIP_4, a: AI_ANSWER_4 },
+  ];
 
   return (
     <section className="web-screen lg dash-ai" data-screen="dash-ai">
@@ -58,37 +68,25 @@ export default function DashAi({ aiStage, aiTyping, flow }: Props) {
           </div>
         </div>
 
+        {/* Anchored to the bottom like a real chat: with 4 Q&As the oldest
+            bubbles slide out of the fixed-height canvas instead of the
+            newest ones overflowing invisible (see .dash-ai-chat CSS). */}
         <div className="dash-ai-chat">
           <div className="dash-ai-bubble dash-ai-bubble-bot">{AI_WELCOME}</div>
-
-          {q1Used && <div className="dash-ai-bubble dash-ai-bubble-user">{AI_CHIP_1}</div>}
-          {typingForQ1 && <TypingDots />}
-          {answer1Shown && <div className="dash-ai-bubble dash-ai-bubble-bot dash-ai-answer-in">{AI_ANSWER_1[flow]}</div>}
-
-          {q2Tapped && <div className="dash-ai-bubble dash-ai-bubble-user">{AI_CHIP_2[flow]}</div>}
-          {typingForQ2 && <TypingDots />}
-          {answer2Shown && <div className="dash-ai-bubble dash-ai-bubble-bot dash-ai-answer-in">{AI_ANSWER_2[flow]}</div>}
+          {qa.map(({ asked, answered, typing, q, a }) => (
+            <div className="dash-ai-turn" key={q}>
+              {asked && <div className="dash-ai-bubble dash-ai-bubble-user">{q}</div>}
+              {typing && <TypingDots />}
+              {answered && <div className="dash-ai-bubble dash-ai-bubble-bot dash-ai-answer-in">{a}</div>}
+            </div>
+          ))}
         </div>
 
         <div className="dash-ai-chips">
-          <button type="button" className={`dash-ai-chip${q1Used ? ' dash-ai-chip-used' : ''}`} data-t="ai-q1" disabled={q1Used}>
-            {AI_CHIP_1}
-          </button>
-          {/* Always mounted (never conditionally rendered) — see the
-              dash-ai-chip-pending CSS comment in tour-dash.css for why:
-              the tour engine must be able to find this element the instant
-              it becomes the active step's target, regardless of whether
-              React has already committed the "visible" class yet. */}
-          <button
-            type="button"
-            className={`dash-ai-chip${!q2Visible ? ' dash-ai-chip-pending' : q2Tapped ? ' dash-ai-chip-used' : ''}`}
-            data-t="ai-q2"
-            disabled={!q2Visible || q2Tapped}
-            aria-hidden={!q2Visible}
-            tabIndex={q2Visible ? undefined : -1}
-          >
-            {AI_CHIP_2[flow]}
-          </button>
+          <Chip dataT="ai-q1" visible={true} used={aiStage >= 1} label={AI_CHIP_1} />
+          <Chip dataT="ai-q2" visible={aiStage >= 2} used={aiStage >= 3} label={AI_CHIP_2[flow]} />
+          <Chip dataT="ai-q3" visible={aiStage >= 4} used={aiStage >= 5} label={AI_CHIP_3} />
+          <Chip dataT="ai-q4" visible={aiStage >= 6} used={aiStage >= 7} label={AI_CHIP_4} />
         </div>
 
         <button type="button" className="dash-ai-restart" data-action="new-payment">

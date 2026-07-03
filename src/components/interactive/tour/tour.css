@@ -12,10 +12,10 @@
   /* Design tokens — extracted from the real TPV Compose theme (dark, el
      default del TPV): primary es GRIS CLARO #E8E8E8, no verde — el verde
      queda para la marca del tour (pill/dot/CTA) y statusSuccess. */
-  --avq-green: #10b981;
-  --avq-green-light: #34d399;
-  --avq-green-press: #059669;
-  --avq-on-green: #052e22;
+  --avq-green: #7add2c; /* verde de marca (logo V2) */
+  --avq-green-light: #98ea5c;
+  --avq-green-press: #5cb81e;
+  --avq-on-green: #17300a;
   --avq-bg: #1c1c1c; /* TPV screen background */
   --avq-surface: #2a2a2a;
   --avq-surface-variant: #282828;
@@ -23,7 +23,7 @@
   --avq-primary: #e8e8e8; /* DarkPrimary real */
   --avq-on-primary: #2a2a2a;
   --avq-primary-container: #505050;
-  --avq-success: #34d399; /* statusSuccess real en dark */
+  --avq-success: #98ea5c; /* statusSuccess real en dark */
   --avq-text: #fafafa;
   --avq-text2: #b5b5b5;
   --avq-text-dim: #6f6f6f;
@@ -290,7 +290,7 @@
   box-shadow:
     0 0 0 1px #000,
     inset 0 0 24px rgba(0, 0, 0, 0.45),
-    0 0 48px rgba(16, 185, 129, 0.08);
+    0 0 48px rgba(122, 221, 44, 0.08);
 }
 
 /* ---------- Faux Android status bar ---------- */
@@ -847,7 +847,7 @@
   height: 146px;
   border-radius: 16px;
   background:
-    radial-gradient(120% 160% at 88% -20%, rgba(16, 185, 129, 0.3) 0%, rgba(16, 185, 129, 0) 55%),
+    radial-gradient(120% 160% at 88% -20%, rgba(122, 221, 44, 0.3) 0%, rgba(122, 221, 44, 0) 55%),
     linear-gradient(135deg, #31363c 0%, #1a1d21 52%, #24282d 100%);
   border: 1px solid rgba(255, 255, 255, 0.09);
   box-shadow:
@@ -1022,7 +1022,7 @@
 .avq-tour .sc-circle,
 .avq-tour .sc-check {
   fill: none;
-  stroke: var(--avq-success); /* statusSuccess #34D399 real */
+  stroke: var(--avq-success);
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 100;
@@ -1507,7 +1507,7 @@
   height: 11px;
   border-radius: 50%;
   background: var(--avq-green);
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.9);
+  box-shadow: 0 0 8px rgba(122, 221, 44, 0.9);
   transform: translate(-50%, -50%);
   transition:
     left 0.28s cubic-bezier(0.3, 0.9, 0.35, 1),
@@ -1518,7 +1518,7 @@
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  background: rgba(16, 185, 129, 0.55);
+  background: rgba(122, 221, 44, 0.55);
   animation: avq-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
   z-index: -1;
 }
@@ -1544,7 +1544,7 @@
   padding: 9px 14px;
   border-radius: 12px;
   box-shadow:
-    0 8px 22px rgba(16, 185, 129, 0.38),
+    0 8px 22px rgba(122, 221, 44, 0.38),
     0 2px 6px rgba(0, 0, 0, 0.35);
   white-space: nowrap;
   display: flex;
@@ -1621,7 +1621,7 @@
   position: absolute;
   inset: -3px;
   border-radius: inherit;
-  border: 1.5px solid rgba(16, 185, 129, 0.55);
+  border: 1.5px solid rgba(122, 221, 44, 0.55);
   pointer-events: none;
 }
 
@@ -1662,8 +1662,8 @@
 }
 .avq-tour .chapter.active {
   opacity: 1;
-  background: rgba(16, 185, 129, 0.06);
-  border-color: rgba(16, 185, 129, 0.28);
+  background: rgba(122, 221, 44, 0.06);
+  border-color: rgba(122, 221, 44, 0.28);
 }
 .avq-tour .chapter.done {
   opacity: 0.85;
@@ -1697,14 +1697,14 @@
   position: absolute;
   inset: -3px;
   border-radius: 50%;
-  background: rgba(16, 185, 129, 0.45);
+  background: rgba(122, 221, 44, 0.45);
   animation: avq-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
   z-index: -1;
 }
 .avq-tour .chapter.done .ch-num {
   border-color: var(--avq-green);
   color: var(--avq-green-light);
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(122, 221, 44, 0.1);
 }
 
 .avq-tour .ch-copy {
@@ -1789,10 +1789,10 @@
   border-color: var(--avq-green);
   color: var(--avq-green-light);
   cursor: pointer;
-  box-shadow: 0 0 26px rgba(16, 185, 129, 0.16);
+  box-shadow: 0 0 26px rgba(122, 221, 44, 0.16);
 }
 .avq-tour .cta-next.ready:hover {
-  background: rgba(16, 185, 129, 0.08);
+  background: rgba(122, 221, 44, 0.08);
 }
 
 .avq-tour .cta-secondary {

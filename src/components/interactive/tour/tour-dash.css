@@ -89,7 +89,7 @@
 }
 .avq-tour .lg .dash-badge-new {
   margin-left: 6px;
-  background: var(--lg-success, #059669);
+  background: var(--lg-success, #3f850f);
 }
 .avq-tour .lg .dash-activity-panel {
   background: var(--lg-card);
@@ -195,7 +195,7 @@
   margin: 0 0 2px;
 }
 .avq-tour .lg .dash-cfdi-available {
-  color: var(--lg-success, #059669);
+  color: var(--lg-success, #3f850f);
   font-weight: 600;
 }
 .avq-tour .lg .dash-cfdi-qr {
@@ -272,7 +272,7 @@
   grid-template-columns: 1.2fr 0.8fr 0.8fr 1.4fr;
 }
 .avq-tour .lg .dash-com-today-up {
-  color: var(--lg-success, #059669);
+  color: var(--lg-success, #3f850f);
   font-weight: 700;
 }
 .avq-tour .lg .dash-com-goal {
@@ -292,7 +292,7 @@
   display: block;
   height: 100%;
   border-radius: 999px;
-  background: var(--lg-success, #059669);
+  background: var(--lg-success, #3f850f);
 }
 .avq-tour .lg .dash-com-goal-label {
   font-size: 10px;
@@ -336,7 +336,7 @@
 .avq-tour .lg .dash-loy-points-earned {
   font-size: 12.5px;
   font-weight: 600;
-  color: var(--lg-success, #059669);
+  color: var(--lg-success, #3f850f);
   margin: 0;
 }
 .avq-tour .lg .dash-loy-rule {
@@ -367,7 +367,7 @@
   display: block;
   height: 100%;
   border-radius: 999px;
-  background: var(--lg-success, #059669);
+  background: var(--lg-success, #3f850f);
 }
 .avq-tour .lg .dash-loy-missing {
   font-size: 10.5px;
@@ -404,7 +404,7 @@
   font-variant-numeric: tabular-nums;
 }
 .avq-tour .lg .dash-rep-counting {
-  color: var(--lg-success, #059669);
+  color: var(--lg-success, #3f850f);
   transition: color 200ms ease;
 }
 .avq-tour .lg .dash-rep-chart {
@@ -445,8 +445,8 @@
   transition: height 260ms ease;
 }
 .avq-tour .lg .dash-rep-bar-grow {
-  background: var(--lg-success, #059669);
-  border-color: var(--lg-success, #059669);
+  background: var(--lg-success, #3f850f);
+  border-color: var(--lg-success, #3f850f);
 }
 .avq-tour .lg .dash-rep-bar-label {
   font-size: 9px;
@@ -479,10 +479,21 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
+  /* Anclado abajo, como un chat real: con 4 preguntas las burbujas viejas
+     salen por arriba del canvas fijo y la más nueva siempre queda visible. */
+  justify-content: flex-end;
   gap: 8px;
-  overflow-y: auto;
+  overflow: hidden;
   padding: 2px 2px 10px;
   margin-bottom: 10px;
+}
+.avq-tour .lg .dash-ai-turn {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.avq-tour .lg .dash-ai-turn:empty {
+  display: none;
 }
 .avq-tour .lg .dash-ai-bubble {
   max-width: 82%;
@@ -500,7 +511,7 @@
 }
 .avq-tour .lg .dash-ai-bubble-user {
   align-self: flex-end;
-  background: var(--lg-success, #059669);
+  background: var(--lg-success, #3f850f);
   color: #fff;
   font-weight: 600;
   border-bottom-right-radius: 4px;
@@ -541,7 +552,7 @@
   font: inherit;
   font-size: 12px;
   font-weight: 600;
-  color: var(--lg-success, #059669);
+  color: var(--lg-success, #3f850f);
   background: var(--lg-soft);
   border: 1px solid var(--lg-border);
   border-radius: 999px;
@@ -715,8 +726,8 @@
 }
 /* La reserva del visitante: entra deslizándose cuando la pantalla se activa. */
 .avq-tour .lg .dash-cal-card-new {
-  border-left-color: var(--lg-success, #059669);
-  background: #ecfdf5;
+  border-left-color: var(--lg-success, #3f850f);
+  background: #f2fbe8;
 }
 .avq-tour .lg [data-screen='dash-resv-cal'].active .dash-cal-card-new {
   animation: dash-sale-in 480ms ease 260ms backwards;
@@ -768,13 +779,13 @@
   cursor: pointer;
 }
 .avq-tour .lg .dash-cal-status-show {
-  background: var(--lg-success, #059669);
-  border-color: var(--lg-success, #059669);
+  background: var(--lg-success, #3f850f);
+  border-color: var(--lg-success, #3f850f);
   color: #fff;
 }
 /* Cita atendida: la card celebra el cobro. */
 .avq-tour .lg .dash-cal-card-attended {
-  background: #d1fae5;
+  background: #e4f7cf;
 }
 
 /* ---------- dash-resv-sales: el cobro de la cita en Transacciones ---------- */

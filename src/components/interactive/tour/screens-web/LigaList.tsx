@@ -128,8 +128,8 @@ function WaDialog({ sent }: { sent: boolean }) {
         {sent ? (
           <div className="lg-wa-done">
             <svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="12" cy="12" r="10" fill="#059669" />
-              <path d="m7.8 12.4 2.7 2.7 5.7-5.9" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="12" cy="12" r="10" fill="#7ADD2C" />
+              <path d="m7.8 12.4 2.7 2.7 5.7-5.9" fill="none" stroke="#17300A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             <b>Liga enviada</b>
             <span>Mensaje enviado vía WhatsApp Business · Plantilla aprobada por Meta</span>

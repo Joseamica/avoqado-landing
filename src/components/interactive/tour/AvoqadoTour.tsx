@@ -38,6 +38,7 @@ import { flowName, trackTour, trackTourBeforeNav } from './analytics';
 import PaxPhotoFrame from './PaxPhotoFrame';
 import BrowserFrame from './BrowserFrame';
 import ChapterPanel from './ChapterPanel';
+import TourDoneDialog from './TourDoneDialog';
 import FastPaymentEntry from './screens/FastPaymentEntry';
 import Cobrar from './screens/Cobrar';
 import Review from './screens/Review';
@@ -85,6 +86,11 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
 
   /** Last completed (simulated) payment — feeds the dashboard handoff URL. */
   const [lastPayment, setLastPayment] = useState<PaymentInfo | null>(null);
+
+  /** Completion dialog (founder request): opens once per completed flow;
+   *  dismissing it leaves the panel CTAs as the fallback. */
+  const [doneDialogOpen, setDoneDialogOpen] = useState(false);
+  const doneDialogShownRef = useRef(false);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const screensRef = useRef<HTMLDivElement>(null);
@@ -159,6 +165,25 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
     return () => window.clearTimeout(t);
   }, [engine.done]);
 
+  /* Completion dialog: opens shortly after the flow's final screen so the
+     payoff is seen first. Once per completion — closing it must not re-open
+     on re-renders; a reset/flow-switch re-arms it. The OPEN is a measurable
+     dataLayer event (GTM → GA4 / Google Ads / Meta). */
+  useEffect(() => {
+    if (!engine.done) {
+      setDoneDialogOpen(false);
+      doneDialogShownRef.current = false;
+      return;
+    }
+    if (doneDialogShownRef.current) return;
+    const t = window.setTimeout(() => {
+      doneDialogShownRef.current = true;
+      trackTour('tour_done_dialog_view', { tour_flow: flowName(engine.flow) });
+      setDoneDialogOpen(true);
+    }, 900);
+    return () => window.clearTimeout(t);
+  }, [engine.done, engine.flow]);
+
   /** Shared per-flow WhatsApp src/text so the href (for the <a>) and the
    *  click handler (for the location redirect) never compute two different
    *  URLs. */
@@ -178,23 +203,24 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
 
   /** Handoff: tour completed → contact sales on WhatsApp, routed through the
    *  /wa bridge so the Google Ads whatsapp_click conversion fires (beacon). */
-  const handlePrimaryCta = (e: Parameters<typeof trackTourBeforeNav>[0]) => {
+  const handlePrimaryCta = (e: Parameters<typeof trackTourBeforeNav>[0], origin: 'panel' | 'dialog' = 'panel') => {
     if (!engine.done) {
       e.preventDefault();
       return;
     }
     /* LA conversión de /demo: tour completado → contactar a ventas por WhatsApp.
        Navegación same-tab a /wa → el evento debe salir ANTES del unload
-       (eventCallback + tope 800ms); un push simple aquí nunca llegaba a GA4. */
-    trackTourBeforeNav(e, 'tour_cta_click', { tour_flow: flowName(engine.flow), tour_cta: 'whatsapp' });
+       (eventCallback + tope 800ms); un push simple aquí nunca llegaba a GA4.
+       tour_cta_origin separa el dialog de cierre del panel en GTM/Ads/Meta. */
+    trackTourBeforeNav(e, 'tour_cta_click', { tour_flow: flowName(engine.flow), tour_cta: 'whatsapp', tour_cta_origin: origin });
   };
 
   /** Secondary handoff: tour completed → open the real demo dashboard journey
    *  in a new tab, seeded with the simulated payment (TPV) or the flow's
    *  journey (R/L). */
-  const handleSecondaryCta = () => {
+  const handleSecondaryCta = (origin: 'panel' | 'dialog' = 'panel') => {
     if (!engine.done) return;
-    trackTour('tour_cta_click', { tour_flow: flowName(engine.flow), tour_cta: 'dashboard' });
+    trackTour('tour_cta_click', { tour_flow: flowName(engine.flow), tour_cta: 'dashboard', tour_cta_origin: origin });
     const url =
       engine.flow === 'A' || engine.flow === 'B'
         ? `${DEMO_DASHBOARD_URL}/?demoTour=venta-tpv&amountCents=${Math.round(
@@ -320,6 +346,17 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
           />
         </div>
       </div>
+
+      <TourDoneDialog
+        open={doneDialogOpen}
+        waHref={waHref}
+        onPrimaryCta={e => handlePrimaryCta(e, 'dialog')}
+        onSecondaryCta={() => {
+          handleSecondaryCta('dialog');
+          setDoneDialogOpen(false);
+        }}
+        onClose={() => setDoneDialogOpen(false)}
+      />
     </div>
   );
 }

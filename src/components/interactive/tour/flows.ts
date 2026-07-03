@@ -198,11 +198,11 @@ function tailSteps(): TourStep<StepCtx>[] {
       onTap: ctx => ctx.dispatch({ type: 'selectCard' }),
       tapDelay: 380,
     },
-    { screen: 'detecting', auto: 1950, ch: 3 } /* card slides in (1.4s anim) */,
-    { screen: 'processing', auto: 1300, ch: 3 },
+    { screen: 'detecting', auto: 1400, ch: 3 } /* card slides in (1.4s anim) */,
+    { screen: 'processing', auto: 1100, ch: 3 },
     {
       screen: 'success',
-      auto: 2500 /* duración real del Aprobado en el TPV */,
+      auto: 1800 /* recortado para el demo web (founder QA: el pago→dashboard se sentía como final) */,
       ch: 3,
       onEnter: ctx => {
         ctx.dispatch({ type: 'confetti' });
@@ -214,7 +214,7 @@ function tailSteps(): TourStep<StepCtx>[] {
         });
       },
     },
-    { screen: 'receipt', auto: 2200, ch: 3 },
+    { screen: 'receipt', auto: 1500, ch: 3 },
   ];
 }
 
