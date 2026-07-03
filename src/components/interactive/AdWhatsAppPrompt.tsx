@@ -107,7 +107,17 @@ export default function AdWhatsAppPrompt() {
 		trackGetStarted(e, 'ad_popup', { wa_source: source, wa_page: window.location.pathname });
 	};
 
+	// /demo only: the ad campaign lands here — "try the demo" is a real outcome
+	// worth measuring, distinct from a plain dismissal.
+	const onTryDemoClick = () => {
+		markDone();
+		setOpen(false);
+		pushEvent('whatsapp_prompt_demo_click', { wa_source: source, wa_page: window.location.pathname });
+	};
+
 	if (!mounted || !open) return null;
+
+	const isDemoPage = window.location.pathname.replace(/\/$/, '') === '/demo';
 
 	const waUrl = `/wa?src=ad_${source}&page=${encodeURIComponent(window.location.pathname)}&text=${encodeURIComponent(message)}`;
 
@@ -168,6 +178,15 @@ export default function AdWhatsAppPrompt() {
 				>
 					Empieza ahora
 				</a>
+
+				{isDemoPage && (
+					<button
+						onClick={onTryDemoClick}
+						className="mt-3 flex w-full items-center justify-center rounded-full border border-black/15 px-6 py-4 text-lg font-semibold text-black transition-colors hover:bg-black/5"
+					>
+						Probar el demo interactivo
+					</button>
+				)}
 
 				<button
 					onClick={dismiss}
