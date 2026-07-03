@@ -1,7 +1,8 @@
 /**
  * Chapter panel (Square-style): título + 3 capítulos de venta por flujo,
- * selector de demos agrupado (terminal / navegador) y el CTA final que se
- * desbloquea al completar el tour.
+ * selector de demos agrupado (terminal / navegador) y el CTA de ventas —
+ * SIEMPRE activo (founder: no condicionar el contacto a terminar el demo;
+ * quien quiere hablar con ventas a mitad del tour es el lead más caliente).
  */
 import type { FlowId } from './engine';
 
@@ -14,13 +15,11 @@ interface Props {
   /** Receives the click event — the handler holds the same-tab navigation
    *  until tour_cta_click leaves the page (see trackTourBeforeNav). */
   onPrimaryCta: (e: import('react').MouseEvent<HTMLAnchorElement>) => void;
-  onSecondaryCta: () => void;
 }
 
 interface FlowMeta {
   title: string;
   chapters: readonly { n: number; title: string; detail: string }[];
-  secondaryCta: string;
 }
 
 const TPV_CHAPTERS = [
@@ -35,12 +34,10 @@ const FLOW_META: Record<FlowId, FlowMeta> = {
   A: {
     title: 'Terminal Avoqado',
     chapters: TPV_CHAPTERS,
-    secondaryCta: 'Explorar el dashboard demo →',
   },
   B: {
     title: 'Terminal Avoqado',
     chapters: TPV_CHAPTERS,
-    secondaryCta: 'Explorar el dashboard demo →',
   },
   R: {
     title: 'Reservas en línea',
@@ -50,7 +47,6 @@ const FLOW_META: Record<FlowId, FlowMeta> = {
       { n: 3, title: 'Directo a tu calendario', detail: '— con recordatorios por WhatsApp' },
       { n: 4, title: 'Llegó y cobraste', detail: '— la venta cae sola en tu dashboard' },
     ],
-    secondaryCta: 'Ver tu reserva en el dashboard demo →',
   },
   L: {
     title: 'Ligas de pago',
@@ -59,7 +55,6 @@ const FLOW_META: Record<FlowId, FlowMeta> = {
       { n: 2, title: 'Compártela', detail: '— WhatsApp, QR o link directo' },
       { n: 3, title: 'Cobra en línea', detail: '— y míralo reflejado al instante' },
     ],
-    secondaryCta: 'Ver tu liga de pago en el dashboard demo →',
   },
 };
 
@@ -83,7 +78,7 @@ const FLOW_GROUPS: { label: string; pills: { id: FlowId; label: string }[] }[] =
   },
 ];
 
-export default function ChapterPanel({ chapter, done, flow, onSelectFlow, waHref, onPrimaryCta, onSecondaryCta }: Props) {
+export default function ChapterPanel({ chapter, done, flow, onSelectFlow, waHref, onPrimaryCta }: Props) {
   const meta = FLOW_META[flow];
 
   return (
@@ -124,20 +119,9 @@ export default function ChapterPanel({ chapter, done, flow, onSelectFlow, waHref
       ))}
 
       <div className="cta-group">
-        {done ? (
-          <>
-            <a className="cta-next ready cta-wa" href={waHref} onClick={onPrimaryCta}>
-              {PRIMARY_CTA_LABEL}
-            </a>
-            <button type="button" className="cta-secondary" onClick={onSecondaryCta}>
-              {meta.secondaryCta}
-            </button>
-          </>
-        ) : (
-          <button type="button" className="cta-next" disabled>
-            {PRIMARY_CTA_LABEL}
-          </button>
-        )}
+        <a className="cta-next ready cta-wa" href={waHref} onClick={onPrimaryCta}>
+          {PRIMARY_CTA_LABEL}
+        </a>
       </div>
     </aside>
   );

@@ -1,15 +1,14 @@
 /**
  * TourDoneDialog — completion dialog (founder request): when a flow finishes,
  * the conversion moment stops being "a button quietly unlocked in the panel"
- * and becomes an unmissable dialog: contact sales (WhatsApp via the /wa
- * bridge, so the Google Ads / Meta conversions keep firing) + the demo
- * dashboard link. Dismissible — the panel CTAs stay available behind it.
+ * and becomes an unmissable dialog with a SINGLE ask: contact sales
+ * (WhatsApp via the /wa bridge, so the Google Ads / Meta conversions keep
+ * firing). Dismissible — the panel CTA stays available behind it.
  *
  * Measurement: the OPEN is tracked by the caller (tour_done_dialog_view on
- * the dataLayer → GTM can fan it out to GA4/Ads/Meta); the primary <a>
- * reuses the exact same waHref + trackTourBeforeNav handler as the panel CTA
- * (tour_cta_click{tour_cta:'whatsapp'} beacon before same-tab nav), and the
- * secondary reuses the dashboard handler (tour_cta_click{tour_cta:'dashboard'}).
+ * the dataLayer → GTM can fan it out to GA4/Ads/Meta); the <a> reuses the
+ * exact same waHref + trackTourBeforeNav handler as the panel CTA
+ * (tour_cta_click{tour_cta:'whatsapp'} beacon before same-tab nav).
  *
  * Follows the repo's modal rules (see DemoDialog.tsx): React portal +
  * position:fixed body lock that preserves the scroll position.
@@ -17,16 +16,26 @@
 import { useEffect, useRef, useState } from 'react';
 import type { MouseEvent as ReactMouseEvent } from 'react';
 import { createPortal } from 'react-dom';
+import type { FlowId } from './engine';
 
 interface Props {
   open: boolean;
+  flow: FlowId;
   waHref: string;
   onPrimaryCta: (e: ReactMouseEvent<HTMLAnchorElement>) => void;
-  onSecondaryCta: () => void;
   onClose: () => void;
 }
 
-export default function TourDoneDialog({ open, waHref, onPrimaryCta, onSecondaryCta, onClose }: Props) {
+/** Subtítulo por flujo — el payoff que el visitante ACABA de ver, no un
+ *  genérico (la cadena post-venta solo corre en los flujos TPV). */
+const SUBTITLE: Record<FlowId, string> = {
+  A: 'Una venta disparó inventario, factura, comisiones, puntos y a tu IA — sin capturar nada dos veces.',
+  B: 'Una venta disparó inventario, factura, comisiones, puntos y a tu IA — sin capturar nada dos veces.',
+  R: 'Tu cliente reservó solo y la venta cayó en tu dashboard — sin llamadas ni captura.',
+  L: 'Creaste una liga, la compartiste por WhatsApp y el cobro cayó solo en tu dashboard.',
+};
+
+export default function TourDoneDialog({ open, flow, waHref, onPrimaryCta, onClose }: Props) {
   const [mounted, setMounted] = useState(false);
   const scrollYRef = useRef(0);
 
@@ -91,9 +100,7 @@ export default function TourDoneDialog({ open, waHref, onPrimaryCta, onSecondary
         </div>
 
         <h2 className="mb-2 text-2xl font-bold text-black">Así de fácil. Todo en uno.</h2>
-        <p className="mb-7 text-gray-500">
-          Una venta disparó inventario, factura, comisiones, puntos y a tu IA — sin capturar nada dos veces.
-        </p>
+        <p className="mb-7 text-gray-500">{SUBTITLE[flow]}</p>
 
         <a
           href={waHref}
@@ -109,14 +116,6 @@ export default function TourDoneDialog({ open, waHref, onPrimaryCta, onSecondary
           </svg>
           Contactar a ventas
         </a>
-
-        <button
-          type="button"
-          onClick={onSecondaryCta}
-          className="mb-4 w-full rounded-full border border-black/15 px-6 py-3 font-medium text-black transition-colors hover:bg-black/5"
-        >
-          Explorar el dashboard demo
-        </button>
 
         <button type="button" onClick={onClose} className="text-sm text-gray-400 underline underline-offset-2 hover:text-gray-600">
           Seguir viendo el demo

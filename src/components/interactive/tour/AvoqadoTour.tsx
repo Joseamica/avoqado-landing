@@ -9,9 +9,10 @@
  * The engine lives in engine.ts; step scripts + screen state in flows.ts /
  * flows-web.ts; screens in screens/ (TPV) and screens-web/ (browser).
  *
- * J1 handoff: when a TPV flow completes, the chapter-panel CTA opens the
- * demo-dashboard journey (`?demoTour=venta-tpv`) in a new tab; web flows
- * hand off to the plain live-demo dashboard.
+ * Conversion: contactar a ventas por WhatsApp (vía /wa) es el ÚNICO CTA y
+ * está SIEMPRE activo — panel en desktop, barra flotante en móvil, y el
+ * dialog de cierre al completar un flujo (founder: no condicionar el
+ * contacto a terminar el demo, ni distraer con el dashboard demo).
  */
 import { useEffect, useReducer, useRef, useState } from 'react';
 import './tour.css';
@@ -22,15 +23,7 @@ import './tour-dash.css';
 
 import { useTourEngine } from './engine';
 import type { FlowId } from './engine';
-import {
-  DEMO_BASE_AMOUNT,
-  DEMO_TIP_AMOUNT,
-  INITIAL_TPV_STATE,
-  INITIAL_WEB_STATE,
-  TOUR_FLOWS,
-  tpvReducer,
-  webReducer,
-} from './flows';
+import { INITIAL_TPV_STATE, INITIAL_WEB_STATE, TOUR_FLOWS, tpvReducer, webReducer } from './flows';
 import type { PaymentInfo, StepCtx } from './flows';
 import { INITIAL_CHAIN_STATE, chainReducer } from './flows-chain';
 
@@ -67,10 +60,6 @@ import DashAi from './screens-dash/DashAi';
 
 export type { PaymentInfo };
 
-const DEMO_DASHBOARD_URL: string = (
-  import.meta.env.PUBLIC_DEMO_DASHBOARD_URL || 'https://demo.dashboard.avoqado.io'
-).replace(/\/$/, '');
-
 export interface AvoqadoTourProps {
   /**
    * F2 seam: called once per completed (simulated) payment, when the
@@ -84,11 +73,8 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
   const [web, webDispatch] = useReducer(webReducer, INITIAL_WEB_STATE);
   const [chain, chainDispatch] = useReducer(chainReducer, INITIAL_CHAIN_STATE);
 
-  /** Last completed (simulated) payment — feeds the dashboard handoff URL. */
-  const [lastPayment, setLastPayment] = useState<PaymentInfo | null>(null);
-
   /** Completion dialog (founder request): opens once per completed flow;
-   *  dismissing it leaves the panel CTAs as the fallback. */
+   *  dismissing it leaves the panel CTA as the fallback. */
   const [doneDialogOpen, setDoneDialogOpen] = useState(false);
   const doneDialogShownRef = useRef(false);
 
@@ -119,7 +105,6 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
       webDispatch,
       chainDispatch,
       notifyPayment: info => {
-        setLastPayment(info);
         onPaymentRef.current?.(info);
         trackTour('tour_payment_done', { tour_flow: flowName(helpers.flow) });
       },
@@ -128,7 +113,6 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
       dispatch({ type: 'reset' });
       webDispatch({ type: 'reset' });
       chainDispatch({ type: 'reset' });
-      setLastPayment(null);
     },
     onEvent: e => {
       if (e.type === 'tap') {
@@ -201,35 +185,20 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
       : 'Hola, acabo de probar el demo de ligas de pago de Avoqado y quiero hablar con ventas.';
   const waHref = `/wa?src=${waSrc}&text=${encodeURIComponent(waText)}`;
 
-  /** Handoff: tour completed → contact sales on WhatsApp, routed through the
-   *  /wa bridge so the Google Ads whatsapp_click conversion fires (beacon). */
-  const handlePrimaryCta = (e: Parameters<typeof trackTourBeforeNav>[0], origin: 'panel' | 'dialog' = 'panel') => {
-    if (!engine.done) {
-      e.preventDefault();
-      return;
-    }
-    /* LA conversión de /demo: tour completado → contactar a ventas por WhatsApp.
+  /** Contactar a ventas por WhatsApp vía el bridge /wa — SIEMPRE activo,
+   *  antes o después de completar el demo (founder request). */
+  const handlePrimaryCta = (e: Parameters<typeof trackTourBeforeNav>[0], origin: 'panel' | 'dialog' | 'floating' = 'panel') => {
+    /* LA conversión de /demo: contactar a ventas por WhatsApp.
        Navegación same-tab a /wa → el evento debe salir ANTES del unload
        (eventCallback + tope 800ms); un push simple aquí nunca llegaba a GA4.
-       tour_cta_origin separa el dialog de cierre del panel en GTM/Ads/Meta. */
-    trackTourBeforeNav(e, 'tour_cta_click', { tour_flow: flowName(engine.flow), tour_cta: 'whatsapp', tour_cta_origin: origin });
-  };
-
-  /** Secondary handoff: tour completed → open the real demo dashboard journey
-   *  in a new tab, seeded with the simulated payment (TPV) or the flow's
-   *  journey (R/L). */
-  const handleSecondaryCta = (origin: 'panel' | 'dialog' = 'panel') => {
-    if (!engine.done) return;
-    trackTour('tour_cta_click', { tour_flow: flowName(engine.flow), tour_cta: 'dashboard', tour_cta_origin: origin });
-    const url =
-      engine.flow === 'A' || engine.flow === 'B'
-        ? `${DEMO_DASHBOARD_URL}/?demoTour=venta-tpv&amountCents=${Math.round(
-            (lastPayment?.amount ?? DEMO_BASE_AMOUNT) * 100
-          )}&tipCents=${Math.round((lastPayment?.tip ?? DEMO_TIP_AMOUNT) * 100)}`
-        : engine.flow === 'R'
-        ? `${DEMO_DASHBOARD_URL}/?demoTour=reserva`
-        : `${DEMO_DASHBOARD_URL}/?demoTour=liga`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+       tour_cta_origin separa panel / dialog / barra flotante, y tour_done
+       distingue si contactó a mitad del demo o al terminarlo. */
+    trackTourBeforeNav(e, 'tour_cta_click', {
+      tour_flow: flowName(engine.flow),
+      tour_cta: 'whatsapp',
+      tour_cta_origin: origin,
+      tour_done: engine.done,
+    });
   };
 
   const isTpvFlow = engine.flow === 'A' || engine.flow === 'B';
@@ -342,19 +311,22 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
             onSelectFlow={handleSelectFlow}
             waHref={waHref}
             onPrimaryCta={handlePrimaryCta}
-            onSecondaryCta={handleSecondaryCta}
           />
         </div>
       </div>
 
+      {/* "Contactar a ventas" siempre a la vista en móvil, donde el panel
+          queda bajo el fold durante el tour (en desktop el panel siempre se
+          ve). Oculta en ≥880px vía CSS (.tour-float-cta). */}
+      <a className="tour-float-cta" href={waHref} onClick={e => handlePrimaryCta(e, 'floating')}>
+        Contactar a ventas
+      </a>
+
       <TourDoneDialog
         open={doneDialogOpen}
+        flow={engine.flow}
         waHref={waHref}
         onPrimaryCta={e => handlePrimaryCta(e, 'dialog')}
-        onSecondaryCta={() => {
-          handleSecondaryCta('dialog');
-          setDoneDialogOpen(false);
-        }}
         onClose={() => setDoneDialogOpen(false)}
       />
     </div>
