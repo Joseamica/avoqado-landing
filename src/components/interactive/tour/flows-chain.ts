@@ -2,11 +2,9 @@
  * flows-chain.ts — the post-sale "cadena" chapters (4-5) that run after the
  * TPV receipt, on the desktop BrowserFrame (dashboard mock).
  *
- * PHASE 5 SCOPE: the full 10-step chain is built here — dash-live cascade →
- * dash-inventory → dash-cfdi → dash-commission → dash-loyalty → dash-report →
- * dash-ai (2 questions + final). `chainTail()`'s `dash-report` step now
- * targets `nav-ia` (no longer `final`) and the chain ends on the last
- * `dash-ai` step instead. See
+ * The full chain: dash-live cascade → dash-inventory (B) → dash-cfdi →
+ * dash-commission → dash-loyalty → dash-report → dash-bancos (saldo y
+ * movimientos por cuenta) → dash-ai (4 questions + final). See
  * docs/superpowers/specs/2026-07-02-avoqado-tour-cadena-post-venta.md.
  *
  * `ChainState`/`ChainAction` cover the full chain; every action is now
@@ -23,6 +21,8 @@ export interface ChainState {
   cascadeShown: 0 | 1 | 2 | 3 | 4;
   invCounted: boolean;
   reportCounted: boolean;
+  /** dash-bancos: la venta aparece como movimiento y el saldo cuenta hacia arriba. */
+  bancosIn: boolean;
   aiStage: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
   aiTyping: boolean;
 }
@@ -32,6 +32,7 @@ export const INITIAL_CHAIN_STATE: ChainState = {
   cascadeShown: 0,
   invCounted: false,
   reportCounted: false,
+  bancosIn: false,
   aiStage: 0,
   aiTyping: false,
 };
@@ -42,6 +43,7 @@ export type ChainAction =
   | { type: 'cascadeAll'; total: 3 | 4 }
   | { type: 'invCount' }
   | { type: 'reportCount' }
+  | { type: 'bancosIn' }
   | { type: 'aiAsk1' }
   | { type: 'aiAnswer1' }
   | { type: 'aiAsk2' }
@@ -65,6 +67,8 @@ export function chainReducer(state: ChainState, action: ChainAction): ChainState
       return { ...state, invCounted: true };
     case 'reportCount':
       return { ...state, reportCounted: true };
+    case 'bancosIn':
+      return { ...state, bancosIn: true };
     case 'aiAsk1':
       return { ...state, aiStage: 1 };
     case 'aiAnswer1':
@@ -178,8 +182,8 @@ function dashLiveStepA(): TourStep<StepCtx> {
   };
 }
 
-/** Shared tail from dash-cfdi through dash-report — same for both flows
- *  (commission/loyalty/report scenes don't vary by flow). The last step
+/** Shared tail from dash-cfdi through dash-bancos — same for both flows
+ *  (commission/loyalty/report/bank scenes don't vary by flow). The last step
  *  targets nav-ia — dashAiSteps() picks up from there. */
 function chainTail(): TourStep<StepCtx>[] {
   return [
@@ -207,14 +211,27 @@ function chainTail(): TourStep<StepCtx>[] {
       pos: 'bottom',
       ch: 4,
     },
+    /* Bancos (founder request 2026-07-03): el dinero de la venta se sigue
+       hasta la cuenta — saldo y movimientos sin abrir el portal del banco.
+       Cierra el loop del paso multi-merchant (eligió Cuenta Operativa BBVA)
+       y le da contexto visual a las preguntas por cuenta de la IA. */
     {
       screen: 'dash-report',
+      frame: 'desktop',
+      target: '[data-t="nav-bancos"]',
+      pill: 'Y mira a dónde cayó el dinero',
+      pos: 'bottom',
+      ch: 4,
+      onEnter: ctx => ctx.chainDispatch({ type: 'reportCount' }),
+    },
+    {
+      screen: 'dash-bancos',
       frame: 'desktop',
       target: '[data-t="nav-ia"]',
       pill: 'Ahora pregúntale a tu negocio',
       pos: 'bottom',
       ch: 4,
-      onEnter: ctx => ctx.chainDispatch({ type: 'reportCount' }),
+      onEnter: ctx => ctx.chainDispatch({ type: 'bancosIn' }),
     },
   ];
 }

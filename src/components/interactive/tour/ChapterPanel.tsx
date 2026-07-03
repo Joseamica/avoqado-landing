@@ -26,7 +26,7 @@ const TPV_CHAPTERS = [
   { n: 1, title: 'Cobra en segundos', detail: '— monto directo o desde tu catálogo' },
   { n: 2, title: 'Propina y calificación', detail: '— tu cliente opina en el momento' },
   { n: 3, title: 'Aprobado al instante', detail: '— y reflejado en tu dashboard en vivo' },
-  { n: 4, title: 'Todo se dispara solo', detail: '— inventario, factura, comisiones y puntos' },
+  { n: 4, title: 'Todo se dispara solo', detail: '— inventario, factura, comisiones, puntos y bancos' },
   { n: 5, title: 'Pregúntale a tu negocio', detail: '— tu IA responde con tus datos' },
 ] as const;
 
@@ -51,7 +51,7 @@ const FLOW_META: Record<FlowId, FlowMeta> = {
   L: {
     title: 'Ligas de pago',
     chapters: [
-      { n: 1, title: 'Crea tu liga', detail: '— monto fijo, abierto o un artículo' },
+      { n: 1, title: 'Crea tu liga', detail: '— vende un artículo o servicio, o acepta un pago' },
       { n: 2, title: 'Compártela', detail: '— WhatsApp, QR o link directo' },
       { n: 3, title: 'Cobra en línea', detail: '— y míralo reflejado al instante' },
     ],

@@ -47,7 +47,7 @@ import ResvCheckout from './screens-web/ResvCheckout';
 import ResvDone from './screens-web/ResvDone';
 import LigaList from './screens-web/LigaList';
 import LigaPurpose from './screens-web/LigaPurpose';
-import LigaForm from './screens-web/LigaForm';
+import LigaItem from './screens-web/LigaItem';
 import DashResvCal from './screens-dash/DashResvCal';
 import DashResvSales from './screens-dash/DashResvSales';
 import DashLive from './screens-dash/DashLive';
@@ -56,6 +56,7 @@ import DashCfdi from './screens-dash/DashCfdi';
 import DashCommission from './screens-dash/DashCommission';
 import DashLoyalty from './screens-dash/DashLoyalty';
 import DashReport from './screens-dash/DashReport';
+import DashBancos from './screens-dash/DashBancos';
 import DashAi from './screens-dash/DashAi';
 
 export type { PaymentInfo };
@@ -255,6 +256,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
                     <DashCommission />
                     <DashLoyalty />
                     <DashReport counted={chain.reportCounted} />
+                    <DashBancos bancosIn={chain.bancosIn} />
                     <DashAi aiStage={chain.aiStage} aiTyping={chain.aiTyping} flow={engine.flow === 'A' ? 'A' : 'B'} />
                   </BrowserFrame>
                 </div>
@@ -285,7 +287,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
               >
                 <LigaList saved={web.ligaSaved} waOpen={web.ligaWaOpen} waSent={web.ligaWaSent} paid={web.ligaPaid} toast={web.ligaToast} />
                 <LigaPurpose purpose={web.ligaPurpose} />
-                <LigaForm amountTyped={web.ligaAmount} />
+                <LigaItem itemPicked={web.ligaItemPicked} />
               </BrowserFrame>
             )}
           </div>

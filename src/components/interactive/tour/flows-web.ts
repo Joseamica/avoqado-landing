@@ -4,7 +4,8 @@
  *   Flow R "Reserva en línea": the REAL booking-widget journey on the venue's
  *   page (Estética Bella) — Citas → servicio → día/hora → datos → confirmada.
  *   Flow L "Liga de pago": the REAL dashboard PaymentLinks journey (Estudio
- *   Lumina) — Crear liga → finalidad → monto fijo → guardar → WhatsApp → pago.
+ *   Lumina) — Crear liga → finalidad (vender un artículo o servicio) →
+ *   elegir del catálogo → crear → WhatsApp → pago.
  *
  * Steps follow the same data shape as flows.ts; screen state lives in its own
  * WebState slice so the TPV reducer stays untouched.
@@ -25,7 +26,7 @@ export interface WebState {
   resvShowMarked: boolean;
   /** L — payment links. */
   ligaPurpose: boolean;
-  ligaAmount: string;
+  ligaItemPicked: boolean;
   ligaSaved: boolean;
   ligaWaOpen: boolean;
   ligaWaSent: boolean;
@@ -40,7 +41,7 @@ export const INITIAL_WEB_STATE: WebState = {
   resvStatusOpen: false,
   resvShowMarked: false,
   ligaPurpose: false,
-  ligaAmount: '',
+  ligaItemPicked: false,
   ligaSaved: false,
   ligaWaOpen: false,
   ligaWaSent: false,
@@ -55,7 +56,7 @@ export type WebAction =
   | { type: 'resvOpenStatus' }
   | { type: 'resvMarkShow' }
   | { type: 'ligaSelectPurpose' }
-  | { type: 'ligaTypeAmount'; value: string }
+  | { type: 'ligaPickItem' }
   | { type: 'ligaSave' }
   | { type: 'ligaWaOpen' }
   | { type: 'ligaWaSend' }
@@ -78,8 +79,8 @@ export function webReducer(state: WebState, action: WebAction): WebState {
       return { ...state, resvShowMarked: true };
     case 'ligaSelectPurpose':
       return { ...state, ligaPurpose: true };
-    case 'ligaTypeAmount':
-      return { ...state, ligaAmount: action.value };
+    case 'ligaPickItem':
+      return { ...state, ligaItemPicked: true };
     case 'ligaSave':
       return { ...state, ligaSaved: true, ligaToast: 'Liga de pago creada' };
     case 'ligaWaOpen':
@@ -203,10 +204,13 @@ export const LIGA_STEPS: TourStep<StepCtx>[] = [
     ch: 1,
     tapDelay: 200,
   },
+  /* Founder request 2026-07-03: la liga se crea VENDIENDO un artículo o
+     servicio del catálogo (con su precio ya puesto), no capturando un monto.
+     "Aceptar un pago" sigue visible como la otra opción del wizard. */
   {
     screen: 'l-purpose',
-    target: '[data-t="purpose-pago"]',
-    pill: 'Elige cómo cobrar',
+    target: '[data-t="purpose-articulo"]',
+    pill: 'Vende un artículo o servicio',
     pos: 'right',
     ch: 1,
     onTap: ctx => ctx.webDispatch({ type: 'ligaSelectPurpose' }),
@@ -221,23 +225,18 @@ export const LIGA_STEPS: TourStep<StepCtx>[] = [
     tapDelay: 220,
   },
   {
-    screen: 'l-form',
-    target: '[data-t="liga-amount"]',
-    pill: 'Define el monto',
+    screen: 'l-item',
+    target: '[data-t="item-sesion"]',
+    pill: 'Elige qué vender',
     pos: 'right',
     ch: 1,
-    onTap: ctx => {
-      /* the amount "types itself", mirrored live by the phone preview */
-      ctx.setTimer(() => ctx.webDispatch({ type: 'ligaTypeAmount', value: '3' }), 60);
-      ctx.setTimer(() => ctx.webDispatch({ type: 'ligaTypeAmount', value: '35' }), 220);
-      ctx.setTimer(() => ctx.webDispatch({ type: 'ligaTypeAmount', value: '350' }), 380);
-    },
-    tapDelay: 800,
+    onTap: ctx => ctx.webDispatch({ type: 'ligaPickItem' }),
+    tapDelay: 420,
   },
   {
-    screen: 'l-form',
+    screen: 'l-item',
     target: '[data-t="liga-save"]',
-    pill: 'Guarda tu liga',
+    pill: 'Crea la liga',
     pos: 'bottom',
     ch: 1,
     onTap: ctx => {

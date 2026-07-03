@@ -3,6 +3,8 @@
  * fiel al CreatePaymentLinkDialog real: 4 cards de finalidad (evento/clase
  * con "Muy pronto") + vista previa de teléfono a la derecha.
  * Presentacional puro; `purpose` lo controla el engine del tour.
+ * El tour guía por "Vender un artículo o servicio" (founder request) —
+ * "Aceptar un pago" queda visible como la otra opción del wizard real.
  */
 import LigaPhone from './LigaPhone';
 
@@ -15,7 +17,6 @@ const PURPOSES = [
     id: 'pago',
     title: 'Aceptar un pago',
     desc: 'Cobra un monto fijo o permite que el cliente ingrese su propio monto',
-    target: true,
     icon: (
       <>
         <rect x="1.5" y="4" width="13" height="8" rx="1.5" />
@@ -25,8 +26,9 @@ const PURPOSES = [
   },
   {
     id: 'articulo',
-    title: 'Vender un artículo',
-    desc: 'Vende un producto de tu inventario directamente con una liga',
+    title: 'Vender un artículo o servicio',
+    desc: 'Vende un producto de tu catálogo o un servicio con una liga',
+    target: true,
     icon: (
       <>
         <path d="M2.5 5.5 8 2.8l5.5 2.7v5L8 13.2l-5.5-2.7v-5Z" />
@@ -79,7 +81,7 @@ export default function LigaPurpose({ purpose }: Props) {
                 key={p.id}
                 type="button"
                 className={`lg-purpose${'soon' in p && p.soon ? ' soon' : ''}${'target' in p && p.target && purpose ? ' selected' : ''}`}
-                {...('target' in p && p.target ? { 'data-t': 'purpose-pago' } : {})}
+                {...('target' in p && p.target ? { 'data-t': 'purpose-articulo' } : {})}
               >
                 <span className="lg-purpose-ic">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

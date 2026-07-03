@@ -73,6 +73,13 @@ const ic = {
       <path d="M12.5 13.5v-6" />
     </>
   ),
+  bancos: (
+    <>
+      <path d="M2.5 6.2 8 2.9l5.5 3.3" />
+      <path d="M4 6.8v4.4M8 6.8v4.4M12 6.8v4.4" />
+      <path d="M2.8 13.2h10.4" />
+    </>
+  ),
   ia: (
     <>
       <path d="M8 2.5v2M8 11.5v2M2.5 8h2M11.5 8h2" />
@@ -105,6 +112,7 @@ const ITEMS: NavEntry[] = [
   { id: 'equipo', label: 'Equipo', icon: ic.equipo, dataT: 'nav-equipo' },
   { id: 'clientes', label: 'Clientes', icon: ic.clientes, dataT: 'nav-clientes' },
   { id: 'reportes', label: 'Reportes', icon: ic.reportes, dataT: 'nav-reportes' },
+  { id: 'bancos', label: 'Bancos', icon: ic.bancos, dataT: 'nav-bancos' },
   { id: 'ia', label: 'Asistente IA', icon: ic.ia, dataT: 'nav-ia' },
   { id: 'config', label: 'Configuración', icon: ic.config },
 ];

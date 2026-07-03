@@ -487,6 +487,15 @@
   color: var(--lg-muted);
   line-height: 1.35;
 }
+/* Precio del catálogo en las cards de artículo/servicio (LigaItem) */
+.avq-tour .lg .lg-item-price {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 .avq-tour .lg .lg-soon {
   position: absolute;
   top: 8px;

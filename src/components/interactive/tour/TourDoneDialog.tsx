@@ -29,10 +29,10 @@ interface Props {
 /** Subtítulo por flujo — el payoff que el visitante ACABA de ver, no un
  *  genérico (la cadena post-venta solo corre en los flujos TPV). */
 const SUBTITLE: Record<FlowId, string> = {
-  A: 'Una venta disparó inventario, factura, comisiones, puntos y a tu IA — sin capturar nada dos veces.',
-  B: 'Una venta disparó inventario, factura, comisiones, puntos y a tu IA — sin capturar nada dos veces.',
+  A: 'Una venta disparó inventario, factura, comisiones, puntos, bancos y a tu IA — sin capturar nada dos veces.',
+  B: 'Una venta disparó inventario, factura, comisiones, puntos, bancos y a tu IA — sin capturar nada dos veces.',
   R: 'Tu cliente reservó solo y la venta cayó en tu dashboard — sin llamadas ni captura.',
-  L: 'Creaste una liga, la compartiste por WhatsApp y el cobro cayó solo en tu dashboard.',
+  L: 'Vendiste un servicio con una liga por WhatsApp y el cobro cayó solo en tu dashboard.',
 };
 
 export default function TourDoneDialog({ open, flow, waHref, onPrimaryCta, onClose }: Props) {
