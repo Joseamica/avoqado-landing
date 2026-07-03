@@ -16,9 +16,13 @@ import { RESERVA_STEPS, LIGA_STEPS } from './flows-web';
 import type { WebAction } from './flows-web';
 import { chainSteps } from './flows-chain';
 import type { ChainAction } from './flows-chain';
+import { posSteps } from './flows-pos';
+import type { PosAction } from './flows-pos';
 
 export type { WebAction, WebState } from './flows-web';
 export { INITIAL_WEB_STATE, webReducer } from './flows-web';
+export type { PosAction, PosState } from './flows-pos';
+export { INITIAL_POS_STATE, posReducer } from './flows-pos';
 
 /* ==========================================================
    Demo amounts (single source for steps, screens and the F2 seam)
@@ -34,7 +38,7 @@ export const DEMO_TOTAL_LABEL = '$348.10';
 export interface PaymentInfo {
   amount: number;
   tip: number;
-  flow: 'fast' | 'cobrar';
+  flow: 'fast' | 'cobrar' | 'pos';
 }
 
 /* ==========================================================
@@ -135,6 +139,8 @@ export interface StepCtx extends EngineCtx {
   webDispatch: Dispatch<WebAction>;
   /** Post-sale chain screens (dash-*) mutate their own state slice. */
   chainDispatch: Dispatch<ChainAction>;
+  /** Flow P (punto de venta) mutates its own state slice. */
+  posDispatch: Dispatch<PosAction>;
   notifyPayment: (info: PaymentInfo) => void;
 }
 
@@ -319,4 +325,8 @@ export const TOUR_FLOWS: Record<FlowId, TourStep<StepCtx>[]> = {
 
   /* Flow L — "Liga de pago": create + share a payment link in the dashboard. */
   L: LIGA_STEPS,
+
+  /* Flow P — "Punto de venta": compu + tablet se fusionan en UN POS; el
+     cobro sale a la terminal PAX (iOS/Android/Windows, un solo sistema). */
+  P: posSteps(),
 };

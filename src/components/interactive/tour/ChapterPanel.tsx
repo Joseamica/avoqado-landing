@@ -56,6 +56,15 @@ const FLOW_META: Record<FlowId, FlowMeta> = {
       { n: 3, title: 'Cobra en línea', detail: '— y míralo reflejado al instante' },
     ],
   },
+  P: {
+    title: 'Punto de venta',
+    chapters: [
+      { n: 1, title: 'Un POS en todos tus equipos', detail: '— computadora, tablet o celular' },
+      { n: 2, title: 'Arma la venta del catálogo', detail: '— toca y el ticket se hace solo' },
+      { n: 3, title: 'Cobra con tu terminal', detail: '— el POS y la PAX hablan solos' },
+      { n: 4, title: 'Venta sincronizada', detail: '— en tus equipos y tu dashboard' },
+    ],
+  },
 };
 
 /** Primary CTA label is fixed/shared across all flows (WhatsApp handoff). */
@@ -68,6 +77,10 @@ const FLOW_GROUPS: { label: string; pills: { id: FlowId; label: string }[] }[] =
       { id: 'A', label: 'Pago rápido' },
       { id: 'B', label: 'Cobrar' },
     ],
+  },
+  {
+    label: 'En tu punto de venta',
+    pills: [{ id: 'P', label: 'POS completo' }],
   },
   {
     label: 'En tu navegador',

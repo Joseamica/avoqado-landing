@@ -20,18 +20,23 @@ import './tour-web.css';
 import './tour-resv.css';
 import './tour-liga.css';
 import './tour-dash.css';
+import './tour-pos.css';
 
 import { useTourEngine } from './engine';
 import type { FlowId } from './engine';
-import { INITIAL_TPV_STATE, INITIAL_WEB_STATE, TOUR_FLOWS, tpvReducer, webReducer } from './flows';
+import { INITIAL_POS_STATE, INITIAL_TPV_STATE, INITIAL_WEB_STATE, TOUR_FLOWS, posReducer, tpvReducer, webReducer } from './flows';
 import type { PaymentInfo, StepCtx } from './flows';
 import { INITIAL_CHAIN_STATE, chainReducer } from './flows-chain';
 
 import { flowName, trackTour, trackTourBeforeNav } from './analytics';
 import PaxPhotoFrame from './PaxPhotoFrame';
 import BrowserFrame from './BrowserFrame';
+import PosFrame from './PosFrame';
 import ChapterPanel from './ChapterPanel';
 import TourDoneDialog from './TourDoneDialog';
+import PosIntro from './screens-pos/PosIntro';
+import PosApp from './screens-pos/PosApp';
+import PosDone from './screens-pos/PosDone';
 import FastPaymentEntry from './screens/FastPaymentEntry';
 import Cobrar from './screens/Cobrar';
 import Review from './screens/Review';
@@ -73,6 +78,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
   const [tpv, dispatch] = useReducer(tpvReducer, INITIAL_TPV_STATE);
   const [web, webDispatch] = useReducer(webReducer, INITIAL_WEB_STATE);
   const [chain, chainDispatch] = useReducer(chainReducer, INITIAL_CHAIN_STATE);
+  const [pos, posDispatch] = useReducer(posReducer, INITIAL_POS_STATE);
 
   /** Completion dialog (founder request): opens once per completed flow;
    *  dismissing it leaves the panel CTA as the fallback. */
@@ -105,6 +111,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
       dispatch,
       webDispatch,
       chainDispatch,
+      posDispatch,
       notifyPayment: info => {
         onPaymentRef.current?.(info);
         trackTour('tour_payment_done', { tour_flow: flowName(helpers.flow) });
@@ -114,6 +121,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
       dispatch({ type: 'reset' });
       webDispatch({ type: 'reset' });
       chainDispatch({ type: 'reset' });
+      posDispatch({ type: 'reset' });
     },
     onEvent: e => {
       if (e.type === 'tap') {
@@ -177,12 +185,16 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
       ? 'demo_tour_tpv'
       : engine.flow === 'R'
       ? 'demo_tour_reserva'
+      : engine.flow === 'P'
+      ? 'demo_tour_pos'
       : 'demo_tour_liga';
   const waText =
     engine.flow === 'A' || engine.flow === 'B'
       ? 'Hola, acabo de probar el demo de cobros de Avoqado y quiero hablar con ventas.'
       : engine.flow === 'R'
       ? 'Hola, acabo de probar el demo de reservas de Avoqado y quiero hablar con ventas.'
+      : engine.flow === 'P'
+      ? 'Hola, acabo de probar el demo del punto de venta de Avoqado y quiero hablar con ventas.'
       : 'Hola, acabo de probar el demo de ligas de pago de Avoqado y quiero hablar con ventas.';
   const waHref = `/wa?src=${waSrc}&text=${encodeURIComponent(waText)}`;
 
@@ -259,6 +271,27 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
                     <DashBancos bancosIn={chain.bancosIn} />
                     <DashAi aiStage={chain.aiStage} aiTyping={chain.aiTyping} flow={engine.flow === 'A' ? 'A' : 'B'} />
                   </BrowserFrame>
+                </div>
+              </>
+            ) : engine.flow === 'P' ? (
+              <>
+                <div className={`frame-slot${showDesktop ? ' is-hidden' : ''}`}>
+                  <PosFrame onTpvClick={engine.handleTpvClick}>
+                    <PosIntro merged={pos.merged} />
+                    <PosApp state={pos} />
+                    <PosDone />
+                  </PosFrame>
+                </div>
+                {/* El cobro brinca a la terminal: slot PAX con la cola de pago
+                    de A/B (propina → detecting → procesando → aprobado → recibo). */}
+                <div className={`frame-slot${showDesktop ? '' : ' is-hidden'}`}>
+                  <PaxPhotoFrame onTpvClick={engine.handleTpvClick}>
+                    <Tip selected={tpv.tipSelected} totalLabel={tpv.tipTotalLabel} />
+                    <Detecting />
+                    <Processing />
+                    <SuccessScreen confettiKey={tpv.confettiKey} />
+                    <ReceiptScreen />
+                  </PaxPhotoFrame>
                 </div>
               </>
             ) : engine.flow === 'R' ? (

@@ -33,6 +33,7 @@ const SUBTITLE: Record<FlowId, string> = {
   B: 'Una venta disparó inventario, factura, comisiones, puntos, bancos y a tu IA — sin capturar nada dos veces.',
   R: 'Tu cliente reservó solo y la venta cayó en tu dashboard — sin llamadas ni captura.',
   L: 'Vendiste un servicio con una liga por WhatsApp y el cobro cayó solo en tu dashboard.',
+  P: 'El mismo POS en computadora, tablet o celular — y el cobro salió directo a tu terminal.',
 };
 
 export default function TourDoneDialog({ open, flow, waHref, onPrimaryCta, onClose }: Props) {

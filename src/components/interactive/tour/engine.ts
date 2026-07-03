@@ -27,7 +27,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { MouseEvent as ReactMouseEvent, RefObject } from 'react';
 
-export type FlowId = 'A' | 'B' | 'R' | 'L';
+export type FlowId = 'A' | 'B' | 'R' | 'L' | 'P';
 export type PillPos = 'top' | 'bottom' | 'left' | 'right';
 
 /** Helpers the engine injects into every step callback. */

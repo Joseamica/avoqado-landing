@@ -1,0 +1,733 @@
+/*
+ * tour-pos.css — Flow P "Punto de venta":
+ *  - .posframe: marco de tablet (shell plateado + bezel negro + cámara),
+ *    canvas fijo 700×500 con la misma estrategia de escala/margen que el
+ *    bframe desktop (tour-web.css).
+ *  - p-intro: computadora + tablet lado a lado y su animación de fusión.
+ *  - p-pos: el POS completo (catálogo + ticket + sheet de cobro).
+ *  - p-done: venta registrada/sincronizada.
+ */
+
+/* ==========================================================
+   Tokens (canvas claro, acentos de marca)
+   ========================================================== */
+.avq-tour .pos {
+  --pos-bg: #f6f8f4;
+  --pos-card: #ffffff;
+  --pos-border: rgba(24, 34, 22, 0.11);
+  --pos-fg: #1d231c;
+  --pos-muted: #687464;
+  --pos-soft: #eef2ea;
+  --pos-accent: #7add2c;
+  --pos-accent-deep: #3f850f;
+  --pos-on-accent: #17300a;
+  background: var(--pos-bg);
+  color: var(--pos-fg);
+  font-family: 'DM Sans', system-ui, sans-serif;
+}
+
+/* ==========================================================
+   Marco de tablet — 700×500 interior; 744×544 exterior
+   ========================================================== */
+.avq-tour .posframe-wrap {
+  width: 744px;
+  max-width: 100%;
+}
+.avq-tour .posframe {
+  position: relative;
+  width: 744px;
+  border-radius: 28px;
+  padding: 10px;
+  background: linear-gradient(150deg, #e6e8ea 0%, #b9bec4 55%, #d9dcdf 100%);
+  box-shadow:
+    0 26px 60px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+.avq-tour .posframe-cam {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #1a1d22;
+  box-shadow: inset 0 0 2px rgba(90, 130, 255, 0.7);
+  z-index: 2;
+}
+.avq-tour .posframe-content {
+  position: relative;
+  width: 724px;
+  height: 524px;
+  border: 12px solid #0c0e0c;
+  border-radius: 20px;
+  background: #0c0e0c;
+  overflow: hidden;
+}
+.avq-tour .posframe-content .screens {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--pos-bg, #f6f8f4);
+}
+
+/* Escala con compensación de margen — mismos cortes que el bframe desktop.
+   Exterior: 744×544. */
+@media (max-width: 1340px) {
+  .avq-tour .posframe {
+    transform: scale(0.92);
+    transform-origin: top left;
+    margin-bottom: -44px;
+    margin-right: -60px;
+  }
+}
+@media (max-width: 1180px) {
+  .avq-tour .posframe-wrap {
+    width: auto;
+  }
+  .avq-tour .posframe {
+    transform: scale(0.84);
+    margin-bottom: -87px;
+    margin-right: -119px;
+  }
+}
+@media (max-width: 880px) {
+  .avq-tour .posframe {
+    transform: scale(0.74);
+    transform-origin: top center;
+    margin: 0 -97px -141px;
+  }
+}
+@media (max-width: 760px) {
+  .avq-tour .posframe {
+    transform: scale(0.6);
+    margin: 0 -149px -218px;
+  }
+}
+@media (max-width: 560px) {
+  .avq-tour .posframe {
+    transform: scale(0.46);
+    margin: 0 -201px -294px;
+  }
+}
+@media (max-width: 430px) {
+  .avq-tour .posframe {
+    transform: scale(0.4);
+    margin: 0 -223px -326px;
+  }
+}
+
+/* ==========================================================
+   p-intro — computadora + tablet, y la fusión
+   ========================================================== */
+.avq-tour .p-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 26px 30px;
+  text-align: center;
+}
+.avq-tour .p-intro-kicker {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pos-accent-deep);
+}
+.avq-tour .p-intro-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.avq-tour .p-intro-sub {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--pos-muted);
+}
+
+.avq-tour .pos-devices {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 34px;
+  margin: 14px 0 6px;
+}
+.avq-tour .pdev {
+  position: relative;
+  background: #0e100e;
+  border-radius: 12px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 900ms cubic-bezier(0.6, 0, 0.2, 1),
+    opacity 700ms ease 150ms;
+}
+.avq-tour .pdev-laptop {
+  width: 300px;
+  padding: 8px 8px 10px;
+}
+.avq-tour .pdev-tablet {
+  width: 190px;
+  padding: 14px 8px 12px;
+  border-radius: 16px;
+  background: linear-gradient(150deg, #d7dade, #aeb3b9 60%, #cdd0d4);
+}
+.avq-tour .pdev-tablet .pmini {
+  border-radius: 8px;
+  overflow: hidden;
+}
+.avq-tour .pdev-cam {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #14171b;
+}
+.avq-tour .pdev-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px 6px;
+}
+.avq-tour .pdev-title {
+  font-size: 9px;
+  font-weight: 600;
+  color: #aab4a8;
+}
+.avq-tour .pdev-winbtns {
+  display: inline-flex;
+  gap: 5px;
+}
+.avq-tour .pdev-winbtns i {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: #3a423a;
+}
+.avq-tour .pdev-label {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--pos-muted);
+  white-space: nowrap;
+}
+
+/* mini-POS idéntico dentro de cada dispositivo — ese ES el mensaje */
+.avq-tour .pmini {
+  background: var(--pos-bg);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.avq-tour .pmini-bar {
+  display: block;
+  height: 12px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--pos-border);
+}
+.avq-tour .pmini-body {
+  display: flex;
+  gap: 6px;
+  padding: 7px;
+  height: 120px;
+}
+.avq-tour .pdev-tablet .pmini-body {
+  height: 150px;
+}
+.avq-tour .pmini-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 5px;
+}
+.avq-tour .pdev-tablet .pmini-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+.avq-tour .pmini-card {
+  background: #ffffff;
+  border: 1px solid var(--pos-border);
+  border-radius: 4px;
+}
+.avq-tour .pmini-ticket {
+  width: 34%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: #ffffff;
+  border: 1px solid var(--pos-border);
+  border-radius: 4px;
+  padding: 5px;
+}
+.avq-tour .pmini-ticket span {
+  height: 7px;
+  border-radius: 2px;
+  background: var(--pos-soft);
+}
+.avq-tour .pmini-ticket .pmini-pay {
+  margin-top: auto;
+  height: 12px;
+  background: var(--pos-accent);
+}
+
+/* Fusión: ambos dispositivos viajan al centro, escalan y se funden — el
+   crossfade del engine hacia p-pos remata la ilusión de UNA pantalla. */
+.avq-tour .pos-merging .pdev-laptop {
+  transform: translateX(96px) scale(1.24);
+  opacity: 0;
+}
+.avq-tour .pos-merging .pdev-tablet {
+  transform: translateX(-96px) scale(1.6);
+  opacity: 0;
+}
+.avq-tour .pos-merging .pdev-label {
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+
+.avq-tour .p-intro-cta {
+  margin-top: 18px;
+  padding: 12px 30px;
+  border-radius: 999px;
+  border: none;
+  background: var(--pos-accent);
+  color: var(--pos-on-accent);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.avq-tour .p-intro-cta:active {
+  transform: scale(0.97);
+}
+
+/* ==========================================================
+   p-pos — POS completo
+   ========================================================== */
+.avq-tour .p-pos {
+  display: flex;
+  flex-direction: column;
+}
+.avq-tour .pos-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--pos-card);
+  border-bottom: 1px solid var(--pos-border);
+}
+.avq-tour .pos-venue {
+  font-size: 12px;
+  color: var(--pos-muted);
+}
+.avq-tour .pos-venue b {
+  color: var(--pos-fg);
+  font-size: 13px;
+}
+.avq-tour .pos-topbar-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.avq-tour .pos-shift {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--pos-muted);
+  border: 1px solid var(--pos-border);
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+.avq-tour .pos-sync {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--pos-accent-deep);
+}
+.avq-tour .pos-sync i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--pos-accent);
+  box-shadow: 0 0 8px rgba(122, 221, 44, 0.8);
+}
+
+.avq-tour .pos-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px 14px;
+}
+
+/* --- catálogo --- */
+.avq-tour .pos-catalog {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.avq-tour .pos-cats {
+  display: flex;
+  gap: 6px;
+}
+.avq-tour .pos-cat {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--pos-muted);
+  border: 1px solid var(--pos-border);
+  border-radius: 999px;
+  padding: 4px 11px;
+  background: var(--pos-card);
+}
+.avq-tour .pos-cat.active {
+  background: var(--pos-fg);
+  border-color: var(--pos-fg);
+  color: #ffffff;
+}
+.avq-tour .pos-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 9px;
+}
+.avq-tour .pos-prod {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 3px;
+  padding: 10px 11px;
+  background: var(--pos-card);
+  border: 1.5px solid var(--pos-border);
+  border-radius: 10px;
+  text-align: left;
+  cursor: pointer;
+}
+.avq-tour .pos-prod-ic {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--pos-soft);
+  color: var(--pos-accent-deep);
+  display: grid;
+  place-items: center;
+  margin-bottom: auto;
+}
+.avq-tour .pos-prod b {
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.avq-tour .pos-prod-price {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--pos-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- ticket --- */
+.avq-tour .pos-ticket {
+  width: 226px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  background: var(--pos-card);
+  border: 1px solid var(--pos-border);
+  border-radius: 12px;
+  padding: 11px;
+}
+.avq-tour .pos-ticket-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.avq-tour .pos-ticket-head b {
+  font-size: 13px;
+}
+.avq-tour .pos-ticket-head span {
+  font-size: 10.5px;
+  color: var(--pos-muted);
+}
+.avq-tour .pos-cust {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  border: 1.5px dashed var(--pos-border);
+  border-radius: 9px;
+  background: transparent;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--pos-muted);
+  cursor: pointer;
+  text-align: left;
+}
+.avq-tour .pos-cust.set {
+  border-style: solid;
+  border-color: var(--pos-accent);
+  background: rgba(122, 221, 44, 0.08);
+  color: var(--pos-fg);
+}
+.avq-tour .pos-cust-plus {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--pos-border);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  line-height: 1;
+}
+.avq-tour .pos-cust-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--pos-accent);
+  color: var(--pos-on-accent);
+  font-size: 10px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.avq-tour .pos-cust-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.avq-tour .pos-cust-copy b {
+  font-size: 11.5px;
+}
+.avq-tour .pos-cust-copy span {
+  font-size: 9.5px;
+  color: var(--pos-accent-deep);
+  font-weight: 600;
+}
+
+.avq-tour .pos-lines {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.avq-tour .pos-line {
+  display: none;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11.5px;
+}
+.avq-tour .pos-line.in {
+  display: flex;
+  animation: pos-line-in 320ms ease both;
+}
+.avq-tour .pos-line span {
+  color: var(--pos-fg);
+}
+.avq-tour .pos-line b {
+  font-variant-numeric: tabular-nums;
+}
+@keyframes pos-line-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.avq-tour .pos-empty {
+  margin: auto 0;
+  font-size: 10.5px;
+  color: var(--pos-muted);
+  text-align: center;
+}
+.avq-tour .pos-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-top: 1px solid var(--pos-border);
+  padding-top: 8px;
+  font-size: 12px;
+}
+.avq-tour .pos-total b {
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+.avq-tour .pos-cobrar {
+  padding: 11px;
+  border: none;
+  border-radius: 10px;
+  background: var(--pos-soft);
+  color: var(--pos-muted);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 200ms ease,
+    color 200ms ease;
+}
+.avq-tour .pos-cobrar.ready {
+  background: var(--pos-accent);
+  color: var(--pos-on-accent);
+}
+
+/* --- sheet "¿Cómo cobras?" — siempre montado, gateado por clase --- */
+.avq-tour .pos-sheet-scrim {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(12, 16, 12, 0);
+  visibility: hidden;
+  transition:
+    background 240ms ease,
+    visibility 0s 240ms;
+}
+.avq-tour .pos-sheet-scrim.open {
+  background: rgba(12, 16, 12, 0.42);
+  visibility: visible;
+  transition: background 240ms ease;
+}
+.avq-tour .pos-sheet {
+  width: 380px;
+  max-width: calc(100% - 32px);
+  background: var(--pos-card);
+  border-radius: 16px 16px 0 0;
+  padding: 16px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transform: translateY(102%);
+  transition: transform 300ms cubic-bezier(0.3, 0.8, 0.3, 1);
+}
+.avq-tour .pos-sheet-scrim.open .pos-sheet {
+  transform: translateY(0);
+}
+.avq-tour .pos-sheet-title {
+  font-size: 13.5px;
+  margin-bottom: 4px;
+}
+.avq-tour .pos-method {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border: 1.5px solid var(--pos-border);
+  border-radius: 10px;
+  background: var(--pos-card);
+  cursor: pointer;
+  text-align: left;
+}
+.avq-tour .pos-method.selected {
+  border-color: var(--pos-accent);
+  background: rgba(122, 221, 44, 0.08);
+}
+.avq-tour .pos-method-ic {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--pos-soft);
+  color: var(--pos-accent-deep);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.avq-tour .pos-method-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.avq-tour .pos-method-copy b {
+  font-size: 12.5px;
+}
+.avq-tour .pos-method-copy span {
+  font-size: 10.5px;
+  color: var(--pos-muted);
+}
+
+/* ==========================================================
+   p-done — venta registrada / sincronizada
+   ========================================================== */
+.avq-tour .p-done {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 30px;
+  text-align: center;
+}
+.avq-tour .p-done-check {
+  margin-bottom: 4px;
+}
+.avq-tour .p-done-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.avq-tour .p-done-sub {
+  margin: 0 0 10px;
+  font-size: 12.5px;
+  color: var(--pos-muted);
+}
+.avq-tour .p-done-sub b {
+  color: var(--pos-fg);
+}
+.avq-tour .p-done-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 380px;
+  max-width: 100%;
+}
+.avq-tour .p-done-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--pos-card);
+  border: 1px solid var(--pos-border);
+  border-radius: 10px;
+  padding: 9px 12px;
+  text-align: left;
+}
+.avq-tour .p-done-row b {
+  font-size: 12.5px;
+}
+.avq-tour .p-done-row span {
+  font-size: 11px;
+  color: var(--pos-muted);
+}
+
+/* ==========================================================
+   Reduced motion
+   ========================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .avq-tour .pdev,
+  .avq-tour .pos-sheet,
+  .avq-tour .pos-sheet-scrim {
+    transition: none;
+  }
+  .avq-tour .pos-line.in {
+    animation: none;
+  }
+}

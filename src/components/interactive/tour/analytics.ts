@@ -16,7 +16,7 @@
 import { pushEvent, pushEventBeforeNav } from '../../../lib/gtm';
 import type { MeasuredClickEvent } from '../../../lib/gtm';
 
-export type TourFlowId = 'A' | 'B' | 'R' | 'L';
+export type TourFlowId = 'A' | 'B' | 'R' | 'L' | 'P';
 
 /** Nombres legibles para los reportes (en vez de A/B/R/L). */
 const FLOW_NAMES: Record<TourFlowId, string> = {
@@ -24,6 +24,7 @@ const FLOW_NAMES: Record<TourFlowId, string> = {
   B: 'cobrar',
   R: 'reserva',
   L: 'liga-de-pago',
+  P: 'pos',
 };
 
 export function trackTour(event: string, data: Record<string, unknown> = {}): void {
