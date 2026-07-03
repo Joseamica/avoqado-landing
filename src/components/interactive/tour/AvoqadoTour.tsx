@@ -245,7 +245,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
                     />
                     <Review starsFilled={tpv.starsFilled} />
                     <Tip selected={tpv.tipSelected} totalLabel={tpv.tipTotalLabel} />
-                    <MerchantSelection cardSelected={tpv.cardSelected} />
+                    <MerchantSelection accountSelected={tpv.accountSelected} cardSelected={tpv.cardSelected} />
                     <Detecting />
                     <Processing />
                     <SuccessScreen confettiKey={tpv.confettiKey} />

@@ -759,6 +759,55 @@
   color: var(--avq-primary);
 }
 
+/* Cuenta destino (multi-merchant): filas apiladas nombre + banco. */
+.avq-tour .acct-row {
+  height: 54px;
+}
+.avq-tour .acct-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: left;
+}
+.avq-tour .acct-name {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.avq-tour .acct-bank {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--avq-text2);
+}
+.avq-tour .method-row.selected .acct-bank {
+  color: inherit;
+  opacity: 0.75;
+}
+
+/* Método de pago inline: segmentos de izquierda a derecha. */
+.avq-tour .method-seg {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.avq-tour .method-chip {
+  flex: 1;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--avq-surface);
+  border: 1.5px solid var(--avq-outline);
+  color: var(--avq-text);
+  font-size: 13px;
+  font-weight: 600;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+.avq-tour .method-chip.selected {
+  border-color: var(--avq-primary);
+  background: rgba(232, 232, 232, 0.08);
+  color: var(--avq-primary);
+}
+
 /* ============================================================
    Screen: DetectingCard
    ============================================================ */

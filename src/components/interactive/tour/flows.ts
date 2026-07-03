@@ -50,7 +50,9 @@ export interface TpvState {
   /** Tip screen: 18% card selected + header subtitle updated (Subtotal → Total). */
   tipSelected: boolean;
   tipTotalLabel: string;
-  /** MerchantSelection: "Tarjeta" row selected. */
+  /** MerchantSelection: cuenta destino elegida (Cuenta Operativa · BBVA). */
+  accountSelected: boolean;
+  /** MerchantSelection: "Tarjeta" method selected. */
   cardSelected: boolean;
   /** Increments per approval to (re)play the confetti burst; 0 = none. */
   confettiKey: number;
@@ -70,6 +72,7 @@ export const INITIAL_TPV_STATE: TpvState = {
   starsFilled: 0,
   tipSelected: false,
   tipTotalLabel: `Subtotal: ${DEMO_BASE_LABEL} MXN`,
+  accountSelected: false,
   cardSelected: false,
   confettiKey: 0,
   cobrarView: 'teclado',
@@ -84,6 +87,7 @@ export type TpvAction =
   | { type: 'setAmount'; value: string }
   | { type: 'setStars'; count: number }
   | { type: 'selectTip' }
+  | { type: 'selectAccount' }
   | { type: 'selectCard' }
   | { type: 'confetti' }
   | { type: 'cobrarShowProducts' }
@@ -99,6 +103,8 @@ export function tpvReducer(state: TpvState, action: TpvAction): TpvState {
       return { ...state, starsFilled: action.count };
     case 'selectTip':
       return { ...state, tipSelected: true, tipTotalLabel: `Total: ${DEMO_TOTAL_LABEL} MXN` };
+    case 'selectAccount':
+      return { ...state, accountSelected: true };
     case 'selectCard':
       return { ...state, cardSelected: true };
     case 'confetti':
@@ -173,10 +179,21 @@ function tailSteps(): TourStep<StepCtx>[] {
       tapDelay: 140,
     },
     {
+      /* Multi-merchant (founder request): el dinero cae a la cuenta bancaria
+         que TÚ eliges por venta — diferenciador vs terminales de una cuenta. */
+      screen: 'merchant',
+      target: '[data-t="acct-operativa"]',
+      pill: 'Elige a dónde cae el dinero',
+      pos: 'top',
+      ch: 3,
+      onTap: ctx => ctx.dispatch({ type: 'selectAccount' }),
+      tapDelay: 380,
+    },
+    {
       screen: 'merchant',
       target: '[data-t="seg-card"]',
       pill: 'Cobra con tarjeta',
-      pos: 'top',
+      pos: 'bottom',
       ch: 3,
       onTap: ctx => ctx.dispatch({ type: 'selectCard' }),
       tapDelay: 380,
