@@ -2,5 +2,8 @@
   "name": "avoqado-landing",
   "pages_build_output_dir": "dist",
   "compatibility_date": "2025-03-14",
-  "compatibility_flags": ["nodejs_compat"]
+  "compatibility_flags": ["nodejs_compat"],
+  // Descargas públicas (AvoqadoPOS para Windows). El CI de avoqado-desktop
+  // sobreescribe el objeto en cada push a main; /descargar/windows lo sirve.
+  "r2_buckets": [{ "binding": "DOWNLOADS", "bucket_name": "avoqado-downloads" }]
 }

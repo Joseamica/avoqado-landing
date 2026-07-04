@@ -1,0 +1,101 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Navbar from '../components/layout/Navbar.astro'
+import Footer from '../components/layout/Footer.astro'
+
+const DOWNLOAD_URL = '/descargar/windows'
+const GREEN = '#7ADD2C'
+---
+
+<Layout
+  title="Descargar Avoqado POS para Windows | Avoqado"
+  description="Descarga Avoqado POS para Windows. Punto de venta portable: descarga, descomprime y empieza a cobrar. Sin instalación y sin permisos de administrador."
+>
+  <Navbar />
+
+  <main class="bg-white min-h-screen">
+    <!-- Hero -->
+    <section class="bg-black text-white pt-32 pb-20 px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <p class="text-sm uppercase tracking-widest text-gray-400 mb-4">Avoqado POS · Windows</p>
+        <h1 class="font-light tracking-tight text-4xl md:text-5xl lg:text-6xl mb-6">
+          Tu punto de venta,<br class="hidden md:block" /> listo en un minuto
+        </h1>
+        <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-10">
+          Portable de verdad: descarga, descomprime y cobra. Sin instalación, sin permisos de
+          administrador — incluso corre desde una USB.
+        </p>
+        <a
+          href={DOWNLOAD_URL}
+          class="inline-block px-10 py-4 rounded-full font-medium text-black text-lg transition-transform hover:scale-105"
+          style={`background-color: ${GREEN}`}
+        >
+          Descargar para Windows
+        </a>
+        <p class="text-gray-500 text-sm mt-4">
+          Windows 10/11 · 64 bits · ~100 MB · siempre la última versión
+        </p>
+      </div>
+    </section>
+
+    <!-- Pasos -->
+    <section class="py-16 px-4">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="font-light tracking-tight text-3xl md:text-4xl mb-10 text-center">
+          Tres pasos y estás cobrando
+        </h2>
+        <ol class="grid md:grid-cols-3 gap-8">
+          <li class="border border-gray-200 rounded-2xl p-6">
+            <span class="text-gray-400 text-sm">Paso 1</span>
+            <h3 class="text-xl font-medium mt-1 mb-2">Descarga el ZIP</h3>
+            <p class="text-gray-600">
+              Haz clic en «Descargar para Windows». Obtienes <code>AvoqadoPOS-windows-portable.zip</code>.
+            </p>
+          </li>
+          <li class="border border-gray-200 rounded-2xl p-6">
+            <span class="text-gray-400 text-sm">Paso 2</span>
+            <h3 class="text-xl font-medium mt-1 mb-2">Descomprime la carpeta</h3>
+            <p class="text-gray-600">
+              Clic derecho → «Extraer todo». Puedes dejar la carpeta en el Escritorio o copiarla a una USB.
+            </p>
+          </li>
+          <li class="border border-gray-200 rounded-2xl p-6">
+            <span class="text-gray-400 text-sm">Paso 3</span>
+            <h3 class="text-xl font-medium mt-1 mb-2">Ejecuta AvoqadoPOS.exe</h3>
+            <p class="text-gray-600">
+              Abre la carpeta <code>AvoqadoPOS</code> y haz doble clic en <code>AvoqadoPOS.exe</code>.
+              Inicia sesión con tu cuenta de Avoqado y listo.
+            </p>
+          </li>
+        </ol>
+
+        <!-- Aviso SmartScreen -->
+        <div class="mt-10 bg-gray-50 border border-gray-200 rounded-2xl p-6">
+          <h3 class="text-lg font-medium mb-2">¿Windows te muestra «Windows protegió tu PC»?</h3>
+          <p class="text-gray-600">
+            Es el aviso estándar de SmartScreen para aplicaciones nuevas. Haz clic en
+            <strong>Más información</strong> y luego en <strong>Ejecutar de todas formas</strong>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ayuda -->
+    <section class="py-16 px-4 bg-gray-50">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="font-light tracking-tight text-3xl mb-4">¿Necesitas ayuda?</h2>
+        <p class="text-gray-600 mb-8">
+          Te acompañamos en la instalación y la puesta en marcha de tu punto de venta.
+        </p>
+        <a
+          href="/contact"
+          class="inline-block px-8 py-3 rounded-full font-medium bg-black text-white transition-transform hover:scale-105"
+        >
+          Hablar con nosotros
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
