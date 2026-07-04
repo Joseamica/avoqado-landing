@@ -427,4 +427,156 @@ export const COMPETITORS: Competitor[] = [
       },
     ],
   },
+  {
+    slug: 'flowww',
+    name: 'Flowww',
+    category: 'software para estética y belleza',
+    tagline: 'todo-en-uno hecha para México: POS, terminal, CFDI e IA',
+    intro:
+      'Flowww es un software especializado en medicina estética y belleza, fuerte en agenda, ficha clínica y marketing. Avoqado ataca el mismo giro desde otro ángulo: además de la agenda, te da el punto de venta completo, la terminal de cobro, la facturación CFDI mexicana y una IA que responde con tus datos.',
+    goodAt: [
+      'Especializado en medicina estética: ficha clínica, fotos y seguimiento',
+      'Agenda online 24/7 con reservas de clientes',
+      'Herramientas de marketing y campañas automatizadas',
+    ],
+    whenThemFits:
+      'Si eres una clínica de medicina estética que vive de la ficha clínica, consentimientos y seguimiento médico, Flowww está hecho para eso.',
+    whenUsFits:
+      'Si tu estética, salón o spa además vende productos, cobra en mostrador con terminal, factura CFDI y quiere entender su negocio con IA — Avoqado junta todo eso, hecho para México.',
+    rows: [
+      { feature: 'Punto de venta completo (iOS, Android y Windows)', them: 'partial', note: 'Caja e inventario dentro de su vertical; no es POS multi-giro' },
+      { feature: 'Terminal de cobro con tarjeta propia', them: 'partial', note: 'No lo destaca su información pública' },
+      { feature: 'Citas y reservas en línea', them: true },
+      { feature: 'Inventario en tiempo real', them: true },
+      { feature: 'Facturación CFDI para México', them: 'partial', note: 'Verifica su facturación para México' },
+      { feature: 'Lealtad y puntos para tus clientes', them: 'partial', note: 'Marketing y fidelización según plan' },
+      { feature: 'IA que responde con los datos de tu negocio', them: false, note: 'No lo anuncia su información pública' },
+      { feature: 'Elige a qué cuenta bancaria cae cada venta', them: false, note: 'No lo anuncia su información pública' },
+      { feature: 'Soporte en español por WhatsApp', them: 'partial' },
+    ],
+    faq: [
+      {
+        q: '¿Avoqado maneja ficha de cliente e historial?',
+        a: 'Sí: historial de visitas, servicios, compras y puntos por cliente. Si necesitas ficha clínica médica formal, cuéntanos tu caso por WhatsApp.',
+      },
+      {
+        q: '¿Puedo migrar mis clientes y servicios?',
+        a: 'Sí — los importamos contigo sin costo y tu agenda en línea queda lista el mismo día.',
+      },
+    ],
+  },
+  {
+    slug: 'progym',
+    name: 'ProGym Cloud',
+    category: 'software para gimnasios',
+    tagline: 'que también es punto de venta, con terminal, CFDI e IA',
+    intro:
+      'ProGym Cloud es un software mexicano sólido para gimnasios, especialmente fuerte en control de accesos. Avoqado cubre membresías y cobros recurrentes — y le suma lo que un gym también necesita: punto de venta para el mostrador (suplementos, bebidas), terminal de cobro propia, facturación CFDI e IA.',
+    goodAt: [
+      'Control de accesos avanzado: facial, huella, QR',
+      'Hecho en México, con presencia en Latinoamérica',
+      'Multi-sucursal y app para socios',
+    ],
+    whenThemFits:
+      'Si tu prioridad número uno es el control de acceso con hardware biométrico y torniquetes, ProGym está especializado en eso.',
+    whenUsFits:
+      'Si además de las membresías vendes en mostrador, quieres cobrar con terminal integrada, facturar CFDI, agendar clases y preguntarle a una IA cómo va el negocio — Avoqado lo junta todo.',
+    rows: [
+      { feature: 'Punto de venta completo (iOS, Android y Windows)', them: 'partial', note: 'Enfocado a gestión de gimnasio' },
+      { feature: 'Terminal de cobro con tarjeta propia', them: 'partial', note: 'Pagos en línea vía procesadores externos' },
+      { feature: 'Citas y reservas en línea', them: 'partial', note: 'Enfocado a accesos y membresías' },
+      { feature: 'Inventario en tiempo real', them: 'partial', note: 'No lo destaca su información pública' },
+      { feature: 'Facturación CFDI para México', them: 'partial', note: 'No lo destaca su información pública' },
+      { feature: 'Lealtad y puntos para tus clientes', them: 'partial', note: 'No lo destaca su información pública' },
+      { feature: 'IA que responde con los datos de tu negocio', them: false, note: 'No lo anuncia su información pública' },
+      { feature: 'Elige a qué cuenta bancaria cae cada venta', them: false, note: 'No lo anuncia su información pública' },
+      { feature: 'Soporte en español por WhatsApp', them: 'partial' },
+    ],
+    faq: [
+      {
+        q: '¿Avoqado maneja membresías y cobros recurrentes?',
+        a: 'Sí: membresías, clases, cobros recurrentes y recordatorios — y además el punto de venta del mostrador en el mismo sistema.',
+      },
+      {
+        q: '¿Y el control de acceso?',
+        a: 'Manejamos el registro de asistencia y clases. Si tu operación exige torniquetes biométricos, cuéntanos tu caso por WhatsApp y te decimos con honestidad si te cubrimos.',
+      },
+    ],
+  },
+  {
+    slug: 'koibox',
+    name: 'Koibox',
+    category: 'software para salones y estéticas',
+    tagline: 'hecha para México: con CFDI, terminal propia e IA de negocio',
+    intro:
+      'Koibox es un software de gestión para salones y estéticas con buena agenda y herramientas de marketing. Avoqado juega en el mismo giro con una diferencia de fondo: está hecho para México — facturación CFDI, terminal de cobro propia, soporte local — y con una IA que responde preguntas de tu negocio.',
+    goodAt: [
+      'Agenda con reservas en línea y recordatorios',
+      'Marketing y fidelización: puntos, tarjetas regalo, campañas',
+      'Multi-dispositivo (PC, Android, iOS) con integración de WhatsApp',
+    ],
+    whenThemFits:
+      'Si tu foco es el marketing y la fidelización dentro de su ecosistema y no necesitas facturación mexicana integrada, Koibox cumple bien.',
+    whenUsFits:
+      'Si operas en México y quieres CFDI en un click, cobrar con terminal integrada, controlar inventario en serio y una IA con tus datos — Avoqado es la opción local todo-en-uno.',
+    rows: [
+      { feature: 'Punto de venta completo (iOS, Android y Windows)', them: 'partial', note: 'Caja dentro de su vertical de belleza' },
+      { feature: 'Terminal de cobro con tarjeta propia', them: 'partial', note: 'No lo destaca su información pública' },
+      { feature: 'Citas y reservas en línea', them: true },
+      { feature: 'Inventario en tiempo real', them: true },
+      { feature: 'Facturación CFDI para México', them: 'partial', note: 'Verifica su facturación para México' },
+      { feature: 'Lealtad y puntos para tus clientes', them: true },
+      { feature: 'IA que responde con los datos de tu negocio', them: 'partial', note: 'Chatbot de atención; sin IA de negocio según su información pública' },
+      { feature: 'Elige a qué cuenta bancaria cae cada venta', them: false, note: 'No lo anuncia su información pública' },
+      { feature: 'Soporte en español por WhatsApp', them: 'partial', note: 'Integración de WhatsApp para clientes' },
+    ],
+    faq: [
+      {
+        q: '¿Avoqado también tiene puntos y fidelización?',
+        a: 'Sí — puntos por venta, historial por cliente y recordatorios. Y tus clientes pueden autofacturarse solos desde su recibo.',
+      },
+      {
+        q: '¿Me ayudan a migrar?',
+        a: 'Sí, importamos tus clientes y servicios sin costo y tu agenda queda lista el mismo día.',
+      },
+    ],
+  },
+  {
+    slug: 'reservo',
+    name: 'Reservo',
+    category: 'agenda para clínicas y salones',
+    tagline: 'mexicana y todo-en-uno: POS, terminal, CFDI, lealtad e IA',
+    intro:
+      'Reservo es un software chileno con buena agenda en línea, fuerte en clínicas y centros de salud. Avoqado es la opción hecha para México: además de la agenda, tienes punto de venta completo, terminal de cobro propia, facturación CFDI y una IA que te responde del negocio.',
+    goodAt: [
+      'Agenda en línea 24/7 con confirmaciones y pagos',
+      'Fuerte en salud: ficha clínica electrónica',
+      'Presencia en varios países de Latinoamérica',
+    ],
+    whenThemFits:
+      'Si eres una clínica o consulta que necesita ficha clínica electrónica formal como centro de la operación, Reservo está orientado a eso.',
+    whenUsFits:
+      'Si tu estética, spa o salón opera en México y quiere agenda + mostrador + terminal + CFDI + lealtad + IA en un solo sistema local, Avoqado te queda mejor.',
+    rows: [
+      { feature: 'Punto de venta completo (iOS, Android y Windows)', them: 'partial', note: 'Enfocado a agenda y gestión clínica' },
+      { feature: 'Terminal de cobro con tarjeta propia', them: 'partial', note: 'Pagos en línea; verifica esquema y comisiones' },
+      { feature: 'Citas y reservas en línea', them: true },
+      { feature: 'Inventario en tiempo real', them: 'partial', note: 'Venta de productos; inventario no es su foco' },
+      { feature: 'Facturación CFDI para México', them: 'partial', note: 'Verifica su facturación para México' },
+      { feature: 'Lealtad y puntos para tus clientes', them: true },
+      { feature: 'IA que responde con los datos de tu negocio', them: false, note: 'No lo anuncia su información pública' },
+      { feature: 'Elige a qué cuenta bancaria cae cada venta', them: false, note: 'No lo anuncia su información pública' },
+      { feature: 'Soporte en español por WhatsApp', them: 'partial' },
+    ],
+    faq: [
+      {
+        q: '¿Avoqado cobra comisión por mis reservas?',
+        a: 'No — tus clientes reservan desde tu página, Google o redes, y la cita cae directo a tu calendario sin comisión.',
+      },
+      {
+        q: '¿Puedo migrar mis clientes y agenda?',
+        a: 'Sí, los importamos contigo sin costo y tu widget de reservas queda listo el mismo día.',
+      },
+    ],
+  },
 ];
