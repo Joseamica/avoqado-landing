@@ -24,6 +24,7 @@ const industries = [
 
 const resources = [
   { name: 'Centro de Ayuda', desc: 'Tutoriales y documentacion', href: '/help', icon: 'help' },
+  { name: 'Descargas', desc: 'Avoqado POS para Windows', href: '/descargar', icon: 'download' },
   { name: 'Precios', desc: 'Planes y costos transparentes', href: '/pricing', icon: 'tag' },
   { name: 'Blog', desc: 'Noticias, guias y consejos', href: '/blog', icon: 'book' },
   { name: 'API y Desarrolladores', desc: 'SDK, webhooks e integraciones', href: '/developers', icon: 'code' },
@@ -79,6 +80,7 @@ function IndustryIcon({ type, className }: { type: string; className?: string })
     case 'book': return <svg {...props} className={cn}><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>;
     case 'help': return <svg {...props} className={cn}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>;
     case 'code': return <svg {...props} className={cn}><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>;
+    case 'download': return <svg {...props} className={cn}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>;
     default: return null;
   }
 }
