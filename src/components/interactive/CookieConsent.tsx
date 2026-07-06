@@ -11,6 +11,7 @@ export default function CookieConsent() {
   const [isPrimary, setIsPrimary] = useState(false);
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [hasFloatingCta, setHasFloatingCta] = useState(false);
   const [preferences, setPreferences] = useState<CookiePreferences>({
     necessary: true,
     analytics: false,
@@ -29,6 +30,14 @@ export default function CookieConsent() {
     const consent = localStorage.getItem('cookieConsent');
     if (!consent) {
       setShowBanner(true);
+    }
+
+    // Pages with their own fixed bottom CTA (e.g. /demo's floating "Contactar
+    // a ventas" pill) mark <body data-floating-cta="true"> server-side — read
+    // synchronously so there's no hydration race. Lifts the banner above the
+    // pill on mobile instead of covering it (was blocking "Aceptar todo").
+    if (document.body.dataset.floatingCta === 'true') {
+      setHasFloatingCta(true);
     }
 
     return () => {
@@ -78,7 +87,11 @@ export default function CookieConsent() {
   return (
     <>
       {/* Cookie Banner */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 border-t border-gray-800 shadow-2xl">
+      <div
+        className={`fixed left-0 right-0 z-50 bg-gray-900 border-t border-gray-800 shadow-2xl bottom-0 ${
+          hasFloatingCta ? 'max-[879px]:bottom-[calc(72px+env(safe-area-inset-bottom,0px))]' : ''
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           {!showSettings ? (
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -106,7 +119,7 @@ export default function CookieConsent() {
                 </button>
                 <button
                   onClick={acceptAll}
-                  className="px-6 py-2 text-sm bg-[--color-avoqado-green] text-white rounded-lg hover:opacity-90 transition-opacity font-semibold"
+                  className="px-6 py-2 text-sm bg-avoqado-green text-white rounded-lg hover:opacity-90 transition-opacity font-semibold"
                 >
                   Aceptar todo
                 </button>
@@ -145,7 +158,7 @@ export default function CookieConsent() {
                       type="checkbox"
                       checked={true}
                       disabled
-                      className="w-5 h-5 text-[--color-avoqado-green] bg-gray-700 border-gray-600 rounded focus:ring-2 focus:ring-[--color-avoqado-green]"
+                      className="w-5 h-5 text-avoqado-green bg-gray-700 border-gray-600 rounded focus:ring-2 focus:ring-avoqado-green"
                     />
                   </div>
                 </div>
@@ -165,7 +178,7 @@ export default function CookieConsent() {
                       type="checkbox"
                       checked={preferences.analytics}
                       onChange={(e) => setPreferences({ ...preferences, analytics: e.target.checked })}
-                      className="w-5 h-5 text-[--color-avoqado-green] bg-gray-700 border-gray-600 rounded focus:ring-2 focus:ring-[--color-avoqado-green] cursor-pointer"
+                      className="w-5 h-5 text-avoqado-green bg-gray-700 border-gray-600 rounded focus:ring-2 focus:ring-avoqado-green cursor-pointer"
                     />
                   </div>
                 </div>
@@ -185,7 +198,7 @@ export default function CookieConsent() {
                       type="checkbox"
                       checked={preferences.marketing}
                       onChange={(e) => setPreferences({ ...preferences, marketing: e.target.checked })}
-                      className="w-5 h-5 text-[--color-avoqado-green] bg-gray-700 border-gray-600 rounded focus:ring-2 focus:ring-[--color-avoqado-green] cursor-pointer"
+                      className="w-5 h-5 text-avoqado-green bg-gray-700 border-gray-600 rounded focus:ring-2 focus:ring-avoqado-green cursor-pointer"
                     />
                   </div>
                 </div>
@@ -200,7 +213,7 @@ export default function CookieConsent() {
                 </button>
                 <button
                   onClick={savePreferences}
-                  className="px-6 py-2 text-sm bg-[--color-avoqado-green] text-white rounded-lg hover:opacity-90 transition-opacity font-semibold"
+                  className="px-6 py-2 text-sm bg-avoqado-green text-white rounded-lg hover:opacity-90 transition-opacity font-semibold"
                 >
                   Guardar preferencias
                 </button>
