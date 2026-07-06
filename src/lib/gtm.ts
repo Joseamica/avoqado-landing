@@ -132,6 +132,27 @@ export function pushEventBeforeNav(e: MeasuredClickEvent, event: string, params:
 	window.setTimeout(go, 800);
 }
 
+/**
+ * Detect whether the visitor arrived from a paid ad, and from which platform.
+ * Auto-detects the click IDs / utm params the ad platforms add, plus a manual
+ * `?wa=1` override (with optional `?src=`) for testing or explicit campaigns.
+ *
+ * Same signals `middleware.ts` uses to auto-grant Consent Mode defaults for ad
+ * traffic (hybrid consent) — keep both in sync if the detection rules change.
+ */
+export function detectAdVisitor(params: URLSearchParams): { ad: boolean; source: string } {
+	if (params.get('wa') === '1') return { ad: true, source: params.get('src') || 'manual' };
+	if (params.get('gclid') || params.get('gbraid') || params.get('wbraid')) return { ad: true, source: 'googleads' };
+	if (params.get('fbclid')) return { ad: true, source: 'meta' };
+	if (params.get('li_fat_id')) return { ad: true, source: 'linkedin' };
+	if (params.get('msclkid')) return { ad: true, source: 'microsoft' };
+	const medium = (params.get('utm_medium') || '').toLowerCase();
+	if (['cpc', 'ppc', 'paid', 'paidsocial', 'paid_social', 'display'].includes(medium)) {
+		return { ad: true, source: params.get('utm_source') || 'utm' };
+	}
+	return { ad: false, source: '' };
+}
+
 export interface ConsentChoice {
 	analytics: boolean;
 	marketing: boolean;

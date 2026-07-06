@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { updateConsent } from '../../lib/gtm';
+import { updateConsent, detectAdVisitor } from '../../lib/gtm';
 
 interface CookiePreferences {
   necessary: boolean;
@@ -29,7 +29,20 @@ export default function CookieConsent() {
 
     const consent = localStorage.getItem('cookieConsent');
     if (!consent) {
-      setShowBanner(true);
+      // Pages that land ad traffic (e.g. /demo) mark <body
+      // data-skip-consent-for-ads="true"> server-side. For that traffic,
+      // middleware.ts already auto-grants Consent Mode defaults (hybrid
+      // consent — see reference_gtm_api_access) BEFORE this banner ever
+      // mounts, so asking again here is pure friction with no compliance
+      // upside: tracking is already flowing. Organic/direct visitors (no ad
+      // click id/utm) still see the full banner — their consent is genuinely
+      // undecided. Nothing is written to localStorage here — this only skips
+      // the banner for THIS page load, it doesn't preset a site-wide choice.
+      const skipForAds = document.body.dataset.skipConsentForAds === 'true';
+      const { ad } = skipForAds ? detectAdVisitor(new URLSearchParams(window.location.search)) : { ad: false };
+      if (!(skipForAds && ad)) {
+        setShowBanner(true);
+      }
     }
 
     // Pages with their own fixed bottom CTA (e.g. /demo's floating "Contactar
