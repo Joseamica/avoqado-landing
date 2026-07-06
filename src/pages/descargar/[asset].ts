@@ -9,9 +9,14 @@ const ASSETS: Record<string, { key: string; contentType: string; inline?: boolea
   windows: { key: 'AvoqadoPOS-Setup.exe', contentType: 'application/octet-stream' },
   // App-image portable (USB, sin instalación).
   'windows-portable': { key: 'AvoqadoPOS-windows-portable.zip', contentType: 'application/zip' },
-  // Manifiesto de builds (lo publica el CI de avoqado-desktop en cada push); el POS
-  // instalado lo consulta cada hora para avisar que hay versión nueva.
+  // Instalador .dmg firmado + notarizado (Apple Silicon) — arrastrar a Aplicaciones.
+  mac: { key: 'AvoqadoPOS.dmg', contentType: 'application/x-apple-diskimage' },
+  // Manifiestos de builds (los publica el CI de avoqado-desktop en cada push); el POS
+  // instalado consulta el suyo cada hora para avisar que hay versión nueva. Separados
+  // por plataforma porque el mismo jvmMain corre en ambos SO — Windows no debe
+  // enterarse del build de Mac ni viceversa.
   'version.json': { key: 'version.json', contentType: 'application/json; charset=utf-8', inline: true },
+  'version-mac.json': { key: 'version-mac.json', contentType: 'application/json; charset=utf-8', inline: true },
 };
 
 export const GET: APIRoute = async ({ params, locals }) => {

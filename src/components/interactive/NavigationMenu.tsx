@@ -24,7 +24,7 @@ const industries = [
 
 const resources = [
   { name: 'Centro de Ayuda', desc: 'Tutoriales y documentacion', href: '/help', icon: 'help' },
-  { name: 'Descargas', desc: 'Avoqado POS para Windows', href: '/descargar', icon: 'download' },
+  { name: 'Descargas', desc: 'Avoqado POS para Windows y Mac', href: '/descargar', icon: 'download' },
   { name: 'Precios', desc: 'Planes y costos transparentes', href: '/pricing', icon: 'tag' },
   { name: 'Blog', desc: 'Noticias, guias y consejos', href: '/blog', icon: 'book' },
   { name: 'API y Desarrolladores', desc: 'SDK, webhooks e integraciones', href: '/developers', icon: 'code' },
