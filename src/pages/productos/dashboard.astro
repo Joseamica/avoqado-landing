@@ -4,12 +4,8 @@ import Navbar from '../../components/layout/Navbar.astro';
 import Footer from '../../components/layout/Footer.astro';
 import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 
-const BLUE = 'oklch(0.72 0.14 240)';
-const BLUE_DEEP = 'oklch(0.50 0.15 240)'; // acento azul legible sobre blanco (eyebrows en secciones claras)
-const GREEN = '#7ADD2C';
-const AMBER = 'oklch(0.78 0.14 75)';
-const RED = 'oklch(0.65 0.20 25)';
-const INDIGO = 'oklch(0.68 0.15 290)';
+// Paleta: tokens compartidos de src/styles/global.css (--color-product-*,
+// --color-alert-*, --color-mockup-*, --color-neutral-*). Sin consts locales.
 ---
 
 <!doctype html>
@@ -36,17 +32,17 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 					<div>
 						<div class="flex items-center gap-3 mb-6">
 							<span class="text-5xl font-light text-black/10">01</span>
-							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${BLUE_DEEP};`}>Dashboard Web</span>
+							<span class="text-xs uppercase tracking-widest font-semibold" style="color: var(--color-product-dashboard-deep);">Dashboard Web</span>
 						</div>
 						<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-black mb-8">
 							31 modulos.<br/>
 							Un solo panel.
 						</h1>
-						<p class="text-lg md:text-xl text-gray-600 max-w-xl leading-relaxed mb-10">
+						<p class="text-lg md:text-xl text-neutral-600 max-w-xl leading-relaxed mb-10">
 							Reportes detallados, ligas de pago, gestion remota de terminales, CRM con programa de lealtad, asistente de IA y mucho mas — todo conectado en tiempo real.
 						</p>
 						<div class="flex flex-col sm:flex-row gap-4">
-							<a href="https://avoqado.io/demo" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${BLUE};`}>
+							<a href="https://avoqado.io/demo" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style="background: var(--color-product-dashboard);">
 								Probar demo gratis
 							</a>
 							<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 border border-black/15 text-black font-medium rounded-full hover:bg-black/5 hover:-translate-y-0.5 transition-all duration-200">
@@ -59,52 +55,52 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 					<div>
 						<div aria-hidden="true" class="rounded-xl overflow-hidden lg:[transform:perspective(1200px)_rotateY(-8deg)_rotateX(2deg)]" style="box-shadow: 0 25px 80px rgba(0,0,0,0.4);">
 							<!-- Browser chrome -->
-							<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.282 0.005 155);">
+							<div class="flex items-center gap-2 px-4 py-2.5" style="background: var(--color-mockup-chrome);">
 								<div class="flex gap-1.5">
 									<div class="w-3 h-3 rounded-full" style="background: #FF5F57;"></div>
 									<div class="w-3 h-3 rounded-full" style="background: #FEBC2E;"></div>
 									<div class="w-3 h-3 rounded-full" style="background: #28C840;"></div>
 								</div>
-								<div class="flex-1 flex items-center gap-1.5 mx-3 px-3 py-1 rounded-md" style="background: oklch(0.206 0.005 155);">
-									<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="oklch(0.45 0.005 155)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-									<span class="text-[10px]" style="color: oklch(0.45 0.005 155);">dashboard.avoqado.io</span>
+								<div class="flex-1 flex items-center gap-1.5 mx-3 px-3 py-1 rounded-md" style="background: var(--color-mockup-dim);">
+									<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color: var(--color-mockup-ink-faint);" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+									<span class="text-[10px]" style="color: var(--color-mockup-ink-faint);">dashboard.avoqado.io</span>
 								</div>
 							</div>
 							<!-- Dashboard screen -->
-							<div class="flex" style="background: oklch(0.13 0.005 155); min-height: 340px;">
+							<div class="flex" style="background: var(--color-mockup-bg); min-height: 340px;">
 								<!-- Sidebar — en moviles se oculta para que el contenido respire -->
-								<div class="hidden sm:block w-[140px] shrink-0 border-r py-4 px-3 space-y-1" style="border-color: oklch(0.244 0.005 155);">
-									<div class="flex items-center gap-2 px-2 py-1.5 rounded-md" style={`background: oklch(0.244 0.055 240);`}>
-										<div class="w-3.5 h-3.5 rounded" style={`background: ${BLUE}; opacity: 0.92;`}></div>
-										<span class="text-[9px] font-medium" style={`color: ${BLUE};`}>Overview</span>
+								<div class="hidden sm:block w-[140px] shrink-0 border-r py-4 px-3 space-y-1" style="border-color: var(--color-mockup-raised);">
+									<div class="flex items-center gap-2 px-2 py-1.5 rounded-md" style="background: var(--color-product-dashboard-tint);">
+										<div class="w-3.5 h-3.5 rounded" style="background: var(--color-product-dashboard); opacity: 0.92;"></div>
+										<span class="text-[9px] font-medium" style="color: var(--color-product-dashboard);">Overview</span>
 									</div>
 									<div class="flex items-center gap-2 px-2 py-1.5">
-										<div class="w-3.5 h-3.5 rounded" style="background: oklch(0.33 0.005 155);"></div>
-										<span class="text-[9px] text-gray-500">Ventas</span>
+										<div class="w-3.5 h-3.5 rounded" style="background: var(--color-mockup-muted);"></div>
+										<span class="text-[9px] text-neutral-500">Ventas</span>
 									</div>
 									<div class="flex items-center gap-2 px-2 py-1.5">
-										<div class="w-3.5 h-3.5 rounded" style="background: oklch(0.33 0.005 155);"></div>
-										<span class="text-[9px] text-gray-500">Ordenes</span>
+										<div class="w-3.5 h-3.5 rounded" style="background: var(--color-mockup-muted);"></div>
+										<span class="text-[9px] text-neutral-500">Ordenes</span>
 									</div>
 									<div class="flex items-center gap-2 px-2 py-1.5">
-										<div class="w-3.5 h-3.5 rounded" style="background: oklch(0.33 0.005 155);"></div>
-										<span class="text-[9px] text-gray-500">Productos</span>
+										<div class="w-3.5 h-3.5 rounded" style="background: var(--color-mockup-muted);"></div>
+										<span class="text-[9px] text-neutral-500">Productos</span>
 									</div>
 									<div class="flex items-center gap-2 px-2 py-1.5">
-										<div class="w-3.5 h-3.5 rounded" style="background: oklch(0.33 0.005 155);"></div>
-										<span class="text-[9px] text-gray-500">Clientes</span>
+										<div class="w-3.5 h-3.5 rounded" style="background: var(--color-mockup-muted);"></div>
+										<span class="text-[9px] text-neutral-500">Clientes</span>
 									</div>
 									<div class="flex items-center gap-2 px-2 py-1.5">
-										<div class="w-3.5 h-3.5 rounded" style="background: oklch(0.33 0.005 155);"></div>
-										<span class="text-[9px] text-gray-500">Terminales</span>
+										<div class="w-3.5 h-3.5 rounded" style="background: var(--color-mockup-muted);"></div>
+										<span class="text-[9px] text-neutral-500">Terminales</span>
 									</div>
 									<div class="flex items-center gap-2 px-2 py-1.5">
-										<div class="w-3.5 h-3.5 rounded" style="background: oklch(0.33 0.005 155);"></div>
-										<span class="text-[9px] text-gray-500">Ligas de pago</span>
+										<div class="w-3.5 h-3.5 rounded" style="background: var(--color-mockup-muted);"></div>
+										<span class="text-[9px] text-neutral-500">Ligas de pago</span>
 									</div>
 									<div class="flex items-center gap-2 px-2 py-1.5">
-										<div class="w-3.5 h-3.5 rounded" style="background: oklch(0.33 0.005 155);"></div>
-										<span class="text-[9px] text-gray-500">Empleados</span>
+										<div class="w-3.5 h-3.5 rounded" style="background: var(--color-mockup-muted);"></div>
+										<span class="text-[9px] text-neutral-500">Empleados</span>
 									</div>
 								</div>
 								<!-- Main content -->
@@ -112,60 +108,60 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 									<!-- Header -->
 									<div class="flex items-center justify-between mb-4">
 										<span class="text-[11px] text-white font-medium">Overview</span>
-										<span class="text-[9px] px-2 py-0.5 rounded" style="background: oklch(0.244 0.005 155); color: oklch(0.45 0.005 155);">Hoy</span>
+										<span class="text-[9px] px-2 py-0.5 rounded" style="background: var(--color-mockup-raised); color: var(--color-mockup-ink-faint);">Hoy</span>
 									</div>
 									<!-- KPI Cards -->
 									<div class="grid grid-cols-3 gap-2 mb-4">
-										<div class="rounded-lg p-3" style={`background: oklch(0.206 0.055 240);`}>
-											<div class="text-[8px] mb-1" style={`color: ${BLUE}; opacity: 0.7;`}>Ventas</div>
+										<div class="rounded-lg p-3" style="background: var(--color-product-dashboard-tint);">
+											<div class="text-[8px] mb-1" style="color: var(--color-product-dashboard); opacity: 0.7;">Ventas</div>
 											<div class="text-base font-light text-white">$24,850</div>
-											<div class="text-[8px] mt-0.5" style={`color: ${BLUE};`}>+12%</div>
+											<div class="text-[8px] mt-0.5" style="color: var(--color-product-dashboard);">+12%</div>
 										</div>
-										<div class="rounded-lg p-3" style="background: oklch(0.206 0.055 155);">
+										<div class="rounded-lg p-3" style="background: var(--color-product-tpv-tint);">
 											<div class="text-[8px] text-avoqado-green mb-1" style="opacity: 0.7;">Ordenes</div>
 											<div class="text-base font-light text-white">127</div>
 											<div class="text-[8px] text-avoqado-green mt-0.5">+8%</div>
 										</div>
-										<div class="rounded-lg p-3" style="background: oklch(0.206 0.055 75);">
-											<div class="text-[8px] mb-1" style={`color: ${AMBER}; opacity: 0.7;`}>Ticket prom.</div>
+										<div class="rounded-lg p-3" style="background: var(--color-alert-amber-tint);">
+											<div class="text-[8px] mb-1" style="color: var(--color-alert-amber); opacity: 0.7;">Ticket prom.</div>
 											<div class="text-base font-light text-white">$195</div>
-											<div class="text-[8px] mt-0.5" style={`color: ${AMBER};`}>+3%</div>
+											<div class="text-[8px] mt-0.5" style="color: var(--color-alert-amber);">+3%</div>
 										</div>
 									</div>
 									<!-- Bar Chart -->
-									<div class="rounded-lg p-3" style="background: oklch(0.187 0.005 155);">
+									<div class="rounded-lg p-3" style="background: var(--color-mockup-elevated);">
 										<div class="flex items-center justify-between mb-2">
-											<span class="text-[8px] text-gray-500">Ventas por dia</span>
-											<span class="text-[8px] text-gray-500">Ultima semana</span>
+											<span class="text-[8px] text-neutral-500">Ventas por dia</span>
+											<span class="text-[8px] text-neutral-500">Ultima semana</span>
 										</div>
 										<div class="flex items-end gap-1.5 h-16">
 											<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-												<div class="w-full rounded-t" style={`height: 45%; background: ${BLUE}; opacity: 0.72;`}></div>
-												<span class="text-[6px] text-gray-500">L</span>
+												<div class="w-full rounded-t" style="height: 45%; background: var(--color-product-dashboard); opacity: 0.72;"></div>
+												<span class="text-[6px] text-neutral-500">L</span>
 											</div>
 											<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-												<div class="w-full rounded-t" style={`height: 60%; background: ${BLUE}; opacity: 0.82;`}></div>
-												<span class="text-[6px] text-gray-500">M</span>
+												<div class="w-full rounded-t" style="height: 60%; background: var(--color-product-dashboard); opacity: 0.82;"></div>
+												<span class="text-[6px] text-neutral-500">M</span>
 											</div>
 											<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-												<div class="w-full rounded-t" style={`height: 50%; background: ${BLUE}; opacity: 0.77;`}></div>
-												<span class="text-[6px] text-gray-500">X</span>
+												<div class="w-full rounded-t" style="height: 50%; background: var(--color-product-dashboard); opacity: 0.77;"></div>
+												<span class="text-[6px] text-neutral-500">X</span>
 											</div>
 											<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-												<div class="w-full rounded-t" style={`height: 70%; background: ${BLUE}; opacity: 0.92;`}></div>
-												<span class="text-[6px] text-gray-500">J</span>
+												<div class="w-full rounded-t" style="height: 70%; background: var(--color-product-dashboard); opacity: 0.92;"></div>
+												<span class="text-[6px] text-neutral-500">J</span>
 											</div>
 											<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-												<div class="w-full rounded-t" style={`height: 90%; background: ${BLUE}; opacity: 1;`}></div>
-												<span class="text-[6px] text-gray-500">V</span>
+												<div class="w-full rounded-t" style="height: 90%; background: var(--color-product-dashboard); opacity: 1;"></div>
+												<span class="text-[6px] text-neutral-500">V</span>
 											</div>
 											<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-												<div class="w-full rounded-t" style={`height: 100%; background: ${BLUE};`}></div>
-												<span class="text-[6px] text-gray-500">S</span>
+												<div class="w-full rounded-t" style="height: 100%; background: var(--color-product-dashboard);"></div>
+												<span class="text-[6px] text-neutral-500">S</span>
 											</div>
 											<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-												<div class="w-full rounded-t" style={`height: 75%; background: ${BLUE}; opacity: 0.92;`}></div>
-												<span class="text-[6px] text-gray-500">D</span>
+												<div class="w-full rounded-t" style="height: 75%; background: var(--color-product-dashboard); opacity: 0.92;"></div>
+												<span class="text-[6px] text-neutral-500">D</span>
 											</div>
 										</div>
 									</div>
@@ -185,115 +181,115 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<div>
-						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Reportes</span>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style="color: var(--color-product-dashboard);">Reportes</span>
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
 							Datos que si sirven para decidir.
 						</h2>
-						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+						<p class="text-neutral-400 text-lg leading-relaxed mb-8">
 							No son graficas bonitas sin contexto. Cada reporte cruza datos de ventas, pagos, inventario y personal para darte respuestas que puedes actuar hoy.
 						</p>
 						<div class="space-y-4">
 							<div class="border-t border-white/10 pt-3">
 								<h3 class="text-base text-white font-medium mb-1">Sales Summary</h3>
-								<p class="text-sm text-gray-400">Ventas por periodo con desglose por metodo de pago, canal, y empleado. Compara dia vs dia, semana vs semana.</p>
+								<p class="text-sm text-neutral-400">Ventas por periodo con desglose por metodo de pago, canal, y empleado. Compara dia vs dia, semana vs semana.</p>
 							</div>
 							<div class="border-t border-white/10 pt-3">
 								<h3 class="text-base text-white font-medium mb-1">Sales by Item</h3>
-								<p class="text-sm text-gray-400">Que se vende, que no, margenes por producto, variacion vs periodo anterior.</p>
+								<p class="text-sm text-neutral-400">Que se vende, que no, margenes por producto, variacion vs periodo anterior.</p>
 							</div>
 							<div class="border-t border-white/10 pt-3">
 								<h3 class="text-base text-white font-medium mb-1">Payment Analytics</h3>
-								<p class="text-sm text-gray-400">Profit metrics, comparativa entre procesadores de pago, time series, export a Excel.</p>
+								<p class="text-sm text-neutral-400">Profit metrics, comparativa entre procesadores de pago, time series, export a Excel.</p>
 							</div>
 							<div class="border-t border-white/10 pt-3">
 								<h3 class="text-base text-white font-medium mb-1">Closing Report</h3>
-								<p class="text-sm text-gray-400">Reporte de cierre diario: ventas, devoluciones, propinas, corte de caja, varianza.</p>
+								<p class="text-sm text-neutral-400">Reporte de cierre diario: ventas, devoluciones, propinas, corte de caja, varianza.</p>
 							</div>
 						</div>
 					</div>
 
 					<!-- Reports mockup -->
-					<div aria-hidden="true" class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
+					<div aria-hidden="true" class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: var(--color-mockup-light-bg);">
 						<div class="flex items-center justify-between mb-4">
-							<span class="text-[11px] text-gray-500">Sales Summary — Ultima semana</span>
+							<span class="text-[11px] text-neutral-500">Sales Summary — Ultima semana</span>
 							<div class="flex gap-2">
-								<span class="text-[9px] px-2 py-1 rounded-full" style={`background: oklch(1.0 0.03 240); color: oklch(0.54 0.17 255);`}>Excel</span>
-								<span class="text-[9px] px-2 py-1 rounded-full" style="background: oklch(1.0 0.003 155); color: oklch(0.55 0.005 155);">PDF</span>
+								<span class="text-[9px] px-2 py-1 rounded-full" style="background: var(--color-product-dashboard-tint-light); color: var(--color-product-dashboard-deep);">Excel</span>
+								<span class="text-[9px] px-2 py-1 rounded-full" style="background: var(--color-mockup-light-card); color: var(--color-neutral-500);">PDF</span>
 							</div>
 						</div>
 						<!-- KPIs -->
 						<div class="grid grid-cols-3 gap-2 mb-4">
-							<div class="rounded-lg p-3 text-center" style="background: oklch(1.0 0.003 155);">
-								<div class="text-lg font-light text-gray-900">$142,800</div>
-								<div class="text-[9px] text-gray-400">Ventas totales</div>
-								<div class="text-[9px] text-[oklch(0.52_0.16_150)] mt-1">+14% vs anterior</div>
+							<div class="rounded-lg p-3 text-center" style="background: var(--color-mockup-light-card);">
+								<div class="text-lg font-light text-neutral-900">$142,800</div>
+								<div class="text-[9px] text-neutral-400">Ventas totales</div>
+								<div class="text-[9px] text-[var(--color-product-tpv-deep)] mt-1">+14% vs anterior</div>
 							</div>
-							<div class="rounded-lg p-3 text-center" style="background: oklch(1.0 0.003 155);">
-								<div class="text-lg font-light text-gray-900">312</div>
-								<div class="text-[9px] text-gray-400">Transacciones</div>
-								<div class="text-[9px]" style={`color: oklch(0.54 0.17 255);`}>$457 prom.</div>
+							<div class="rounded-lg p-3 text-center" style="background: var(--color-mockup-light-card);">
+								<div class="text-lg font-light text-neutral-900">312</div>
+								<div class="text-[9px] text-neutral-400">Transacciones</div>
+								<div class="text-[9px]" style="color: var(--color-product-dashboard-deep);">$457 prom.</div>
 							</div>
-							<div class="rounded-lg p-3 text-center" style="background: oklch(1.0 0.003 155);">
-								<div class="text-lg font-light text-gray-900">$12,450</div>
-								<div class="text-[9px] text-gray-400">Propinas</div>
-								<div class="text-[9px] text-[oklch(0.52_0.16_150)]">8.7% del total</div>
+							<div class="rounded-lg p-3 text-center" style="background: var(--color-mockup-light-card);">
+								<div class="text-lg font-light text-neutral-900">$12,450</div>
+								<div class="text-[9px] text-neutral-400">Propinas</div>
+								<div class="text-[9px] text-[var(--color-product-tpv-deep)]">8.7% del total</div>
 							</div>
 						</div>
 						<!-- Chart -->
-						<div class="rounded-lg p-3 mb-3" style="background: oklch(0.999 0.003 155);">
+						<div class="rounded-lg p-3 mb-3" style="background: var(--color-mockup-light-card);">
 							<div class="flex items-end gap-1 h-20">
 								<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-									<div class="w-full rounded-t" style={`height: 40%; background: oklch(0.54 0.17 255); opacity: 0.72;`}></div>
-									<span class="text-[7px] text-gray-400">Lun</span>
+									<div class="w-full rounded-t" style="height: 40%; background: var(--color-product-dashboard-deep); opacity: 0.72;"></div>
+									<span class="text-[7px] text-neutral-400">Lun</span>
 								</div>
 								<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-									<div class="w-full rounded-t" style={`height: 55%; background: oklch(0.54 0.17 255); opacity: 0.82;`}></div>
-									<span class="text-[7px] text-gray-400">Mar</span>
+									<div class="w-full rounded-t" style="height: 55%; background: var(--color-product-dashboard-deep); opacity: 0.82;"></div>
+									<span class="text-[7px] text-neutral-400">Mar</span>
 								</div>
 								<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-									<div class="w-full rounded-t" style={`height: 45%; background: oklch(0.54 0.17 255); opacity: 0.77;`}></div>
-									<span class="text-[7px] text-gray-400">Mie</span>
+									<div class="w-full rounded-t" style="height: 45%; background: var(--color-product-dashboard-deep); opacity: 0.77;"></div>
+									<span class="text-[7px] text-neutral-400">Mie</span>
 								</div>
 								<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-									<div class="w-full rounded-t" style={`height: 65%; background: oklch(0.54 0.17 255); opacity: 0.92;`}></div>
-									<span class="text-[7px] text-gray-400">Jue</span>
+									<div class="w-full rounded-t" style="height: 65%; background: var(--color-product-dashboard-deep); opacity: 0.92;"></div>
+									<span class="text-[7px] text-neutral-400">Jue</span>
 								</div>
 								<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-									<div class="w-full rounded-t" style={`height: 90%; background: oklch(0.54 0.17 255); opacity: 1;`}></div>
-									<span class="text-[7px] text-gray-400">Vie</span>
+									<div class="w-full rounded-t" style="height: 90%; background: var(--color-product-dashboard-deep); opacity: 1;"></div>
+									<span class="text-[7px] text-neutral-400">Vie</span>
 								</div>
 								<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-									<div class="w-full rounded-t" style={`height: 95%; background: oklch(0.54 0.17 255);`}></div>
-									<span class="text-[7px] text-gray-400">Sab</span>
+									<div class="w-full rounded-t" style="height: 95%; background: var(--color-product-dashboard-deep);"></div>
+									<span class="text-[7px] text-neutral-400">Sab</span>
 								</div>
 								<div class="flex-1 h-full flex flex-col items-center justify-end gap-0.5">
-									<div class="w-full rounded-t" style={`height: 70%; background: oklch(0.54 0.17 255); opacity: 0.97;`}></div>
-									<span class="text-[7px] text-gray-400">Dom</span>
+									<div class="w-full rounded-t" style="height: 70%; background: var(--color-product-dashboard-deep); opacity: 0.97;"></div>
+									<span class="text-[7px] text-neutral-400">Dom</span>
 								</div>
 							</div>
 						</div>
 						<!-- Payment breakdown -->
 						<div class="space-y-1.5">
-							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(1.0 0.003 155);">
+							<div class="flex items-center justify-between p-2 rounded" style="background: var(--color-mockup-light-card);">
 								<div class="flex items-center gap-2">
-									<div class="w-2 h-2 rounded-full" style={`background: oklch(0.54 0.17 255);`}></div>
-									<span class="text-[10px] text-gray-400">Tarjeta</span>
+									<div class="w-2 h-2 rounded-full" style="background: var(--color-product-dashboard-deep);"></div>
+									<span class="text-[10px] text-neutral-400">Tarjeta</span>
 								</div>
-								<span class="text-[10px] text-gray-900">$98,400 (69%)</span>
+								<span class="text-[10px] text-neutral-900">$98,400 (69%)</span>
 							</div>
-							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(1.0 0.003 155);">
+							<div class="flex items-center justify-between p-2 rounded" style="background: var(--color-mockup-light-card);">
 								<div class="flex items-center gap-2">
 									<div class="w-2 h-2 rounded-full bg-avoqado-green"></div>
-									<span class="text-[10px] text-gray-400">Efectivo</span>
+									<span class="text-[10px] text-neutral-400">Efectivo</span>
 								</div>
-								<span class="text-[10px] text-gray-900">$32,100 (22%)</span>
+								<span class="text-[10px] text-neutral-900">$32,100 (22%)</span>
 							</div>
-							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(1.0 0.003 155);">
+							<div class="flex items-center justify-between p-2 rounded" style="background: var(--color-mockup-light-card);">
 								<div class="flex items-center gap-2">
-									<div class="w-2 h-2 rounded-full" style={`background: oklch(0.62 0.14 68);`}></div>
-									<span class="text-[10px] text-gray-400">Transferencia</span>
+									<div class="w-2 h-2 rounded-full" style="background: var(--color-alert-amber-deep);"></div>
+									<span class="text-[10px] text-neutral-400">Transferencia</span>
 								</div>
-								<span class="text-[10px] text-gray-900">$12,300 (9%)</span>
+								<span class="text-[10px] text-neutral-900">$12,300 (9%)</span>
 							</div>
 						</div>
 					</div>
@@ -309,74 +305,74 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<!-- Payment link mockup -->
-					<div aria-hidden="true" class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: oklch(0.168 0.005 155);">
-						<div class="text-[11px] text-gray-500 mb-4">Liga de pago activa</div>
+					<div aria-hidden="true" class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: var(--color-mockup-surface);">
+						<div class="text-[11px] text-neutral-500 mb-4">Liga de pago activa</div>
 						<!-- Link card -->
-						<div class="rounded-xl p-4 mb-4" style="background: oklch(0.244 0.005 155);">
+						<div class="rounded-xl p-4 mb-4" style="background: var(--color-mockup-raised);">
 							<div class="flex items-center justify-between mb-3">
 								<span class="text-sm text-white font-medium">Paquete 10 clases — Yoga</span>
 								<span class="text-[9px] px-2 py-0.5 rounded-full bg-avoqado-green text-black font-medium">Activa</span>
 							</div>
-							<div class="flex items-center gap-2 mb-3 p-2 rounded-lg" style="background: oklch(0.187 0.005 155);">
-								<span class="text-[10px] text-gray-400 truncate flex-1">avoqado.io/pay/xK3mN8p2</span>
-								<span class="text-[9px] px-2 py-0.5 rounded" style={`background: oklch(0.282 0.055 240); color: ${BLUE};`}>Copiar</span>
+							<div class="flex items-center gap-2 mb-3 p-2 rounded-lg" style="background: var(--color-mockup-elevated);">
+								<span class="text-[10px] text-neutral-400 truncate flex-1">avoqado.io/pay/xK3mN8p2</span>
+								<span class="text-[9px] px-2 py-0.5 rounded" style="background: var(--color-product-dashboard-tint-strong); color: var(--color-product-dashboard);">Copiar</span>
 							</div>
 							<div class="grid grid-cols-2 gap-3">
 								<div>
-									<div class="text-[9px] text-gray-500 mb-1">Monto</div>
+									<div class="text-[9px] text-neutral-500 mb-1">Monto</div>
 									<div class="text-sm text-white">$2,500.00</div>
 								</div>
 								<div>
-									<div class="text-[9px] text-gray-500 mb-1">Propina</div>
+									<div class="text-[9px] text-neutral-500 mb-1">Propina</div>
 									<div class="text-sm text-white">10%, 15%, 20%</div>
 								</div>
 								<div>
-									<div class="text-[9px] text-gray-500 mb-1">Expira</div>
+									<div class="text-[9px] text-neutral-500 mb-1">Expira</div>
 									<div class="text-sm text-white">24 mar, 23:59</div>
 								</div>
 								<div>
-									<div class="text-[9px] text-gray-500 mb-1">Recolectado</div>
+									<div class="text-[9px] text-neutral-500 mb-1">Recolectado</div>
 									<div class="text-sm text-avoqado-green">$7,500 / 3 pagos</div>
 								</div>
 							</div>
 						</div>
 						<!-- Share options -->
 						<div class="flex gap-2">
-							<div class="flex-1 h-9 rounded-lg flex items-center justify-center gap-1.5" style="background: oklch(0.244 0.005 155);">
+							<div class="flex-1 h-9 rounded-lg flex items-center justify-center gap-1.5" style="background: var(--color-mockup-raised);">
 								<div class="w-3.5 h-3.5 rounded-full bg-avoqado-green"></div>
 								<span class="text-[10px] text-white">WhatsApp</span>
 							</div>
-							<div class="flex-1 h-9 rounded-lg flex items-center justify-center gap-1.5" style="background: oklch(0.244 0.005 155);">
-								<div class="w-3.5 h-3.5 rounded-full" style={`background: ${BLUE};`}></div>
+							<div class="flex-1 h-9 rounded-lg flex items-center justify-center gap-1.5" style="background: var(--color-mockup-raised);">
+								<div class="w-3.5 h-3.5 rounded-full" style="background: var(--color-product-dashboard);"></div>
 								<span class="text-[10px] text-white">Email</span>
 							</div>
-							<div class="flex-1 h-9 rounded-lg flex items-center justify-center gap-1.5" style="background: oklch(0.244 0.005 155);">
-								<div class="w-3.5 h-3.5 rounded-full" style={`background: ${AMBER};`}></div>
+							<div class="flex-1 h-9 rounded-lg flex items-center justify-center gap-1.5" style="background: var(--color-mockup-raised);">
+								<div class="w-3.5 h-3.5 rounded-full" style="background: var(--color-alert-amber);"></div>
 								<span class="text-[10px] text-white">QR</span>
 							</div>
 						</div>
 					</div>
 
 					<div class="order-1 lg:order-2">
-						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE_DEEP};`}>Cobra sin terminal</span>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style="color: var(--color-product-dashboard-deep);">Cobra sin terminal</span>
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
 							Un link. Cualquier lugar.
 						</h2>
-						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+						<p class="text-neutral-600 text-lg leading-relaxed mb-8">
 							Genera ligas de pago en segundos y comparte via WhatsApp, email o QR. Montos fijos o abiertos, reusables o de un solo uso, con propinas configurables y fecha de expiracion. Cada pago se sincroniza automaticamente con tu dashboard.
 						</p>
 						<div class="space-y-3">
 							<div class="flex items-start gap-3">
 								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
-								<span class="text-sm text-gray-600">Montos fijos, abiertos, o con producto vinculado (descuenta inventario)</span>
+								<span class="text-sm text-neutral-600">Montos fijos, abiertos, o con producto vinculado (descuenta inventario)</span>
 							</div>
 							<div class="flex items-start gap-3">
-								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
-								<span class="text-sm text-gray-600">Links reusables o de un solo uso con shortcode de 8 caracteres</span>
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style="background: var(--color-product-dashboard);"></div>
+								<span class="text-sm text-neutral-600">Links reusables o de un solo uso con shortcode de 8 caracteres</span>
 							</div>
 							<div class="flex items-start gap-3">
-								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
-								<span class="text-sm text-gray-600">Branding personalizable por venue, campos custom, tracking de monto recolectado</span>
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style="background: var(--color-alert-amber);"></div>
+								<span class="text-sm text-neutral-600">Branding personalizable por venue, campos custom, tracking de monto recolectado</span>
 							</div>
 						</div>
 					</div>
@@ -391,51 +387,51 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/10">
 			<div class="max-w-[1400px] mx-auto">
 				<div class="text-center max-w-2xl mx-auto mb-12">
-					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Inteligencia artificial</span>
+					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style="color: var(--color-product-dashboard);">Inteligencia artificial</span>
 					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
 						Preguntale a tu negocio lo que quieras.
 					</h2>
-					<p class="text-gray-400 text-lg leading-relaxed">
+					<p class="text-neutral-400 text-lg leading-relaxed">
 						Text-to-SQL que convierte preguntas en lenguaje natural a consultas sobre tus datos reales. No es un chatbot generico — entiende la estructura de TU negocio, con templates especializados por industria.
 					</p>
 				</div>
 
 				<!-- Chat mockup - full width -->
-				<div aria-hidden="true" class="max-w-3xl mx-auto rounded-2xl overflow-hidden border border-black/10 p-5 mb-12" style="background: #f1f1f1;">
+				<div aria-hidden="true" class="max-w-3xl mx-auto rounded-2xl overflow-hidden border border-black/10 p-5 mb-12" style="background: var(--color-mockup-light-bg);">
 					<div class="space-y-3">
 						<div class="flex justify-end">
-							<div class="px-4 py-2.5 rounded-2xl rounded-br-sm max-w-[80%]" style="background: oklch(1.0 0.003 155);">
-								<span class="text-sm text-gray-400">Que empleado genero mas ventas el viernes?</span>
+							<div class="px-4 py-2.5 rounded-2xl rounded-br-sm max-w-[80%]" style="background: var(--color-mockup-light-card);">
+								<span class="text-sm text-neutral-400">Que empleado genero mas ventas el viernes?</span>
 							</div>
 						</div>
 						<div class="flex gap-2.5">
-							<div class="w-7 h-7 rounded-full shrink-0 flex items-center justify-center" style="background: oklch(1.0 0.03 155);">
+							<div class="w-7 h-7 rounded-full shrink-0 flex items-center justify-center" style="background: var(--color-product-tpv-tint-light);">
 								<div class="w-3 h-3 rounded-full bg-avoqado-green"></div>
 							</div>
-							<div class="px-4 py-2.5 rounded-2xl rounded-bl-sm max-w-[85%]" style="background: oklch(1.0 0.003 155);">
-								<span class="text-sm text-gray-400">
-									<span class="text-[oklch(0.52_0.16_150)] font-medium">Maria G.</span> con $18,450 en 34 ordenes. Ticket promedio $542. Su comision acumulada esta semana: $1,845.
+							<div class="px-4 py-2.5 rounded-2xl rounded-bl-sm max-w-[85%]" style="background: var(--color-mockup-light-card);">
+								<span class="text-sm text-neutral-400">
+									<span class="text-[var(--color-product-tpv-deep)] font-medium">Maria G.</span> con $18,450 en 34 ordenes. Ticket promedio $542. Su comision acumulada esta semana: $1,845.
 								</span>
 							</div>
 						</div>
 						<div class="flex justify-end">
-							<div class="px-4 py-2.5 rounded-2xl rounded-br-sm max-w-[80%]" style="background: oklch(1.0 0.003 155);">
-								<span class="text-sm text-gray-400">Crea una promo 2x1 en manicure hasta el domingo</span>
+							<div class="px-4 py-2.5 rounded-2xl rounded-br-sm max-w-[80%]" style="background: var(--color-mockup-light-card);">
+								<span class="text-sm text-neutral-400">Crea una promo 2x1 en manicure hasta el domingo</span>
 							</div>
 						</div>
 						<div class="flex gap-2.5">
-							<div class="w-7 h-7 rounded-full shrink-0 flex items-center justify-center" style="background: oklch(1.0 0.03 155);">
+							<div class="w-7 h-7 rounded-full shrink-0 flex items-center justify-center" style="background: var(--color-product-tpv-tint-light);">
 								<div class="w-3 h-3 rounded-full bg-avoqado-green"></div>
 							</div>
-							<div class="px-4 py-2.5 rounded-2xl rounded-bl-sm max-w-[85%]" style="background: oklch(1.0 0.003 155);">
-								<span class="text-sm text-gray-400">
-									Listo. Promo <span style={`color: oklch(0.62 0.14 68);`}>"2x1 Manicure"</span> activa desde hoy hasta domingo 23:59. Aplicada automaticamente en TPV y QR.
+							<div class="px-4 py-2.5 rounded-2xl rounded-bl-sm max-w-[85%]" style="background: var(--color-mockup-light-card);">
+								<span class="text-sm text-neutral-400">
+									Listo. Promo <span style="color: var(--color-alert-amber-deep);">"2x1 Manicure"</span> activa desde hoy hasta domingo 23:59. Aplicada automaticamente en TPV y QR.
 								</span>
 							</div>
 						</div>
-						<div class="flex items-center gap-2 mt-2 px-4 py-2.5 rounded-full" style="background: oklch(1.0 0.003 155); border: 1px solid oklch(1.0 0.003 155);">
+						<div class="flex items-center gap-2 mt-2 px-4 py-2.5 rounded-full" style="background: var(--color-mockup-light-card); border: 1px solid var(--color-mockup-light-card);">
 							<div class="w-4 h-4 rounded-full bg-avoqado-green opacity-50"></div>
-							<span class="text-sm text-gray-400">Pregunta lo que sea...</span>
+							<span class="text-sm text-neutral-400">Pregunta lo que sea...</span>
 							<div class="ml-auto w-6 h-6 rounded-full bg-avoqado-green flex items-center justify-center">
 								<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
 							</div>
@@ -447,15 +443,15 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
 					<div class="text-center">
 						<h3 class="text-base text-white font-medium mb-1">Text-to-SQL</h3>
-						<p class="text-sm text-gray-400">Convierte preguntas en consultas SQL sobre tus datos reales.</p>
+						<p class="text-sm text-neutral-400">Convierte preguntas en consultas SQL sobre tus datos reales.</p>
 					</div>
 					<div class="text-center">
 						<h3 class="text-base text-white font-medium mb-1">Schema-aware</h3>
-						<p class="text-sm text-gray-400">Entiende tus productos, empleados, clientes y ordenes.</p>
+						<p class="text-sm text-neutral-400">Entiende tus productos, empleados, clientes y ordenes.</p>
 					</div>
 					<div class="text-center">
 						<h3 class="text-base text-white font-medium mb-1">Templates por industria</h3>
-						<p class="text-sm text-gray-400">Preguntas sugeridas adaptadas a tu vertical.</p>
+						<p class="text-sm text-neutral-400">Preguntas sugeridas adaptadas a tu vertical.</p>
 					</div>
 				</div>
 			</div>
@@ -469,103 +465,103 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<!-- Terminal management mockup -->
-					<div aria-hidden="true" class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: oklch(0.168 0.005 155);">
-						<div class="text-[11px] text-gray-500 mb-4">Terminales — 4 activas</div>
+					<div aria-hidden="true" class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: var(--color-mockup-surface);">
+						<div class="text-[11px] text-neutral-500 mb-4">Terminales — 4 activas</div>
 						<div class="space-y-2 mb-4">
-							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.244 0.005 155);">
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: var(--color-mockup-raised);">
 								<div class="flex items-center gap-3">
 									<div class="w-2 h-2 rounded-full bg-avoqado-green"></div>
 									<div>
 										<span class="text-xs text-white">PAX A910S — Caja 1</span>
 										<div class="flex items-center gap-2 mt-0.5">
-											<span class="text-[9px] text-gray-500">v3.2.1</span>
-											<span class="text-[9px] text-gray-500">98% bat</span>
+											<span class="text-[9px] text-neutral-500">v3.2.1</span>
+											<span class="text-[9px] text-neutral-500">98% bat</span>
 											<span class="text-[9px] text-avoqado-green">Online</span>
 										</div>
 									</div>
 								</div>
-								<span class="text-[9px] px-2 py-0.5 rounded" style={`background: oklch(0.282 0.055 240); color: ${BLUE};`}>Comandos</span>
+								<span class="text-[9px] px-2 py-0.5 rounded" style="background: var(--color-product-dashboard-tint-strong); color: var(--color-product-dashboard);">Comandos</span>
 							</div>
-							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.244 0.005 155);">
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: var(--color-mockup-raised);">
 								<div class="flex items-center gap-3">
 									<div class="w-2 h-2 rounded-full bg-avoqado-green"></div>
 									<div>
 										<span class="text-xs text-white">PAX A910S — Caja 2</span>
 										<div class="flex items-center gap-2 mt-0.5">
-											<span class="text-[9px] text-gray-500">v3.2.1</span>
-											<span class="text-[9px] text-gray-500">72% bat</span>
+											<span class="text-[9px] text-neutral-500">v3.2.1</span>
+											<span class="text-[9px] text-neutral-500">72% bat</span>
 											<span class="text-[9px] text-avoqado-green">Online</span>
 										</div>
 									</div>
 								</div>
-								<span class="text-[9px] px-2 py-0.5 rounded" style="background: oklch(0.244 0.005 155); color: oklch(0.40 0.005 155);">Comandos</span>
+								<span class="text-[9px] px-2 py-0.5 rounded" style="background: var(--color-mockup-raised); color: var(--color-mockup-ink-faint);">Comandos</span>
 							</div>
-							<div class="flex items-center justify-between p-3 rounded-lg" style={`background: oklch(0.244 0.005 155); border: 1px solid oklch(0.33 0.065 75);`}>
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: var(--color-mockup-raised); border: 1px solid var(--color-alert-amber-tint-strong);">
 								<div class="flex items-center gap-3">
-									<div class="w-2 h-2 rounded-full" style={`background: ${AMBER};`}></div>
+									<div class="w-2 h-2 rounded-full" style="background: var(--color-alert-amber);"></div>
 									<div>
 										<span class="text-xs text-white">Nexgo N86 — Recepcion</span>
 										<div class="flex items-center gap-2 mt-0.5">
-											<span class="text-[9px]" style={`color: ${AMBER};`}>v3.1.0 — Update disponible</span>
+											<span class="text-[9px]" style="color: var(--color-alert-amber);">v3.1.0 — Update disponible</span>
 										</div>
 									</div>
 								</div>
 								<span class="text-[9px] px-2 py-0.5 rounded bg-avoqado-green text-black font-medium">Actualizar</span>
 							</div>
-							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.244 0.005 155);">
+							<div class="flex items-center justify-between p-3 rounded-lg" style="background: var(--color-mockup-raised);">
 								<div class="flex items-center gap-3">
-									<div class="w-2 h-2 rounded-full" style={`background: ${RED};`}></div>
+									<div class="w-2 h-2 rounded-full" style="background: var(--color-alert-red);"></div>
 									<div>
 										<span class="text-xs text-white">PAX A920 — Sucursal Norte</span>
 										<div class="flex items-center gap-2 mt-0.5">
-											<span class="text-[9px]" style={`color: ${RED};`}>Offline hace 23 min</span>
+											<span class="text-[9px]" style="color: var(--color-alert-red);">Offline hace 23 min</span>
 										</div>
 									</div>
 								</div>
-								<span class="text-[9px] px-2 py-0.5 rounded" style={`background: oklch(0.225 0.055 25); color: ${RED};`}>Reiniciar</span>
+								<span class="text-[9px] px-2 py-0.5 rounded" style="background: var(--color-alert-red-tint); color: var(--color-alert-red);">Reiniciar</span>
 							</div>
 						</div>
 						<!-- Command options -->
 						<div class="grid grid-cols-4 gap-1.5">
-							<div class="rounded-lg p-2 text-center" style="background: oklch(0.244 0.005 155);">
-								<span class="text-[8px] text-gray-500">Lock</span>
+							<div class="rounded-lg p-2 text-center" style="background: var(--color-mockup-raised);">
+								<span class="text-[8px] text-neutral-500">Lock</span>
 							</div>
-							<div class="rounded-lg p-2 text-center" style="background: oklch(0.244 0.005 155);">
-								<span class="text-[8px] text-gray-500">Restart</span>
+							<div class="rounded-lg p-2 text-center" style="background: var(--color-mockup-raised);">
+								<span class="text-[8px] text-neutral-500">Restart</span>
 							</div>
-							<div class="rounded-lg p-2 text-center" style="background: oklch(0.244 0.005 155);">
-								<span class="text-[8px] text-gray-500">OTA Update</span>
+							<div class="rounded-lg p-2 text-center" style="background: var(--color-mockup-raised);">
+								<span class="text-[8px] text-neutral-500">OTA Update</span>
 							</div>
-							<div class="rounded-lg p-2 text-center" style="background: oklch(0.244 0.005 155);">
-								<span class="text-[8px] text-gray-500">Sync</span>
+							<div class="rounded-lg p-2 text-center" style="background: var(--color-mockup-raised);">
+								<span class="text-[8px] text-neutral-500">Sync</span>
 							</div>
 						</div>
 					</div>
 
 					<div class="order-1 lg:order-2">
-						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE_DEEP};`}>Control remoto</span>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style="color: var(--color-product-dashboard-deep);">Control remoto</span>
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
 							Tus terminales, desde cualquier lugar.
 						</h2>
-						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+						<p class="text-neutral-600 text-lg leading-relaxed mb-8">
 							Monitoreo en tiempo real con heartbeat cada 5 minutos. Comandos remotos, actualizaciones OTA, geofencing, comandos programados y auditoria completa de cada accion.
 						</p>
 						<div class="space-y-3">
 							<div class="flex items-start gap-3">
 								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
-								<span class="text-sm text-gray-600"><span class="text-black">Comandos remotos:</span> Lock, Unlock, Restart, Shutdown, Factory reset, Sync forzado</span>
+								<span class="text-sm text-neutral-600"><span class="text-black">Comandos remotos:</span> Lock, Unlock, Restart, Shutdown, Factory reset, Sync forzado</span>
 							</div>
 							<div class="flex items-start gap-3">
-								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
-								<span class="text-sm text-gray-600"><span class="text-black">OTA Updates:</span> Force update, rollback, install version especifica</span>
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style="background: var(--color-product-dashboard);"></div>
+								<span class="text-sm text-neutral-600"><span class="text-black">OTA Updates:</span> Force update, rollback, install version especifica</span>
 							</div>
 							<div class="flex items-start gap-3">
-								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
-								<span class="text-sm text-gray-600"><span class="text-black">Geofencing:</span> Reglas por ubicacion, alertas si terminal sale de zona</span>
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style="background: var(--color-alert-amber);"></div>
+								<span class="text-sm text-neutral-600"><span class="text-black">Geofencing:</span> Reglas por ubicacion, alertas si terminal sale de zona</span>
 							</div>
 							<div class="flex items-start gap-3">
-								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${INDIGO};`}></div>
-								<span class="text-sm text-gray-600"><span class="text-black">Cron:</span> Comandos programados (restart diario a las 3am)</span>
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style="background: var(--color-product-pos);"></div>
+								<span class="text-sm text-neutral-600"><span class="text-black">Cron:</span> Comandos programados (restart diario a las 3am)</span>
 							</div>
 						</div>
 					</div>
@@ -581,69 +577,69 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<div>
-						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Clientes</span>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style="color: var(--color-product-dashboard);">Clientes</span>
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
 							Conoce a quien te compra.
 						</h2>
-						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+						<p class="text-neutral-400 text-lg leading-relaxed mb-8">
 							Base de datos de clientes con historial completo, grupos automaticos, programa de lealtad basado en puntos, tags personalizados y tracking de visitas. Cada interaccion — ordenes, cupones, reviews — queda registrada.
 						</p>
 						<div class="space-y-3">
 							<div class="border-t border-white/10 pt-3">
 								<h3 class="text-base text-white font-medium mb-1">Grupos automaticos</h3>
-								<p class="text-sm text-gray-400">VIP, frecuentes, inactivos — reglas de auto-asignacion basadas en gasto y visitas.</p>
+								<p class="text-sm text-neutral-400">VIP, frecuentes, inactivos — reglas de auto-asignacion basadas en gasto y visitas.</p>
 							</div>
 							<div class="border-t border-white/10 pt-3">
 								<h3 class="text-base text-white font-medium mb-1">Programa de lealtad</h3>
-								<p class="text-sm text-gray-400">Puntos por compra, canje por productos o descuentos, niveles de membresia.</p>
+								<p class="text-sm text-neutral-400">Puntos por compra, canje por productos o descuentos, niveles de membresia.</p>
 							</div>
 							<div class="border-t border-white/10 pt-3">
 								<h3 class="text-base text-white font-medium mb-1">Tags y notas</h3>
-								<p class="text-sm text-gray-400">"Alergia al amoniaco", "Cumple en diciembre", "Prefiere que la atienda Ana" — cualquier dato relevante.</p>
+								<p class="text-sm text-neutral-400">"Alergia al amoniaco", "Cumple en diciembre", "Prefiere que la atienda Ana" — cualquier dato relevante.</p>
 							</div>
 						</div>
 					</div>
 
 					<!-- CRM mockup -->
-					<div aria-hidden="true" class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
-						<div class="text-[11px] text-gray-500 mb-4">Cliente — Perfil</div>
+					<div aria-hidden="true" class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: var(--color-mockup-light-bg);">
+						<div class="text-[11px] text-neutral-500 mb-4">Cliente — Perfil</div>
 						<!-- Client header -->
-						<div class="flex items-center gap-3 mb-4 p-3 rounded-lg" style="background: oklch(1.0 0.003 155);">
-							<div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold" style={`background: oklch(1.0 0.03 240); color: oklch(0.54 0.17 255);`}>JG</div>
+						<div class="flex items-center gap-3 mb-4 p-3 rounded-lg" style="background: var(--color-mockup-light-card);">
+							<div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold" style="background: var(--color-product-dashboard-tint-light); color: var(--color-product-dashboard-deep);">JG</div>
 							<div class="flex-1">
-								<div class="text-sm text-gray-900 font-medium">Juan Garcia</div>
-								<div class="text-[10px] text-gray-500">VIP — 142 visitas — $48,200 total</div>
+								<div class="text-sm text-neutral-900 font-medium">Juan Garcia</div>
+								<div class="text-[10px] text-neutral-500">VIP — 142 visitas — $48,200 total</div>
 							</div>
 							<div class="text-right">
-								<div class="text-sm text-[oklch(0.52_0.16_150)] font-medium">2,840 pts</div>
-								<div class="text-[9px] text-gray-400">Nivel Gold</div>
+								<div class="text-sm text-[var(--color-product-tpv-deep)] font-medium">2,840 pts</div>
+								<div class="text-[9px] text-neutral-400">Nivel Gold</div>
 							</div>
 						</div>
 						<!-- Tags -->
 						<div class="flex flex-wrap gap-1.5 mb-4">
-							<span class="text-[9px] px-2 py-1 rounded-full" style={`background: oklch(1.0 0.03 240); color: oklch(0.54 0.17 255);`}>VIP</span>
-							<span class="text-[9px] px-2 py-1 rounded-full" style="background: oklch(1.0 0.003 155); color: oklch(0.5 0.005 155);">Prefiere a Ana</span>
-							<span class="text-[9px] px-2 py-1 rounded-full" style={`background: oklch(1.0 0.03 25); color: oklch(0.55 0.21 25);`}>Alergia: amoniaco</span>
-							<span class="text-[9px] px-2 py-1 rounded-full" style="background: oklch(1.0 0.003 155); color: oklch(0.5 0.005 155);">Cumple: 15 dic</span>
+							<span class="text-[9px] px-2 py-1 rounded-full" style="background: var(--color-product-dashboard-tint-light); color: var(--color-product-dashboard-deep);">VIP</span>
+							<span class="text-[9px] px-2 py-1 rounded-full" style="background: var(--color-mockup-light-card); color: var(--color-neutral-500);">Prefiere a Ana</span>
+							<span class="text-[9px] px-2 py-1 rounded-full" style="background: var(--color-alert-red-tint-light); color: var(--color-alert-red-deep);">Alergia: amoniaco</span>
+							<span class="text-[9px] px-2 py-1 rounded-full" style="background: var(--color-mockup-light-card); color: var(--color-neutral-500);">Cumple: 15 dic</span>
 						</div>
 						<!-- History -->
 						<div class="space-y-1.5">
-							<div class="text-[10px] text-gray-400 mb-1">Historial reciente</div>
-							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(1.0 0.003 155);">
-								<span class="text-[10px] text-gray-400">Orden #1,247 — 4 items</span>
-								<span class="text-[10px] text-gray-900">$685</span>
+							<div class="text-[10px] text-neutral-400 mb-1">Historial reciente</div>
+							<div class="flex items-center justify-between p-2 rounded" style="background: var(--color-mockup-light-card);">
+								<span class="text-[10px] text-neutral-400">Orden #1,247 — 4 items</span>
+								<span class="text-[10px] text-neutral-900">$685</span>
 							</div>
-							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(1.0 0.003 155);">
-								<span class="text-[10px] text-gray-400">Cupon canjeado: "2x1 Viernes"</span>
-								<span class="text-[10px] text-[oklch(0.52_0.16_150)]">-$95</span>
+							<div class="flex items-center justify-between p-2 rounded" style="background: var(--color-mockup-light-card);">
+								<span class="text-[10px] text-neutral-400">Cupon canjeado: "2x1 Viernes"</span>
+								<span class="text-[10px] text-[var(--color-product-tpv-deep)]">-$95</span>
 							</div>
-							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(1.0 0.003 155);">
-								<span class="text-[10px] text-gray-400">Review 5 estrellas</span>
-								<span class="text-[10px]" style={`color: oklch(0.62 0.14 68);`}>Google</span>
+							<div class="flex items-center justify-between p-2 rounded" style="background: var(--color-mockup-light-card);">
+								<span class="text-[10px] text-neutral-400">Review 5 estrellas</span>
+								<span class="text-[10px]" style="color: var(--color-alert-amber-deep);">Google</span>
 							</div>
-							<div class="flex items-center justify-between p-2 rounded" style="background: oklch(1.0 0.003 155);">
-								<span class="text-[10px] text-gray-400">Cita — Corte + Barba</span>
-								<span class="text-[10px]" style={`color: oklch(0.54 0.17 255);`}>Confirmada</span>
+							<div class="flex items-center justify-between p-2 rounded" style="background: var(--color-mockup-light-card);">
+								<span class="text-[10px] text-neutral-400">Cita — Corte + Barba</span>
+								<span class="text-[10px]" style="color: var(--color-product-dashboard-deep);">Confirmada</span>
 							</div>
 						</div>
 					</div>
@@ -659,66 +655,66 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<!-- Menu mockup -->
-					<div aria-hidden="true" class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: oklch(0.168 0.005 155);">
-						<div class="text-[11px] text-gray-400 mb-4">MenuMaker — 7 tipos de producto</div>
+					<div aria-hidden="true" class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: var(--color-mockup-surface);">
+						<div class="text-[11px] text-neutral-400 mb-4">MenuMaker — 7 tipos de producto</div>
 						<div class="space-y-2">
-							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.244 0.005 155); border-left: 3px solid ${BLUE};`}>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style="background: var(--color-mockup-raised); border-left: 3px solid var(--color-product-dashboard);">
 								<div>
 									<span class="text-xs text-white">Corte de cabello</span>
-									<span class="text-[9px] text-gray-600 block">Appointment/Service — 45 min</span>
+									<span class="text-[9px] text-neutral-600 block">Appointment/Service — 45 min</span>
 								</div>
 								<span class="text-xs text-white">$250</span>
 							</div>
-							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.244 0.005 155); border-left: 3px solid ${GREEN};`}>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style="background: var(--color-mockup-raised); border-left: 3px solid var(--color-avoqado-green);">
 								<div>
 									<span class="text-xs text-white">Tacos al Pastor</span>
-									<span class="text-[9px] text-gray-600 block">Food & Beverage — 3 modificadores</span>
+									<span class="text-[9px] text-neutral-600 block">Food & Beverage — 3 modificadores</span>
 								</div>
 								<span class="text-xs text-white">$95</span>
 							</div>
-							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.244 0.005 155); border-left: 3px solid ${INDIGO};`}>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style="background: var(--color-mockup-raised); border-left: 3px solid var(--color-product-pos);">
 								<div>
 									<span class="text-xs text-white">Clase de Yoga</span>
-									<span class="text-[9px] text-gray-600 block">Class — 15/20 cupos</span>
+									<span class="text-[9px] text-neutral-600 block">Class — 15/20 cupos</span>
 								</div>
 								<span class="text-xs text-white">$180</span>
 							</div>
-							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.244 0.005 155); border-left: 3px solid ${AMBER};`}>
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style="background: var(--color-mockup-raised); border-left: 3px solid var(--color-alert-amber);">
 								<div>
 									<span class="text-xs text-white">Pack 10 clases</span>
-									<span class="text-[9px] text-gray-600 block">Credit Pack — 10 creditos</span>
+									<span class="text-[9px] text-neutral-600 block">Credit Pack — 10 creditos</span>
 								</div>
 								<span class="text-xs text-white">$1,500</span>
 							</div>
-							<div class="flex items-center justify-between p-2.5 rounded-lg" style="background: oklch(0.244 0.005 155); border-left: 3px solid oklch(0.65 0.15 330);">
+							<div class="flex items-center justify-between p-2.5 rounded-lg" style="background: var(--color-mockup-raised); border-left: 3px solid oklch(0.65 0.15 330);">
 								<div>
 									<span class="text-xs text-white">Noche VIP</span>
-									<span class="text-[9px] text-gray-600 block">Event — Ticket, 200 cupos</span>
+									<span class="text-[9px] text-neutral-600 block">Event — Ticket, 200 cupos</span>
 								</div>
 								<span class="text-xs text-white">$850</span>
 							</div>
 						</div>
 						<div class="mt-4 pt-3 border-t border-white/10">
-							<div class="text-[9px] text-gray-500">Tipos: Regular, Food & Bev, Service, Class, Event, Digital, Donation</div>
+							<div class="text-[9px] text-neutral-500">Tipos: Regular, Food & Bev, Service, Class, Event, Digital, Donation</div>
 						</div>
 					</div>
 
 					<div class="order-1 lg:order-2">
-						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE_DEEP};`}>Productos</span>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style="color: var(--color-product-dashboard-deep);">Productos</span>
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
 							7 tipos de producto. Un solo catalogo.
 						</h2>
-						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+						<p class="text-neutral-600 text-lg leading-relaxed mb-8">
 							No importa si vendes cortes de cabello, clases de yoga, tacos o tickets de eventos — MenuMaker maneja todo. Categorias, modificadores, credit packs, importacion masiva y multi-menu por sucursal.
 						</p>
 						<div class="flex flex-wrap gap-2">
-							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-gray-600">Regular</span>
-							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-gray-600">Food & Bev</span>
-							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-gray-600">Servicio/Cita</span>
-							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-gray-600">Clase grupal</span>
-							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-gray-600">Evento</span>
-							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-gray-600">Digital</span>
-							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-gray-600">Donacion</span>
+							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-neutral-600">Regular</span>
+							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-neutral-600">Food & Bev</span>
+							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-neutral-600">Servicio/Cita</span>
+							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-neutral-600">Clase grupal</span>
+							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-neutral-600">Evento</span>
+							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-neutral-600">Digital</span>
+							<span class="px-3 py-1.5 text-xs rounded-full border border-black/10 text-neutral-600">Donacion</span>
 						</div>
 					</div>
 				</div>
@@ -734,63 +730,63 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-16">
 					<!-- Notificaciones -->
 					<div>
-						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Notificaciones</span>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style="color: var(--color-product-dashboard);">Notificaciones</span>
 						<h2 class="text-3xl font-light tracking-tight text-white mb-4 leading-tight">
 							30+ alertas automaticas.
 						</h2>
-						<p class="text-gray-400 text-base leading-relaxed mb-6">
+						<p class="text-neutral-400 text-base leading-relaxed mb-6">
 							WhatsApp, email, push e in-app. Pago recibido, review negativa, inventario bajo, terminal desconectada, turno terminado — todo llega sin configurar nada.
 						</p>
 						<div class="space-y-2">
 							<div class="flex items-center gap-3 p-3 rounded-lg border border-white/10">
 								<div class="w-2 h-2 rounded-full bg-avoqado-green shrink-0"></div>
-								<span class="text-sm text-gray-300">Pago de $547 recibido — Visa *4821</span>
+								<span class="text-sm text-neutral-300">Pago de $547 recibido — Visa *4821</span>
 							</div>
 							<div class="flex items-center gap-3 p-3 rounded-lg border border-white/10">
-								<div class="w-2 h-2 rounded-full shrink-0" style={`background: ${RED};`}></div>
-								<span class="text-sm text-gray-300">Review negativa en Google — Sucursal Centro</span>
+								<div class="w-2 h-2 rounded-full shrink-0" style="background: var(--color-alert-red);"></div>
+								<span class="text-sm text-neutral-300">Review negativa en Google — Sucursal Centro</span>
 							</div>
 							<div class="flex items-center gap-3 p-3 rounded-lg border border-white/10">
-								<div class="w-2 h-2 rounded-full shrink-0" style={`background: ${AMBER};`}></div>
-								<span class="text-sm text-gray-300">Stock bajo: Tinte 7.1 (12%), Shampoo (8%)</span>
+								<div class="w-2 h-2 rounded-full shrink-0" style="background: var(--color-alert-amber);"></div>
+								<span class="text-sm text-neutral-300">Stock bajo: Tinte 7.1 (12%), Shampoo (8%)</span>
 							</div>
 							<div class="flex items-center gap-3 p-3 rounded-lg border border-white/10">
-								<div class="w-2 h-2 rounded-full shrink-0" style={`background: ${BLUE};`}></div>
-								<span class="text-sm text-gray-300">Resumen diario: $18,450 en ventas</span>
+								<div class="w-2 h-2 rounded-full shrink-0" style="background: var(--color-product-dashboard);"></div>
+								<span class="text-sm text-neutral-300">Resumen diario: $18,450 en ventas</span>
 							</div>
 						</div>
 					</div>
 
 					<!-- Cortes de caja -->
 					<div>
-						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Caja</span>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style="color: var(--color-product-dashboard);">Caja</span>
 						<h2 class="text-3xl font-light tracking-tight text-white mb-4 leading-tight">
 							Cortes sin sorpresas.
 						</h2>
-						<p class="text-gray-400 text-base leading-relaxed mb-6">
+						<p class="text-neutral-400 text-base leading-relaxed mb-6">
 							El sistema sabe cuanto deberia haber en caja. Tu cuentas cuanto hay. Si no cuadra, se detecta al instante con auditoria por empleado.
 						</p>
-						<div aria-hidden="true" class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
+						<div aria-hidden="true" class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: var(--color-mockup-light-bg);">
 							<div class="flex items-center justify-between mb-3">
-								<span class="text-[11px] text-gray-500">Corte — Turno vespertino</span>
-								<span class="text-[9px] text-[oklch(0.52_0.16_150)]">Cuadrado</span>
+								<span class="text-[11px] text-neutral-500">Corte — Turno vespertino</span>
+								<span class="text-[9px] text-[var(--color-product-tpv-deep)]">Cuadrado</span>
 							</div>
 							<div class="space-y-2">
-								<div class="flex justify-between p-2 rounded" style="background: oklch(1.0 0.003 155);">
-									<span class="text-[10px] text-gray-500">Efectivo esperado</span>
-									<span class="text-[10px] text-gray-900">$4,230.00</span>
+								<div class="flex justify-between p-2 rounded" style="background: var(--color-mockup-light-card);">
+									<span class="text-[10px] text-neutral-500">Efectivo esperado</span>
+									<span class="text-[10px] text-neutral-900">$4,230.00</span>
 								</div>
-								<div class="flex justify-between p-2 rounded" style="background: oklch(1.0 0.003 155);">
-									<span class="text-[10px] text-gray-500">Efectivo contado</span>
-									<span class="text-[10px] text-gray-900">$4,230.00</span>
+								<div class="flex justify-between p-2 rounded" style="background: var(--color-mockup-light-card);">
+									<span class="text-[10px] text-neutral-500">Efectivo contado</span>
+									<span class="text-[10px] text-neutral-900">$4,230.00</span>
 								</div>
-								<div class="flex justify-between p-2 rounded" style="background: oklch(1.0 0.03 155);">
-									<span class="text-[10px] text-gray-500">Varianza</span>
-									<span class="text-[10px] text-[oklch(0.52_0.16_150)]">$0.00</span>
+								<div class="flex justify-between p-2 rounded" style="background: var(--color-product-tpv-tint-light);">
+									<span class="text-[10px] text-neutral-500">Varianza</span>
+									<span class="text-[10px] text-[var(--color-product-tpv-deep)]">$0.00</span>
 								</div>
-								<div class="flex justify-between p-2 rounded" style="background: oklch(1.0 0.003 155);">
-									<span class="text-[10px] text-gray-500">Deposito</span>
-									<span class="text-[10px] text-gray-900">Caja fuerte</span>
+								<div class="flex justify-between p-2 rounded" style="background: var(--color-mockup-light-card);">
+									<span class="text-[10px] text-neutral-500">Deposito</span>
+									<span class="text-[10px] text-neutral-900">Caja fuerte</span>
 								</div>
 							</div>
 						</div>
@@ -808,47 +804,47 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<div>
 						<div class="flex items-center gap-3 mb-4">
-							<span class="text-xs uppercase tracking-widest font-semibold" style="color: oklch(0.50 0.15 162);">Contabilidad</span>
-							<span class="text-[10px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded-full" style="color: oklch(0.50 0.15 162); border: 1px solid oklch(0.50 0.15 162); opacity: 0.85;">Premium</span>
+							<span class="text-xs uppercase tracking-widest font-semibold" style="color: var(--color-product-contabilidad-deep);">Contabilidad</span>
+							<span class="text-[10px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded-full" style="color: var(--color-product-contabilidad-deep); border: 1px solid var(--color-product-contabilidad-deep); opacity: 0.85;">Premium</span>
 						</div>
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
 							Tu contabilidad se lleva sola.
 						</h2>
-						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+						<p class="text-neutral-600 text-lg leading-relaxed mb-8">
 							Cada venta se convierte en una poliza de doble partida. Tu Estado de Resultados y Balance General en tiempo real, listos para el SAT — mas conciliacion bancaria con IA y catalogo de cuentas SAT.
 						</p>
-						<a href="/productos/contabilidad" class="inline-flex items-center gap-2 text-base font-medium group" style="color: oklch(0.50 0.15 162);">
+						<a href="/productos/contabilidad" class="inline-flex items-center gap-2 text-base font-medium group" style="color: var(--color-product-contabilidad-deep);">
 							Conocer Contabilidad
 							<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
 						</a>
 					</div>
 
 					<!-- Mini reportes mockup -->
-					<div class="rounded-xl overflow-hidden" aria-hidden="true" style="background: oklch(0.13 0.005 155); border: 1px solid oklch(0.282 0.005 155); box-shadow: 0 20px 50px rgba(0,0,0,0.4);">
-						<div class="flex items-center justify-between px-4 py-3 border-b" style="border-color: oklch(0.244 0.005 155);">
+					<div class="rounded-xl overflow-hidden" aria-hidden="true" style="background: var(--color-mockup-bg); border: 1px solid var(--color-mockup-chrome); box-shadow: 0 20px 50px rgba(0,0,0,0.4);">
+						<div class="flex items-center justify-between px-4 py-3 border-b" style="border-color: var(--color-mockup-raised);">
 							<span class="text-[11px] text-white font-medium">Reportes contables</span>
-							<span class="text-[8px] flex items-center gap-1" style="color: oklch(0.74 0.15 162);">
+							<span class="text-[8px] flex items-center gap-1" style="color: var(--color-product-contabilidad);">
 								<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
 								El balance cuadra
 							</span>
 						</div>
 						<div class="grid grid-cols-2 gap-3 p-4">
-							<div class="rounded-lg p-3" style="background: oklch(0.187 0.005 155);">
+							<div class="rounded-lg p-3" style="background: var(--color-mockup-elevated);">
 								<div class="text-[8px] font-semibold text-white mb-2">Estado de Resultados</div>
 								<div class="space-y-1">
-									<div class="flex justify-between text-[8px]"><span class="text-gray-500">Ingresos</span><span class="text-gray-300 tabular-nums">$10,000</span></div>
-									<div class="flex justify-between text-[8px]"><span class="text-gray-500">Costos</span><span class="text-gray-300 tabular-nums">$4,000</span></div>
-									<div class="flex justify-between text-[8px]"><span class="text-gray-500">Gastos</span><span class="text-gray-300 tabular-nums">$2,000</span></div>
-									<div class="flex justify-between text-[9px] px-1.5 py-1 rounded font-semibold mt-1" style="background: oklch(0.74 0.15 162 / 0.12); color: oklch(0.74 0.15 162);"><span>Utilidad</span><span class="tabular-nums">$4,000</span></div>
+									<div class="flex justify-between text-[8px]"><span class="text-neutral-500">Ingresos</span><span class="text-neutral-300 tabular-nums">$10,000</span></div>
+									<div class="flex justify-between text-[8px]"><span class="text-neutral-500">Costos</span><span class="text-neutral-300 tabular-nums">$4,000</span></div>
+									<div class="flex justify-between text-[8px]"><span class="text-neutral-500">Gastos</span><span class="text-neutral-300 tabular-nums">$2,000</span></div>
+									<div class="flex justify-between text-[9px] px-1.5 py-1 rounded font-semibold mt-1" style="background: color-mix(in oklab, var(--color-product-contabilidad) 12%, transparent); color: var(--color-product-contabilidad);"><span>Utilidad</span><span class="tabular-nums">$4,000</span></div>
 								</div>
 							</div>
-							<div class="rounded-lg p-3" style="background: oklch(0.187 0.005 155);">
+							<div class="rounded-lg p-3" style="background: var(--color-mockup-elevated);">
 								<div class="text-[8px] font-semibold text-white mb-2">Balance General</div>
 								<div class="space-y-1">
-									<div class="flex justify-between text-[8px]"><span class="text-gray-500">Activo</span><span class="text-gray-300 tabular-nums">$5,600</span></div>
-									<div class="flex justify-between text-[8px]"><span class="text-gray-500">Pasivo</span><span class="text-gray-300 tabular-nums">$1,600</span></div>
-									<div class="flex justify-between text-[8px]"><span class="text-gray-500">Capital</span><span class="text-gray-300 tabular-nums">$4,000</span></div>
-									<div class="flex justify-between text-[9px] px-1.5 py-1 rounded font-semibold mt-1" style="background: oklch(0.244 0.005 155); color: #fff;"><span class="text-gray-400">A = P + C</span><span class="tabular-nums">$5,600</span></div>
+									<div class="flex justify-between text-[8px]"><span class="text-neutral-500">Activo</span><span class="text-neutral-300 tabular-nums">$5,600</span></div>
+									<div class="flex justify-between text-[8px]"><span class="text-neutral-500">Pasivo</span><span class="text-neutral-300 tabular-nums">$1,600</span></div>
+									<div class="flex justify-between text-[8px]"><span class="text-neutral-500">Capital</span><span class="text-neutral-300 tabular-nums">$4,000</span></div>
+									<div class="flex justify-between text-[9px] px-1.5 py-1 rounded font-semibold mt-1" style="background: var(--color-mockup-raised); color: #fff;"><span class="text-neutral-400">A = P + C</span><span class="tabular-nums">$5,600</span></div>
 								</div>
 							</div>
 						</div>
@@ -864,21 +860,21 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/10">
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-					<div class="border-t pt-6" style={`border-color: ${BLUE};`}>
+					<div class="border-t pt-6" style="border-color: var(--color-product-dashboard);">
 						<div class="text-3xl md:text-4xl font-light text-black mb-1">31</div>
-						<div class="text-sm text-gray-600">Modulos integrados</div>
+						<div class="text-sm text-neutral-600">Modulos integrados</div>
 					</div>
-					<div class="border-t pt-6" style={`border-color: ${BLUE};`}>
+					<div class="border-t pt-6" style="border-color: var(--color-product-dashboard);">
 						<div class="text-3xl md:text-4xl font-light text-black mb-1">35+</div>
-						<div class="text-sm text-gray-600">Tipos de negocio</div>
+						<div class="text-sm text-neutral-600">Tipos de negocio</div>
 					</div>
-					<div class="border-t pt-6" style={`border-color: ${BLUE};`}>
+					<div class="border-t pt-6" style="border-color: var(--color-product-dashboard);">
 						<div class="text-3xl md:text-4xl font-light text-black mb-1">30+</div>
-						<div class="text-sm text-gray-600">Alertas automaticas</div>
+						<div class="text-sm text-neutral-600">Alertas automaticas</div>
 					</div>
-					<div class="border-t pt-6" style={`border-color: ${BLUE};`}>
+					<div class="border-t pt-6" style="border-color: var(--color-product-dashboard);">
 						<div class="text-3xl md:text-4xl font-light text-black mb-1">7</div>
-						<div class="text-sm text-gray-600">Tipos de producto</div>
+						<div class="text-sm text-neutral-600">Tipos de producto</div>
 					</div>
 				</div>
 
@@ -891,27 +887,27 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-6">
 					<div class="border-t border-black/10 pt-3">
 						<h3 class="text-black font-medium text-base mb-1">Inventario FIFO</h3>
-						<p class="text-gray-600 text-sm">Materias primas, recetas, alertas, lotes con expiracion, ordenes de compra a proveedores.</p>
+						<p class="text-neutral-600 text-sm">Materias primas, recetas, alertas, lotes con expiracion, ordenes de compra a proveedores.</p>
 					</div>
 					<div class="border-t border-black/10 pt-3">
 						<h3 class="text-black font-medium text-base mb-1">Personal + Comisiones</h3>
-						<p class="text-gray-600 text-sm">9 roles, 50+ permisos, comisiones escalonadas con milestones, turnos y asistencia.</p>
+						<p class="text-neutral-600 text-sm">9 roles, 50+ permisos, comisiones escalonadas con milestones, turnos y asistencia.</p>
 					</div>
 					<div class="border-t border-black/10 pt-3">
 						<h3 class="text-black font-medium text-base mb-1">Reservaciones</h3>
-						<p class="text-gray-600 text-sm">Calendario, waitlist, booking publico, depositos Stripe, Google Reserve, clases grupales.</p>
+						<p class="text-neutral-600 text-sm">Calendario, waitlist, booking publico, depositos Stripe, Google Reserve, clases grupales.</p>
 					</div>
 					<div class="border-t border-black/10 pt-3">
 						<h3 class="text-black font-medium text-base mb-1">Reviews</h3>
-						<p class="text-gray-600 text-sm">Google, TripAdvisor, Facebook, Yelp — sync automatico, alertas de reviews negativas, respuestas.</p>
+						<p class="text-neutral-600 text-sm">Google, TripAdvisor, Facebook, Yelp — sync automatico, alertas de reviews negativas, respuestas.</p>
 					</div>
 					<div class="border-t border-black/10 pt-3">
 						<h3 class="text-black font-medium text-base mb-1">Training</h3>
-						<p class="text-gray-600 text-sm">Modulos de capacitacion con videos y quizzes. Tracking de progreso por empleado.</p>
+						<p class="text-neutral-600 text-sm">Modulos de capacitacion con videos y quizzes. Tracking de progreso por empleado.</p>
 					</div>
 					<div class="border-t border-black/10 pt-3">
 						<h3 class="text-black font-medium text-base mb-1">White-Label</h3>
-						<p class="text-gray-600 text-sm">Tu marca, tus colores, features seleccionados. Presets para Telecom, Joyeria, Retail.</p>
+						<p class="text-neutral-600 text-sm">Tu marca, tus colores, features seleccionados. Presets para Telecom, Joyeria, Retail.</p>
 					</div>
 				</div>
 			</div>
@@ -926,11 +922,11 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 				<h2 class="text-3xl md:text-5xl font-light tracking-tight text-white mb-8">
 					Prueba los 31 modulos.
 				</h2>
-				<p class="text-lg text-gray-400 mb-12 max-w-xl mx-auto">
+				<p class="text-lg text-neutral-400 mb-12 max-w-xl mx-auto">
 					Demo interactiva con datos reales. Sin tarjeta, sin compromiso. Explora cada modulo a tu ritmo.
 				</p>
 				<div class="flex flex-col sm:flex-row gap-4 justify-center">
-					<a href="https://avoqado.io/demo" target="_blank" rel="noopener noreferrer" class="px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 text-lg" style={`background: ${BLUE};`}>
+					<a href="https://avoqado.io/demo" target="_blank" rel="noopener noreferrer" class="px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 text-lg" style="background: var(--color-product-dashboard);">
 						Probar demo gratis
 					</a>
 					<a href="/contact" class="px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200 text-lg">

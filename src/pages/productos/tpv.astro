@@ -6,28 +6,10 @@ import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 import TpvFrame from '../../components/ui/TpvFrame.astro';
 import AvoqadoTour from '../../components/interactive/tour/AvoqadoTour';
 
-const GREEN = '#7ADD2C';
-const GREEN_DEEP = 'oklch(0.50 0.16 150)'; // acento verde legible sobre blanco (eyebrows en secciones claras)
-const BLUE = 'oklch(0.72 0.14 240)';
-const AMBER = 'oklch(0.78 0.14 75)';
-const RED = 'oklch(0.65 0.20 25)';
-const INDIGO = 'oklch(0.68 0.15 290)';
-
-// ─── Dark screen palette (TpvFrame) ────────────────────────────
-// Las pantallas dentro del PAX blanco son oscuras (casi negro + glow
-// verde) con acentos verde/ambar/azul brillantes.
-const SURFACE = 'oklch(0.13 0.005 155)';       // dark screen backdrop
-const CARD = 'oklch(0.185 0.006 155)';         // dark inner cards / chips
-const NEUTRAL_TINT = 'oklch(0.24 0.006 155)';  // image/placeholder blocks
-const TRACK = 'oklch(0.26 0.006 155)';         // progress track
-const HAIRLINE = 'oklch(0.62 0.006 155)';      // svg icon stroke on dark
-const GREEN_INK = '#7ADD2C';                   // bright green text/amounts
-const GREEN_TINT = 'oklch(0.23 0.06 152)';     // active green card fill (dark)
-const GREEN_LINE = 'oklch(0.50 0.14 152)';     // green border on dark
-const AMBER_INK = 'oklch(0.80 0.14 75)';       // bright amber text
-const AMBER_TINT = 'oklch(0.22 0.05 75)';      // amber card fill (dark)
-const BLUE_INK = 'oklch(0.72 0.14 240)';       // bright blue text
-const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
+// Paleta: tokens compartidos de src/styles/global.css (--color-product-*,
+// --color-alert-*, --color-mockup-*, --color-neutral-*). Los unicos colores
+// inline que quedan son decorativos de contenido (grid de categorias e
+// iniciales de producto del kiosko).
 ---
 
 <!doctype html>
@@ -60,7 +42,7 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 							Cobra en cualquier lugar.<br/>
 							Con o sin internet.
 						</h1>
-						<p class="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed mb-10">
+						<p class="text-lg md:text-xl text-neutral-400 max-w-xl leading-relaxed mb-10">
 							Terminal handheld para tu staff con 5 procesadores de pago, impresora integrada, operacion offline y sincronizacion automatica. Gestiona remotamente desde el dashboard.
 						</p>
 						<div class="flex flex-col sm:flex-row gap-4">
@@ -74,7 +56,7 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 					</div>
 					<!-- Mobile: terminal principal (la composicion 3D es solo desktop) -->
 					<div class="lg:hidden relative flex justify-center pt-2 pb-6">
-						<div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-56 h-12 rounded-full blur-3xl" style="background: #7ADD2C; opacity: 0.15;"></div>
+						<div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-56 h-12 rounded-full blur-3xl" style="background: var(--color-avoqado-green); opacity: 0.15;"></div>
 						<img src="/pax-avoqado.png" alt="Terminal PAX A910S con Avoqado"
 							class="max-h-[340px] w-auto relative"
 							style="filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));"
@@ -83,7 +65,7 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 					<!-- Terminals composition — floating with 3 devices -->
 					<div class="hidden lg:flex justify-center items-center relative" style="min-height: 520px; perspective: 1400px;" data-terminals-root>
 						<!-- Green glow underneath (ambient — stays put) -->
-						<div class="absolute bottom-8 left-1/2 -translate-x-1/2 w-72 h-16 rounded-full blur-3xl animate-terminal-glow" style="background: #7ADD2C; opacity: 0.15;"></div>
+						<div class="absolute bottom-8 left-1/2 -translate-x-1/2 w-72 h-16 rounded-full blur-3xl animate-terminal-glow" style="background: var(--color-avoqado-green); opacity: 0.15;"></div>
 
 						<!-- 3D stage — the group subtly turns to face the cursor -->
 						<div class="absolute inset-0 flex justify-center items-center" style="transform-style: preserve-3d; will-change: transform;" data-terminals-stage>
@@ -125,21 +107,21 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
 							Ordena productos.<br/>Cobra servicios.
 						</h2>
-						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+						<p class="text-neutral-400 text-lg leading-relaxed mb-8">
 							Toda tu operacion en la palma de la mano — como un handheld de Square, pero tuyo. Arma la venta, agrega productos o servicios, aplica descuentos y cobra en la misma pantalla. Sin caja, sin cables, sin computadora.
 						</p>
 						<div class="space-y-3">
 							<div class="flex items-start gap-3">
 								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
-								<span class="text-sm text-gray-400">Catalogo de productos y servicios con categorias, modificadores y descuentos</span>
+								<span class="text-sm text-neutral-400">Catalogo de productos y servicios con categorias, modificadores y descuentos</span>
 							</div>
 							<div class="flex items-start gap-3">
 								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
-								<span class="text-sm text-gray-400">Arma la orden y cobra en un solo dispositivo — tarjeta, efectivo o transferencia</span>
+								<span class="text-sm text-neutral-400">Arma la orden y cobra en un solo dispositivo — tarjeta, efectivo o transferencia</span>
 							</div>
 							<div class="flex items-start gap-3">
 								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
-								<span class="text-sm text-gray-400">Cada venta actualiza inventario, reportes y comisiones en tiempo real</span>
+								<span class="text-sm text-neutral-400">Cada venta actualiza inventario, reportes y comisiones en tiempo real</span>
 							</div>
 						</div>
 					</div>
@@ -155,22 +137,22 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 								</div>
 								<!-- search + acciones -->
 								<div class="flex items-center gap-2 mb-3">
-									<div class="flex-1 flex items-center gap-2 rounded-xl px-3 h-9" style={`background: ${CARD};`}>
-										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={HAIRLINE} stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-										<span class="text-[12px] text-gray-500">Buscar</span>
+									<div class="flex-1 flex items-center gap-2 rounded-xl px-3 h-9" style="background: var(--color-mockup-elevated);">
+										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color: var(--color-mockup-ink-muted);" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+										<span class="text-[12px] text-neutral-500">Buscar</span>
 									</div>
-									<div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={`background: ${CARD};`}>
-										<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={HAIRLINE} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v5h-5"/></svg>
+									<div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background: var(--color-mockup-elevated);">
+										<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color: var(--color-mockup-ink-muted);" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v5h-5"/></svg>
 									</div>
-									<div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={`background: ${CARD};`}>
-										<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={HAIRLINE} stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M20 14v3M17 17v4M20 20h1"/></svg>
+									<div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background: var(--color-mockup-elevated);">
+										<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color: var(--color-mockup-ink-muted);" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M20 14v3M17 17v4M20 20h1"/></svg>
 									</div>
 								</div>
 								<!-- tabs -->
 								<div class="flex items-center gap-4 mb-3 border-b border-white/10">
-									<span class="text-[11.5px] text-gray-500 pb-2">Shortcuts</span>
+									<span class="text-[11.5px] text-neutral-500 pb-2">Shortcuts</span>
 									<span class="text-[11.5px] text-white font-medium pb-2 border-b-2 border-avoqado-green -mb-px">Todos los productos</span>
-									<span class="text-[11.5px] text-gray-500 pb-2">Configurar</span>
+									<span class="text-[11.5px] text-neutral-500 pb-2">Configurar</span>
 								</div>
 								<!-- category grid — distintos giros de negocio -->
 								<div class="grid grid-cols-3 gap-2 flex-1 content-start">
@@ -185,18 +167,18 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 									<div class="aspect-square rounded-xl p-2 flex flex-col justify-between" style="background: oklch(0.60 0.19 25);"><svg width="15" height="15" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="rgba(255,255,255,0.92)"/><rect x="13" y="3" width="8" height="8" rx="2" fill="rgba(255,255,255,0.92)"/><rect x="3" y="13" width="8" height="8" rx="2" fill="rgba(255,255,255,0.92)"/><rect x="13" y="13" width="8" height="8" rx="2" fill="rgba(255,255,255,0.92)"/></svg><span class="text-[10px] font-semibold text-white leading-tight">Boletos</span></div>
 								</div>
 								<!-- resumen del carrito -->
-								<div class="mt-3 rounded-xl px-3 py-2.5" style={`background: ${CARD};`}>
+								<div class="mt-3 rounded-xl px-3 py-2.5" style="background: var(--color-mockup-elevated);">
 									<div class="flex items-center justify-between mb-2">
 										<div class="flex items-center gap-1.5">
-											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={GREEN} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+											<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color: var(--color-avoqado-green);" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
 											<span class="text-[12px] font-medium text-white">Carrito · 3 productos</span>
 										</div>
 										<span class="text-[13px] font-semibold text-white">$320.00</span>
 									</div>
 									<div class="flex flex-wrap gap-1">
-										<span class="text-[9px] px-2 py-0.5 rounded-full text-gray-300 border border-white/10">Corte de cabello</span>
-										<span class="text-[9px] px-2 py-0.5 rounded-full text-gray-300 border border-white/10">Barba</span>
-										<span class="text-[9px] px-2 py-0.5 rounded-full text-gray-300 border border-white/10">Cafe americano</span>
+										<span class="text-[9px] px-2 py-0.5 rounded-full text-neutral-300 border border-white/10">Corte de cabello</span>
+										<span class="text-[9px] px-2 py-0.5 rounded-full text-neutral-300 border border-white/10">Barba</span>
+										<span class="text-[9px] px-2 py-0.5 rounded-full text-neutral-300 border border-white/10">Cafe americano</span>
 									</div>
 								</div>
 								<!-- cobrar -->
@@ -219,29 +201,29 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<div>
-						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${GREEN_DEEP};`}>Pagos</span>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style="color: var(--color-product-tpv-deep);">Pagos</span>
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
 							Tu decides a donde va cada peso.
 						</h2>
-						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+						<p class="text-neutral-600 text-lg leading-relaxed mb-8">
 							Configura a que cuenta bancaria se deposita cada transaccion. Enruta pagos a diferentes CLABEs por sucursal, por concepto o por regla de negocio. Acepta tarjeta (NFC, chip, banda), efectivo, transferencia, wallet y criptomonedas.
 						</p>
 						<div class="space-y-4">
 							<div class="border-t border-black/5 pt-3">
 								<h3 class="text-base text-black font-medium mb-1">Enrutamiento inteligente</h3>
-								<p class="text-sm text-gray-500">Asigna cuentas CLABE diferentes por sucursal o concepto. El dinero llega directo a donde debe.</p>
+								<p class="text-sm text-neutral-500">Asigna cuentas CLABE diferentes por sucursal o concepto. El dinero llega directo a donde debe.</p>
 							</div>
 							<div class="border-t border-black/5 pt-3">
 								<h3 class="text-base text-black font-medium mb-1">Todos los metodos de pago</h3>
-								<p class="text-sm text-gray-500">Tarjeta contactless (NFC), chip, banda magnetica, efectivo, transferencia bancaria, wallet digital.</p>
+								<p class="text-sm text-neutral-500">Tarjeta contactless (NFC), chip, banda magnetica, efectivo, transferencia bancaria, wallet digital.</p>
 							</div>
 							<div class="border-t border-black/5 pt-3">
 								<h3 class="text-base text-black font-medium mb-1">Criptomonedas</h3>
-								<p class="text-sm text-gray-500">Acepta BTC, ETH y USDT via B4Bit con verificacion criptografica.</p>
+								<p class="text-sm text-neutral-500">Acepta BTC, ETH y USDT via B4Bit con verificacion criptografica.</p>
 							</div>
 							<div class="border-t border-black/5 pt-3">
 								<h3 class="text-base text-black font-medium mb-1">Reconciliacion automatica</h3>
-								<p class="text-sm text-gray-500">Cada pago se reconcilia en 4 capas: terminal, procesador, backend y webhook. Zero discrepancias.</p>
+								<p class="text-sm text-neutral-500">Cada pago se reconcilia en 4 capas: terminal, procesador, backend y webhook. Zero discrepancias.</p>
 							</div>
 						</div>
 					</div>
@@ -254,37 +236,37 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
 									<span class="text-[16px] font-semibold text-white">Enrutamiento</span>
 								</div>
-								<div class="rounded-2xl p-3.5" style={`background: ${CARD};`}>
-									<div class="text-[11px] text-gray-500 mb-2">Pago recibido</div>
+								<div class="rounded-2xl p-3.5" style="background: var(--color-mockup-elevated);">
+									<div class="text-[11px] text-neutral-500 mb-2">Pago recibido</div>
 									<div class="flex items-center justify-between">
 										<div class="flex items-center gap-2"><div class="w-2.5 h-2.5 rounded-full bg-avoqado-green"></div><span class="text-[14px] text-white">Tarjeta Visa *4821</span></div>
-										<span class="text-[17px] font-semibold" style={`color: ${GREEN_INK};`}>$1,247.00</span>
+										<span class="text-[17px] font-semibold" style="color: var(--color-avoqado-green);">$1,247.00</span>
 									</div>
 								</div>
 								<div class="flex justify-center py-1.5">
-									<div class="w-7 h-7 rounded-full flex items-center justify-center" style={`background: ${CARD};`}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={HAIRLINE} stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></div>
+									<div class="w-7 h-7 rounded-full flex items-center justify-center" style="background: var(--color-mockup-elevated);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color: var(--color-mockup-ink-muted);" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></div>
 								</div>
 								<div class="flex-1 flex flex-col gap-2.5">
-									<div class="flex-1 rounded-2xl p-3.5 flex items-center justify-between border" style={`background: ${GREEN_TINT}; border-color: ${GREEN};`}>
-										<div><div class="text-[14px] text-white leading-tight">Cuenta principal</div><div class="text-[11px] text-gray-400 mt-1">CLABE **** 7832 · BBVA</div></div>
-										<span class="text-[12px] font-semibold" style={`color: ${GREEN_INK};`}>Sucursal Centro</span>
+									<div class="flex-1 rounded-2xl p-3.5 flex items-center justify-between border" style="background: var(--color-product-tpv-tint); border-color: var(--color-avoqado-green);">
+										<div><div class="text-[14px] text-white leading-tight">Cuenta principal</div><div class="text-[11px] text-neutral-400 mt-1">CLABE **** 7832 · BBVA</div></div>
+										<span class="text-[12px] font-semibold" style="color: var(--color-avoqado-green);">Sucursal Centro</span>
 									</div>
-									<div class="flex-1 rounded-2xl p-3.5 flex items-center justify-between border border-white/10" style={`background: ${CARD};`}>
-										<div><div class="text-[14px] text-white leading-tight">Cuenta eventos</div><div class="text-[11px] text-gray-400 mt-1">CLABE **** 1456 · Banorte</div></div>
-										<span class="text-[11px] text-gray-400">Sucursal Norte</span>
+									<div class="flex-1 rounded-2xl p-3.5 flex items-center justify-between border border-white/10" style="background: var(--color-mockup-elevated);">
+										<div><div class="text-[14px] text-white leading-tight">Cuenta eventos</div><div class="text-[11px] text-neutral-400 mt-1">CLABE **** 1456 · Banorte</div></div>
+										<span class="text-[11px] text-neutral-400">Sucursal Norte</span>
 									</div>
-									<div class="flex-1 rounded-2xl p-3.5 flex items-center justify-between border border-white/10" style={`background: ${CARD};`}>
-										<div><div class="text-[14px] text-white leading-tight">Cuenta propinas</div><div class="text-[11px] text-gray-400 mt-1">CLABE **** 9021 · HSBC</div></div>
-										<span class="text-[11px] text-gray-400">Todas</span>
+									<div class="flex-1 rounded-2xl p-3.5 flex items-center justify-between border border-white/10" style="background: var(--color-mockup-elevated);">
+										<div><div class="text-[14px] text-white leading-tight">Cuenta propinas</div><div class="text-[11px] text-neutral-400 mt-1">CLABE **** 9021 · HSBC</div></div>
+										<span class="text-[11px] text-neutral-400">Todas</span>
 									</div>
 								</div>
 								<div class="flex flex-wrap gap-1.5 mt-3.5">
-									<span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10" style={`background: ${CARD}; color: oklch(0.65 0.006 155);`}>NFC</span>
-									<span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10" style={`background: ${CARD}; color: oklch(0.65 0.006 155);`}>Chip</span>
-									<span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10" style={`background: ${CARD}; color: oklch(0.65 0.006 155);`}>Banda</span>
-									<span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10" style={`background: ${CARD}; color: oklch(0.65 0.006 155);`}>Efectivo</span>
-									<span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10" style={`background: ${CARD}; color: oklch(0.65 0.006 155);`}>Transferencia</span>
-									<span class="text-[10px] px-2.5 py-1 rounded-full" style={`background: ${AMBER_TINT}; color: ${AMBER_INK};`}>Crypto</span>
+									<span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10" style="background: var(--color-mockup-elevated); color: var(--color-mockup-ink-muted);">NFC</span>
+									<span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10" style="background: var(--color-mockup-elevated); color: var(--color-mockup-ink-muted);">Chip</span>
+									<span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10" style="background: var(--color-mockup-elevated); color: var(--color-mockup-ink-muted);">Banda</span>
+									<span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10" style="background: var(--color-mockup-elevated); color: var(--color-mockup-ink-muted);">Efectivo</span>
+									<span class="text-[10px] px-2.5 py-1 rounded-full border border-white/10" style="background: var(--color-mockup-elevated); color: var(--color-mockup-ink-muted);">Transferencia</span>
+									<span class="text-[10px] px-2.5 py-1 rounded-full" style="background: var(--color-alert-amber-tint); color: var(--color-alert-amber);">Crypto</span>
 								</div>
 							</div>
 						</TpvFrame>
@@ -309,26 +291,26 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 									<span class="text-[16px] font-semibold text-white">Estado del equipo</span>
 								</div>
 								<div class="flex-1 flex flex-col gap-3">
-									<div class="flex-1 rounded-2xl p-4 flex flex-col justify-center" style={`background: ${CARD};`}>
-										<div class="flex items-center gap-2 mb-2.5"><div class="w-3 h-3 rounded-full bg-avoqado-green"></div><span class="text-[15px] font-semibold" style={`color: ${GREEN_INK};`}>Online</span></div>
+									<div class="flex-1 rounded-2xl p-4 flex flex-col justify-center" style="background: var(--color-mockup-elevated);">
+										<div class="flex items-center gap-2 mb-2.5"><div class="w-3 h-3 rounded-full bg-avoqado-green"></div><span class="text-[15px] font-semibold" style="color: var(--color-avoqado-green);">Online</span></div>
 										<div class="space-y-1.5">
-										<div class="flex justify-between text-[12px]"><span class="text-gray-400">Ordenes sincronizadas</span><span class="text-white">247 / 247</span></div>
-										<div class="flex justify-between text-[12px]"><span class="text-gray-400">Pagos procesados</span><span class="font-medium" style={`color: ${GREEN_INK};`}>En tiempo real</span></div>
-										<div class="flex justify-between text-[12px]"><span class="text-gray-400">Menu actualizado</span><span class="text-white">Hace 2 min</span></div>
+										<div class="flex justify-between text-[12px]"><span class="text-neutral-400">Ordenes sincronizadas</span><span class="text-white">247 / 247</span></div>
+										<div class="flex justify-between text-[12px]"><span class="text-neutral-400">Pagos procesados</span><span class="font-medium" style="color: var(--color-avoqado-green);">En tiempo real</span></div>
+										<div class="flex justify-between text-[12px]"><span class="text-neutral-400">Menu actualizado</span><span class="text-white">Hace 2 min</span></div>
 										</div>
 									</div>
-									<div class="flex-1 rounded-2xl p-4 flex flex-col justify-center" style={`background: ${CARD}; border: 1px solid ${AMBER_INK};`}>
-										<div class="flex items-center gap-2 mb-2.5"><div class="w-3 h-3 rounded-full" style={`background: ${AMBER_INK};`}></div><span class="text-[15px] font-semibold" style={`color: ${AMBER_INK};`}>Sin conexion</span></div>
+									<div class="flex-1 rounded-2xl p-4 flex flex-col justify-center" style="background: var(--color-mockup-elevated); border: 1px solid var(--color-alert-amber);">
+										<div class="flex items-center gap-2 mb-2.5"><div class="w-3 h-3 rounded-full" style="background: var(--color-alert-amber);"></div><span class="text-[15px] font-semibold" style="color: var(--color-alert-amber);">Sin conexion</span></div>
 										<div class="space-y-1.5">
-											<div class="flex justify-between text-[12px]"><span class="text-gray-400">Ordenes pendientes</span><span class="font-medium" style={`color: ${AMBER_INK};`}>12 por sincronizar</span></div>
-										<div class="flex justify-between text-[12px]"><span class="text-gray-400">Pagos en efectivo</span><span class="text-white">Operando normal</span></div>
-										<div class="flex justify-between text-[12px]"><span class="text-gray-400">Menu local</span><span class="text-white">Cache activo</span></div>
+											<div class="flex justify-between text-[12px]"><span class="text-neutral-400">Ordenes pendientes</span><span class="font-medium" style="color: var(--color-alert-amber);">12 por sincronizar</span></div>
+										<div class="flex justify-between text-[12px]"><span class="text-neutral-400">Pagos en efectivo</span><span class="text-white">Operando normal</span></div>
+										<div class="flex justify-between text-[12px]"><span class="text-neutral-400">Menu local</span><span class="text-white">Cache activo</span></div>
 										</div>
 									</div>
-									<div class="flex-1 rounded-2xl p-4 flex flex-col justify-center" style={`background: ${GREEN_TINT}; border: 1px solid ${GREEN_LINE};`}>
-										<div class="flex items-center gap-2 mb-3"><div class="w-3 h-3 rounded-full bg-avoqado-green animate-pulse"></div><span class="text-[15px] font-semibold" style={`color: ${GREEN_INK};`}>Sincronizando...</span></div>
-										<div class="w-full h-2 rounded-full overflow-hidden" style={`background: ${TRACK};`}><div class="h-full rounded-full bg-avoqado-green" style="width: 67%;"></div></div>
-										<div class="text-[11px] text-gray-400 mt-2">8 de 12 ordenes sincronizadas</div>
+									<div class="flex-1 rounded-2xl p-4 flex flex-col justify-center" style="background: var(--color-product-tpv-tint); border: 1px solid var(--color-product-tpv-deep);">
+										<div class="flex items-center gap-2 mb-3"><div class="w-3 h-3 rounded-full bg-avoqado-green animate-pulse"></div><span class="text-[15px] font-semibold" style="color: var(--color-avoqado-green);">Sincronizando...</span></div>
+										<div class="w-full h-2 rounded-full overflow-hidden" style="background: var(--color-mockup-raised);"><div class="h-full rounded-full bg-avoqado-green" style="width: 67%;"></div></div>
+										<div class="text-[11px] text-neutral-400 mt-2">8 de 12 ordenes sincronizadas</div>
 									</div>
 								</div>
 							</div>
@@ -340,21 +322,21 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
 							Se cae el internet. Tu sigues cobrando.
 						</h2>
-						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+						<p class="text-neutral-400 text-lg leading-relaxed mb-8">
 							La terminal opera con o sin conexion. Ordenes, menu y configuracion se almacenan localmente. Cuando vuelve el internet, todo se sincroniza automaticamente — sin perder una sola transaccion.
 						</p>
 						<div class="space-y-3">
 							<div class="flex items-start gap-3">
 								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
-								<span class="text-sm text-gray-400">Menu y productos disponibles sin internet via cache local</span>
+								<span class="text-sm text-neutral-400">Menu y productos disponibles sin internet via cache local</span>
 							</div>
 							<div class="flex items-start gap-3">
-								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
-								<span class="text-sm text-gray-400">Cobros en efectivo operan 100% normal sin conexion</span>
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style="background: var(--color-alert-amber);"></div>
+								<span class="text-sm text-neutral-400">Cobros en efectivo operan 100% normal sin conexion</span>
 							</div>
 							<div class="flex items-start gap-3">
-								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
-								<span class="text-sm text-gray-400">Sincronizacion automatica al reconectar — zero intervencion</span>
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style="background: var(--color-product-dashboard);"></div>
+								<span class="text-sm text-neutral-400">Sincronizacion automatica al reconectar — zero intervencion</span>
 							</div>
 						</div>
 					</div>
@@ -370,29 +352,29 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<div>
-						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${GREEN_DEEP};`}>Hardware</span>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style="color: var(--color-product-tpv-deep);">Hardware</span>
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
 							Compatible con lo que ya tienes.
 						</h2>
-						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+						<p class="text-neutral-600 text-lg leading-relaxed mb-8">
 							Funciona con las principales marcas de terminales. Impresora de tickets integrada, Kitchen Display System para cocina, y activacion en menos de 5 minutos con un codigo de 6 caracteres.
 						</p>
 						<div class="space-y-4">
 							<div class="border-t border-black/5 pt-3">
 								<h3 class="text-base text-black font-medium mb-1">Terminales</h3>
-								<p class="text-sm text-gray-500">PAX (A910S, A920 Pro) y Nexgo (N86 y compacta), o cualquier dispositivo Android con impresora.</p>
+								<p class="text-sm text-neutral-500">PAX (A910S, A920 Pro) y Nexgo (N86 y compacta), o cualquier dispositivo Android con impresora.</p>
 							</div>
 							<div class="border-t border-black/5 pt-3">
 								<h3 class="text-base text-black font-medium mb-1">Impresora integrada</h3>
-								<p class="text-sm text-gray-500">Ticket impreso al instante. Recibos digitales con link a review como alternativa.</p>
+								<p class="text-sm text-neutral-500">Ticket impreso al instante. Recibos digitales con link a review como alternativa.</p>
 							</div>
 							<div class="border-t border-black/5 pt-3">
 								<h3 class="text-base text-black font-medium mb-1">Kitchen Display (KDS)</h3>
-								<p class="text-sm text-gray-500">Ordenes llegan directo a la pantalla de cocina con tracking de estado por platillo.</p>
+								<p class="text-sm text-neutral-500">Ordenes llegan directo a la pantalla de cocina con tracking de estado por platillo.</p>
 							</div>
 							<div class="border-t border-black/5 pt-3">
 								<h3 class="text-base text-black font-medium mb-1">Activacion rapida</h3>
-								<p class="text-sm text-gray-500">Codigo de 6 caracteres, expira en 7 dias, anti-brute force (max 5 intentos).</p>
+								<p class="text-sm text-neutral-500">Codigo de 6 caracteres, expira en 7 dias, anti-brute force (max 5 intentos).</p>
 							</div>
 						</div>
 					</div>
@@ -403,19 +385,19 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 						<div class="flex flex-col items-center relative z-10">
 							<img src="/pax-avoqado.png" alt="PAX A910S" class="h-72 w-auto mb-3" style="filter: drop-shadow(0 12px 24px rgba(0,0,0,0.1));" />
 							<span class="text-sm text-black font-medium">PAX A910S</span>
-							<span class="text-[10px] text-gray-500">Handheld + impresora</span>
+							<span class="text-[10px] text-neutral-500">Handheld + impresora</span>
 						</div>
 						<!-- Nexgo N86 — medium, angled shot -->
 						<div class="flex flex-col items-center relative z-0 -ml-4">
 							<img src="/nexgo86-avoqado.png" alt="Nexgo N86" class="h-52 w-auto mb-3" style="filter: drop-shadow(0 12px 24px rgba(0,0,0,0.1));" />
 							<span class="text-sm text-black font-medium">Nexgo N86</span>
-							<span class="text-[10px] text-gray-500">Robusta + escaner</span>
+							<span class="text-[10px] text-neutral-500">Robusta + escaner</span>
 						</div>
 						<!-- Nexgo compact — smallest, right -->
 						<div class="flex flex-col items-center relative z-0 -ml-2">
 							<img src="/nexgo-avoqado.png" alt="Nexgo Compact" class="h-40 w-auto mb-3" style="filter: drop-shadow(0 12px 24px rgba(0,0,0,0.1));" />
 							<span class="text-sm text-black font-medium">Nexgo</span>
-							<span class="text-[10px] text-gray-500">Compacta + NFC</span>
+							<span class="text-[10px] text-neutral-500">Compacta + NFC</span>
 						</div>
 					</div>
 				</div>
@@ -435,7 +417,7 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 						<h2 class="text-3xl font-light tracking-tight text-white mb-4 leading-tight">
 							Una terminal, multiples negocios.
 						</h2>
-						<p class="text-gray-400 text-base leading-relaxed mb-6">
+						<p class="text-neutral-400 text-base leading-relaxed mb-6">
 							Un solo dispositivo puede operar con diferentes cuentas de merchant. Ideal para plazas comerciales, food halls o negocios con multiples conceptos.
 						</p>
 						<div class="flex justify-center">
@@ -445,22 +427,22 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 										<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
 										<span class="text-[16px] font-semibold text-white">Negocios</span>
 									</div>
-									<div class="text-[11px] text-gray-500 mb-3.5">Selecciona con cual operar</div>
+									<div class="text-[11px] text-neutral-500 mb-3.5">Selecciona con cual operar</div>
 									<div class="flex-1 flex flex-col gap-2.5">
-										<div class="flex-1 rounded-2xl p-3.5 flex items-center gap-3 border" style={`background: ${GREEN_TINT}; border-color: ${GREEN};`}>
-											<div class="w-12 h-12 rounded-xl flex items-center justify-center text-[16px] font-bold shrink-0" style={`background: oklch(0.28 0.07 152); color: ${GREEN_INK};`}>LT</div>
-											<div class="flex-1 min-w-0"><div class="text-[15px] text-white leading-tight">La Terraza Rooftop</div><div class="text-[12px] font-medium mt-0.5" style={`color: ${GREEN_INK};`}>Activo</div></div>
-											<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={GREEN} stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+										<div class="flex-1 rounded-2xl p-3.5 flex items-center gap-3 border" style="background: var(--color-product-tpv-tint); border-color: var(--color-avoqado-green);">
+											<div class="w-12 h-12 rounded-xl flex items-center justify-center text-[16px] font-bold shrink-0" style="background: var(--color-product-tpv-tint-strong); color: var(--color-avoqado-green);">LT</div>
+											<div class="flex-1 min-w-0"><div class="text-[15px] text-white leading-tight">La Terraza Rooftop</div><div class="text-[12px] font-medium mt-0.5" style="color: var(--color-avoqado-green);">Activo</div></div>
+											<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color: var(--color-avoqado-green);" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
 										</div>
-										<div class="flex-1 rounded-2xl p-3.5 flex items-center gap-3 border border-white/10" style={`background: ${CARD};`}>
-											<div class="w-12 h-12 rounded-xl flex items-center justify-center text-[16px] font-bold shrink-0" style={`background: ${BLUE_TINT}; color: ${BLUE_INK};`}>CB</div>
-											<div class="flex-1 min-w-0"><div class="text-[15px] text-white leading-tight">Cafe Botanico</div><div class="text-[12px] text-gray-400 mt-0.5">Cambiar</div></div>
-											<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={HAIRLINE} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+										<div class="flex-1 rounded-2xl p-3.5 flex items-center gap-3 border border-white/10" style="background: var(--color-mockup-elevated);">
+											<div class="w-12 h-12 rounded-xl flex items-center justify-center text-[16px] font-bold shrink-0" style="background: var(--color-product-dashboard-tint); color: var(--color-product-dashboard);">CB</div>
+											<div class="flex-1 min-w-0"><div class="text-[15px] text-white leading-tight">Cafe Botanico</div><div class="text-[12px] text-neutral-400 mt-0.5">Cambiar</div></div>
+											<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color: var(--color-mockup-ink-muted);" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
 										</div>
-										<div class="flex-1 rounded-2xl p-3.5 flex items-center gap-3 border border-white/10" style={`background: ${CARD};`}>
-											<div class="w-12 h-12 rounded-xl flex items-center justify-center text-[16px] font-bold shrink-0" style={`background: ${AMBER_TINT}; color: ${AMBER_INK};`}>BN</div>
-											<div class="flex-1 min-w-0"><div class="text-[15px] text-white leading-tight">Bar Norte</div><div class="text-[12px] text-gray-400 mt-0.5">Cambiar</div></div>
-											<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={HAIRLINE} stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+										<div class="flex-1 rounded-2xl p-3.5 flex items-center gap-3 border border-white/10" style="background: var(--color-mockup-elevated);">
+											<div class="w-12 h-12 rounded-xl flex items-center justify-center text-[16px] font-bold shrink-0" style="background: var(--color-alert-amber-tint); color: var(--color-alert-amber);">BN</div>
+											<div class="flex-1 min-w-0"><div class="text-[15px] text-white leading-tight">Bar Norte</div><div class="text-[12px] text-neutral-400 mt-0.5">Cambiar</div></div>
+											<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color: var(--color-mockup-ink-muted);" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
 										</div>
 									</div>
 								</div>
@@ -474,7 +456,7 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 						<h2 class="text-3xl font-light tracking-tight text-white mb-4 leading-tight">
 							Login en 2 segundos.
 						</h2>
-						<p class="text-gray-400 text-base leading-relaxed mb-6">
+						<p class="text-neutral-400 text-base leading-relaxed mb-6">
 							PIN numerico por venue para acceso rapido. Biometricos y passkeys (Face ID, Touch ID) para seguridad sin friccion. Sin esperar, sin escribir passwords.
 						</p>
 						<div class="flex justify-center">
@@ -483,37 +465,37 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 								<!-- header -->
 								<div class="text-center pt-1">
 									<div class="text-[20px] font-semibold text-white leading-none">Ingresa tu PIN</div>
-									<div class="text-[13px] text-gray-500 mt-2">Studio Mave · Ana G.</div>
+									<div class="text-[13px] text-neutral-500 mt-2">Studio Mave · Ana G.</div>
 								</div>
 								<!-- PIN dots -->
 								<div class="flex justify-center gap-4 mt-7 mb-1">
 									<div class="w-5 h-5 rounded-full bg-avoqado-green"></div>
 									<div class="w-5 h-5 rounded-full bg-avoqado-green"></div>
-									<div class="w-5 h-5 rounded-full" style="background: oklch(0.30 0.006 155);"></div>
-									<div class="w-5 h-5 rounded-full" style="background: oklch(0.30 0.006 155);"></div>
+									<div class="w-5 h-5 rounded-full" style="background: var(--color-mockup-muted);"></div>
+									<div class="w-5 h-5 rounded-full" style="background: var(--color-mockup-muted);"></div>
 								</div>
 								<!-- numpad fills the screen -->
 								<div class="flex-1 grid grid-cols-3 gap-3 mt-6 auto-rows-fr">
-									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style={`background: ${CARD};`}>1</div>
-									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style={`background: ${CARD};`}>2</div>
-									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style={`background: ${CARD};`}>3</div>
-									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style={`background: ${CARD};`}>4</div>
-									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style={`background: ${CARD};`}>5</div>
-									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style={`background: ${CARD};`}>6</div>
-									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style={`background: ${CARD};`}>7</div>
-									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style={`background: ${CARD};`}>8</div>
-									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style={`background: ${CARD};`}>9</div>
-									<div class="rounded-2xl flex items-center justify-center border border-white/10" style={`background: ${CARD};`}>
-										<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={GREEN} stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11V8a5 5 0 0 1 10 0v3"/><rect x="5" y="11" width="14" height="10" rx="2"/></svg>
+									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style="background: var(--color-mockup-elevated);">1</div>
+									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style="background: var(--color-mockup-elevated);">2</div>
+									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style="background: var(--color-mockup-elevated);">3</div>
+									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style="background: var(--color-mockup-elevated);">4</div>
+									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style="background: var(--color-mockup-elevated);">5</div>
+									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style="background: var(--color-mockup-elevated);">6</div>
+									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style="background: var(--color-mockup-elevated);">7</div>
+									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style="background: var(--color-mockup-elevated);">8</div>
+									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style="background: var(--color-mockup-elevated);">9</div>
+									<div class="rounded-2xl flex items-center justify-center border border-white/10" style="background: var(--color-mockup-elevated);">
+										<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color: var(--color-avoqado-green);" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11V8a5 5 0 0 1 10 0v3"/><rect x="5" y="11" width="14" height="10" rx="2"/></svg>
 									</div>
-									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style={`background: ${CARD};`}>0</div>
-									<div class="rounded-2xl flex items-center justify-center border border-white/10" style={`background: ${CARD};`}>
-										<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={HAIRLINE} stroke-width="2" stroke-linecap="round"><path d="M12 19l-7-7 7-7"/><path d="M19 12H5"/></svg>
+									<div class="rounded-2xl flex items-center justify-center text-[26px] text-white border border-white/10" style="background: var(--color-mockup-elevated);">0</div>
+									<div class="rounded-2xl flex items-center justify-center border border-white/10" style="background: var(--color-mockup-elevated);">
+										<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color: var(--color-mockup-ink-muted);" stroke-width="2" stroke-linecap="round"><path d="M12 19l-7-7 7-7"/><path d="M19 12H5"/></svg>
 									</div>
 								</div>
 								<!-- footer -->
 								<div class="text-center mt-5">
-									<span class="text-[13px] text-gray-500">O usa Face ID / passkey</span>
+									<span class="text-[13px] text-neutral-500">O usa Face ID / passkey</span>
 								</div>
 							</div>
 						</TpvFrame>
@@ -530,11 +512,11 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
 			<div class="max-w-[1400px] mx-auto">
 				<div class="text-center max-w-2xl mx-auto mb-12">
-					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${GREEN_DEEP};`}>Self-service</span>
+					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style="color: var(--color-product-tpv-deep);">Self-service</span>
 					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
 						El cliente pide solo.
 					</h2>
-					<p class="text-gray-600 text-lg leading-relaxed">
+					<p class="text-neutral-600 text-lg leading-relaxed">
 						Modo kiosko con UI completa — el cliente ve el menu, arma su orden, paga y recibe confirmacion sin necesidad de personal. Ideal para cualquier negocio con alto volumen.
 					</p>
 				</div>
@@ -545,33 +527,33 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 					<div class="flex flex-col h-full">
 						<div class="mb-3.5">
 							<div class="text-[19px] font-semibold text-white leading-none">Haz tu pedido</div>
-							<div class="text-[12px] text-gray-500 mt-1.5">Toca para agregar a tu orden</div>
+							<div class="text-[12px] text-neutral-500 mt-1.5">Toca para agregar a tu orden</div>
 						</div>
 						<div class="flex gap-1.5 mb-3">
 							<span class="text-[11px] px-3 py-1 rounded-full text-black font-semibold bg-avoqado-green">Todo</span>
-							<span class="text-[11px] px-3 py-1 rounded-full text-gray-300 border border-white/10" style={`background: ${CARD};`}>Combos</span>
-							<span class="text-[11px] px-3 py-1 rounded-full text-gray-300 border border-white/10" style={`background: ${CARD};`}>Bebidas</span>
+							<span class="text-[11px] px-3 py-1 rounded-full text-neutral-300 border border-white/10" style="background: var(--color-mockup-elevated);">Combos</span>
+							<span class="text-[11px] px-3 py-1 rounded-full text-neutral-300 border border-white/10" style="background: var(--color-mockup-elevated);">Bebidas</span>
 						</div>
 						<div class="grid grid-cols-2 gap-2.5 flex-1 auto-rows-fr">
-							<div class="rounded-2xl p-2.5 flex flex-col border" style={`background: ${GREEN_TINT}; border-color: ${GREEN};`}>
-								<div class="flex-1 rounded-xl mb-2 min-h-[52px] flex items-center justify-center" style={`background: ${NEUTRAL_TINT};`}><span class="text-[26px] font-bold" style="color: oklch(0.72 0.15 150);">CC</span></div>
+							<div class="rounded-2xl p-2.5 flex flex-col border" style="background: var(--color-product-tpv-tint); border-color: var(--color-avoqado-green);">
+								<div class="flex-1 rounded-xl mb-2 min-h-[52px] flex items-center justify-center" style="background: var(--color-mockup-raised);"><span class="text-[26px] font-bold" style="color: oklch(0.72 0.15 150);">CC</span></div>
 								<div class="text-[12px] text-white leading-tight">Combo Clasico</div>
-								<div class="flex items-center justify-between mt-1"><span class="text-[12px] font-semibold" style={`color: ${GREEN_INK};`}>$185</span><div class="w-6 h-6 rounded-full bg-avoqado-green flex items-center justify-center"><span class="text-[11px] font-bold text-black">1</span></div></div>
+								<div class="flex items-center justify-between mt-1"><span class="text-[12px] font-semibold" style="color: var(--color-avoqado-green);">$185</span><div class="w-6 h-6 rounded-full bg-avoqado-green flex items-center justify-center"><span class="text-[11px] font-bold text-black">1</span></div></div>
 							</div>
-							<div class="rounded-2xl p-2.5 flex flex-col border border-white/10" style={`background: ${CARD};`}>
-								<div class="flex-1 rounded-xl mb-2 min-h-[52px] flex items-center justify-center" style={`background: ${NEUTRAL_TINT};`}><span class="text-[26px] font-bold" style="color: oklch(0.74 0.16 135);">EF</span></div>
+							<div class="rounded-2xl p-2.5 flex flex-col border border-white/10" style="background: var(--color-mockup-elevated);">
+								<div class="flex-1 rounded-xl mb-2 min-h-[52px] flex items-center justify-center" style="background: var(--color-mockup-raised);"><span class="text-[26px] font-bold" style="color: oklch(0.74 0.16 135);">EF</span></div>
 								<div class="text-[12px] text-white leading-tight">Ensalada Fresh</div>
-								<div class="flex items-center justify-between mt-1"><span class="text-[12px] font-semibold" style={`color: ${GREEN_INK};`}>$120</span></div>
+								<div class="flex items-center justify-between mt-1"><span class="text-[12px] font-semibold" style="color: var(--color-avoqado-green);">$120</span></div>
 							</div>
-							<div class="rounded-2xl p-2.5 flex flex-col border border-white/10" style={`background: ${CARD};`}>
-								<div class="flex-1 rounded-xl mb-2 min-h-[52px] flex items-center justify-center" style={`background: ${NEUTRAL_TINT};`}><span class="text-[26px] font-bold" style="color: oklch(0.74 0.14 62);">WP</span></div>
+							<div class="rounded-2xl p-2.5 flex flex-col border border-white/10" style="background: var(--color-mockup-elevated);">
+								<div class="flex-1 rounded-xl mb-2 min-h-[52px] flex items-center justify-center" style="background: var(--color-mockup-raised);"><span class="text-[26px] font-bold" style="color: oklch(0.74 0.14 62);">WP</span></div>
 								<div class="text-[12px] text-white leading-tight">Wrap Pollo</div>
-								<div class="flex items-center justify-between mt-1"><span class="text-[12px] font-semibold" style={`color: ${GREEN_INK};`}>$145</span></div>
+								<div class="flex items-center justify-between mt-1"><span class="text-[12px] font-semibold" style="color: var(--color-avoqado-green);">$145</span></div>
 							</div>
-							<div class="rounded-2xl p-2.5 flex flex-col border border-white/10" style={`background: ${CARD};`}>
-								<div class="flex-1 rounded-xl mb-2 min-h-[52px] flex items-center justify-center" style={`background: ${NEUTRAL_TINT};`}><span class="text-[26px] font-bold" style="color: oklch(0.72 0.13 220);">AN</span></div>
+							<div class="rounded-2xl p-2.5 flex flex-col border border-white/10" style="background: var(--color-mockup-elevated);">
+								<div class="flex-1 rounded-xl mb-2 min-h-[52px] flex items-center justify-center" style="background: var(--color-mockup-raised);"><span class="text-[26px] font-bold" style="color: oklch(0.72 0.13 220);">AN</span></div>
 								<div class="text-[12px] text-white leading-tight">Agua natural</div>
-								<div class="flex items-center justify-between mt-1"><span class="text-[12px] font-semibold" style={`color: ${GREEN_INK};`}>$35</span></div>
+								<div class="flex items-center justify-between mt-1"><span class="text-[12px] font-semibold" style="color: var(--color-avoqado-green);">$35</span></div>
 							</div>
 						</div>
 						<div class="mt-3 rounded-2xl h-12 flex items-center justify-between px-4 bg-avoqado-green">
@@ -596,7 +578,7 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 					<h2 class="text-3xl md:text-4xl font-light tracking-tight text-white leading-tight mb-4">
 						Controla cada terminal sin tocarla.
 					</h2>
-					<p class="text-gray-400 text-lg">
+					<p class="text-neutral-400 text-lg">
 						Todo se gestiona remotamente desde el Dashboard Web. Comandos, actualizaciones, monitoreo — sin visitar cada sucursal.
 					</p>
 				</div>
@@ -604,27 +586,27 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-8">
 					<div class="border-t border-white/5 pt-4">
 						<h3 class="text-white font-medium text-base mb-1">Comandos remotos</h3>
-						<p class="text-gray-400 text-sm">Lock, Unlock, Restart, Shutdown, Factory reset, Sync forzado, Export logs, Clear cache.</p>
+						<p class="text-neutral-400 text-sm">Lock, Unlock, Restart, Shutdown, Factory reset, Sync forzado, Export logs, Clear cache.</p>
 					</div>
 					<div class="border-t border-white/5 pt-4">
 						<h3 class="text-white font-medium text-base mb-1">OTA Updates</h3>
-						<p class="text-gray-400 text-sm">Force update, rollback a version anterior, install version especifica. Sin tocar el device.</p>
+						<p class="text-neutral-400 text-sm">Force update, rollback a version anterior, install version especifica. Sin tocar el device.</p>
 					</div>
 					<div class="border-t border-white/5 pt-4">
 						<h3 class="text-white font-medium text-base mb-1">Geofencing</h3>
-						<p class="text-gray-400 text-sm">Reglas por ubicacion GPS. Alerta si la terminal sale de la zona autorizada.</p>
+						<p class="text-neutral-400 text-sm">Reglas por ubicacion GPS. Alerta si la terminal sale de la zona autorizada.</p>
 					</div>
 					<div class="border-t border-white/5 pt-4">
 						<h3 class="text-white font-medium text-base mb-1">Comandos programados</h3>
-						<p class="text-gray-400 text-sm">Cron-based: restart diario a las 3am, sync cada hora, lo que necesites.</p>
+						<p class="text-neutral-400 text-sm">Cron-based: restart diario a las 3am, sync cada hora, lo que necesites.</p>
 					</div>
 					<div class="border-t border-white/5 pt-4">
 						<h3 class="text-white font-medium text-base mb-1">Monitoreo de salud</h3>
-						<p class="text-gray-400 text-sm">Heartbeat cada 5 min: bateria, memoria, CPU, uptime, GPS. Alertas proactivas.</p>
+						<p class="text-neutral-400 text-sm">Heartbeat cada 5 min: bateria, memoria, CPU, uptime, GPS. Alertas proactivas.</p>
 					</div>
 					<div class="border-t border-white/5 pt-4">
 						<h3 class="text-white font-medium text-base mb-1">Auditoria completa</h3>
-						<p class="text-gray-400 text-sm">Historial inmutable de cada comando enviado, quien lo envio y cuando.</p>
+						<p class="text-neutral-400 text-sm">Historial inmutable de cada comando enviado, quien lo envio y cuando.</p>
 					</div>
 				</div>
 			</div>
@@ -638,13 +620,13 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 			<div class="max-w-[1400px] mx-auto">
 				<div class="text-center max-w-2xl mx-auto mb-10 md:mb-14">
 					<div class="inline-flex items-center gap-2 text-xs font-bold tracking-wide lowercase mb-3" style="color: #98EA5C;">
-						<span class="w-2 h-2 rounded-full" style="background: #7ADD2C; box-shadow: 0 0 10px rgba(122,221,44,0.8);"></span>
+						<span class="w-2 h-2 rounded-full" style="background: var(--color-avoqado-green); box-shadow: 0 0 10px rgba(122,221,44,0.8);"></span>
 						demo interactivo
 					</div>
 					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-4 leading-tight">
 						Pruebala tu mismo.
 					</h2>
-					<p class="text-gray-400 text-lg leading-relaxed">
+					<p class="text-neutral-400 text-lg leading-relaxed">
 						Sigue el punto verde: cobra en la terminal real, arma una venta desde el punto de venta o crea una liga de pago. Sin registro, sin tarjeta.
 					</p>
 				</div>
@@ -662,7 +644,7 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 				<h2 class="text-3xl md:text-5xl font-light tracking-tight text-white mb-8">
 					Tu terminal en menos de 5 dias.
 				</h2>
-				<p class="text-lg text-gray-400 mb-12 max-w-xl mx-auto">
+				<p class="text-lg text-neutral-400 mb-12 max-w-xl mx-auto">
 					Solicita tu terminal, recibela configurada y lista para operar. Activacion en minutos con un codigo de 6 caracteres.
 				</p>
 				<div class="flex flex-col sm:flex-row gap-4 justify-center">

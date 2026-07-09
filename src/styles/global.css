@@ -49,6 +49,21 @@
   /* Border Radius */
   --radius-4xl: 2rem;
   --radius-5xl: 2.5rem;
+
+  /* Neutral scale — green-tinted (hue 155, chroma 0.003-0.007).
+     L matched 1:1 to Tailwind's gray scale so swapping text-gray-N for
+     text-neutral-N keeps the same lightness. Per design system: never pure gray. */
+  --color-neutral-50: oklch(0.985 0.003 155);
+  --color-neutral-100: oklch(0.967 0.003 155);
+  --color-neutral-200: oklch(0.928 0.005 155);
+  --color-neutral-300: oklch(0.872 0.005 155);
+  --color-neutral-400: oklch(0.707 0.006 155);
+  --color-neutral-500: oklch(0.551 0.006 155);
+  --color-neutral-600: oklch(0.446 0.007 155);
+  --color-neutral-700: oklch(0.373 0.007 155);
+  --color-neutral-800: oklch(0.278 0.006 155);
+  --color-neutral-900: oklch(0.21 0.006 155);
+  --color-neutral-950: oklch(0.13 0.005 155);
 }
 
 /* Product accent colors (used in /productos pages) */
@@ -72,6 +87,36 @@
   /* Semantic alert colors */
   --color-alert-red: oklch(0.65 0.20 25);
   --color-alert-amber: oklch(0.78 0.14 75);
+
+  /* Deep accents — L 0.50-0.62, legibles sobre blanco (design review jul 2026) */
+  --color-product-dashboard-deep: oklch(0.50 0.15 240);
+  --color-product-tpv-deep: oklch(0.50 0.16 150);
+  --color-product-contabilidad: oklch(0.74 0.15 162);
+  --color-product-contabilidad-deep: oklch(0.50 0.15 162);
+  --color-alert-amber-deep: oklch(0.62 0.14 75);
+  --color-alert-red-deep: oklch(0.55 0.21 25);
+
+  /* Accent tints — rellenos de tarjeta/chip sobre superficies oscuras */
+  --color-product-dashboard-tint: oklch(0.22 0.055 240);
+  --color-product-dashboard-tint-strong: oklch(0.28 0.055 240);
+  --color-product-tpv-tint: oklch(0.22 0.06 150);
+  --color-product-tpv-tint-strong: oklch(0.28 0.07 150);
+  --color-alert-amber-tint: oklch(0.22 0.05 75);
+  --color-alert-amber-tint-strong: oklch(0.33 0.065 75);
+  --color-alert-red-tint: oklch(0.22 0.055 25);
+
+  /* Accent tints — chips sobre secciones claras */
+  --color-product-dashboard-tint-light: oklch(1.0 0.03 240);
+  --color-product-tpv-tint-light: oklch(1.0 0.03 150);
+  --color-alert-red-tint-light: oklch(1.0 0.03 25);
+
+  /* Mockup neutrals — peldanos y tintas complementarios (hue 155) */
+  --color-mockup-raised: oklch(0.24 0.005 155);
+  --color-mockup-chrome: oklch(0.28 0.005 155);
+  --color-mockup-ink-muted: oklch(0.62 0.006 155);
+  --color-mockup-ink-faint: oklch(0.45 0.005 155);
+  --color-mockup-light-bg: oklch(0.955 0.003 155);
+  --color-mockup-light-card: oklch(1.0 0.003 155);
 }
 
 @keyframes fade-in {
