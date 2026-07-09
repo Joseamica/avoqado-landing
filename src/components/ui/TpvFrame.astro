@@ -24,7 +24,7 @@ const { variant = 'frontal', w = '340px', screenClass = '', class: cls = '' } = 
 const src = variant === 'diagonal' ? '/pax-a910s-frame.png' : '/pax-frame.png';
 ---
 
-<div class={`tpvf tpvf--${variant} ${cls}`} style={`max-width:${w};`}>
+<div class={`tpvf tpvf--${variant} ${cls}`} style={`max-width:${w};`} aria-hidden="true">
   <div class="tpvf-screen" data-tpvf-screen>
     <div class={`tpvf-canvas ${screenClass}`}>
       <slot />

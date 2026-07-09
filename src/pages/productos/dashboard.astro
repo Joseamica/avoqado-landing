@@ -23,6 +23,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 	</head>
 	<body class="bg-black m-0 p-0 w-full">
 		<Navbar position="fixed" transparentOnTop={false} />
+		<main>
 
 
 		<!-- ═══════════════════════════════════════════ -->
@@ -56,7 +57,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 
 					<!-- Browser mockup — visible en todos los tamanos; tilt 3D solo en desktop -->
 					<div>
-						<div class="rounded-xl overflow-hidden lg:[transform:perspective(1200px)_rotateY(-8deg)_rotateX(2deg)]" style="box-shadow: 0 25px 80px rgba(0,0,0,0.4);">
+						<div aria-hidden="true" class="rounded-xl overflow-hidden lg:[transform:perspective(1200px)_rotateY(-8deg)_rotateX(2deg)]" style="box-shadow: 0 25px 80px rgba(0,0,0,0.4);">
 							<!-- Browser chrome -->
 							<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.282 0.005 155);">
 								<div class="flex gap-1.5">
@@ -212,7 +213,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 					</div>
 
 					<!-- Reports mockup -->
-					<div class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
+					<div aria-hidden="true" class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Sales Summary — Ultima semana</span>
 							<div class="flex gap-2">
@@ -308,7 +309,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<!-- Payment link mockup -->
-					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: oklch(0.168 0.005 155);">
+					<div aria-hidden="true" class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: oklch(0.168 0.005 155);">
 						<div class="text-[11px] text-gray-500 mb-4">Liga de pago activa</div>
 						<!-- Link card -->
 						<div class="rounded-xl p-4 mb-4" style="background: oklch(0.244 0.005 155);">
@@ -400,7 +401,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 				</div>
 
 				<!-- Chat mockup - full width -->
-				<div class="max-w-3xl mx-auto rounded-2xl overflow-hidden border border-black/10 p-5 mb-12" style="background: #f1f1f1;">
+				<div aria-hidden="true" class="max-w-3xl mx-auto rounded-2xl overflow-hidden border border-black/10 p-5 mb-12" style="background: #f1f1f1;">
 					<div class="space-y-3">
 						<div class="flex justify-end">
 							<div class="px-4 py-2.5 rounded-2xl rounded-br-sm max-w-[80%]" style="background: oklch(1.0 0.003 155);">
@@ -468,7 +469,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<!-- Terminal management mockup -->
-					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: oklch(0.168 0.005 155);">
+					<div aria-hidden="true" class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: oklch(0.168 0.005 155);">
 						<div class="text-[11px] text-gray-500 mb-4">Terminales — 4 activas</div>
 						<div class="space-y-2 mb-4">
 							<div class="flex items-center justify-between p-3 rounded-lg" style="background: oklch(0.244 0.005 155);">
@@ -604,7 +605,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 					</div>
 
 					<!-- CRM mockup -->
-					<div class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
+					<div aria-hidden="true" class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
 						<div class="text-[11px] text-gray-500 mb-4">Cliente — Perfil</div>
 						<!-- Client header -->
 						<div class="flex items-center gap-3 mb-4 p-3 rounded-lg" style="background: oklch(1.0 0.003 155);">
@@ -658,7 +659,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<!-- Menu mockup -->
-					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: oklch(0.168 0.005 155);">
+					<div aria-hidden="true" class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: oklch(0.168 0.005 155);">
 						<div class="text-[11px] text-gray-400 mb-4">MenuMaker — 7 tipos de producto</div>
 						<div class="space-y-2">
 							<div class="flex items-center justify-between p-2.5 rounded-lg" style={`background: oklch(0.244 0.005 155); border-left: 3px solid ${BLUE};`}>
@@ -769,7 +770,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 						<p class="text-gray-400 text-base leading-relaxed mb-6">
 							El sistema sabe cuanto deberia haber en caja. Tu cuentas cuanto hay. Si no cuadra, se detecta al instante con auditoria por empleado.
 						</p>
-						<div class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
+						<div aria-hidden="true" class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
 							<div class="flex items-center justify-between mb-3">
 								<span class="text-[11px] text-gray-500">Corte — Turno vespertino</span>
 								<span class="text-[9px] text-[oklch(0.52_0.16_150)]">Cuadrado</span>
@@ -823,7 +824,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 					</div>
 
 					<!-- Mini reportes mockup -->
-					<div class="rounded-xl overflow-hidden" style="background: oklch(0.13 0.005 155); border: 1px solid oklch(0.282 0.005 155); box-shadow: 0 20px 50px rgba(0,0,0,0.4);">
+					<div class="rounded-xl overflow-hidden" aria-hidden="true" style="background: oklch(0.13 0.005 155); border: 1px solid oklch(0.282 0.005 155); box-shadow: 0 20px 50px rgba(0,0,0,0.4);">
 						<div class="flex items-center justify-between px-4 py-3 border-b" style="border-color: oklch(0.244 0.005 155);">
 							<span class="text-[11px] text-white font-medium">Reportes contables</span>
 							<span class="text-[8px] flex items-center gap-1" style="color: oklch(0.74 0.15 162);">
@@ -938,6 +939,8 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 				</div>
 			</div>
 		</section>
+
+		</main>
 
 		<FloatingChatbot client:idle />
 		<Footer />
