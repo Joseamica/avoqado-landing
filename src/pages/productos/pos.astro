@@ -18,7 +18,7 @@ const RED = 'oklch(0.65 0.20 25)';
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Avoqado POS | Punto de Venta para iOS y Android</title>
-		<meta name="description" content="Punto de venta nativo para iOS y Android. Floor plan, ordenes multi-tipo, KDS, reservaciones, turnos, comisiones, modo kiosko y operacion offline." />
+		<meta name="description" content="Punto de venta nativo para iOS y Android. Floor plan, ordenes multi-tipo, reservas y citas, clases con cupo, informes de venta, KDS, turnos, modo kiosko y operacion offline." />
 		<link rel="icon" type="image/png" href="/favicon.png?v=3" />
 	</head>
 	<body class="bg-black m-0 p-0 w-full">
@@ -42,7 +42,7 @@ const RED = 'oklch(0.65 0.20 25)';
 							Tu punto de venta.<br/>En cualquier dispositivo.
 						</h1>
 						<p class="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed mb-10">
-							App nativa para iOS y Android con floor plan, ordenes multi-tipo, catalogo completo, KDS, reservaciones, turnos y operacion offline. Para cualquier tipo de negocio.
+							App nativa para iOS y Android con floor plan, ordenes multi-tipo, reservas y citas, clases con cupo, informes de venta y operacion offline. Para cualquier tipo de negocio.
 						</p>
 						<div class="flex flex-col sm:flex-row gap-4">
 							<a href="https://avoqado.io/demo" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-white font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${INDIGO};`}>
@@ -385,10 +385,10 @@ const RED = 'oklch(0.65 0.20 25)';
 				<div class="text-center max-w-2xl mx-auto mb-12">
 					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${INDIGO_DEEP};`}>Reservaciones</span>
 					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
-						Reservaciones integradas.
+						Reservas, citas y clases.
 					</h2>
 					<p class="text-gray-600 text-lg leading-relaxed">
-						Calendario, waitlist y pagina de booking publica — todo conectado con tu floor plan. Cuando un cliente reserva, la mesa se bloquea automaticamente. Sin doble asignacion, sin confusiones.
+						Citas con profesional y duracion, clases con cupo, mesas con zona — el mismo calendario para todo, con waitlist y pagina de booking publica. Confirmacion, check-in, no-show y reagendado en dos taps.
 					</p>
 				</div>
 
@@ -472,17 +472,17 @@ const RED = 'oklch(0.65 0.20 25)';
 							<div class="text-[10px] text-gray-500">Reservaciones del 18 mar</div>
 							<div class="rounded-lg p-3" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${INDIGO};`}>
 								<div class="flex items-center justify-between mb-1">
-									<span class="text-xs text-white">Ana Lopez — 4 pax</span>
+									<span class="text-xs text-white">Ana Lopez — Corte + Barba</span>
 									<span class="text-[9px] px-1.5 py-0.5 rounded" style={`background: oklch(0.18 0.02 290); color: ${INDIGO};`}>Confirmada</span>
 								</div>
-								<span class="text-[9px] text-gray-500">20:00 — Mesa 4, Salon — Tel: *4521</span>
+								<span class="text-[9px] text-gray-500">20:00 — Con Carlos R. · 45 min</span>
 							</div>
 							<div class="rounded-lg p-3" style={`background: oklch(0.16 0.005 155); border-left: 3px solid ${AMBER};`}>
 								<div class="flex items-center justify-between mb-1">
-									<span class="text-xs text-white">Roberto M. — 6 pax</span>
-									<span class="text-[9px] px-1.5 py-0.5 rounded" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>Pendiente</span>
+									<span class="text-xs text-white">Clase de Yoga — grupal</span>
+									<span class="text-[9px] px-1.5 py-0.5 rounded" style={`background: oklch(0.18 0.02 75); color: ${AMBER};`}>18/20 lugares</span>
 								</div>
-								<span class="text-[9px] text-gray-500">19:30 — Mesa 11, Terraza — Cumpleanos</span>
+								<span class="text-[9px] text-gray-500">19:00 — Sala 2 · Check-in de asistentes en el POS</span>
 							</div>
 							<div class="rounded-lg p-3" style="background: oklch(0.16 0.005 155); border-left: 3px solid oklch(0.40 0.005 155);">
 								<div class="flex items-center justify-between mb-1">
@@ -510,8 +510,8 @@ const RED = 'oklch(0.65 0.20 25)';
 						<p class="text-sm text-gray-500">Vista por dia, semana o mes. Arrastra para reasignar horario o mesa.</p>
 					</div>
 					<div class="text-center">
-						<h3 class="text-base text-black font-medium mb-1">Waitlist inteligente</h3>
-						<p class="text-sm text-gray-500">Cuando se libera una mesa del tamano correcto, notifica automaticamente.</p>
+						<h3 class="text-base text-black font-medium mb-1">Clases con cupo</h3>
+						<p class="text-sm text-gray-500">Sesiones recurrentes con lugares limitados, check-in de asistentes y cobro directo en el POS.</p>
 					</div>
 					<div class="text-center">
 						<h3 class="text-base text-black font-medium mb-1">Depositos opcionales</h3>
@@ -826,26 +826,136 @@ const RED = 'oklch(0.65 0.20 25)';
 
 
 		<!-- ═══════════════════════════════════════════ -->
-		<!-- KEY NUMBERS                                 -->
+		<!-- 7. INFORMES                                 -->
 		<!-- ═══════════════════════════════════════════ -->
 		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
 			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${INDIGO_DEEP};`}>Informes</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Tus numeros, sin abrir la laptop.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Informes integrados en el mismo POS: hoy, semana, mes o el periodo que elijas. Ganancia neta con propinas, comisiones y fees ya descontados — no solo ventas brutas.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${INDIGO};`}></div>
+								<span class="text-sm text-gray-600">Ventas por hora para conocer tus picos reales de operacion</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-600">Top de productos y ventas por categoria, con ticket promedio</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${BLUE};`}></div>
+								<span class="text-sm text-gray-600">Desglose por metodo de pago: tarjeta, efectivo y transferencia</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Reports mockup — tablet, pantalla oscura (seccion blanca) -->
+					<div aria-hidden="true" class="w-full max-w-[560px] mx-auto" style="background: linear-gradient(145deg, oklch(0.82 0.005 155), oklch(0.70 0.005 155)); border-radius: 1.6rem; padding: 8px; box-shadow: 0 25px 60px rgba(0,0,0,0.35);">
+						<div style="background: oklch(0.12 0.005 155); border-radius: 1.2rem; padding: 4px;">
+							<div class="overflow-hidden p-5" style="background: #0A0A0A; border-radius: 0.95rem;">
+								<div class="flex items-center justify-between mb-3">
+									<span class="text-[9px] text-gray-500 font-medium tabular-nums">12:30</span>
+									<div class="flex items-center gap-1.5">
+										<span class="text-[8px] text-gray-500">LTE</span>
+										<div class="relative" style="width: 16px; height: 8px; border: 1px solid oklch(0.45 0.005 155); border-radius: 2px;">
+											<div class="absolute" style="inset: 1px; right: 30%; background: oklch(0.55 0.005 155); border-radius: 1px;"></div>
+										</div>
+									</div>
+								</div>
+								<div class="flex items-center justify-between mb-4">
+									<span class="text-[11px] text-white font-medium">Informes</span>
+									<span class="text-[9px] px-2 py-0.5 rounded-full" style={`background: oklch(0.18 0.02 290); color: ${INDIGO};`}>Hoy</span>
+								</div>
+								<!-- KPIs -->
+								<div class="grid grid-cols-3 gap-2 mb-4">
+									<div class="rounded-lg p-2.5" style="background: oklch(0.16 0.03 290);">
+										<div class="text-[8px] mb-1" style={`color: ${INDIGO};`}>Ventas netas</div>
+										<div class="text-sm font-light text-white">$18,450</div>
+									</div>
+									<div class="rounded-lg p-2.5" style="background: oklch(0.16 0.02 155);">
+										<div class="text-[8px] text-avoqado-green mb-1">Propinas</div>
+										<div class="text-sm font-light text-white">$1,240</div>
+									</div>
+									<div class="rounded-lg p-2.5" style="background: oklch(0.16 0.02 75);">
+										<div class="text-[8px] mb-1" style={`color: ${AMBER};`}>Ticket prom.</div>
+										<div class="text-sm font-light text-white">$485</div>
+									</div>
+								</div>
+								<!-- Ventas por hora -->
+								<div class="rounded-lg p-3 mb-3" style="background: oklch(0.15 0.005 155);">
+									<div class="flex items-center justify-between mb-2">
+										<span class="text-[8px] text-gray-500">Ventas por hora</span>
+										<span class="text-[8px] text-gray-500">9:00 — 21:00</span>
+									</div>
+									<div class="flex items-end gap-1 h-14">
+										<div class="flex-1 rounded-t" style={`height: 22%; background: ${INDIGO}; opacity: 0.45;`}></div>
+										<div class="flex-1 rounded-t" style={`height: 34%; background: ${INDIGO}; opacity: 0.55;`}></div>
+										<div class="flex-1 rounded-t" style={`height: 48%; background: ${INDIGO}; opacity: 0.65;`}></div>
+										<div class="flex-1 rounded-t" style={`height: 72%; background: ${INDIGO}; opacity: 0.85;`}></div>
+										<div class="flex-1 rounded-t" style={`height: 58%; background: ${INDIGO}; opacity: 0.75;`}></div>
+										<div class="flex-1 rounded-t" style={`height: 40%; background: ${INDIGO}; opacity: 0.6;`}></div>
+										<div class="flex-1 rounded-t" style={`height: 52%; background: ${INDIGO}; opacity: 0.7;`}></div>
+										<div class="flex-1 rounded-t" style={`height: 78%; background: ${INDIGO}; opacity: 0.9;`}></div>
+										<div class="flex-1 rounded-t" style={`height: 100%; background: ${INDIGO};`}></div>
+										<div class="flex-1 rounded-t" style={`height: 86%; background: ${INDIGO}; opacity: 0.92;`}></div>
+										<div class="flex-1 rounded-t" style={`height: 60%; background: ${INDIGO}; opacity: 0.75;`}></div>
+										<div class="flex-1 rounded-t" style={`height: 36%; background: ${INDIGO}; opacity: 0.55;`}></div>
+									</div>
+								</div>
+								<!-- Top productos + metodos -->
+								<div class="grid grid-cols-2 gap-2">
+									<div class="rounded-lg p-3" style="background: oklch(0.15 0.005 155);">
+										<div class="text-[8px] text-gray-500 mb-2">Top productos</div>
+										<div class="space-y-1.5">
+											<div class="flex justify-between"><span class="text-[9px] text-gray-300">Corte de cabello</span><span class="text-[9px] text-white tabular-nums">32</span></div>
+											<div class="flex justify-between"><span class="text-[9px] text-gray-300">Clase de Yoga</span><span class="text-[9px] text-white tabular-nums">18</span></div>
+											<div class="flex justify-between"><span class="text-[9px] text-gray-300">Combo Clasico</span><span class="text-[9px] text-white tabular-nums">12</span></div>
+										</div>
+									</div>
+									<div class="rounded-lg p-3" style="background: oklch(0.15 0.005 155);">
+										<div class="text-[8px] text-gray-500 mb-2">Metodos de pago</div>
+										<div class="space-y-1.5">
+											<div class="flex justify-between"><span class="text-[9px] text-gray-300">Tarjeta</span><span class="text-[9px] tabular-nums" style={`color: ${INDIGO};`}>68%</span></div>
+											<div class="flex justify-between"><span class="text-[9px] text-gray-300">Efectivo</span><span class="text-[9px] text-avoqado-green tabular-nums">24%</span></div>
+											<div class="flex justify-between"><span class="text-[9px] text-gray-300">Transferencia</span><span class="text-[9px] tabular-nums" style={`color: ${AMBER};`}>8%</span></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- KEY NUMBERS                                 -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
 					<div class="border-t pt-6" style={`border-color: ${INDIGO};`}>
-						<div class="text-3xl md:text-4xl font-light text-black mb-1">iOS + Android</div>
-						<div class="text-sm text-gray-500">Plataformas nativas</div>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">iOS + Android</div>
+						<div class="text-sm text-gray-400">Plataformas nativas</div>
 					</div>
 					<div class="border-t pt-6" style={`border-color: ${INDIGO};`}>
-						<div class="text-3xl md:text-4xl font-light text-black mb-1">7</div>
-						<div class="text-sm text-gray-500">Tipos de orden</div>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">7</div>
+						<div class="text-sm text-gray-400">Tipos de orden</div>
 					</div>
 					<div class="border-t pt-6" style={`border-color: ${INDIGO};`}>
-						<div class="text-3xl md:text-4xl font-light text-black mb-1">9</div>
-						<div class="text-sm text-gray-500">Roles con permisos granulares</div>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">9</div>
+						<div class="text-sm text-gray-400">Roles con permisos granulares</div>
 					</div>
 					<div class="border-t pt-6" style={`border-color: ${INDIGO};`}>
-						<div class="text-3xl md:text-4xl font-light text-black mb-1">Offline</div>
-						<div class="text-sm text-gray-500">Opera sin internet</div>
+						<div class="text-3xl md:text-4xl font-light text-white mb-1">Offline</div>
+						<div class="text-sm text-gray-400">Opera sin internet</div>
 					</div>
 				</div>
 			</div>
