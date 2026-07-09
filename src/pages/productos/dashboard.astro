@@ -53,9 +53,9 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 						</div>
 					</div>
 
-					<!-- Browser mockup -->
-					<div class="hidden lg:block">
-						<div class="rounded-xl overflow-hidden" style="transform: perspective(1200px) rotateY(-8deg) rotateX(2deg); box-shadow: 0 25px 80px rgba(0,0,0,0.4);">
+					<!-- Browser mockup — visible en todos los tamanos; tilt 3D solo en desktop -->
+					<div>
+						<div class="rounded-xl overflow-hidden lg:[transform:perspective(1200px)_rotateY(-8deg)_rotateX(2deg)]" style="box-shadow: 0 25px 80px rgba(0,0,0,0.4);">
 							<!-- Browser chrome -->
 							<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.282 0.005 155);">
 								<div class="flex gap-1.5">
@@ -70,8 +70,8 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 							</div>
 							<!-- Dashboard screen -->
 							<div class="flex" style="background: oklch(0.13 0.005 155); min-height: 340px;">
-								<!-- Sidebar -->
-								<div class="w-[140px] shrink-0 border-r py-4 px-3 space-y-1" style="border-color: oklch(0.244 0.005 155);">
+								<!-- Sidebar — en moviles se oculta para que el contenido respire -->
+								<div class="hidden sm:block w-[140px] shrink-0 border-r py-4 px-3 space-y-1" style="border-color: oklch(0.244 0.005 155);">
 									<div class="flex items-center gap-2 px-2 py-1.5 rounded-md" style={`background: oklch(0.244 0.055 240);`}>
 										<div class="w-3.5 h-3.5 rounded" style={`background: ${BLUE}; opacity: 0.92;`}></div>
 										<span class="text-[9px] font-medium" style={`color: ${BLUE};`}>Overview</span>
