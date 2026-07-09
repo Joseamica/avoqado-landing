@@ -29,18 +29,24 @@ export default function CookieConsent() {
 
     const consent = localStorage.getItem('cookieConsent');
     if (!consent) {
+      // GEO-GATE: only visitors from a region that legally requires a
+      // prior-consent (opt-in) banner see it — EEA + UK + Switzerland.
+      // middleware.ts reads Cloudflare's cf-ipcountry and stamps <body
+      // data-consent-required="true"> for those visitors only. México
+      // (LFPDPPP, opt-out) and the rest of LATAM/US get NO banner — just the
+      // Aviso de Privacidad link in the footer — so the funnel fold stays
+      // clean. This is the Stripe/Square pattern.
+      const consentRequired = document.body.dataset.consentRequired === 'true';
+
       // Pages that land ad traffic (e.g. /demo) mark <body
       // data-skip-consent-for-ads="true"> server-side. For that traffic,
       // middleware.ts already auto-grants Consent Mode defaults (hybrid
-      // consent — see reference_gtm_api_access) BEFORE this banner ever
-      // mounts, so asking again here is pure friction with no compliance
-      // upside: tracking is already flowing. Organic/direct visitors (no ad
-      // click id/utm) still see the full banner — their consent is genuinely
-      // undecided. Nothing is written to localStorage here — this only skips
-      // the banner for THIS page load, it doesn't preset a site-wide choice.
+      // consent — see reference_gtm_api_access) BEFORE this banner ever mounts,
+      // so even an EEA ad visitor isn't re-prompted. Nothing is written to
+      // localStorage here — this only skips the banner for THIS page load.
       const skipForAds = document.body.dataset.skipConsentForAds === 'true';
       const { ad } = skipForAds ? detectAdVisitor(new URLSearchParams(window.location.search)) : { ad: false };
-      if (!(skipForAds && ad)) {
+      if (consentRequired && !(skipForAds && ad)) {
         setShowBanner(true);
       }
     }
@@ -99,43 +105,45 @@ export default function CookieConsent() {
 
   return (
     <>
-      {/* Cookie Banner */}
+      {/* Cookie Banner — compact corner card (shown only to EEA/UK/CH visitors) */}
       <div
-        className={`fixed left-0 right-0 z-50 bg-gray-900 border-t border-gray-800 shadow-2xl bottom-0 ${
+        className={`fixed z-[60] bottom-4 left-4 right-4 sm:right-auto sm:max-w-sm ${
           hasFloatingCta ? 'max-[879px]:bottom-[calc(72px+env(safe-area-inset-bottom,0px))]' : ''
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl p-4">
           {!showSettings ? (
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex-1">
-                <h3 className="text-white font-semibold mb-1">
-                  Usamos cookies
-                </h3>
-                <p className="text-gray-300 text-sm">
-                  Utilizamos cookies para mejorar tu experiencia, analizar el tráfico del sitio y personalizar el contenido.
-                  Puedes aceptar todas las cookies o personalizar tus preferencias.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-2 sm:gap-3">
-                <button
-                  onClick={() => setShowSettings(true)}
-                  className="px-4 py-2 text-sm text-gray-300 hover:text-white border border-gray-700 rounded-lg hover:border-gray-600 transition-colors"
-                >
-                  Personalizar
-                </button>
-                <button
-                  onClick={rejectAll}
-                  className="px-4 py-2 text-sm text-gray-300 hover:text-white border border-gray-700 rounded-lg hover:border-gray-600 transition-colors"
-                >
-                  Rechazar todo
-                </button>
+            <div>
+              <h3 className="text-white font-semibold text-sm mb-1">
+                Usamos cookies
+              </h3>
+              <p className="text-gray-400 text-xs leading-relaxed mb-3">
+                Mejoran tu experiencia y nos ayudan a medir el tráfico.{' '}
+                <a href="/privacy" className="text-gray-300 underline hover:text-white">
+                  Más información
+                </a>
+              </p>
+              <div className="flex flex-col gap-2">
                 <button
                   onClick={acceptAll}
-                  className="px-6 py-2 text-sm bg-avoqado-green text-white rounded-lg hover:opacity-90 transition-opacity font-semibold"
+                  className="w-full px-4 py-2 text-sm bg-avoqado-green text-white rounded-lg hover:opacity-90 transition-opacity font-semibold"
                 >
                   Aceptar todo
                 </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={rejectAll}
+                    className="flex-1 px-3 py-2 text-sm text-gray-300 hover:text-white border border-gray-700 rounded-lg hover:border-gray-600 transition-colors"
+                  >
+                    Rechazar
+                  </button>
+                  <button
+                    onClick={() => setShowSettings(true)}
+                    className="flex-1 px-3 py-2 text-sm text-gray-300 hover:text-white border border-gray-700 rounded-lg hover:border-gray-600 transition-colors"
+                  >
+                    Personalizar
+                  </button>
+                </div>
               </div>
             </div>
           ) : (

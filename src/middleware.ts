@@ -3,6 +3,22 @@ import type { MiddlewareHandler } from 'astro';
 // Google Tag Manager container ID.
 const GTM_ID = 'GTM-PBD8C8RM';
 
+// GEO-GATE for the cookie banner. Regions where a prior-consent (opt-in) cookie
+// banner is legally required: EEA (GDPR/ePrivacy) + UK (UK GDPR) + Switzerland
+// (FADP). México (LFPDPPP) and the rest of LATAM/US follow an opt-out model, so
+// those visitors get NO blocking banner — just the Aviso de Privacidad link in
+// the footer — keeping the funnel fold clean. Cloudflare hands us the visitor's
+// country for free via the `cf-ipcountry` edge header. For those visitors we
+// stamp <body data-consent-required="true"> and the CookieConsent island reads
+// it; everyone else never mounts the banner. This is the Stripe/Square pattern.
+const CONSENT_REQUIRED_COUNTRIES = new Set([
+	// EU-27
+	'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU',
+	'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE',
+	// EEA (non-EU) + UK + Switzerland
+	'IS', 'LI', 'NO', 'GB', 'CH',
+]);
+
 // Consent Mode v2 defaults — MUST run before the GTM container so no Google tag
 // stores data before the user has chosen. Repeat visitors get their previously
 // stored choice (localStorage `cookieConsent`) applied immediately. The runtime
@@ -80,11 +96,26 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
 
 	let html = await response.text();
 
+	// Visitor country from Cloudflare's edge header. `?_cc=DE` overrides it for
+	// QA / local dev (harmless in prod — real traffic never sends it). Empty in
+	// local dev → no banner, which matches México's opt-out behaviour.
+	const country = (url.searchParams.get('_cc') || context.request.headers.get('cf-ipcountry') || '').toUpperCase();
+	const consentRequired = CONSENT_REQUIRED_COUNTRIES.has(country);
+
 	// Inject once. The guard prevents double-loading GTM if the snippet is ever
 	// already present in the rendered HTML.
 	if (!html.includes(GTM_ID)) {
 		html = html.replace('<head>', () => `<head>\n${GTM_CONSENT_DEFAULT}\n${GTM_HEAD}\n${POSTHOG_SNIPPET}`);
-		html = html.replace(/<body[^>]*>/i, (match) => `${match}\n${GTM_BODY}`);
+		// Stamp data-consent-required on <body> for EEA/UK/CH visitors only, then
+		// append the GTM noscript. Preserves any attributes the page already set
+		// (e.g. data-skip-consent-for-ads, data-floating-cta).
+		html = html.replace(/<body([^>]*)>/i, (_match, attrs) => {
+			const bodyTag =
+				consentRequired && !/data-consent-required/i.test(attrs)
+					? `<body${attrs} data-consent-required="true">`
+					: `<body${attrs}>`;
+			return `${bodyTag}\n${GTM_BODY}`;
+		});
 	}
 
 	// Body length changed — drop the stale content-length so the platform

@@ -12,6 +12,7 @@ const products = [
   { name: 'Asistente IA', desc: 'Pregunta en lenguaje natural, obtiene respuestas', href: '/productos/ai', accent: 'oklch(0.75 0.14 195)', num: '05' },
   { name: 'Avoqado Widget', desc: 'Ordenes y reservas embebidas en tu sitio', href: '/productos/widget', accent: 'oklch(0.72 0.15 340)', num: '06' },
   { name: 'Contabilidad', desc: 'Polizas, estados financieros y CFDI automaticos', href: '/productos/contabilidad', accent: 'oklch(0.74 0.15 162)', num: '07' },
+  { name: 'Agenda', desc: 'Citas, recordatorios por WhatsApp y lista de espera', href: '/productos/agenda', accent: 'oklch(0.78 0.15 50)', num: '08' },
 ];
 
 const industries = [

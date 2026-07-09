@@ -85,6 +85,12 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
   const [doneDialogOpen, setDoneDialogOpen] = useState(false);
   const doneDialogShownRef = useRef(false);
 
+  /** First-run "Empezar demo" cue: shown until the visitor's first tap,
+   *  then never again (founder QA: muchos veían "Marca el monto" pero no
+   *  entendían que había que TOCAR ahí). Sticky — un reset/cambio de flujo
+   *  no lo trae de vuelta, porque ya demostraron que saben interactuar. */
+  const [started, setStarted] = useState(false);
+
   const stageRef = useRef<HTMLDivElement>(null);
   const screensRef = useRef<HTMLDivElement>(null);
   const layerRef = useRef<HTMLDivElement>(null);
@@ -125,6 +131,7 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
     },
     onEvent: e => {
       if (e.type === 'tap') {
+        setStarted(true); /* primer tap → retira el cue "Empezar demo" */
         if (!startedFlowsRef.current.has(e.flow)) {
           startedFlowsRef.current.add(e.flow);
           trackTour('tour_start', { tour_flow: flowName(e.flow) });
@@ -140,6 +147,14 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
   useEffect(() => {
     trackTour('tour_view');
   }, []);
+
+  /* Alterna el cue de primer uso sobre la capa del spotlight. Se aplica
+     imperativamente (no vía className en JSX) porque el engine también muta
+     el classList de la capa (off/jump); re-renderizar el className desde
+     React pisaría ese estado imperativo. */
+  useEffect(() => {
+    layerRef.current?.classList.toggle('is-start', !started);
+  }, [started, engine.flow]);
 
   const handleSelectFlow = (flow: FlowId) => {
     if (flow !== engine.flow) trackTour('tour_flow_switch', { tour_flow: flowName(flow), tour_from: flowName(engine.flow) });
@@ -332,7 +347,15 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
             {/* data-pos + --tail-x (set by the engine) drive the tooltip tail
                 that points back at the dot — no chevron glyph. */}
             <div className="tour-pill" ref={pillRef}>
-              <span>{engine.pillText}</span>
+              {/* Flecha animada del cue de primer uso: absoluta (no afecta el
+                  offsetWidth que mide el engine), apunta a la tecla y solo se
+                  ve en .is-start. */}
+              <span className="tour-pill-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 9l7 7 7-7" />
+                </svg>
+              </span>
+              <span>{started ? engine.pillText : 'Empezar demo'}</span>
             </div>
           </div>
         </div>

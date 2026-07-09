@@ -1,0 +1,263 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/layout/Navbar.astro';
+import Footer from '../../components/layout/Footer.astro';
+import FloatingChatbot from '../../components/interactive/FloatingChatbot';
+
+// Agenda accent — warm gold (citas, calendario, atencion personal). Distinct
+// from dashboard-blue(240), tpv-green(155), pos-indigo(290), qr-amber(75),
+// ai-teal(195), widget-magenta(340), contabilidad-emerald(162).
+const GOLD = 'oklch(0.78 0.15 50)';
+const GOLD_DARK = 'oklch(0.62 0.16 45)';
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Agenda y Citas en Linea | Avoqado</title>
+		<meta name="description" content="Tus clientes reservan solos desde Google, tu pagina o redes. Recordatorios automaticos por WhatsApp, lista de espera y anticipos — todo conectado a tu cobro y tu Dashboard." />
+		<link rel="icon" type="image/png" href="/favicon.png?v=3" />
+	</head>
+	<body class="bg-black m-0 p-0 w-full">
+		<Navbar position="fixed" transparentOnTop={true} />
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- HERO                                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="min-h-screen flex items-center pt-24 md:pt-32 pb-16 px-6">
+			<div class="max-w-[1400px] mx-auto w-full">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+					<!-- Text -->
+					<div>
+						<div class="flex items-center gap-3 mb-6">
+							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${GOLD};`}>Agenda</span>
+						</div>
+						<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-white mb-8">
+							Tu agenda<br/>se llena sola.
+						</h1>
+						<p class="text-lg md:text-xl text-gray-500 max-w-xl leading-relaxed mb-10">
+							Tu cliente reserva desde Google, tu pagina o redes — sin llamadas, sin mensajes de ida y vuelta. Recordatorios automaticos por WhatsApp, lista de espera y anticipos en linea, todo conectado a tu cobro y tu Dashboard en tiempo real.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4">
+							<a href="https://avoqado.io/demo" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${GOLD};`}>
+								Probar demo gratis
+							</a>
+							<a
+								id="agenda-signup-cta"
+								href="https://dashboard.avoqado.io/signup"
+								class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200"
+							>
+								Empieza ahora
+							</a>
+							<script is:inline>
+								// get_started_click con el patron beacon-before-redirect (pagina estatica —
+								// misma logica que trackGetStarted en src/lib/gtm.ts para React islands): el
+								// destino es otro subdominio, el evento debe salir antes del unload.
+								(function () {
+									var a = document.getElementById('agenda-signup-cta')
+									if (!a) return
+									a.addEventListener('click', function (e) {
+										if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+										e.preventDefault()
+										var done = false
+										var go = function () {
+											if (done) return
+											done = true
+											window.location.href = a.href
+										}
+										window.dataLayer = window.dataLayer || []
+										window.dataLayer.push({ event: 'get_started_click', source: 'agenda_page', eventCallback: go, eventTimeout: 800 })
+										try { window.posthog && window.posthog.capture('get_started_click', { source: 'agenda_page' }) } catch (err) {}
+										setTimeout(go, 800)
+									})
+								})()
+							</script>
+							<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200">
+								Hablar con ventas
+							</a>
+						</div>
+					</div>
+
+					<!-- Mockup: browser frame con calendario de reservaciones -->
+					<div class="hidden lg:block" aria-hidden="true">
+						<div class="rounded-2xl overflow-hidden shadow-2xl" style="background: oklch(0.14 0 0); border: 1px solid oklch(0.28 0 0);">
+							<!-- Browser chrome -->
+							<div class="flex items-center gap-2 px-4 py-3" style="background: oklch(0.18 0 0); border-bottom: 1px solid oklch(0.28 0 0);">
+								<div class="flex gap-1.5">
+									<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.55 0.15 25);"></div>
+									<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.65 0.14 75);"></div>
+									<div class="w-2.5 h-2.5 rounded-full" style="background: oklch(0.65 0.14 155);"></div>
+								</div>
+								<div class="flex-1 flex justify-center">
+									<div class="flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] text-gray-400" style="background: oklch(0.10 0 0);">
+										<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+										dashboard.avoqado.io
+									</div>
+								</div>
+							</div>
+							<!-- Contenido: calendario semanal -->
+							<div class="p-5" style="background: oklch(0.09 0 0);">
+								<div class="flex items-center justify-between mb-4">
+									<span class="text-white text-sm font-semibold">Reservaciones — esta semana</span>
+									<span class="text-[11px] px-2 py-1 rounded-full" style={`background: ${GOLD}22; color: ${GOLD};`}>14 nuevas</span>
+								</div>
+								<div class="grid grid-cols-5 gap-2 mb-3">
+									{['Lun', 'Mar', 'Mie', 'Jue', 'Vie'].map((d) => (
+										<div class="text-center text-[10px] text-gray-500 uppercase tracking-wide">{d}</div>
+									))}
+								</div>
+								<div class="grid grid-cols-5 gap-2">
+									{[3, 5, 2, 6, 4].map((n, i) => (
+										<div class="rounded-lg p-2 space-y-1.5" style="background: oklch(0.13 0 0); border: 1px solid oklch(0.20 0 0); min-height: 96px;">
+											{Array.from({ length: n }).map((_, j) => (
+												<div
+													class="rounded h-4"
+													style={`background: ${(i + j) % 3 === 0 ? GOLD + '55' : 'oklch(0.24 0 0)'};`}
+												></div>
+											))}
+										</div>
+									))}
+								</div>
+								<div class="mt-4 flex items-center justify-between rounded-xl p-3" style="background: oklch(0.13 0 0); border: 1px solid oklch(0.20 0 0);">
+									<div class="flex items-center gap-2">
+										<div class="w-8 h-8 rounded-full flex items-center justify-center" style={`background: ${GOLD}22;`}>
+											<svg class="w-4 h-4" style={`color: ${GOLD};`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+										</div>
+										<div>
+											<p class="text-white text-xs font-medium">Recordatorio enviado</p>
+											<p class="text-gray-500 text-[10px]">WhatsApp · 2h antes</p>
+										</div>
+									</div>
+									<span class="text-[10px]" style={`color: ${GOLD};`}>Automatico</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- FEATURES — grid                             -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="text-center mb-16">
+					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-4">Todo lo que necesita tu agenda</h2>
+					<p class="text-lg text-gray-500 max-w-2xl mx-auto">Desde la reserva hasta el recordatorio, sin que tu equipo tenga que estar pendiente del telefono.</p>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+					<div class="p-8 rounded-2xl" style="background: oklch(0.97 0 0);">
+						<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={`background: ${GOLD}1a;`}>
+							<svg class="w-6 h-6" style={`color: ${GOLD_DARK};`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+						</div>
+						<h3 class="text-xl font-semibold text-black mb-2">Reservas en linea</h3>
+						<p class="text-gray-500">Tu cliente reserva solo desde Google, tu pagina o redes — disponibilidad real, sin llamadas ni mensajes de ida y vuelta.</p>
+					</div>
+					<div class="p-8 rounded-2xl" style="background: oklch(0.97 0 0);">
+						<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={`background: ${GOLD}1a;`}>
+							<svg class="w-6 h-6" style={`color: ${GOLD_DARK};`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606M12 22a10 10 0 100-20 10 10 0 000 20z" /></svg>
+						</div>
+						<h3 class="text-xl font-semibold text-black mb-2">Recordatorios por WhatsApp</h3>
+						<p class="text-gray-500">Mensajes automaticos 24h y 2h antes de la cita — reduce las inasistencias sin que nadie tenga que marcar.</p>
+					</div>
+					<div class="p-8 rounded-2xl" style="background: oklch(0.97 0 0);">
+						<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={`background: ${GOLD}1a;`}>
+							<svg class="w-6 h-6" style={`color: ${GOLD_DARK};`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+						</div>
+						<h3 class="text-xl font-semibold text-black mb-2">Lista de espera</h3>
+						<p class="text-gray-500">Si no hay horario disponible, el cliente entra a la lista de espera y le avisas en automatico cuando se libera un lugar.</p>
+					</div>
+					<div class="p-8 rounded-2xl" style="background: oklch(0.97 0 0);">
+						<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={`background: ${GOLD}1a;`}>
+							<svg class="w-6 h-6" style={`color: ${GOLD_DARK};`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+						</div>
+						<h3 class="text-xl font-semibold text-black mb-2">Anticipos y depositos</h3>
+						<p class="text-gray-500">Cobra un anticipo al reservar para citas de alto valor — protege tu agenda contra cancelaciones de ultimo momento.</p>
+					</div>
+					<div class="p-8 rounded-2xl" style="background: oklch(0.97 0 0);">
+						<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={`background: ${GOLD}1a;`}>
+							<svg class="w-6 h-6" style={`color: ${GOLD_DARK};`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+						</div>
+						<h3 class="text-xl font-semibold text-black mb-2">No-shows en automatico</h3>
+						<p class="text-gray-500">Las citas que nadie confirma se liberan solas de tu calendario para que otro cliente pueda tomar ese horario.</p>
+					</div>
+					<div class="p-8 rounded-2xl" style="background: oklch(0.97 0 0);">
+						<div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={`background: ${GOLD}1a;`}>
+							<svg class="w-6 h-6" style={`color: ${GOLD_DARK};`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" /></svg>
+						</div>
+						<h3 class="text-xl font-semibold text-black mb-2">Todo conectado al cobro</h3>
+						<p class="text-gray-500">Cuando el cliente llega y paga, esa venta ya esta en tu Dashboard — reservacion, cobro y reporte en el mismo lugar.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- WIDGET EMBEBIBLE                            -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${GOLD};`}>Widget de reservas</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mt-4 mb-6">Reserva tambien desde tu propio sitio</h2>
+						<p class="text-lg text-gray-500 leading-relaxed mb-8">
+							Un solo script y tu pagina ya tiene boton de reservar — sin construir nada, sin salir a otra plataforma. El cliente ve tu disponibilidad real y confirma su cita ahi mismo.
+						</p>
+						<ul class="space-y-4">
+							<li class="flex items-start gap-3">
+								<svg class="w-5 h-5 mt-0.5 flex-shrink-0" style={`color: ${GOLD};`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+								<span class="text-gray-300">Se instala con una linea de codigo en cualquier sitio</span>
+							</li>
+							<li class="flex items-start gap-3">
+								<svg class="w-5 h-5 mt-0.5 flex-shrink-0" style={`color: ${GOLD};`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+								<span class="text-gray-300">Disponibilidad siempre sincronizada con tu Dashboard</span>
+							</li>
+							<li class="flex items-start gap-3">
+								<svg class="w-5 h-5 mt-0.5 flex-shrink-0" style={`color: ${GOLD};`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+								<span class="text-gray-300">Funciona en escritorio y celular sin descargar nada</span>
+							</li>
+						</ul>
+					</div>
+					<div class="hidden lg:block" aria-hidden="true">
+						<div class="rounded-3xl p-8" style="background: linear-gradient(145deg, oklch(0.14 0 0), oklch(0.09 0 0)); border: 1px solid oklch(0.22 0 0);">
+							<div class="rounded-2xl p-6" style="background: oklch(0.11 0 0); border: 1px solid oklch(0.20 0 0);">
+								<p class="text-white text-sm font-semibold mb-4">Agenda tu cita</p>
+								<div class="grid grid-cols-3 gap-2 mb-4">
+									{['10:00', '11:30', '13:00'].map((t) => (
+										<div class="text-center py-2 rounded-lg text-xs" style={`background: ${GOLD}22; color: ${GOLD};`}>{t}</div>
+									))}
+								</div>
+								<div class="w-full py-3 rounded-full text-center text-sm font-semibold" style={`background: ${GOLD}; color: black;`}>Confirmar cita</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- CTA FINAL                                    -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-3xl mx-auto text-center">
+				<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6">Deja de perseguir tu propia agenda</h2>
+				<p class="text-lg text-gray-500 mb-10">Pruebalo en 60 segundos, sin registro ni tarjeta.</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="https://avoqado.io/demo" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${GOLD};`}>
+						Probar demo gratis
+					</a>
+					<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 border border-black/15 text-black font-medium rounded-full hover:bg-black/5 transition-all duration-200">
+						Hablar con ventas
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<FloatingChatbot client:idle />
+		<Footer />
+	</body>
+</html>

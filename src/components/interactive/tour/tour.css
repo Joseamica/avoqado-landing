@@ -1626,6 +1626,100 @@
 }
 
 /* ============================================================
+   Start cue — el primer spotlight, antes de cualquier tap.
+   Amplifica el primer pill a un claro "toca aquí para empezar":
+   etiqueta "Empezar demo" en negritas, glow que respira y una
+   flecha que rebota apuntando a la tecla (founder QA: muchos no
+   se daban cuenta de que el spotlight era clicable). Se enciende
+   con .tour-layer.is-start (dueño: AvoqadoTour) y se retira en el
+   primer tap exitoso.
+   ============================================================ */
+.avq-tour .tour-pill-arrow {
+  position: absolute;
+  left: var(--tail-x, 50%);
+  display: none; /* solo visible en .is-start (top/bottom) */
+  color: var(--avq-green);
+  filter: drop-shadow(0 2px 7px rgba(122, 221, 44, 0.55));
+  pointer-events: none;
+}
+.avq-tour .tour-pill-arrow svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+/* Pill más grande y con glow que respira mientras no han empezado. */
+.avq-tour .tour-layer.is-start .tour-pill {
+  font-size: 14px;
+  font-weight: 700;
+  padding: 11px 18px;
+  letter-spacing: 0.2px;
+  animation: avq-start-breathe 1.9s ease-in-out infinite;
+}
+
+/* Muestra + orienta la flecha hacia la tecla. Un pill lateral (left/right)
+   conserva solo el glow — una flecha vertical ahí apuntaría mal. */
+.avq-tour .tour-layer.is-start .tour-pill[data-pos='top'] .tour-pill-arrow,
+.avq-tour .tour-layer.is-start .tour-pill[data-pos='bottom'] .tour-pill-arrow {
+  display: block;
+}
+.avq-tour .tour-layer.is-start .tour-pill[data-pos='top'] .tour-pill-arrow {
+  top: 100%;
+  margin-top: 5px;
+  transform: translateX(-50%); /* base para reduced-motion; el keyframe la anima */
+  animation: avq-start-arrow-down 1.15s ease-in-out infinite;
+}
+.avq-tour .tour-layer.is-start .tour-pill[data-pos='bottom'] .tour-pill-arrow {
+  bottom: 100%;
+  margin-bottom: 5px;
+  transform: translateX(-50%) rotate(180deg);
+  animation: avq-start-arrow-up 1.15s ease-in-out infinite;
+}
+
+/* Ping del dot más fuerte y lento: refuerza la zona de tap. */
+.avq-tour .tour-layer.is-start .tour-dot {
+  box-shadow: 0 0 12px rgba(122, 221, 44, 1);
+}
+.avq-tour .tour-layer.is-start .tour-dot::before {
+  background: rgba(122, 221, 44, 0.65);
+  animation-duration: 1.6s;
+}
+
+@keyframes avq-start-breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 8px 22px rgba(122, 221, 44, 0.4),
+      0 0 0 0 rgba(122, 221, 44, 0.5);
+  }
+  50% {
+    box-shadow:
+      0 10px 30px rgba(122, 221, 44, 0.6),
+      0 0 0 9px rgba(122, 221, 44, 0);
+  }
+}
+/* La flecha apunta hacia abajo (pill arriba de la tecla) y rebota hacia ella. */
+@keyframes avq-start-arrow-down {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 6px);
+  }
+}
+/* Pill debajo de la tecla: la flecha se voltea y rebota hacia arriba. */
+@keyframes avq-start-arrow-up {
+  0%,
+  100% {
+    transform: translate(-50%, 0) rotate(180deg);
+  }
+  50% {
+    transform: translate(-50%, -6px) rotate(180deg);
+  }
+}
+
+/* ============================================================
    Chapter panel (Square-style)
    ============================================================ */
 .avq-tour .panel {
@@ -1834,7 +1928,9 @@
   .avq-tour .chapter.active .ch-num::before,
   .avq-tour .confetti-layer i,
   .avq-tour .star.filled svg,
-  .avq-tour .fast-amount.pop {
+  .avq-tour .fast-amount.pop,
+  .avq-tour .tour-layer.is-start .tour-pill,
+  .avq-tour .tour-layer.is-start .tour-pill-arrow {
     animation: none !important;
   }
   .avq-tour .tour-dot,
@@ -1916,6 +2012,15 @@
     padding: 7px 11px;
     border-radius: 10px;
     gap: 5px;
+  }
+  /* Cue de inicio compacto en móvil (el pill vive en la capa sin escalar). */
+  .avq-tour .tour-layer.is-start .tour-pill {
+    font-size: 12.5px;
+    padding: 8px 13px;
+  }
+  .avq-tour .tour-pill-arrow svg {
+    width: 20px;
+    height: 20px;
   }
 }
 @media (max-width: 430px) {
