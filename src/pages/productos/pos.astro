@@ -261,7 +261,18 @@ const RED = 'oklch(0.65 0.20 25)';
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<!-- Catalog mockup -->
-					<div aria-hidden="true" class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
+					<div aria-hidden="true" class="order-2 lg:order-1 w-full max-w-[560px] mx-auto" style="background: linear-gradient(145deg, oklch(0.82 0.005 155), oklch(0.70 0.005 155)); border-radius: 1.6rem; padding: 8px; box-shadow: 0 25px 60px rgba(0,0,0,0.35);">
+						<div style="background: oklch(0.12 0.005 155); border-radius: 1.2rem; padding: 4px;">
+							<div class="overflow-hidden p-5" style="background: #f1f1f1; border-radius: 0.95rem;">
+								<div class="flex items-center justify-between mb-3">
+									<span class="text-[9px] text-gray-500 font-medium tabular-nums">12:30</span>
+									<div class="flex items-center gap-1.5">
+										<span class="text-[8px] text-gray-500">LTE</span>
+										<div class="relative" style="width: 16px; height: 8px; border: 1px solid oklch(0.60 0.005 155); border-radius: 2px;">
+											<div class="absolute" style="inset: 1px; right: 30%; background: oklch(0.55 0.005 155); border-radius: 1px;"></div>
+										</div>
+									</div>
+								</div>
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Nueva orden — Mesa 6</span>
 							<div class="flex gap-1.5">
@@ -279,7 +290,7 @@ const RED = 'oklch(0.65 0.20 25)';
 						<!-- Product grid -->
 						<div class="grid grid-cols-2 gap-2 mb-4">
 							<div class="rounded-xl p-3" style={`background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid oklch(0.55 0.15 290);`}>
-								<div class="w-full aspect-[4/3] rounded-lg mb-2" style="background: oklch(0.93 0.004 155);"></div>
+								<div class="w-full aspect-[16/9] rounded-lg mb-2 flex items-center justify-center" style="background: oklch(0.93 0.004 155);"><span class="text-[17px] font-bold tracking-wide" style="color: oklch(0.55 0.10 290);">TP</span></div>
 								<span class="text-[11px] text-gray-900">Tacos al Pastor</span>
 								<div class="flex items-center justify-between mt-1">
 									<span class="text-[10px]" style={`color: ${INDIGO_DEEP};`}>$95</span>
@@ -295,7 +306,7 @@ const RED = 'oklch(0.65 0.20 25)';
 								</div>
 							</div>
 							<div class="rounded-xl p-3" style="background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-								<div class="w-full aspect-[4/3] rounded-lg mb-2" style="background: oklch(0.93 0.004 155);"></div>
+								<div class="w-full aspect-[16/9] rounded-lg mb-2 flex items-center justify-center" style="background: oklch(0.93 0.004 155);"><span class="text-[17px] font-bold tracking-wide" style="color: oklch(0.55 0.10 150);">GU</span></div>
 								<span class="text-[11px] text-gray-900">Guacamole</span>
 								<div class="flex items-center justify-between mt-1">
 									<span class="text-[10px] text-gray-500">$120</span>
@@ -305,7 +316,7 @@ const RED = 'oklch(0.65 0.20 25)';
 								</div>
 							</div>
 							<div class="rounded-xl p-3" style="background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-								<div class="w-full aspect-[4/3] rounded-lg mb-2" style="background: oklch(0.93 0.004 155);"></div>
+								<div class="w-full aspect-[16/9] rounded-lg mb-2 flex items-center justify-center" style="background: oklch(0.93 0.004 155);"><span class="text-[17px] font-bold tracking-wide" style="color: oklch(0.55 0.10 75);">AR</span></div>
 								<span class="text-[11px] text-gray-900">Arrachera 300g</span>
 								<div class="flex items-center justify-between mt-1">
 									<span class="text-[10px] text-gray-500">$320</span>
@@ -315,7 +326,7 @@ const RED = 'oklch(0.65 0.20 25)';
 								</div>
 							</div>
 							<div class="rounded-xl p-3" style="background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-								<div class="w-full aspect-[4/3] rounded-lg mb-2" style="background: oklch(0.93 0.004 155);"></div>
+								<div class="w-full aspect-[16/9] rounded-lg mb-2 flex items-center justify-center" style="background: oklch(0.93 0.004 155);"><span class="text-[17px] font-bold tracking-wide" style="color: oklch(0.55 0.10 240);">MI</span></div>
 								<span class="text-[11px] text-gray-900">Michelada</span>
 								<div class="flex items-center justify-between mt-1">
 									<span class="text-[10px] text-gray-500">$95</span>
@@ -329,6 +340,8 @@ const RED = 'oklch(0.65 0.20 25)';
 						<div class="h-10 rounded-xl flex items-center justify-between px-4" style={`background: ${INDIGO_DEEP};`}>
 							<span class="text-[11px] font-semibold text-white">3 items — $285</span>
 							<span class="text-sm font-semibold text-white">Enviar a cocina</span>
+						</div>
+							</div>
 						</div>
 					</div>
 
@@ -544,7 +557,18 @@ const RED = 'oklch(0.65 0.20 25)';
 					</div>
 
 					<!-- Shifts mockup -->
-					<div aria-hidden="true" class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
+					<div aria-hidden="true" class="w-full max-w-[560px] mx-auto" style="background: linear-gradient(145deg, oklch(0.82 0.005 155), oklch(0.70 0.005 155)); border-radius: 1.6rem; padding: 8px; box-shadow: 0 25px 60px rgba(0,0,0,0.35);">
+						<div style="background: oklch(0.12 0.005 155); border-radius: 1.2rem; padding: 4px;">
+							<div class="overflow-hidden p-5" style="background: #f1f1f1; border-radius: 0.95rem;">
+								<div class="flex items-center justify-between mb-3">
+									<span class="text-[9px] text-gray-500 font-medium tabular-nums">12:30</span>
+									<div class="flex items-center gap-1.5">
+										<span class="text-[8px] text-gray-500">LTE</span>
+										<div class="relative" style="width: 16px; height: 8px; border: 1px solid oklch(0.60 0.005 155); border-radius: 2px;">
+											<div class="absolute" style="inset: 1px; right: 30%; background: oklch(0.55 0.005 155); border-radius: 1px;"></div>
+										</div>
+									</div>
+								</div>
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Turno vespertino — 4 activos</span>
 							<span class="text-[9px] px-2 py-0.5 rounded-full bg-avoqado-green text-black font-medium">En curso</span>
@@ -617,6 +641,8 @@ const RED = 'oklch(0.65 0.20 25)';
 									<div class="text-[10px] text-[oklch(0.52_0.16_150)]">$0.00</div>
 									<div class="text-[7px] text-gray-600">Varianza</div>
 								</div>
+							</div>
+						</div>
 							</div>
 						</div>
 					</div>
@@ -723,7 +749,18 @@ const RED = 'oklch(0.65 0.20 25)';
 				</div>
 
 				<!-- Kiosk mockup centered -->
-				<div aria-hidden="true" class="max-w-sm mx-auto rounded-2xl overflow-hidden border border-black/10 p-5 mb-12" style="background: #f1f1f1;">
+				<div aria-hidden="true" class="w-full max-w-sm mx-auto mb-12" style="background: linear-gradient(145deg, oklch(0.82 0.005 155), oklch(0.70 0.005 155)); border-radius: 1.6rem; padding: 8px; box-shadow: 0 25px 60px rgba(0,0,0,0.35);">
+					<div style="background: oklch(0.12 0.005 155); border-radius: 1.2rem; padding: 4px;">
+						<div class="overflow-hidden p-5" style="background: #f1f1f1; border-radius: 0.95rem;">
+							<div class="flex items-center justify-between mb-3">
+								<span class="text-[9px] text-gray-500 font-medium tabular-nums">12:30</span>
+								<div class="flex items-center gap-1.5">
+									<span class="text-[8px] text-gray-500">LTE</span>
+									<div class="relative" style="width: 16px; height: 8px; border: 1px solid oklch(0.60 0.005 155); border-radius: 2px;">
+										<div class="absolute" style="inset: 1px; right: 30%; background: oklch(0.55 0.005 155); border-radius: 1px;"></div>
+									</div>
+								</div>
+							</div>
 					<div class="text-center mb-4">
 						<span class="text-sm text-gray-900 font-medium">Haz tu pedido</span>
 						<div class="text-[10px] text-gray-600 mt-0.5">Toca para comenzar</div>
@@ -736,7 +773,7 @@ const RED = 'oklch(0.65 0.20 25)';
 					</div>
 					<div class="grid grid-cols-2 gap-2 mb-4">
 						<div class="rounded-xl p-3" style={`background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid oklch(0.55 0.15 290);`}>
-							<div class="w-full aspect-square rounded-lg mb-2" style="background: oklch(0.93 0.004 155);"></div>
+							<div class="w-full aspect-[4/3] rounded-lg mb-2 flex items-center justify-center" style="background: oklch(0.93 0.004 155);"><span class="text-[17px] font-bold tracking-wide" style="color: oklch(0.55 0.10 290);">CC</span></div>
 							<span class="text-[11px] text-gray-900">Combo Clasico</span>
 							<div class="flex items-center justify-between mt-1">
 								<span class="text-[10px]" style={`color: ${INDIGO_DEEP};`}>$185</span>
@@ -746,17 +783,17 @@ const RED = 'oklch(0.65 0.20 25)';
 							</div>
 						</div>
 						<div class="rounded-xl p-3" style="background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-							<div class="w-full aspect-square rounded-lg mb-2" style="background: oklch(0.93 0.004 155);"></div>
+							<div class="w-full aspect-[4/3] rounded-lg mb-2 flex items-center justify-center" style="background: oklch(0.93 0.004 155);"><span class="text-[17px] font-bold tracking-wide" style="color: oklch(0.55 0.10 150);">EF</span></div>
 							<span class="text-[11px] text-gray-900">Ensalada Fresh</span>
 							<span class="text-[10px] text-gray-500 block mt-1">$120</span>
 						</div>
 						<div class="rounded-xl p-3" style="background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-							<div class="w-full aspect-square rounded-lg mb-2" style="background: oklch(0.93 0.004 155);"></div>
+							<div class="w-full aspect-[4/3] rounded-lg mb-2 flex items-center justify-center" style="background: oklch(0.93 0.004 155);"><span class="text-[17px] font-bold tracking-wide" style="color: oklch(0.55 0.10 75);">WP</span></div>
 							<span class="text-[11px] text-gray-900">Wrap Pollo</span>
 							<span class="text-[10px] text-gray-500 block mt-1">$145</span>
 						</div>
 						<div class="rounded-xl p-3" style="background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-							<div class="w-full aspect-square rounded-lg mb-2" style="background: oklch(0.93 0.004 155);"></div>
+							<div class="w-full aspect-[4/3] rounded-lg mb-2 flex items-center justify-center" style="background: oklch(0.93 0.004 155);"><span class="text-[17px] font-bold tracking-wide" style="color: oklch(0.55 0.10 240);">AM</span></div>
 							<span class="text-[11px] text-gray-900">Agua Mineral</span>
 							<span class="text-[10px] text-gray-500 block mt-1">$35</span>
 						</div>
@@ -764,6 +801,8 @@ const RED = 'oklch(0.65 0.20 25)';
 					<div class="h-10 rounded-xl flex items-center justify-between px-4" style={`background: ${INDIGO_DEEP};`}>
 						<span class="text-[11px] font-semibold text-white">1 item — $185</span>
 						<span class="text-sm font-semibold text-white">Pagar</span>
+					</div>
+						</div>
 					</div>
 				</div>
 
