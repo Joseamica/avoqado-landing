@@ -5,6 +5,7 @@ import Footer from '../../components/layout/Footer.astro';
 import FloatingChatbot from '../../components/interactive/FloatingChatbot';
 
 const BLUE = 'oklch(0.72 0.14 240)';
+const BLUE_DEEP = 'oklch(0.50 0.15 240)'; // acento azul legible sobre blanco (eyebrows en secciones claras)
 const GREEN = '#7ADD2C';
 const AMBER = 'oklch(0.78 0.14 75)';
 const RED = 'oklch(0.65 0.20 25)';
@@ -34,7 +35,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 					<div>
 						<div class="flex items-center gap-3 mb-6">
 							<span class="text-5xl font-light text-black/10">01</span>
-							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${BLUE};`}>Dashboard Web</span>
+							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${BLUE_DEEP};`}>Dashboard Web</span>
 						</div>
 						<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-black mb-8">
 							31 modulos.<br/>
@@ -356,7 +357,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 					</div>
 
 					<div class="order-1 lg:order-2">
-						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Cobra sin terminal</span>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE_DEEP};`}>Cobra sin terminal</span>
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
 							Un link. Cualquier lugar.
 						</h2>
@@ -541,7 +542,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 					</div>
 
 					<div class="order-1 lg:order-2">
-						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE};`}>Control remoto</span>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${BLUE_DEEP};`}>Control remoto</span>
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
 							Tus terminales, desde cualquier lugar.
 						</h2>
@@ -806,8 +807,8 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<div>
 						<div class="flex items-center gap-3 mb-4">
-							<span class="text-xs uppercase tracking-widest font-semibold" style="color: oklch(0.74 0.15 162);">Contabilidad</span>
-							<span class="text-[10px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded-full" style="color: oklch(0.74 0.15 162); border: 1px solid oklch(0.74 0.15 162); opacity: 0.85;">Premium</span>
+							<span class="text-xs uppercase tracking-widest font-semibold" style="color: oklch(0.50 0.15 162);">Contabilidad</span>
+							<span class="text-[10px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded-full" style="color: oklch(0.50 0.15 162); border: 1px solid oklch(0.50 0.15 162); opacity: 0.85;">Premium</span>
 						</div>
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
 							Tu contabilidad se lleva sola.
@@ -815,7 +816,7 @@ const INDIGO = 'oklch(0.68 0.15 290)';
 						<p class="text-gray-600 text-lg leading-relaxed mb-8">
 							Cada venta se convierte en una poliza de doble partida. Tu Estado de Resultados y Balance General en tiempo real, listos para el SAT — mas conciliacion bancaria con IA y catalogo de cuentas SAT.
 						</p>
-						<a href="/productos/contabilidad" class="inline-flex items-center gap-2 text-base font-medium group" style="color: oklch(0.74 0.15 162);">
+						<a href="/productos/contabilidad" class="inline-flex items-center gap-2 text-base font-medium group" style="color: oklch(0.50 0.15 162);">
 							Conocer Contabilidad
 							<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
 						</a>

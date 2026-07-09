@@ -7,15 +7,15 @@ import TpvFrame from '../../components/ui/TpvFrame.astro';
 import AvoqadoTour from '../../components/interactive/tour/AvoqadoTour';
 
 const GREEN = '#7ADD2C';
+const GREEN_DEEP = 'oklch(0.50 0.16 150)'; // acento verde legible sobre blanco (eyebrows en secciones claras)
 const BLUE = 'oklch(0.72 0.14 240)';
 const AMBER = 'oklch(0.78 0.14 75)';
 const RED = 'oklch(0.65 0.20 25)';
 const INDIGO = 'oklch(0.68 0.15 290)';
 
-// ─── Light "page" mockup palette ───────────────────────────────
-// Mockups render as clean light windows: #f1f1f1 frame + dark border,
-// white inner cards, dark text. Accents are darkened so they stay
-// legible on light surfaces.
+// ─── Dark screen palette (TpvFrame) ────────────────────────────
+// Las pantallas dentro del PAX blanco son oscuras (casi negro + glow
+// verde) con acentos verde/ambar/azul brillantes.
 const SURFACE = 'oklch(0.13 0.005 155)';       // dark screen backdrop
 const CARD = 'oklch(0.185 0.006 155)';         // dark inner cards / chips
 const NEUTRAL_TINT = 'oklch(0.24 0.006 155)';  // image/placeholder blocks
@@ -218,7 +218,7 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<div>
-						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block text-avoqado-green">Pagos</span>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${GREEN_DEEP};`}>Pagos</span>
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
 							Tu decides a donde va cada peso.
 						</h2>
@@ -369,7 +369,7 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<div>
-						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${GREEN};`}>Hardware</span>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${GREEN_DEEP};`}>Hardware</span>
 						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
 							Compatible con lo que ya tienes.
 						</h2>
@@ -529,7 +529,7 @@ const BLUE_TINT = 'oklch(0.22 0.04 245)';      // blue avatar fill (dark)
 		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
 			<div class="max-w-[1400px] mx-auto">
 				<div class="text-center max-w-2xl mx-auto mb-12">
-					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${GREEN};`}>Self-service</span>
+					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${GREEN_DEEP};`}>Self-service</span>
 					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
 						El cliente pide solo.
 					</h2>
