@@ -74,6 +74,10 @@ export interface UseTourEngineOptions<Ctx extends EngineCtx> {
   layerRef: RefObject<HTMLDivElement>;
   dotRef: RefObject<HTMLDivElement>;
   pillRef: RefObject<HTMLDivElement>;
+  /** Optional guided-tour scrim: .tour-shade (clipped overlay, off-toggled)
+   *  wrapping .tour-spotlight (the bright hole the engine sizes to the target). */
+  shadeRef?: RefObject<HTMLDivElement>;
+  spotlightRef?: RefObject<HTMLDivElement>;
   /** Builds the ctx passed to step callbacks (engine helpers + caller's). */
   buildCtx: (engine: EngineCtx) => Ctx;
   /** Caller resets its own screen state (cart, stars, tip, confetti…). */
@@ -255,9 +259,25 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     pill.dataset.pos = tailPos;
     pill.style.setProperty('--tail-x', `${Math.max(14, Math.min(pw - 14, dx - px))}px`);
 
+    /* Guided-tour scrim: size the bright hole to the target's box (+ padding).
+       Uses the same stage-relative coords as the dot/pill so it stays exact
+       under the PAX scale transform. On a jump (first show / reappear) skip the
+       transition so it snaps into place instead of growing from 0. */
+    const spot = optsRef.current.spotlightRef?.current;
+    if (spot) {
+      const padX = 8;
+      const padY = 7;
+      if (jump) spot.style.transition = 'none';
+      spot.style.left = `${tr.left - sr.left - padX}px`;
+      spot.style.top = `${tr.top - sr.top - padY}px`;
+      spot.style.width = `${tr.width + padX * 2}px`;
+      spot.style.height = `${tr.height + padY * 2}px`;
+    }
+
     if (jump) {
       void layer.offsetWidth; /* flush so the next move animates */
       layer.classList.remove('jump');
+      if (spot) spot.style.transition = '';
     }
   };
 
@@ -349,6 +369,7 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
     pendingPlaceRef.current = null;
     placeTour(target, pending.pos, pending.jump);
     optsRef.current.layerRef.current?.classList.remove('off');
+    optsRef.current.shadeRef?.current?.classList.remove('off');
     tourVisibleRef.current = true;
 
     scrollTargetIntoView(target);
@@ -360,6 +381,7 @@ export function useTourEngine<Ctx extends EngineCtx>(opts: UseTourEngineOptions<
   const hideTour = () => {
     stopTargetWatch();
     optsRef.current.layerRef.current?.classList.add('off');
+    optsRef.current.shadeRef?.current?.classList.add('off');
     tourVisibleRef.current = false;
     curTargetRef.current?.classList.remove('tour-target');
     curTargetRef.current = null;

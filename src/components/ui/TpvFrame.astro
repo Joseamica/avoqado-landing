@@ -1,108 +1,114 @@
 ---
 /**
- * TpvFrame — real PAX terminal photo with the mockup UI rendered *inside* the
- * screen. Same approach as the tour (PaxPhotoFrame / TpvLivingPreview): the
- * device photo overlays on top (z-2) and its transparent screen cutout reveals
- * the UI beneath (z-1). Screen is LIGHT (#f1f1f1) so it matches the light
- * mockups.
+ * TpvFrame — real PAX mockup from the design kits, two variants:
  *
- * Cutout geometry measured from pax-frontal.png: top 24.6% · left 31.3% ·
- * width 37.4% · height 75.2%.
+ *  - "frontal"  → PAX A920 Pro, flat, big rectangular screen (public/pax-frame.png).
+ *                 Kit: pax_mockup_pack_dark. Handles dense screens.
+ *  - "diagonal" → PAX A910S, angled/premium, smaller screen (public/pax-a910s-frame.png).
+ *                 Kit: pax_a910s_dark_mockup_pack. Use big type + few modules.
  *
- * Usage:
- *   <TpvFrame maxw="520px" time="13:04">
- *     ...small-scale screen UI...
- *   </TpvFrame>
+ * The device photo overlays on top (z-2); its transparent screen cutout reveals
+ * a DARK screen UI beneath (z-1). The UI is authored on a fixed 343×692 canvas
+ * (the kits' design size) and `transform: scale(--s)` to fit the cutout, so it
+ * stays crisp and proportional at every viewport (never reflows / clips). --s
+ * is set per instance by JS.
  */
 interface Props {
-  /** Max width of the whole device photo (screen ≈ 37% of this). */
-  maxw?: string;
-  time?: string;
+  variant?: 'frontal' | 'diagonal';
+  /** Device (frame) width. */
+  w?: string;
   screenClass?: string;
   class?: string;
 }
-const { maxw = '440px', time = '12:30', screenClass = '', class: cls = '' } = Astro.props;
+const { variant = 'frontal', w = '340px', screenClass = '', class: cls = '' } = Astro.props;
+const src = variant === 'diagonal' ? '/pax-a910s-frame.png' : '/pax-frame.png';
 ---
 
-<div class={`tpvf ${cls}`} style={`max-width:${maxw};`}>
-  <!-- UI behind the glass -->
-  <div class="tpvf-screen">
-    <div class="tpvf-status" aria-hidden="true">
-      <span>{time}</span>
-      <span class="tpvf-right">
-        <span class="tpvf-sig"><i></i><i></i><i></i></span>
-        <svg width="9" height="7" viewBox="0 0 13 10" fill="none"><path d="M1 3.4C2.6 1.9 4.5 1.1 6.5 1.1s3.9.8 5.5 2.3" stroke="#9aa0a6" stroke-width="1.4" stroke-linecap="round"/><path d="M3.2 5.6c1-.9 2.1-1.4 3.3-1.4s2.3.5 3.3 1.4" stroke="#9aa0a6" stroke-width="1.4" stroke-linecap="round"/><circle cx="6.5" cy="8" r="1.1" fill="#9aa0a6"/></svg>
-        <span class="tpvf-batt"></span>
-      </span>
-    </div>
-    <div class={`tpvf-body ${screenClass}`}>
+<div class={`tpvf tpvf--${variant} ${cls}`} style={`max-width:${w};`}>
+  <div class="tpvf-screen" data-tpvf-screen>
+    <div class={`tpvf-canvas ${screenClass}`}>
       <slot />
     </div>
   </div>
-
-  <!-- real device photo (transparent screen cutout) -->
-  <img src="/pax-frontal.png" alt="Terminal PAX de Avoqado" class="tpvf-img" draggable="false" aria-hidden="true" />
+  <img src={src} alt="Terminal PAX de Avoqado" class="tpvf-frame-img" draggable="false" aria-hidden="true" />
 </div>
 
 <style>
   .tpvf {
     position: relative;
     width: 100%;
+    max-width: 340px;
     margin: 0 auto;
+    filter: drop-shadow(0 40px 70px rgba(0, 0, 0, 0.4));
   }
-  .tpvf-img {
-    display: block;
+  .tpvf--frontal { aspect-ratio: 856 / 1759; }
+  .tpvf--diagonal { aspect-ratio: 1 / 1; }
+
+  .tpvf-screen {
+    position: absolute;
+    z-index: 1;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 62% at 84% 0%, rgba(122, 221, 44, 0.1), transparent 55%),
+      #0a0c0b;
+    --s: 0.78; /* fallback until JS measures */
+  }
+  /* frontal: rectangular cutout (kit metadata) */
+  .tpvf--frontal .tpvf-screen {
+    left: 9.5794%;
+    top: 21.3189%;
+    width: 80.1402%;
+    height: 78.6811%;
+    border-radius: 4px 4px 0 0;
+  }
+  /* diagonal: angled cutout, clipped to the screen polygon (kit metadata) */
+  .tpvf--diagonal .tpvf-screen {
+    left: 28.9167%;
+    top: 23.6667%;
+    width: 27.6667%;
+    height: 61.0833%;
+    clip-path: polygon(0% 1.91%, 99.6988% 0%, 99.6988% 99.8636%, 0.3012% 97.1351%);
+  }
+
+  /* fixed design canvas (kit size), scaled to fill the cutout width */
+  .tpvf-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 343px;
+    height: 692px;
+    transform: scale(var(--s));
+    transform-origin: top left;
+    padding: 16px 15px 18px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .tpvf-frame-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    height: auto;
-    position: relative;
+    height: 100%;
     z-index: 2;
     pointer-events: none;
     user-select: none;
     -webkit-user-drag: none;
-    filter: drop-shadow(0 34px 64px rgba(0, 0, 0, 0.42));
-  }
-  /* screen cutout */
-  .tpvf-screen {
-    position: absolute;
-    z-index: 1;
-    top: 24.6%;
-    left: 31.3%;
-    width: 37.4%;
-    height: 75.2%;
-    overflow: hidden;
-    border-radius: 5px;
-    background: #f1f1f1;
-    display: flex;
-    flex-direction: column;
-  }
-  /* faux android status bar */
-  .tpvf-status {
-    flex: 0 0 auto;
-    height: 15px;
-    padding: 0 7px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 7px;
-    font-weight: 600;
-    color: #6b7075;
-  }
-  .tpvf-right { display: flex; align-items: center; gap: 3px; }
-  .tpvf-sig { display: flex; align-items: flex-end; gap: 1px; }
-  .tpvf-sig i { display: block; width: 1.5px; background: #9aa0a6; border-radius: 1px; }
-  .tpvf-sig i:nth-child(1) { height: 2.5px; }
-  .tpvf-sig i:nth-child(2) { height: 4px; }
-  .tpvf-sig i:nth-child(3) { height: 5.5px; }
-  .tpvf-batt { width: 11px; height: 6px; border: 1px solid #9aa0a6; border-radius: 1.5px; position: relative; }
-  .tpvf-batt::before { content: ''; position: absolute; inset: 1px 3.5px 1px 1px; background: #9aa0a6; border-radius: 1px; }
-  .tpvf-batt::after { content: ''; position: absolute; right: -2px; top: 1.5px; width: 1.5px; height: 3px; background: #9aa0a6; border-radius: 0 1px 1px 0; }
-
-  .tpvf-body {
-    flex: 1 1 auto;
-    min-height: 0;
-    padding: 6px 7px 8px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
   }
 </style>
+
+<script>
+  // Scale each terminal's 343-wide design canvas to fill its screen cutout.
+  const DESIGN_W = 343;
+  function fitScreens() {
+    document.querySelectorAll<HTMLElement>('[data-tpvf-screen]').forEach((el) => {
+      el.style.setProperty('--s', String(el.clientWidth / DESIGN_W));
+    });
+  }
+  fitScreens();
+  window.addEventListener('resize', fitScreens);
+  window.addEventListener('load', fitScreens);
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(fitScreens);
+    document.querySelectorAll('[data-tpvf-screen]').forEach((el) => ro.observe(el));
+  }
+</script>

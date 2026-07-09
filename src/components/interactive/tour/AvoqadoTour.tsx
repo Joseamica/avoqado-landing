@@ -96,6 +96,8 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
   const layerRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const pillRef = useRef<HTMLDivElement>(null);
+  const shadeRef = useRef<HTMLDivElement>(null);
+  const spotlightRef = useRef<HTMLDivElement>(null);
   const panelWrapRef = useRef<HTMLDivElement>(null);
 
   const onPaymentRef = useRef(onPaymentComplete);
@@ -112,6 +114,8 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
     layerRef,
     dotRef,
     pillRef,
+    shadeRef,
+    spotlightRef,
     buildCtx: helpers => ({
       ...helpers,
       dispatch,
@@ -340,6 +344,13 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
             )}
           </div>
 
+          {/* Guided-tour scrim: dims the whole stage and cuts a bright hole
+              around the current target. off toggled + hole positioned by the
+              engine (shadeRef / spotlightRef). Sits below the dot+pill layer. */}
+          <div className="tour-shade off" ref={shadeRef} aria-hidden="true">
+            <div className="tour-spotlight" ref={spotlightRef} />
+          </div>
+
           {/* Floating spotlight: pulsing dot + green pill (Square-style).
               Classes off/jump and inline positions are engine-managed. */}
           <div className="tour-layer off jump" ref={layerRef} aria-hidden="true">
@@ -347,14 +358,6 @@ export default function AvoqadoTour({ onPaymentComplete }: AvoqadoTourProps) {
             {/* data-pos + --tail-x (set by the engine) drive the tooltip tail
                 that points back at the dot — no chevron glyph. */}
             <div className="tour-pill" ref={pillRef}>
-              {/* Flecha animada del cue de primer uso: absoluta (no afecta el
-                  offsetWidth que mide el engine), apunta a la tecla y solo se
-                  ve en .is-start. */}
-              <span className="tour-pill-arrow" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 9l7 7 7-7" />
-                </svg>
-              </span>
               <span>{started ? engine.pillText : 'Empezar demo'}</span>
             </div>
           </div>
