@@ -23,6 +23,7 @@ const RED = 'oklch(0.65 0.20 25)';
 	</head>
 	<body class="bg-black m-0 p-0 w-full">
 		<Navbar position="fixed" transparentOnTop={true} />
+		<main>
 
 
 		<!-- ═══════════════════════════════════════════ -->
@@ -53,15 +54,14 @@ const RED = 'oklch(0.65 0.20 25)';
 						</div>
 					</div>
 
-					<!-- iPad tablet mockup — floor plan preview -->
-					<div class="hidden lg:flex justify-center items-center">
+					<!-- iPad tablet mockup — floor plan preview (visible en todos los tamanos; tilt solo desktop) -->
+					<div class="flex justify-center items-center">
 						<div
-							class="ipad-frame relative"
+							aria-hidden="true" class="ipad-frame relative w-full max-w-[320px] lg:max-w-[380px] lg:[transform:perspective(1200px)_rotateY(-5deg)_rotateX(3deg)]"
 							style={`
 								background: linear-gradient(145deg, oklch(0.82 0.005 155), oklch(0.70 0.005 155));
 								border-radius: 1.6rem;
 								padding: 8px;
-								transform: perspective(1200px) rotateY(-5deg) rotateX(3deg);
 								box-shadow: 0 25px 80px rgba(0,0,0,0.4);
 							`}
 						>
@@ -114,7 +114,7 @@ const RED = 'oklch(0.65 0.20 25)';
 											<span class="text-[6px] mt-0.5" style={`color: ${AMBER};`}>19:30</span>
 										</div>
 										<!-- T5: occupied (indigo) -->
-										<div class="aspect-square rounded-lg flex flex-col items-center justify-center col-span-2" style={`background: oklch(0.16 0.03 290); border: 1px solid oklch(0.28 0.06 290);`}>
+										<div class="aspect-[2/1] rounded-lg flex flex-col items-center justify-center col-span-2" style={`background: oklch(0.16 0.03 290); border: 1px solid oklch(0.28 0.06 290);`}>
 											<span class="text-[9px] text-white font-medium">M5 — VIP</span>
 											<span class="text-[6px] mt-0.5" style={`color: ${INDIGO};`}>8 pax</span>
 											<span class="text-[6px]" style={`color: ${INDIGO};`}>$5,670</span>
@@ -185,7 +185,7 @@ const RED = 'oklch(0.65 0.20 25)';
 					</div>
 
 					<!-- Floor plan detail mockup -->
-					<div class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+					<div aria-hidden="true" class="rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Zonas configuradas — 4</span>
 							<div class="flex gap-1.5">
@@ -261,7 +261,7 @@ const RED = 'oklch(0.65 0.20 25)';
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<!-- Catalog mockup -->
-					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
+					<div aria-hidden="true" class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Nueva orden — Mesa 6</span>
 							<div class="flex gap-1.5">
@@ -380,7 +380,7 @@ const RED = 'oklch(0.65 0.20 25)';
 				</div>
 
 				<!-- Reservation mockup — centered -->
-				<div class="max-w-3xl mx-auto rounded-2xl overflow-hidden border border-black/5 p-5 mb-12" style="background: #0A0A0A;">
+				<div aria-hidden="true" class="max-w-3xl mx-auto rounded-2xl overflow-hidden border border-black/5 p-5 mb-12" style="background: #0A0A0A;">
 					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 						<!-- Calendar side -->
 						<div class="rounded-xl p-4" style="background: oklch(0.16 0.005 155);">
@@ -544,7 +544,7 @@ const RED = 'oklch(0.65 0.20 25)';
 					</div>
 
 					<!-- Shifts mockup -->
-					<div class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
+					<div aria-hidden="true" class="rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Turno vespertino — 4 activos</span>
 							<span class="text-[9px] px-2 py-0.5 rounded-full bg-avoqado-green text-black font-medium">En curso</span>
@@ -632,7 +632,7 @@ const RED = 'oklch(0.65 0.20 25)';
 			<div class="max-w-[1400px] mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 					<!-- KDS mockup -->
-					<div class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
+					<div aria-hidden="true" class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/5 p-5" style="background: #0A0A0A;">
 						<div class="flex items-center justify-between mb-4">
 							<span class="text-[11px] text-gray-500">Kitchen Display — 6 ordenes activas</span>
 							<div class="flex gap-1.5">
@@ -723,7 +723,7 @@ const RED = 'oklch(0.65 0.20 25)';
 				</div>
 
 				<!-- Kiosk mockup centered -->
-				<div class="max-w-sm mx-auto rounded-2xl overflow-hidden border border-black/10 p-5 mb-12" style="background: #f1f1f1;">
+				<div aria-hidden="true" class="max-w-sm mx-auto rounded-2xl overflow-hidden border border-black/10 p-5 mb-12" style="background: #f1f1f1;">
 					<div class="text-center mb-4">
 						<span class="text-sm text-gray-900 font-medium">Haz tu pedido</span>
 						<div class="text-[10px] text-gray-600 mt-0.5">Toca para comenzar</div>
@@ -834,6 +834,8 @@ const RED = 'oklch(0.65 0.20 25)';
 				</div>
 			</div>
 		</section>
+
+		</main>
 
 		<FloatingChatbot client:idle />
 		<Footer />
