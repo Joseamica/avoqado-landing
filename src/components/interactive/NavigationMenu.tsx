@@ -199,7 +199,7 @@ export default function NavigationMenu() {
   return (
     <nav
       ref={navRef}
-      className={`fixed top-[36px] left-0 right-0 z-[300] transition-all duration-300 font-sans ${
+      className={`fixed top-[var(--site-banner-height)] left-0 right-0 z-[300] transition-all duration-300 font-sans ${
         scrolled
           ? 'bg-white/95 backdrop-blur-xl border-b border-black/5 py-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
           : 'bg-transparent py-4'
@@ -360,7 +360,7 @@ function MobileDrawer({ open, section, onSectionToggle }: MobileDrawerProps) {
 
   return createPortal(
     <div
-      className={`fixed inset-x-0 bottom-0 top-[88px] bg-white z-[350] lg:hidden overflow-y-auto transition-opacity duration-300 motion-reduce:transition-none ${
+      className={`fixed inset-x-0 bottom-0 top-[var(--site-header-height)] bg-white z-[350] lg:hidden overflow-y-auto transition-opacity duration-300 motion-reduce:transition-none ${
         open ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
       }`}
       role="dialog"

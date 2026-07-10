@@ -68,6 +68,10 @@
 
 /* Product accent colors (used in /productos pages) */
 :root {
+  --site-banner-height: 36px;
+  --site-nav-height: 60px;
+  --site-header-height: calc(var(--site-banner-height) + var(--site-nav-height));
+
   --color-product-dashboard: oklch(0.72 0.14 240);
   --color-product-tpv: oklch(0.81 0.22 135);
   --color-product-pos: oklch(0.68 0.15 290);
@@ -117,6 +121,12 @@
   --color-mockup-ink-faint: oklch(0.45 0.005 155);
   --color-mockup-light-bg: oklch(0.955 0.003 155);
   --color-mockup-light-card: oklch(1.0 0.003 155);
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --site-nav-height: 52px;
+  }
 }
 
 @keyframes fade-in {

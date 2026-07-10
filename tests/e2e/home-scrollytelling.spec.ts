@@ -77,3 +77,28 @@ test('activa escenas al avanzar y retroceder el scroll', async ({ page }, testIn
     await expect(root).toHaveAttribute('data-active-scene', id);
   }
 });
+
+test('resuelve la geometría sticky contra el viewport', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/');
+
+  const root = page.locator('[data-story-mode="animated"]');
+  const shell = root.locator(':scope > div').first();
+  await expect(shell).toHaveCount(1);
+
+  const geometry = await shell.evaluate((element) => {
+    const styles = getComputedStyle(element);
+    return {
+      position: styles.position,
+      top: styles.top,
+      height: element.getBoundingClientRect().height,
+      viewportHeight: window.innerHeight,
+    };
+  });
+
+  expect(geometry.position).toBe('sticky');
+  expect(geometry.top).not.toBe('auto');
+  expect(geometry.height).toBeGreaterThan(0);
+  expect(Math.abs(Number.parseFloat(geometry.top) + geometry.height - geometry.viewportHeight))
+    .toBeLessThanOrEqual(1);
+});
