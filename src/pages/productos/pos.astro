@@ -186,11 +186,49 @@ const RED = 'oklch(0.65 0.20 25)';
 								<div class="flex-1 rounded-t" style={`height: 65%; background: ${INDIGO}; opacity: 0.75;`}></div>
 							</div>
 						</div>
+						<!-- Pantalla flotante: KDS / cocina -->
+						<div class="hidden sm:block absolute -top-8 -left-6 lg:-left-14 w-[160px] z-20 rounded-2xl rotate-[-3deg] p-3.5" style="background: oklch(0.15 0.006 155); border: 1px solid oklch(0.30 0.008 155); box-shadow: 0 18px 45px rgba(0,0,0,0.6);">
+							<div class="flex items-center justify-between mb-2">
+								<span class="text-[9px] text-gray-400">Cocina — #128</span>
+								<span class="text-[8px] px-1.5 py-0.5 rounded-full font-medium tabular-nums" style={`background: oklch(0.20 0.04 75); color: ${AMBER};`}>2:45</span>
+							</div>
+							<div class="space-y-1.5">
+								<div class="flex items-center justify-between">
+									<span class="text-[9px] text-gray-300">2x Tacos al Pastor</span>
+									<span class="text-[8px] text-avoqado-green">Listo</span>
+								</div>
+								<div class="flex items-center justify-between">
+									<span class="text-[9px] text-gray-300">1x Michelada</span>
+									<span class="text-[8px]" style={`color: ${AMBER};`}>En prep</span>
+								</div>
+							</div>
+						</div>
 
-						<!-- Toast: reserva confirmada -->
-						<div class="absolute -bottom-8 right-0 sm:-right-6 z-10 flex items-center gap-2 rounded-full px-3 py-2" style="background: oklch(0.17 0.006 155); border: 1px solid oklch(0.30 0.008 155); box-shadow: 0 12px 30px rgba(0,0,0,0.5);">
-							<div class="w-1.5 h-1.5 rounded-full bg-avoqado-green"></div>
-							<span class="text-[9px] text-gray-300">Reserva confirmada — Ana · 20:00</span>
+						<!-- Pantalla flotante: clase con cupo -->
+						<div class="absolute top-[54%] -right-2 sm:-right-12 w-[164px] z-20 rounded-2xl rotate-[2deg] p-3.5" style="background: oklch(0.15 0.006 155); border: 1px solid oklch(0.30 0.008 155); box-shadow: 0 18px 45px rgba(0,0,0,0.6);">
+							<div class="flex items-center justify-between mb-2">
+								<span class="text-[10px] text-white font-medium">Clase de Yoga</span>
+								<span class="text-[9px] text-gray-500 tabular-nums">19:00</span>
+							</div>
+							<div class="h-1.5 rounded-full mb-1.5 overflow-hidden" style="background: oklch(0.26 0.008 155);">
+								<div class="h-full rounded-full" style={`width: 90%; background: ${INDIGO};`}></div>
+							</div>
+							<div class="flex items-center justify-between">
+								<span class="text-[8px] text-gray-500">Check-in de asistentes</span>
+								<span class="text-[9px] tabular-nums" style={`color: ${INDIGO};`}>18/20</span>
+							</div>
+						</div>
+
+						<!-- Toasts: notificaciones apiladas -->
+						<div class="absolute -bottom-10 right-0 sm:-right-6 z-10 flex flex-col items-end gap-2">
+							<div class="flex items-center gap-2 rounded-full px-3 py-2" style="background: oklch(0.17 0.006 155); border: 1px solid oklch(0.30 0.008 155); box-shadow: 0 12px 30px rgba(0,0,0,0.5);">
+								<div class="w-1.5 h-1.5 rounded-full bg-avoqado-green"></div>
+								<span class="text-[9px] text-gray-300">Pago aprobado — $285 · Visa *4821</span>
+							</div>
+							<div class="flex items-center gap-2 rounded-full px-3 py-2" style="background: oklch(0.17 0.006 155); border: 1px solid oklch(0.30 0.008 155); box-shadow: 0 12px 30px rgba(0,0,0,0.5);">
+								<div class="w-1.5 h-1.5 rounded-full" style={`background: ${INDIGO};`}></div>
+								<span class="text-[9px] text-gray-300">Reserva confirmada — Ana · 20:00</span>
+							</div>
 						</div>
 					</div>
 					</div>
