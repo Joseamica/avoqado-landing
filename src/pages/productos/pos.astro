@@ -54,10 +54,11 @@ const RED = 'oklch(0.65 0.20 25)';
 						</div>
 					</div>
 
-					<!-- iPad tablet mockup — floor plan preview (visible en todos los tamanos; tilt solo desktop) -->
+					<!-- Composicion de pantallas del POS: tablet (floor plan) + cobro + ventas + toast -->
 					<div class="flex justify-center items-center">
+						<div aria-hidden="true" class="relative w-full max-w-[330px] lg:max-w-[400px] py-10">
 						<div
-							aria-hidden="true" class="ipad-frame relative w-full max-w-[320px] lg:max-w-[380px] lg:[transform:perspective(1200px)_rotateY(-5deg)_rotateX(3deg)]"
+							class="ipad-frame relative w-full lg:[transform:perspective(1200px)_rotateY(-5deg)_rotateX(3deg)]"
 							style={`
 								background: linear-gradient(145deg, oklch(0.82 0.005 155), oklch(0.70 0.005 155));
 								border-radius: 1.6rem;
@@ -151,6 +152,47 @@ const RED = 'oklch(0.65 0.20 25)';
 								</div>
 							</div>
 						</div>
+						<!-- Pantalla flotante: cobro (clara, truena sobre el negro) -->
+						<div class="absolute -left-3 sm:-left-12 -bottom-4 w-[190px] z-20 rounded-2xl overflow-hidden rotate-[-4deg]" style="background: #f1f1f1; box-shadow: 0 20px 50px rgba(0,0,0,0.55); border: 1px solid rgba(0,0,0,0.15);">
+							<div class="px-3.5 pt-3 pb-3.5">
+								<div class="flex items-center justify-between mb-2.5">
+									<span class="text-[11px] text-gray-900 font-semibold">Orden — M5</span>
+									<span class="text-[8px] px-1.5 py-0.5 rounded-full font-medium" style={`background: oklch(0.93 0.035 290); color: ${INDIGO_DEEP};`}>Dine-in</span>
+								</div>
+								<div class="space-y-1.5 mb-2.5">
+									<div class="flex justify-between"><span class="text-[9px] text-gray-600">2x Tacos al Pastor</span><span class="text-[9px] text-gray-900 tabular-nums">$190</span></div>
+									<div class="flex justify-between"><span class="text-[9px] text-gray-600">1x Michelada</span><span class="text-[9px] text-gray-900 tabular-nums">$95</span></div>
+									<div class="flex justify-between pt-1.5 border-t border-black/10"><span class="text-[9px] text-gray-900 font-semibold">Total</span><span class="text-[10px] text-gray-900 font-semibold tabular-nums">$285</span></div>
+								</div>
+								<div class="h-8 rounded-lg flex items-center justify-center" style={`background: ${INDIGO_DEEP};`}>
+									<span class="text-[10px] font-semibold text-white">Cobrar $285</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- Pantalla flotante: ventas de hoy (mini reporte) -->
+						<div class="absolute -right-2 sm:-right-10 -top-3 w-[170px] z-20 rounded-2xl rotate-[3deg] p-3.5" style="background: oklch(0.15 0.006 155); border: 1px solid oklch(0.30 0.008 155); box-shadow: 0 18px 45px rgba(0,0,0,0.6);">
+							<div class="flex items-center justify-between mb-1">
+								<span class="text-[9px] text-gray-400">Ventas hoy</span>
+								<span class="text-[8px] text-avoqado-green">+12%</span>
+							</div>
+							<div class="text-[17px] font-light text-white mb-2 tabular-nums">$18,450</div>
+							<div class="flex items-end gap-1 h-8">
+								<div class="flex-1 rounded-t" style={`height: 35%; background: ${INDIGO}; opacity: 0.5;`}></div>
+								<div class="flex-1 rounded-t" style={`height: 55%; background: ${INDIGO}; opacity: 0.65;`}></div>
+								<div class="flex-1 rounded-t" style={`height: 45%; background: ${INDIGO}; opacity: 0.6;`}></div>
+								<div class="flex-1 rounded-t" style={`height: 75%; background: ${INDIGO}; opacity: 0.85;`}></div>
+								<div class="flex-1 rounded-t" style={`height: 100%; background: ${INDIGO};`}></div>
+								<div class="flex-1 rounded-t" style={`height: 65%; background: ${INDIGO}; opacity: 0.75;`}></div>
+							</div>
+						</div>
+
+						<!-- Toast: reserva confirmada -->
+						<div class="absolute -bottom-8 right-0 sm:-right-6 z-10 flex items-center gap-2 rounded-full px-3 py-2" style="background: oklch(0.17 0.006 155); border: 1px solid oklch(0.30 0.008 155); box-shadow: 0 12px 30px rgba(0,0,0,0.5);">
+							<div class="w-1.5 h-1.5 rounded-full bg-avoqado-green"></div>
+							<span class="text-[9px] text-gray-300">Reserva confirmada — Ana · 20:00</span>
+						</div>
+					</div>
 					</div>
 				</div>
 			</div>
