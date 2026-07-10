@@ -1,0 +1,328 @@
+---
+import '../../styles/global.css';
+import Navbar from '../../components/layout/Navbar.astro';
+import Footer from '../../components/layout/Footer.astro';
+import FloatingChatbot from '../../components/interactive/FloatingChatbot';
+
+// Facturacion accent — violeta fiscal, distinto del azul dashboard (240) y del indigo POS (290)
+const VIOLET = 'oklch(0.70 0.14 265)';
+const VIOLET_DEEP = 'oklch(0.48 0.14 265)'; // legible sobre secciones blancas
+const EMERALD = 'oklch(0.74 0.15 162)';
+const AMBER = 'oklch(0.78 0.14 75)';
+const RED = 'oklch(0.65 0.20 25)';
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Facturacion CFDI 4.0 | Avoqado</title>
+		<meta name="description" content="Timbra CFDI 4.0 en un clic, deja que tu cliente se autofacture desde su recibo digital y la factura global del resto se emite sola. Cancelaciones con motivo SAT y nomina timbrada." />
+		<link rel="icon" type="image/png" href="/favicon.png?v=3" />
+	</head>
+	<body class="bg-black m-0 p-0 w-full">
+		<Navbar position="fixed" transparentOnTop={true} />
+		<main>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- HERO                                        -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="min-h-screen flex items-center pt-24 md:pt-32 pb-16 px-6">
+			<div class="max-w-[1400px] mx-auto w-full">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+					<!-- Text -->
+					<div>
+						<div class="flex items-center gap-3 mb-6">
+							<span class="text-xs uppercase tracking-widest font-semibold" style={`color: ${VIOLET};`}>Facturacion</span>
+							<span class="text-[10px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded-full" style={`color: ${VIOLET}; border: 1px solid ${VIOLET}; opacity: 0.85;`}>Premium</span>
+						</div>
+						<h1 class="text-5xl sm:text-6xl md:text-7xl font-light tracking-tight leading-[0.95] text-white mb-8">
+							Facturar deja de<br/>ser un pendiente.
+						</h1>
+						<p class="text-lg md:text-xl text-gray-400 max-w-xl leading-relaxed mb-10">
+							Timbra CFDI 4.0 en un clic desde tu dashboard, deja que tu cliente se autofacture desde su recibo digital, y lo que nadie pidio se va solo a la factura global. PDF y XML siempre listos.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4">
+							<a href="https://avoqado.io/demo" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200" style={`background: ${VIOLET};`}>
+								Probar demo gratis
+							</a>
+							<a href="/contact" class="inline-flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200">
+								Agendar demo
+							</a>
+						</div>
+					</div>
+
+					<!-- Browser mockup — lista de CFDIs (visible en todos los tamanos; tilt solo desktop) -->
+					<div aria-hidden="true">
+						<div class="rounded-xl overflow-hidden lg:[transform:perspective(1200px)_rotateY(-8deg)_rotateX(2deg)]" style="box-shadow: 0 25px 80px rgba(0,0,0,0.4);">
+							<!-- Browser chrome -->
+							<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.18 0.005 155);">
+								<div class="flex gap-1.5">
+									<div class="w-3 h-3 rounded-full" style="background: #FF5F57;"></div>
+									<div class="w-3 h-3 rounded-full" style="background: #FEBC2E;"></div>
+									<div class="w-3 h-3 rounded-full" style="background: #28C840;"></div>
+								</div>
+								<div class="flex-1 flex items-center gap-1.5 mx-3 px-3 py-1 rounded-md" style="background: oklch(0.14 0.005 155);">
+									<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="oklch(0.45 0.005 155)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+									<span class="text-[10px]" style="color: oklch(0.45 0.005 155);">dashboard.avoqado.io/facturacion</span>
+								</div>
+							</div>
+							<!-- Screen -->
+							<div class="p-4" style="background: oklch(0.10 0.005 155); min-height: 340px;">
+								<div class="flex items-center justify-between mb-3">
+									<span class="text-[11px] text-white font-medium">CFDIs emitidos</span>
+									<span class="text-[9px] px-2 py-0.5 rounded-full font-medium" style={`background: oklch(0.70 0.14 265 / 0.15); color: ${VIOLET};`}>+ Timbrar CFDI</span>
+								</div>
+								<div class="space-y-2">
+									<div class="rounded-lg p-3" style="background: oklch(0.185 0.006 155); border: 1px solid oklch(0.28 0.006 155);">
+										<div class="flex items-center justify-between mb-1">
+											<span class="text-[10px] text-white">F-1042 — Comercial Andrade SA de CV</span>
+											<span class="text-[8px] px-1.5 py-0.5 rounded-full" style={`background: oklch(0.74 0.15 162 / 0.15); color: ${EMERALD};`}>Timbrada</span>
+										</div>
+										<div class="flex items-center justify-between">
+											<span class="text-[8px] text-gray-500">CAN950528XX1 · Uso G03 · hace 5 min</span>
+											<span class="text-[10px] text-white tabular-nums">$4,850.00</span>
+										</div>
+									</div>
+									<div class="rounded-lg p-3" style="background: oklch(0.185 0.006 155); border: 1px solid oklch(0.28 0.006 155);">
+										<div class="flex items-center justify-between mb-1">
+											<span class="text-[10px] text-white">F-1041 — Ana Lopez Rivera</span>
+											<span class="text-[8px] px-1.5 py-0.5 rounded-full" style={`background: oklch(0.70 0.14 265 / 0.15); color: ${VIOLET};`}>Autofactura</span>
+										</div>
+										<div class="flex items-center justify-between">
+											<span class="text-[8px] text-gray-500">LORA880912XX3 · Uso D01 · hace 2 h</span>
+											<span class="text-[10px] text-white tabular-nums">$1,240.00</span>
+										</div>
+									</div>
+									<div class="rounded-lg p-3" style="background: oklch(0.185 0.006 155); border: 1px solid oklch(0.28 0.006 155);">
+										<div class="flex items-center justify-between mb-1">
+											<span class="text-[10px] text-white">FG-38 — Publico en General</span>
+											<span class="text-[8px] px-1.5 py-0.5 rounded-full" style={`background: oklch(0.24 0.04 75); color: ${AMBER};`}>Global · Jun</span>
+										</div>
+										<div class="flex items-center justify-between">
+											<span class="text-[8px] text-gray-500">XAXX010101000 · 43 ventas · automatica</span>
+											<span class="text-[10px] text-white tabular-nums">$28,450.00</span>
+										</div>
+									</div>
+								</div>
+								<div class="mt-3 flex items-center gap-1.5 text-[8px]" style="color: oklch(0.45 0.005 155);">
+									<div class="w-1 h-1 rounded-full" style={`background: ${VIOLET};`}></div>
+									<span>PDF + XML de cada CFDI, guardados y enviados solos.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 1. AUTOFACTURA                              -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<div>
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${VIOLET_DEEP};`}>Autofactura</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+							Tu cliente se factura solo.
+						</h2>
+						<p class="text-gray-600 text-lg leading-relaxed mb-8">
+							Cada cobro genera un recibo digital con su liga de autofactura. El cliente captura su RFC y sus datos fiscales, y recibe PDF y XML al instante — sin llamarte, sin escribirte, sin quitarle tiempo a tu equipo.
+						</p>
+						<div class="space-y-4">
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Desde el recibo digital</h3>
+								<p class="text-sm text-gray-500">La liga de su ticket lo lleva directo a facturarse. Solo puede facturar su propia venta, dentro del mismo mes fiscal.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">PDF + XML por donde quiera</h3>
+								<p class="text-sm text-gray-500">Email, WhatsApp o descarga directa en ZIP. Sus datos fiscales quedan guardados para la proxima.</p>
+							</div>
+							<div class="border-t border-black/5 pt-3">
+								<h3 class="text-base text-black font-medium mb-1">Tambien en un clic desde tu dashboard</h3>
+								<p class="text-sm text-gray-500">Si el cliente prefiere que lo hagas tu, timbras su cuenta cerrada al momento con sus datos capturados.</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Autofactura mockup (portal publico, dark sobre seccion blanca) -->
+					<div aria-hidden="true">
+						<div class="rounded-xl overflow-hidden border border-black/10" style="box-shadow: 0 20px 50px rgba(0,0,0,0.12);">
+							<div class="flex items-center gap-2 px-4 py-2.5" style="background: oklch(0.18 0.005 155);">
+								<div class="flex gap-1.5">
+									<div class="w-2.5 h-2.5 rounded-full" style="background: #FF5F57;"></div>
+									<div class="w-2.5 h-2.5 rounded-full" style="background: #FEBC2E;"></div>
+									<div class="w-2.5 h-2.5 rounded-full" style="background: #28C840;"></div>
+								</div>
+								<span class="text-[9px] ml-2" style="color: oklch(0.50 0.005 155);">avoqado.io/recibo/8F3K…/factura</span>
+							</div>
+							<div class="p-4" style="background: oklch(0.10 0.005 155);">
+								<div class="text-center mb-4">
+									<span class="text-[12px] text-white font-medium block">Factura tu compra</span>
+									<span class="text-[9px] text-gray-500">Estetica Mave — Ticket $1,240.00 · 18 jun</span>
+								</div>
+								<div class="space-y-2 mb-3">
+									<div class="rounded-lg px-3 py-2.5 flex items-center justify-between" style="background: oklch(0.185 0.006 155); border: 1px solid oklch(0.28 0.006 155);">
+										<span class="text-[9px] text-gray-500">RFC</span>
+										<span class="text-[10px] text-white tabular-nums">LORA880912XX3</span>
+									</div>
+									<div class="rounded-lg px-3 py-2.5 flex items-center justify-between" style="background: oklch(0.185 0.006 155); border: 1px solid oklch(0.28 0.006 155);">
+										<span class="text-[9px] text-gray-500">Razon social</span>
+										<span class="text-[10px] text-white">Ana Lopez Rivera</span>
+									</div>
+									<div class="grid grid-cols-2 gap-2">
+										<div class="rounded-lg px-3 py-2.5 flex items-center justify-between" style="background: oklch(0.185 0.006 155); border: 1px solid oklch(0.28 0.006 155);">
+											<span class="text-[9px] text-gray-500">Regimen</span>
+											<span class="text-[10px] text-white tabular-nums">612</span>
+										</div>
+										<div class="rounded-lg px-3 py-2.5 flex items-center justify-between" style="background: oklch(0.185 0.006 155); border: 1px solid oklch(0.28 0.006 155);">
+											<span class="text-[9px] text-gray-500">Uso CFDI</span>
+											<span class="text-[10px] text-white tabular-nums">D01</span>
+										</div>
+									</div>
+								</div>
+								<div class="h-9 rounded-lg flex items-center justify-center mb-3" style={`background: ${VIOLET};`}>
+									<span class="text-[11px] font-semibold text-black">Generar mi factura</span>
+								</div>
+								<div class="flex items-center justify-center gap-3">
+									<span class="text-[8px] text-gray-500">Recibela por:</span>
+									<span class="text-[8px] px-2 py-0.5 rounded-full" style="background: oklch(0.185 0.006 155); border: 1px solid oklch(0.28 0.006 155); color: oklch(0.62 0.006 155);">Email</span>
+									<span class="text-[8px] px-2 py-0.5 rounded-full" style="background: oklch(0.185 0.006 155); border: 1px solid oklch(0.28 0.006 155); color: oklch(0.62 0.006 155);">WhatsApp</span>
+									<span class="text-[8px] px-2 py-0.5 rounded-full" style="background: oklch(0.185 0.006 155); border: 1px solid oklch(0.28 0.006 155); color: oklch(0.62 0.006 155);">ZIP</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 2. FACTURA GLOBAL                           -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-black border-t border-white/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+					<!-- Global mockup (claro sobre seccion negra) -->
+					<div aria-hidden="true" class="order-2 lg:order-1 rounded-2xl overflow-hidden border border-black/10 p-5" style="background: #f1f1f1;">
+						<div class="flex items-center justify-between mb-4">
+							<span class="text-[11px] text-gray-600">Factura global — configuracion</span>
+							<span class="text-[9px] px-2 py-0.5 rounded-full font-medium" style="background: oklch(0.74 0.15 162 / 0.15); color: oklch(0.52 0.16 150);">Activa</span>
+						</div>
+						<div class="flex gap-1.5 mb-4">
+							<span class="text-[9px] px-2.5 py-1 rounded-full text-gray-600" style="background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">Diaria</span>
+							<span class="text-[9px] px-2.5 py-1 rounded-full text-gray-600" style="background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">Semanal</span>
+							<span class="text-[9px] px-2.5 py-1 rounded-full text-white font-medium" style={`background: ${VIOLET_DEEP};`}>Mensual</span>
+							<span class="text-[9px] px-2.5 py-1 rounded-full text-gray-600" style="background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">Bimestral</span>
+						</div>
+						<div class="rounded-xl p-3.5 mb-2" style="background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+							<div class="flex items-center justify-between mb-2">
+								<span class="text-[10px] text-gray-900 font-medium">FG-38 — Junio 2026</span>
+								<span class="text-[8px] px-1.5 py-0.5 rounded-full" style="background: oklch(0.74 0.15 162 / 0.15); color: oklch(0.52 0.16 150);">Timbrada</span>
+							</div>
+							<div class="space-y-1">
+								<div class="flex justify-between"><span class="text-[9px] text-gray-600">Ventas sin factura individual</span><span class="text-[9px] text-gray-900 tabular-nums">43</span></div>
+								<div class="flex justify-between"><span class="text-[9px] text-gray-600">Receptor</span><span class="text-[9px] text-gray-900 tabular-nums">XAXX010101000</span></div>
+								<div class="flex justify-between pt-1.5 border-t border-black/10"><span class="text-[9px] text-gray-900 font-semibold">Total timbrado</span><span class="text-[10px] text-gray-900 font-semibold tabular-nums">$28,450.00</span></div>
+							</div>
+						</div>
+						<div class="text-[8px] text-gray-500">Se emite sola en la madrugada — sin que nadie la recuerde.</div>
+					</div>
+
+					<div class="order-1 lg:order-2">
+						<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${VIOLET};`}>Factura global</span>
+						<h2 class="text-4xl md:text-5xl font-light tracking-tight text-white mb-6 leading-tight">
+							Lo que nadie facturo,<br/>se timbra solo.
+						</h2>
+						<p class="text-gray-400 text-lg leading-relaxed mb-8">
+							Las ventas al publico que no pidieron factura individual se agrupan y timbran automaticamente como factura global al Publico en General — con la periodicidad que tu regimen necesite.
+						</p>
+						<div class="space-y-3">
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${VIOLET};`}></div>
+								<span class="text-sm text-gray-400">Periodicidad configurable: diaria, semanal, quincenal, mensual o bimestral</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 bg-avoqado-green shrink-0"></div>
+								<span class="text-sm text-gray-400">Solo entra lo que no se facturo individualmente — sin duplicar ingresos</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${AMBER};`}></div>
+								<span class="text-sm text-gray-400">Tu decides si las ventas en efectivo se incluyen</span>
+							</div>
+							<div class="flex items-start gap-3">
+								<div class="w-1.5 h-1.5 rounded-full mt-2 shrink-0" style={`background: ${VIOLET};`}></div>
+								<span class="text-sm text-gray-400">Tambien puedes dispararla manualmente cuando quieras</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- 3. CONTROL: CANCELACIONES, NOMINA, CONTA    -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 bg-white border-t border-black/5">
+			<div class="max-w-[1400px] mx-auto">
+				<div class="text-center max-w-2xl mx-auto mb-14">
+					<span class="text-xs uppercase tracking-widest font-semibold mb-4 block" style={`color: ${VIOLET_DEEP};`}>Control total</span>
+					<h2 class="text-4xl md:text-5xl font-light tracking-tight text-black mb-6 leading-tight">
+						Todo el ciclo fiscal, cubierto.
+					</h2>
+					<p class="text-gray-600 text-lg leading-relaxed">
+						Emitir es la mitad del trabajo. Cancelar bien, timbrar la nomina de tu equipo y que cada CFDI aterrice en tu contabilidad — esa es la otra mitad.
+					</p>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+					<div class="border-t pt-5" style={`border-color: ${VIOLET_DEEP};`}>
+						<h3 class="text-base text-black font-medium mb-2">Cancelaciones con motivo SAT</h3>
+						<p class="text-sm text-gray-500">Cancela con el motivo correcto (01-04) y factura de sustitucion cuando aplica. El estado queda rastreado hasta que el SAT acepta.</p>
+					</div>
+					<div class="border-t pt-5" style={`border-color: ${VIOLET_DEEP};`}>
+						<h3 class="text-base text-black font-medium mb-2">Nomina timbrada</h3>
+						<p class="text-sm text-gray-500">Los recibos de tu equipo se timbran como CFDI de nomina con complemento 1.2 — directo desde el modulo de personal.</p>
+					</div>
+					<div class="border-t pt-5" style={`border-color: ${VIOLET_DEEP};`}>
+						<h3 class="text-base text-black font-medium mb-2">Conectado a Contabilidad</h3>
+						<p class="text-sm text-gray-500">Cada CFDI emitido alimenta tus polizas y reportes. Facturacion y contabilidad dejan de ser dos mundos.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- ═══════════════════════════════════════════ -->
+		<!-- CTA — cierre oscuro                          -->
+		<!-- ═══════════════════════════════════════════ -->
+		<section class="px-6 py-24 md:py-32 border-t border-white/10" style="background: radial-gradient(900px 600px at 50% 22%, oklch(0.35 0.10 265 / 0.25), transparent 62%), #0D0E0D;">
+			<div class="max-w-3xl mx-auto text-center">
+				<h2 class="text-3xl md:text-5xl font-light tracking-tight text-white mb-8">
+					Deja que tus facturas se hagan solas.
+				</h2>
+				<p class="text-lg text-gray-400 mb-12 max-w-xl mx-auto">
+					Facturacion es parte del plan Premium. Pruebala en la demo con datos reales — sin tarjeta, sin compromiso.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center">
+					<a href="https://avoqado.io/demo" target="_blank" rel="noopener noreferrer" class="px-8 py-4 text-black font-semibold rounded-full hover:opacity-90 hover:-translate-y-0.5 transition-all duration-200 text-lg" style={`background: ${VIOLET};`}>
+						Probar demo gratis
+					</a>
+					<a href="/contact" class="px-8 py-4 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200 text-lg">
+						Hablar con ventas
+					</a>
+				</div>
+			</div>
+		</section>
+
+		</main>
+
+		<FloatingChatbot client:idle />
+		<Footer />
+	</body>
+</html>
