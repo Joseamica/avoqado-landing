@@ -276,3 +276,47 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
     expect(visiblePrimaryPulses).toBe(1);
   }
 });
+
+test('mantiene una venta coherente desde operación hasta contabilidad', async ({ page }, testInfo) => {
+  test.skip(['chromium-reduced', 'chromium-nojs'].includes(testInfo.project.name));
+  await page.goto('/');
+  const story = page.locator('main[data-scrollytelling]');
+
+  await expect(story).toContainText('$348.10');
+  await expect(story).toContainText('Crema facial 50 ml −1');
+  await expect(story).toContainText('María G. +29 puntos');
+  await expect(story).toContainText('Ana Torres +$29.50');
+  await expect(story).toContainText('Reorden sugerido');
+  await expect(story).toContainText('Liquidación esperada');
+  await expect(story).toContainText('Conciliación');
+  await expect(story).toContainText('Póliza');
+  await expect(story).not.toContainText('Liquidación garantizada');
+
+  if (['chromium-mobile', 'chromium-small'].includes(testInfo.project.name)) {
+    const root = page.locator('[data-story-mode="animated"]');
+
+    for (const [progress, scene] of [
+      [0.645, 'operations'],
+      [0.75, 'finance'],
+    ] as const) {
+      await root.evaluate((element, value) => {
+        document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+        const top = element.getBoundingClientRect().top + window.scrollY;
+        const distance = element.scrollHeight - window.innerHeight;
+        window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+      }, progress);
+      await expect(root).toHaveAttribute('data-active-scene', scene);
+
+      const card = root.locator(
+        `[data-story-scene="${scene}"][data-active="true"] .story-frame-visual > div > div`,
+      );
+      await expect(card).toBeVisible();
+      const geometry = await card.evaluate(element => {
+        const rect = element.getBoundingClientRect();
+        return { top: rect.top, bottom: rect.bottom, viewportHeight: window.innerHeight };
+      });
+      expect(geometry.top).toBeGreaterThanOrEqual(0);
+      expect(geometry.bottom).toBeLessThanOrEqual(geometry.viewportHeight);
+    }
+  }
+});
