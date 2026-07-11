@@ -291,6 +291,48 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
     );
     expect(visiblePrimaryPulses).toBe(1);
   }
+
+  const readCascadePulse = async (progress: number, scene: 'operations' | 'finance') => {
+    await root.evaluate((element, value) => {
+      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+      const top = element.getBoundingClientRect().top + window.scrollY;
+      const distance = element.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+    }, progress);
+    await expect(root).toHaveAttribute('data-active-scene', scene);
+
+    const pulse = root.locator(
+      `[data-story-scene="${scene}"][data-active="true"] [data-story-primary-pulse]`,
+    );
+    await expect(pulse).toBeVisible();
+    return pulse.evaluate(element => {
+      const rect = element.getBoundingClientRect();
+      const styles = getComputedStyle(element);
+      return {
+        center: { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
+        inlineTop: (element as HTMLElement).style.top,
+        inlineTransform: (element as HTMLElement).style.transform,
+        boxShadow: styles.boxShadow,
+      };
+    });
+  };
+
+  const routedPulse = await readCascadePulse(0.595, 'operations');
+  expect.soft(routedPulse.inlineTop).toBe('');
+  expect.soft(routedPulse.inlineTransform).toContain('translateX(');
+  expect.soft(routedPulse.inlineTransform).toContain('translateY(');
+  expect.soft(routedPulse.boxShadow).toBe('none');
+
+  const operationsDock = await readCascadePulse(0.659, 'operations');
+  const financeDock = await readCascadePulse(0.662, 'finance');
+  expect.soft(operationsDock.inlineTop).toBe('');
+  expect.soft(financeDock.inlineTop).toBe('');
+  expect(
+    Math.hypot(
+      operationsDock.center.x - financeDock.center.x,
+      operationsDock.center.y - financeDock.center.y,
+    ),
+  ).toBeLessThanOrEqual(4);
 });
 
 test('mantiene una venta coherente desde operación hasta contabilidad', async ({ page }, testInfo) => {
@@ -306,6 +348,8 @@ test('mantiene una venta coherente desde operación hasta contabilidad', async (
   await expect(story).toContainText('Liquidación esperada');
   await expect(story).toContainText('Conciliación');
   await expect(story).toContainText('Póliza');
+  await expect(story).toContainText('En cascada');
+  await expect(story).not.toContainText('5 efectos');
   await expect(story).not.toContainText('Liquidación garantizada');
 
   const root = page.locator('[data-story-mode="animated"]');

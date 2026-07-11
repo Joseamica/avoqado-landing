@@ -1,6 +1,7 @@
 import { motion, useTransform, type MotionValue } from 'framer-motion';
 import type { StoryScene } from '../story';
 import { STORY_FIXTURE } from '../story-fixture';
+import CascadeTimeline from '../CascadeTimeline';
 import SceneFrame from '../SceneFrame';
 
 interface Stage {
@@ -31,6 +32,7 @@ function FinanceStage({
       style={{ opacity, y }}
     >
       <span
+        data-story-cascade-node
         className="relative z-10 grid size-6 place-items-center rounded-full border border-black/10 bg-white text-[0.625rem] font-semibold text-neutral-600 sm:size-7"
         aria-hidden="true"
       >
@@ -116,13 +118,6 @@ export default function FinanceScene({
     },
   ];
 
-  const pulseTop = useTransform(
-    progress,
-    [0.04, 0.22, 0.4, 0.58, 0.76, 0.94],
-    ['6%', '22%', '40%', '58%', '76%', '94%'],
-  );
-  const pulseScale = useTransform(progress, [0, 0.08, 0.88, 1], [0.75, 1, 1, 0.75]);
-
   return (
     <SceneFrame
       scene={scene}
@@ -131,7 +126,7 @@ export default function FinanceScene({
       <div className="flex h-full items-center justify-center">
         <div
           data-story-panel="finance"
-          className="w-full max-w-2xl overflow-hidden rounded-[1.5rem] border border-black/6 bg-white p-2.5 shadow-[0_24px_80px_rgb(20_35_25_/_0.10)] sm:rounded-[1.75rem] sm:p-5"
+          className="relative w-full max-w-2xl overflow-hidden rounded-[1.5rem] border border-black/6 bg-white p-2.5 shadow-[0_24px_80px_rgb(20_35_25_/_0.10)] sm:rounded-[1.75rem] sm:p-5"
         >
           <div className="flex items-center justify-between border-b border-black/6 pb-2 sm:pb-5">
             <div>
@@ -152,24 +147,13 @@ export default function FinanceScene({
               Trazable
             </span>
           </div>
-          <div className="relative mt-1.5 sm:mt-2">
-            <span
-              data-story-cascade-path
-              aria-hidden="true"
-              className="pointer-events-none absolute bottom-3 left-[0.72rem] top-3 w-px bg-black/10 sm:left-[0.84rem]"
-            />
-            <motion.span
-              data-story-primary-pulse
-              aria-hidden="true"
-              className="story-primary-pulse pointer-events-none absolute left-[0.43rem] z-20 size-2.5 -translate-y-1/2 rounded-full border border-avoqado-green/30 bg-avoqado-green shadow-[0_0_0_4px_rgb(43_219_122_/_0.10)] sm:left-[0.55rem]"
-              style={{ top: pulseTop, scale: pulseScale }}
-            />
+          <CascadeTimeline progress={progress} tone="light">
             <ol className="relative">
               {stages.map((stage, index) => (
                 <FinanceStage key={stage.title} stage={stage} progress={progress} index={index} />
               ))}
             </ol>
-          </div>
+          </CascadeTimeline>
         </div>
       </div>
     </SceneFrame>

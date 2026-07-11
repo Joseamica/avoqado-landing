@@ -25,7 +25,12 @@ export default function StoryLayer({ scene, index, total, progress, active, chil
     [start, Math.min(start + 0.018, end), Math.max(end - 0.018, start), end],
     values,
   );
-  const y = useTransform(localProgress, [0, 0.18, 0.82, 1], [24, 0, 0, -18]);
+  const preservesCascadeDock = scene.id === 'operations' || scene.id === 'finance';
+  const y = useTransform(
+    localProgress,
+    [0, 0.18, 0.82, 1],
+    preservesCascadeDock ? [0, 0, 0, 0] : [24, 0, 0, -18],
+  );
 
   useEffect(() => {
     layerRef.current?.toggleAttribute('inert', !active);
