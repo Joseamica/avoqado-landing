@@ -253,13 +253,29 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
   await page.goto('/');
   const root = page.locator('[data-story-mode="animated"]');
 
-  for (const progress of [0.105, 0.205, 0.305, 0.425]) {
+  for (const [progress, expectedScene] of [
+    [0.105, null],
+    [0.205, null],
+    [0.305, null],
+    [0.425, null],
+    [0.645, 'operations'],
+    [0.75, 'finance'],
+  ] as const) {
     await root.evaluate((element, value) => {
       document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
       const top = element.getBoundingClientRect().top + window.scrollY;
       const distance = element.scrollHeight - window.innerHeight;
       window.scrollTo({ top: top + distance * value, behavior: 'auto' });
     }, progress);
+
+    if (expectedScene) {
+      await expect(root).toHaveAttribute('data-active-scene', expectedScene);
+      const activeScene = root.locator(
+        `[data-story-scene="${expectedScene}"][data-active="true"]`,
+      );
+      await expect(activeScene.locator('[data-story-cascade-path]')).toHaveCount(1);
+      await expect(activeScene.locator('[data-story-primary-pulse]')).toHaveCount(1);
+    }
 
     const visiblePrimaryPulses = await root.locator('[data-story-primary-pulse]').evaluateAll(elements =>
       elements.filter(element => {
@@ -292,9 +308,28 @@ test('mantiene una venta coherente desde operación hasta contabilidad', async (
   await expect(story).toContainText('Póliza');
   await expect(story).not.toContainText('Liquidación garantizada');
 
-  if (['chromium-mobile', 'chromium-small'].includes(testInfo.project.name)) {
-    const root = page.locator('[data-story-mode="animated"]');
+  const root = page.locator('[data-story-mode="animated"]');
+  const operationsScene = root.locator('[data-story-scene="operations"]');
+  const financeScene = root.locator('[data-story-scene="finance"]');
 
+  await expect(operationsScene.locator('.sr-only')).toContainText(
+    'La venta de $348.10 atendida por Ana Torres descuenta una unidad de Crema facial 50 ml, cambia el stock de 8 a 7, sugiere reorden, suma 29 puntos a María G. y registra una comisión de $29.50.',
+  );
+  await expect(financeScene.locator('.sr-only')).toContainText(
+    'El pago de $348.10 en Operación diaria sigue la ruta Costo, Liquidación esperada, Conciliación y Póliza; la liquidación se presenta como esperada, no garantizada.',
+  );
+
+  for (const [scene, sceneRoot] of [
+    ['operations', operationsScene],
+    ['finance', financeScene],
+  ] as const) {
+    const panel = sceneRoot.locator(`[data-story-panel="${scene}"]`);
+    await expect(panel).toHaveCount(1);
+    await expect(panel.locator('[data-story-cascade-path]')).toHaveCount(1);
+    await expect(panel.locator('[data-story-primary-pulse]')).toHaveCount(1);
+  }
+
+  if (['chromium-mobile', 'chromium-small'].includes(testInfo.project.name)) {
     for (const [progress, scene] of [
       [0.645, 'operations'],
       [0.75, 'finance'],
@@ -307,16 +342,39 @@ test('mantiene una venta coherente desde operación hasta contabilidad', async (
       }, progress);
       await expect(root).toHaveAttribute('data-active-scene', scene);
 
-      const card = root.locator(
-        `[data-story-scene="${scene}"][data-active="true"] .story-frame-visual > div > div`,
+      const panel = root.locator(
+        `[data-story-scene="${scene}"][data-active="true"] [data-story-panel="${scene}"]`,
       );
-      await expect(card).toBeVisible();
-      const geometry = await card.evaluate(element => {
+      await expect(panel).toBeVisible();
+      const geometry = await panel.evaluate(element => {
         const rect = element.getBoundingClientRect();
-        return { top: rect.top, bottom: rect.bottom, viewportHeight: window.innerHeight };
+        return {
+          left: rect.left,
+          right: rect.right,
+          width: rect.width,
+          top: rect.top,
+          bottom: rect.bottom,
+          viewportWidth: window.innerWidth,
+          viewportHeight: window.innerHeight,
+          clientWidth: element.clientWidth,
+          scrollWidth: element.scrollWidth,
+          documentScrollWidth: document.documentElement.scrollWidth,
+        };
       });
-      expect(geometry.top).toBeGreaterThanOrEqual(0);
-      expect(geometry.bottom).toBeLessThanOrEqual(geometry.viewportHeight);
+      expect(geometry.left).toBeGreaterThanOrEqual(-1);
+      expect(geometry.right).toBeLessThanOrEqual(geometry.viewportWidth + 1);
+      expect(geometry.width).toBeLessThanOrEqual(geometry.viewportWidth + 1);
+      expect(geometry.top).toBeGreaterThanOrEqual(-1);
+      expect(geometry.bottom).toBeLessThanOrEqual(geometry.viewportHeight + 1);
+      expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.clientWidth + 1);
+      expect(geometry.documentScrollWidth).toBeLessThanOrEqual(geometry.viewportWidth + 1);
+
+      const panelCopy = panel.locator('[data-story-panel-copy]');
+      expect(await panelCopy.count()).toBeGreaterThan(0);
+      const fontSizes = await panelCopy.evaluateAll(elements =>
+        elements.map(element => Number.parseFloat(getComputedStyle(element).fontSize)),
+      );
+      expect(Math.min(...fontSizes)).toBeGreaterThanOrEqual(10);
     }
   }
 });

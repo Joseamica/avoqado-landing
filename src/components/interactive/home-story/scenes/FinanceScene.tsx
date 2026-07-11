@@ -1,5 +1,6 @@
 import { motion, useTransform, type MotionValue } from 'framer-motion';
 import type { StoryScene } from '../story';
+import { STORY_FIXTURE } from '../story-fixture';
 import SceneFrame from '../SceneFrame';
 
 interface Stage {
@@ -7,6 +8,7 @@ interface Stage {
   value: string;
   detail: string;
   start: number;
+  status: string;
   premium?: boolean;
 }
 
@@ -24,27 +26,46 @@ function FinanceStage({
 
   return (
     <motion.li
-      className="relative flex-1 border-l border-black/10 py-0 pl-3 first:border-l-0 first:pl-0 sm:py-3 sm:pl-5 lg:border-l-0 lg:border-t lg:pl-0 lg:pt-6"
+      data-story-cascade-stage={stage.title}
+      className="relative grid grid-cols-[1.5rem_minmax(0,1fr)_auto] items-center gap-2 py-1 sm:grid-cols-[1.75rem_minmax(0,1fr)_auto] sm:gap-3 sm:py-2"
       style={{ opacity, y }}
     >
       <span
-        className="absolute -left-[5px] top-5 size-2 rounded-full bg-neutral-400 first:hidden lg:-top-[5px] lg:left-0 lg:block"
+        className="relative z-10 grid size-6 place-items-center rounded-full border border-black/10 bg-white text-[0.625rem] font-semibold text-neutral-600 sm:size-7"
         aria-hidden="true"
-      />
-      <p className="text-[8px] font-semibold uppercase tracking-[0.16em] text-neutral-500 sm:text-[10px]">
-        0{index + 1} · {stage.title}
-      </p>
-      <p className="mt-0.5 text-xs font-medium leading-tight text-neutral-950 sm:mt-2 sm:text-lg">
-        {stage.value}
-      </p>
-      <p className="text-[8px] leading-tight text-neutral-500 sm:mt-1 sm:text-xs sm:leading-relaxed">
-        {stage.detail}
-      </p>
-      {stage.premium ? (
-        <span className="mt-1 inline-flex rounded-full bg-amber-100 px-1.5 py-0.5 text-[8px] font-semibold text-amber-900 sm:mt-3 sm:px-2 sm:py-1 sm:text-[10px]">
-          CFDI · Premium
+      >
+        0{index + 1}
+      </span>
+      <span className="min-w-0">
+        <b
+          data-story-panel-copy
+          className="block text-[0.7rem] font-semibold leading-tight text-neutral-950 sm:text-xs"
+        >
+          {stage.title}
+        </b>
+        <span className="mt-0.5 flex min-w-0 items-baseline gap-x-2 leading-tight">
+          <span
+            data-story-panel-copy
+            className="shrink-0 text-[0.625rem] font-medium text-neutral-800 sm:text-[0.7rem]"
+          >
+            {stage.value}
+          </span>
+          <span
+            data-story-panel-copy
+            className="truncate text-[0.625rem] text-neutral-500 sm:text-[0.7rem]"
+          >
+            {stage.detail}
+          </span>
         </span>
-      ) : null}
+      </span>
+      <span
+        data-story-panel-copy
+        className={stage.premium
+          ? 'rounded-full bg-amber-100 px-1.5 py-0.5 text-[0.625rem] font-semibold text-amber-900 sm:px-2'
+          : 'rounded-full bg-neutral-100 px-1.5 py-0.5 text-[0.625rem] font-medium text-neutral-600 sm:px-2'}
+      >
+        {stage.status}
+      </span>
     </motion.li>
   );
 }
@@ -57,49 +78,98 @@ export default function FinanceScene({
   progress: MotionValue<number>;
 }) {
   const stages: Stage[] = [
-    { title: 'Pago', value: '$348.10', detail: 'merchant: Operación diaria', start: 0.05 },
-    { title: 'Costo', value: 'Calculado', detail: 'procesador y comisión', start: 0.18 },
+    {
+      title: 'Pago',
+      value: STORY_FIXTURE.total,
+      detail: `merchant: ${STORY_FIXTURE.selectedMerchant}`,
+      start: 0.05,
+      status: 'Registrado',
+    },
+    {
+      title: 'Costo',
+      value: 'Calculado',
+      detail: 'procesador y comisión',
+      start: 0.18,
+      status: 'Calculado',
+    },
     {
       title: 'Liquidación esperada',
       value: 'En seguimiento',
       detail: 'fecha y monto neto',
       start: 0.31,
+      status: 'Esperada',
     },
     {
       title: 'Conciliación',
       value: 'Referencia ligada',
       detail: 'saldo y movimientos',
       start: 0.44,
+      status: 'Ligada',
     },
     {
       title: 'Póliza',
       value: 'Lista para libros',
       detail: 'IVA · ISR · contabilidad',
       start: 0.57,
+      status: 'Premium',
       premium: true,
     },
   ];
 
+  const pulseTop = useTransform(
+    progress,
+    [0.04, 0.22, 0.4, 0.58, 0.76, 0.94],
+    ['6%', '22%', '40%', '58%', '76%', '94%'],
+  );
+  const pulseScale = useTransform(progress, [0, 0.08, 0.88, 1], [0.75, 1, 1, 0.75]);
+
   return (
-    <SceneFrame scene={scene}>
-      <div className="flex h-full items-center">
-        <div className="w-full rounded-[1.75rem] border border-black/6 bg-white p-2.5 shadow-[0_24px_80px_rgb(20_35_25_/_0.10)] sm:p-8">
+    <SceneFrame
+      scene={scene}
+      accessibleSummary={`El pago de ${STORY_FIXTURE.total} en ${STORY_FIXTURE.selectedMerchant} sigue la ruta Costo, Liquidación esperada, Conciliación y Póliza; la liquidación se presenta como esperada, no garantizada.`}
+    >
+      <div className="flex h-full items-center justify-center">
+        <div
+          data-story-panel="finance"
+          className="w-full max-w-2xl overflow-hidden rounded-[1.5rem] border border-black/6 bg-white p-2.5 shadow-[0_24px_80px_rgb(20_35_25_/_0.10)] sm:rounded-[1.75rem] sm:p-5"
+        >
           <div className="flex items-center justify-between border-b border-black/6 pb-2 sm:pb-5">
             <div>
-              <p className="text-[0.6rem] text-neutral-500 sm:text-xs">Ruta financiera del pago</p>
-              <p className="mt-0.5 text-sm font-medium sm:mt-1 sm:text-xl">
+              <p data-story-panel-copy className="text-[0.625rem] text-neutral-500 sm:text-xs">
+                Ruta financiera del pago
+              </p>
+              <p
+                data-story-panel-copy
+                className="mt-0.5 text-sm font-medium text-neutral-950 sm:mt-1 sm:text-lg"
+              >
                 Referencia AVQ-34810
               </p>
             </div>
-            <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[8px] font-medium text-neutral-600 sm:px-3 sm:py-1 sm:text-[10px]">
+            <span
+              data-story-panel-copy
+              className="rounded-full bg-neutral-100 px-2 py-1 text-[0.625rem] font-medium text-neutral-600"
+            >
               Trazable
             </span>
           </div>
-          <ol className="mt-2 flex flex-col sm:mt-5 lg:flex-row lg:gap-4">
-            {stages.map((stage, index) => (
-              <FinanceStage key={stage.title} stage={stage} progress={progress} index={index} />
-            ))}
-          </ol>
+          <div className="relative mt-1.5 sm:mt-2">
+            <span
+              data-story-cascade-path
+              aria-hidden="true"
+              className="pointer-events-none absolute bottom-3 left-[0.72rem] top-3 w-px bg-black/10 sm:left-[0.84rem]"
+            />
+            <motion.span
+              data-story-primary-pulse
+              aria-hidden="true"
+              className="story-primary-pulse pointer-events-none absolute left-[0.43rem] z-20 size-2.5 -translate-y-1/2 rounded-full border border-avoqado-green/30 bg-avoqado-green shadow-[0_0_0_4px_rgb(43_219_122_/_0.10)] sm:left-[0.55rem]"
+              style={{ top: pulseTop, scale: pulseScale }}
+            />
+            <ol className="relative">
+              {stages.map((stage, index) => (
+                <FinanceStage key={stage.title} stage={stage} progress={progress} index={index} />
+              ))}
+            </ol>
+          </div>
         </div>
       </div>
     </SceneFrame>
