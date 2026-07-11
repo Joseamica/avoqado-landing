@@ -199,15 +199,16 @@ export default function NavigationMenu() {
   return (
     <nav
       ref={navRef}
-      className={`fixed top-[var(--site-banner-height)] left-0 right-0 z-[300] transition-all duration-300 font-sans ${
+      data-site-navigation
+      className={`fixed top-[var(--site-banner-height)] left-0 right-0 z-[300] h-[var(--site-nav-height)] transition-all duration-300 font-sans ${
         scrolled
-          ? 'bg-white/95 backdrop-blur-xl border-b border-black/5 py-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
-          : 'bg-transparent py-4'
+          ? 'bg-white/95 backdrop-blur-xl border-b border-black/5 shadow-[0_1px_3px_rgba(0,0,0,0.04)]'
+          : 'bg-transparent'
       }`}
       onMouseLeave={leave}
     >
-      <div className="max-w-[1400px] mx-auto px-6">
-        <div className="flex justify-between items-center relative z-50">
+      <div className="mx-auto h-full max-w-[1400px] px-6">
+        <div className="relative z-50 flex h-full items-center justify-between">
 
           {/* Logo */}
           <a href="/" className="shrink-0">

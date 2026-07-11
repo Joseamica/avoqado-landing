@@ -79,26 +79,45 @@ test('activa escenas al avanzar y retroceder el scroll', async ({ page }, testIn
 });
 
 test('resuelve la geometría sticky contra el viewport', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'chromium-desktop');
+  const visualProjects = ['chromium-desktop', 'chromium-mobile', 'chromium-small'];
+  test.skip(!visualProjects.includes(testInfo.project.name));
   await page.goto('/');
 
   const root = page.locator('[data-story-mode="animated"]');
   const shell = root.locator(':scope > div').first();
+  const navigation = page.locator('[data-site-navigation]');
   await expect(shell).toHaveCount(1);
+  await expect(navigation).toBeVisible();
 
-  const geometry = await shell.evaluate((element) => {
-    const styles = getComputedStyle(element);
+  const geometry = await shell.evaluate((element, navigationElement) => {
+    const shellStyles = getComputedStyle(element);
+    const navigationRect = (navigationElement as HTMLElement).getBoundingClientRect();
+    const shellRect = element.getBoundingClientRect();
     return {
-      position: styles.position,
-      top: styles.top,
-      height: element.getBoundingClientRect().height,
+      position: shellStyles.position,
+      top: shellStyles.top,
+      shellTop: shellRect.top,
+      navigationBottom: navigationRect.bottom,
+      height: shellRect.height,
       viewportHeight: window.innerHeight,
     };
-  });
+  }, await navigation.elementHandle());
 
   expect(geometry.position).toBe('sticky');
   expect(geometry.top).not.toBe('auto');
   expect(geometry.height).toBeGreaterThan(0);
+  expect(Math.abs(geometry.navigationBottom - geometry.shellTop)).toBeLessThanOrEqual(1);
   expect(Math.abs(Number.parseFloat(geometry.top) + geometry.height - geometry.viewportHeight))
     .toBeLessThanOrEqual(1);
+
+  if (['chromium-mobile', 'chromium-small'].includes(testInfo.project.name)) {
+    await navigation.locator('button:visible').last().click();
+    const drawer = page.getByRole('dialog', { name: 'Menú de navegación' });
+    await expect(drawer).toBeVisible();
+    const drawerGeometry = await drawer.evaluate((element, navigationElement) => ({
+      drawerTop: element.getBoundingClientRect().top,
+      navigationBottom: (navigationElement as HTMLElement).getBoundingClientRect().bottom,
+    }), await navigation.elementHandle());
+    expect(Math.abs(drawerGeometry.navigationBottom - drawerGeometry.drawerTop)).toBeLessThanOrEqual(1);
+  }
 });
