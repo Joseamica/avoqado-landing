@@ -78,6 +78,24 @@ test('activa escenas al avanzar y retroceder el scroll', async ({ page }, testIn
   }
 });
 
+test('permite forzar la experiencia animada para previsualizarla', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-reduced');
+  await page.goto('/?motion=full');
+
+  expect(await page.evaluate(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)).toBe(true);
+
+  const root = page.locator('[data-story-mode="animated"]');
+  await expect(root).toBeVisible();
+  await expect(page.locator('[data-story-mode="static"]')).toHaveCount(0);
+
+  await root.evaluate((element) => {
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    const distance = element.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: top + distance * 0.34, behavior: 'auto' });
+  });
+  await expect(root).toHaveAttribute('data-active-scene', 'payment');
+});
+
 test('resuelve la geometría sticky contra el viewport', async ({ page }, testInfo) => {
   const visualProjects = ['chromium-desktop', 'chromium-mobile', 'chromium-small'];
   test.skip(!visualProjects.includes(testInfo.project.name));

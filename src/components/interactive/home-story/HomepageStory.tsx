@@ -6,12 +6,16 @@ import ReducedMotionStory from './ReducedMotionStory';
 export default function HomepageStory() {
   const reduceMotion = useReducedMotion();
   const [mounted, setMounted] = useState(false);
+  const [forceMotion, setForceMotion] = useState(false);
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setForceMotion(new URLSearchParams(window.location.search).get('motion') === 'full');
+    setMounted(true);
+  }, []);
 
   return (
     <>
-      {mounted && reduceMotion ? <ReducedMotionStory /> : <AnimatedStory />}
+      {mounted && reduceMotion && !forceMotion ? <ReducedMotionStory /> : <AnimatedStory />}
       <noscript>
         <style dangerouslySetInnerHTML={{ __html: '[data-story-mode="animated"] { display: none !important; }' }} />
         <ReducedMotionStory mode="noscript" />
