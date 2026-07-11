@@ -6,7 +6,7 @@ interface Geometry {
   nodeY: number[];
 }
 
-const ROUTE_TIMES = [0, 0.04, 0.12, 0.26, 0.42, 0.58, 0.74, 0.84, 0.92, 1] as const;
+const ROUTE_TIMES = [0, 0.04, 0.26, 0.4, 0.54, 0.68, 0.82, 0.86, 0.92, 1] as const;
 
 function interpolateRoute(progress: number, values: number[]) {
   for (let index = 1; index < ROUTE_TIMES.length; index += 1) {

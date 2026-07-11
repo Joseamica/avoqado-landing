@@ -282,45 +282,35 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
       );
       if (!pulse || !node) throw new Error(`Missing cascade geometry for ${stageTitle}`);
 
-      let layoutX = node.offsetWidth / 2;
-      let layoutY = node.offsetHeight / 2;
-      let current: HTMLElement | null = node;
-      while (current && current !== panelElement) {
-        layoutX += current.offsetLeft;
-        layoutY += current.offsetTop;
-        current = current.offsetParent as HTMLElement | null;
-      }
-      if (current !== panelElement) throw new Error(`Node ${stageTitle} is outside its panel`);
-
-      const panelRect = panelElement.getBoundingClientRect();
       const pulseRect = pulse.getBoundingClientRect();
+      const nodeRect = node.getBoundingClientRect();
       const pulseCenter = {
         x: pulseRect.left + pulseRect.width / 2,
         y: pulseRect.top + pulseRect.height / 2,
       };
-      const nodeLayoutCenter = {
-        x: panelRect.left + layoutX,
-        y: panelRect.top + layoutY,
+      const nodeCenter = {
+        x: nodeRect.left + nodeRect.width / 2,
+        y: nodeRect.top + nodeRect.height / 2,
       };
       return Math.hypot(
-        pulseCenter.x - nodeLayoutCenter.x,
-        pulseCenter.y - nodeLayoutCenter.y,
+        pulseCenter.x - nodeCenter.x,
+        pulseCenter.y - nodeCenter.y,
       );
     }, stage);
   };
 
   const operationsNodeDistance = await readNodeAlignment(
-    0.52 + 0.42 * (0.67 - 0.52),
+    0.52 + 0.54 * (0.67 - 0.52),
     'operations',
     'Reorden sugerido',
   );
   const financeNodeDistance = await readNodeAlignment(
-    0.66 + 0.42 * (0.77 - 0.66),
+    0.66 + 0.54 * (0.77 - 0.66),
     'finance',
     'Liquidación esperada',
   );
-  expect.soft(operationsNodeDistance, 'operations pulse follows the layout center').toBeLessThanOrEqual(3);
-  expect.soft(financeNodeDistance, 'finance pulse follows the layout center').toBeLessThanOrEqual(3);
+  expect.soft(operationsNodeDistance, 'operations pulse follows the visible node').toBeLessThanOrEqual(3);
+  expect.soft(financeNodeDistance, 'finance pulse follows the visible node').toBeLessThanOrEqual(3);
 
   for (const [progress, expectedScene] of [
     [0.105, null],
