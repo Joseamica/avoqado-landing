@@ -138,3 +138,123 @@ test('presenta canales y routing sin prometer routing bancario inteligente', asy
   await expect(story).not.toContainText('routing inteligente');
   await expect(story).not.toContainText('elige tu cuenta bancaria');
 });
+
+test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({ page }, testInfo) => {
+  test.skip(!['chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
+  await page.goto('/');
+
+  const root = page.locator('[data-story-mode="animated"]');
+  const chat = page.getByRole('button', { name: 'Abrir chat de ayuda' });
+  await expect(chat).toBeVisible();
+
+  const moveTo = async (progress: number, scene: string) => {
+    await root.evaluate((element, value) => {
+      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+      const top = element.getBoundingClientRect().top + window.scrollY;
+      const distance = element.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+    }, progress);
+    await expect(root).toHaveAttribute('data-active-scene', scene);
+  };
+
+  const expectClearOfChat = async (locator: ReturnType<typeof page.locator>, minimumFontSize = 0) => {
+    await expect(locator).toBeVisible();
+    const metrics = await locator.evaluate((element, chatElement) => {
+      const rect = element.getBoundingClientRect();
+      const chatRect = (chatElement as HTMLElement).getBoundingClientRect();
+      const overlapWidth = Math.max(0, Math.min(rect.right, chatRect.right) - Math.max(rect.left, chatRect.left));
+      const overlapHeight = Math.max(0, Math.min(rect.bottom, chatRect.bottom) - Math.max(rect.top, chatRect.top));
+      return {
+        fontSize: Number.parseFloat(getComputedStyle(element).fontSize),
+        insideViewport: rect.top >= 0 && rect.left >= 0 && rect.right <= window.innerWidth && rect.bottom <= window.innerHeight,
+        overlapArea: overlapWidth * overlapHeight,
+      };
+    }, await chat.elementHandle());
+    expect(metrics.insideViewport).toBe(true);
+    expect(metrics.overlapArea).toBe(0);
+    expect(metrics.fontSize).toBeGreaterThanOrEqual(minimumFontSize);
+  };
+
+  await moveTo(0.155, 'channels');
+  const channels = root.locator('[data-story-scene="channels"][data-active="true"]');
+  await expectClearOfChat(channels.locator('.story-channel-event-venue'));
+  const channelPulse = channels.locator('[data-story-primary-pulse]:visible');
+  const activeChannel = channels.locator('[data-channel-active]');
+  await expect(channelPulse).toHaveCount(1);
+  await expect(activeChannel).toHaveCount(1);
+  expect(await channelPulse.evaluate((element, targetElement) => {
+    const pulseRect = element.getBoundingClientRect();
+    const targetRect = (targetElement as HTMLElement).getBoundingClientRect();
+    const center = { x: pulseRect.left + pulseRect.width / 2, y: pulseRect.top + pulseRect.height / 2 };
+    return center.x >= targetRect.left && center.x <= targetRect.right && center.y >= targetRect.top && center.y <= targetRect.bottom;
+  }, await activeChannel.elementHandle())).toBe(true);
+
+  await moveTo(0.255, 'service');
+  const service = root.locator('[data-story-scene="service"][data-active="true"]');
+  await expectClearOfChat(service.getByText('Crema facial 50 ml', { exact: true }), 10);
+  await expectClearOfChat(service.getByText('POS Desktop · Windows Service', { exact: true }), 10);
+  const railGap = await service.locator('.story-service-rail span').evaluateAll(elements => {
+    const [first, second] = elements.map(element => element.getBoundingClientRect());
+    return second.top > first.top + 1 ? second.top - first.bottom : second.left - first.right;
+  });
+  expect(railGap).toBeGreaterThanOrEqual(4);
+
+  await moveTo(0.365, 'payment');
+  const payment = root.locator('[data-story-scene="payment"][data-active="true"]');
+  await expectClearOfChat(payment.getByText('TPV compatible · selección manual', { exact: true }), 10);
+  await expectClearOfChat(payment.getByText('Merchant habilitado', { exact: true }), 10);
+  await expectClearOfChat(payment.getByText('Disponible', { exact: true }), 10);
+  const routeTruth = testInfo.project.name === 'chromium-small'
+    ? payment.locator('.story-payment-reference-summary')
+    : payment.getByText('Registro manual', { exact: true });
+  await expectClearOfChat(routeTruth, 10);
+
+  const pulse = payment.locator('[data-story-primary-pulse]:visible');
+  const selectedMerchant = payment.locator('[data-merchant-selected]');
+  const alternateMerchant = payment.locator('[data-merchant-alternate]');
+  await expect(pulse).toHaveCount(1);
+  await expect(selectedMerchant).toHaveCount(1);
+  await expect(alternateMerchant).toHaveCount(1);
+  const pulseTarget = await pulse.evaluate((element, targets) => {
+    const pulseRect = element.getBoundingClientRect();
+    const selectedRect = (targets.selected as HTMLElement).getBoundingClientRect();
+    const alternateRect = (targets.alternate as HTMLElement).getBoundingClientRect();
+    const center = { x: pulseRect.left + pulseRect.width / 2, y: pulseRect.top + pulseRect.height / 2 };
+    const contains = (rect: DOMRect) => center.x >= rect.left && center.x <= rect.right && center.y >= rect.top && center.y <= rect.bottom;
+    return { selected: contains(selectedRect), alternate: contains(alternateRect) };
+  }, {
+    selected: await selectedMerchant.elementHandle(),
+    alternate: await alternateMerchant.elementHandle(),
+  });
+  expect(pulseTarget.selected).toBe(true);
+  expect(pulseTarget.alternate).toBe(false);
+});
+
+test('mantiene un solo pulso primario durante los handoffs', async ({ page }, testInfo) => {
+  test.skip(!['chromium-desktop', 'chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
+  await page.goto('/');
+  const root = page.locator('[data-story-mode="animated"]');
+
+  for (const progress of [0.105, 0.205, 0.305, 0.425]) {
+    await root.evaluate((element, value) => {
+      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+      const top = element.getBoundingClientRect().top + window.scrollY;
+      const distance = element.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+    }, progress);
+
+    const visiblePrimaryPulses = await root.locator('[data-story-primary-pulse]').evaluateAll(elements =>
+      elements.filter(element => {
+        let opacity = 1;
+        let current: Element | null = element;
+        while (current && current !== document.documentElement) {
+          opacity *= Number.parseFloat(getComputedStyle(current).opacity || '1');
+          current = current.parentElement;
+        }
+        const rect = element.getBoundingClientRect();
+        return opacity > 0.05 && rect.width > 0 && rect.height > 0;
+      }).length,
+    );
+    expect(visiblePrimaryPulses).toBe(1);
+  }
+});

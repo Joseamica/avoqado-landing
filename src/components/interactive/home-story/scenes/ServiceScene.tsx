@@ -28,7 +28,7 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
         />
 
         <motion.div
-          className="absolute inset-x-[3%] bottom-[4%] z-10 overflow-hidden rounded-[1rem] border border-white/10 bg-neutral-900 shadow-[0_24px_70px_oklch(0.05_0.003_155_/_0.38)] sm:inset-x-[7%] sm:bottom-[6%] sm:rounded-[1.35rem] lg:inset-x-[5%] lg:bottom-[9%]"
+          className="story-service-agenda absolute inset-x-[3%] bottom-[4%] z-10 overflow-hidden rounded-[1rem] border border-white/10 bg-neutral-900 shadow-[0_24px_70px_oklch(0.05_0.003_155_/_0.38)] sm:inset-x-[7%] sm:bottom-[6%] sm:rounded-[1.35rem] lg:inset-x-[5%] lg:bottom-[9%]"
           style={{ opacity: agendaOpacity, y: agendaY }}
         >
           <div className="flex items-center justify-between border-b border-white/8 px-3.5 py-2 sm:px-5 sm:py-3.5">
@@ -73,11 +73,13 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
           <motion.path d="M 0 260 H 36 V 154 H 192 V 338 H 458" fill="none" stroke="var(--color-avoqado-green)" strokeWidth="1" style={{ pathLength: trackLength }} />
         </svg>
         <motion.span
-          className="pointer-events-none absolute left-0 top-1/2 z-20 hidden size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green sm:block"
+          data-story-primary-pulse
+          className="story-primary-pulse pointer-events-none absolute left-0 top-1/2 z-20 hidden size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green sm:block"
           style={{ x: desktopPulseX, y: desktopPulseY, scale: pulseScale }}
         />
         <motion.span
-          className="pointer-events-none absolute left-0 top-1/2 z-20 size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green sm:hidden"
+          data-story-primary-pulse
+          className="story-primary-pulse pointer-events-none absolute left-0 top-1/2 z-20 size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green sm:hidden"
           style={{ x: mobilePulseX, y: mobilePulseY, scale: pulseScale }}
         />
       </div>

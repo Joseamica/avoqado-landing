@@ -1,6 +1,34 @@
+[data-story-scene][data-active='false'] [data-story-primary-pulse] {
+  opacity: 0 !important;
+}
+
 @media (max-width: 639px) {
+  .story-service-context-value {
+    font-size: 0.625rem !important;
+  }
+
+  .story-service-rail {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.2rem 0.5rem;
+    font-size: 0.625rem !important;
+    line-height: 1.15 !important;
+  }
+
+  .story-service-agenda {
+    bottom: 5.5rem !important;
+  }
+
   .story-payment-reference-grid {
     padding-right: 4.75rem;
+  }
+
+  .story-payment-reference-detail {
+    font-size: 0.625rem !important;
+  }
+
+  .story-payment-merchant-detail {
+    font-size: 0.625rem !important;
   }
 
   .story-aftercare-invoice {
@@ -10,6 +38,10 @@
 
   .story-aftercare-invoice > [aria-hidden='true'] {
     display: none !important;
+  }
+
+  .story-payment-compatibility {
+    transform: translateX(-0.25rem);
   }
 }
 
@@ -68,17 +100,19 @@
 
   .story-payment-reference-summary {
     display: block !important;
-    font-size: 0.54rem !important;
+    width: calc(100% - 4.75rem) !important;
+    font-size: 0.625rem !important;
     line-height: 1.2 !important;
     padding-left: 0.25rem !important;
-    padding-right: 4.75rem !important;
+    padding-right: 0 !important;
     text-align: left !important;
-    transform: translateY(-0.5rem);
+    transform: translateY(-0.75rem);
   }
 
   .story-channel-visual {
     align-content: start !important;
     gap: 0.25rem !important;
+    transform: translateY(-1rem);
   }
 
   .story-channel-ledger > p {
@@ -107,8 +141,8 @@
 
   .story-service-context-value {
     overflow: visible !important;
-    font-size: 0.5rem !important;
-    line-height: 1.05 !important;
+    font-size: 0.625rem !important;
+    line-height: 1.15 !important;
     text-overflow: clip !important;
     white-space: normal !important;
   }
@@ -117,7 +151,8 @@
     display: grid !important;
     grid-template-columns: 1fr 1fr;
     gap: 0.2rem 0.5rem;
-    font-size: 0.48rem !important;
+    font-size: 0.625rem !important;
+    line-height: 1.15 !important;
     letter-spacing: 0.02em !important;
   }
 

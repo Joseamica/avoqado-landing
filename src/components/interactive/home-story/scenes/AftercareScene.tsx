@@ -21,7 +21,7 @@ export default function AftercareScene({ scene, progress }: { scene: StoryScene;
   const endpointOpacity = useTransform(progress, [0.5, 0.72], [0, 1]);
   const desktopPulseX = useTransform(progress, [0, 0.16, 0.38, 0.7, 0.84, 1], [0, 24, 240, 500, 24, 0]);
   const desktopPulseY = useTransform(progress, [0, 0.16, 0.38, 0.7, 0.84, 1], [0, 0, 0, 92, 0, 0]);
-  const mobilePulseY = useTransform(progress, [0, 0.16, 0.4, 0.72, 0.86, 1], [0, 18, 116, 232, 18, 0]);
+  const mobilePulseY = useTransform(progress, [0, 0.16, 0.4, 0.72, 0.86, 1], [0, -80, 0, 100, -80, 0]);
   const pulseScale = useTransform(progress, [0.34, 0.46, 0.58], [0.94, 1.08, 1]);
 
   return (
@@ -104,12 +104,14 @@ export default function AftercareScene({ scene, progress }: { scene: StoryScene;
         <motion.span className="pointer-events-none absolute right-[25%] top-1/2 hidden size-1.5 rounded-full bg-avoqado-green sm:block" style={{ opacity: endpointOpacity }} />
         <motion.span className="pointer-events-none absolute right-[29%] top-[76%] hidden size-1.5 rounded-full bg-avoqado-green sm:block" style={{ opacity: endpointOpacity }} />
         <motion.span
-          className="pointer-events-none absolute left-0 top-1/2 z-20 hidden size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green sm:block"
+          data-story-primary-pulse
+          className="story-primary-pulse pointer-events-none absolute left-0 top-1/2 z-20 hidden size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green sm:block"
           style={{ x: desktopPulseX, y: desktopPulseY, scale: pulseScale }}
         />
         <div className="pointer-events-none absolute left-2 top-0 h-full w-px bg-black/10 sm:hidden" />
         <motion.span
-          className="pointer-events-none absolute left-[0.22rem] top-0 z-20 size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green sm:hidden"
+          data-story-primary-pulse
+          className="story-primary-pulse pointer-events-none absolute left-0 top-1/2 z-20 size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green sm:hidden"
           style={{ y: mobilePulseY, scale: pulseScale }}
         />
       </div>

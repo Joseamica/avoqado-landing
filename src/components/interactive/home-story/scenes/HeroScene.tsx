@@ -92,7 +92,8 @@ export default function HeroScene({ scene, progress }: Props) {
 
         <div className="absolute left-0 top-1/2 z-40 h-px w-8 bg-avoqado-green/55" />
         <motion.span
-          className="absolute left-0 top-1/2 z-50 size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green"
+          data-story-primary-pulse
+          className="story-primary-pulse absolute left-0 top-1/2 z-50 size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green"
           style={{ x: pulseX, y: pulseY, scale: pulseScale }}
         />
       </div>
