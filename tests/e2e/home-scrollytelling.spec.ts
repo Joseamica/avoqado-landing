@@ -121,3 +121,20 @@ test('resuelve la geometría sticky contra el viewport', async ({ page }, testIn
     expect(Math.abs(drawerGeometry.navigationBottom - drawerGeometry.drawerTop)).toBeLessThanOrEqual(1);
   }
 });
+
+test('presenta canales y routing sin prometer routing bancario inteligente', async ({ page }, testInfo) => {
+  test.skip(['chromium-reduced', 'chromium-nojs'].includes(testInfo.project.name));
+  await page.goto('/');
+  const story = page.locator('main[data-scrollytelling]');
+
+  await expect(story).toContainText('Consumer App');
+  await expect(story).toContainText('Booking Widget');
+  await expect(story).toContainText('POS iOS');
+  await expect(story).toContainText('POS Android');
+  await expect(story).toContainText('POS Desktop');
+  await expect(story).toContainText('Cuenta de cobro');
+  await expect(story).toContainText('Operación diaria');
+  await expect(story).toContainText('TPV compatible');
+  await expect(story).not.toContainText('routing inteligente');
+  await expect(story).not.toContainText('elige tu cuenta bancaria');
+});

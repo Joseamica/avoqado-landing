@@ -4,6 +4,7 @@ export const STORY_FIXTURE = {
   comparisonVenue: 'Sucursal Norte',
   customer: 'María G.',
   staff: 'Ana Torres',
+  appointmentTime: '11:30',
   service: 'Facial hidratante',
   product: 'Crema facial 50 ml',
   subtotal: '$295.00',
@@ -15,6 +16,7 @@ export const STORY_FIXTURE = {
   stockAfter: 7,
   selectedMerchant: 'Operación diaria',
   alternateMerchant: 'Facturación',
+  selectedChannel: 'Booking Widget',
 } as const;
 
 export type StoryFixture = typeof STORY_FIXTURE;

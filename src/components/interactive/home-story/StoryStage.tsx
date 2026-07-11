@@ -1,10 +1,33 @@
 import type { MotionValue } from 'framer-motion';
-import { STORY_SCENES } from './story';
+import SceneFrame from './SceneFrame';
 import StoryLayer from './StoryLayer';
+import { STORY_SCENES, type StoryScene } from './story';
+import AftercareScene from './scenes/AftercareScene';
+import ChannelsScene from './scenes/ChannelsScene';
+import HeroScene from './scenes/HeroScene';
+import PaymentScene from './scenes/PaymentScene';
+import ServiceScene from './scenes/ServiceScene';
 
 interface Props {
   progress: MotionValue<number>;
   activeIndex: number;
+}
+
+function renderScene(scene: StoryScene, progress: MotionValue<number>) {
+  switch (scene.id) {
+    case 'entry':
+      return <HeroScene scene={scene} progress={progress} />;
+    case 'channels':
+      return <ChannelsScene scene={scene} progress={progress} />;
+    case 'service':
+      return <ServiceScene scene={scene} progress={progress} />;
+    case 'payment':
+      return <PaymentScene scene={scene} progress={progress} />;
+    case 'aftercare':
+      return <AftercareScene scene={scene} progress={progress} />;
+    default:
+      return <SceneFrame scene={scene}><div className="h-full" /></SceneFrame>;
+  }
 }
 
 export default function StoryStage({ progress, activeIndex }: Props) {
@@ -19,19 +42,7 @@ export default function StoryStage({ progress, activeIndex }: Props) {
           progress={progress}
           active={index === activeIndex}
         >
-          {() => (
-            <div className={`flex h-full items-center ${scene.theme === 'light' ? 'bg-neutral-50 text-neutral-950' : 'bg-neutral-950 text-neutral-50'}`}>
-              <div className="mx-auto w-full max-w-6xl px-6 md:px-10 lg:pl-32">
-                <p className="text-sm font-medium text-avoqado-green">{scene.eyebrow}</p>
-                {index === 0 ? (
-                  <h1 className="mt-4 max-w-4xl text-4xl font-light tracking-[-0.04em] sm:text-6xl lg:text-7xl">{scene.title}</h1>
-                ) : (
-                  <h2 className="mt-4 max-w-4xl text-4xl font-light tracking-[-0.04em] sm:text-6xl lg:text-7xl">{scene.title}</h2>
-                )}
-                <p className="mt-6 max-w-2xl text-lg opacity-70">{scene.body}</p>
-              </div>
-            </div>
-          )}
+          {localProgress => renderScene(scene, localProgress)}
         </StoryLayer>
       ))}
     </div>
