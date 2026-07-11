@@ -38,22 +38,27 @@ export default function CascadeTimeline({
     if (!container || !panel) return;
 
     const measure = () => {
-      const panelRect = panel.getBoundingClientRect();
       const nodes = Array.from(
         container.querySelectorAll<HTMLElement>('[data-story-cascade-node]'),
       );
       if (nodes.length === 0) return;
 
       const centers = nodes.map(node => {
-        const rect = node.getBoundingClientRect();
-        return {
-          x: rect.left + rect.width / 2 - panelRect.left,
-          y: rect.top + rect.height / 2 - panelRect.top,
-        };
+        let x = node.offsetWidth / 2;
+        let y = node.offsetHeight / 2;
+        let current: HTMLElement | null = node;
+        while (current && current !== panel) {
+          x += current.offsetLeft;
+          y += current.offsetTop;
+          current = current.offsetParent as HTMLElement | null;
+        }
+        return current === panel ? { x, y } : null;
       });
+      if (centers.some(center => center === null)) return;
+      const layoutCenters = centers as Array<{ x: number; y: number }>;
       geometry.set({
-        spineX: centers[0].x - 5,
-        nodeY: centers.map(center => center.y - panelRect.height / 2),
+        spineX: layoutCenters[0].x - 5,
+        nodeY: layoutCenters.map(center => center.y - panel.clientHeight / 2),
       });
     };
 

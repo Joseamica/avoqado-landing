@@ -253,6 +253,75 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
   await page.goto('/');
   const root = page.locator('[data-story-mode="animated"]');
 
+  await expect(root).toBeVisible();
+  await page.evaluate(() => new Promise<void>(resolve => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
+
+  const readNodeAlignment = async (
+    progress: number,
+    scene: 'operations' | 'finance',
+    stage: string,
+  ) => {
+    await root.evaluate((element, value) => {
+      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+      const top = element.getBoundingClientRect().top + window.scrollY;
+      const distance = element.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+    }, progress);
+    await expect(root).toHaveAttribute('data-active-scene', scene);
+
+    const panel = root.locator(
+      `[data-story-scene="${scene}"][data-active="true"] [data-story-panel="${scene}"]`,
+    );
+    await expect(panel).toBeVisible();
+    return panel.evaluate((panelElement, stageTitle) => {
+      const pulse = panelElement.querySelector<HTMLElement>('[data-story-primary-pulse]');
+      const node = panelElement.querySelector<HTMLElement>(
+        `[data-story-cascade-stage="${stageTitle}"] [data-story-cascade-node]`,
+      );
+      if (!pulse || !node) throw new Error(`Missing cascade geometry for ${stageTitle}`);
+
+      let layoutX = node.offsetWidth / 2;
+      let layoutY = node.offsetHeight / 2;
+      let current: HTMLElement | null = node;
+      while (current && current !== panelElement) {
+        layoutX += current.offsetLeft;
+        layoutY += current.offsetTop;
+        current = current.offsetParent as HTMLElement | null;
+      }
+      if (current !== panelElement) throw new Error(`Node ${stageTitle} is outside its panel`);
+
+      const panelRect = panelElement.getBoundingClientRect();
+      const pulseRect = pulse.getBoundingClientRect();
+      const pulseCenter = {
+        x: pulseRect.left + pulseRect.width / 2,
+        y: pulseRect.top + pulseRect.height / 2,
+      };
+      const nodeLayoutCenter = {
+        x: panelRect.left + layoutX,
+        y: panelRect.top + layoutY,
+      };
+      return Math.hypot(
+        pulseCenter.x - nodeLayoutCenter.x,
+        pulseCenter.y - nodeLayoutCenter.y,
+      );
+    }, stage);
+  };
+
+  const operationsNodeDistance = await readNodeAlignment(
+    0.52 + 0.42 * (0.67 - 0.52),
+    'operations',
+    'Reorden sugerido',
+  );
+  const financeNodeDistance = await readNodeAlignment(
+    0.66 + 0.42 * (0.77 - 0.66),
+    'finance',
+    'Liquidación esperada',
+  );
+  expect.soft(operationsNodeDistance, 'operations pulse follows the layout center').toBeLessThanOrEqual(3);
+  expect.soft(financeNodeDistance, 'finance pulse follows the layout center').toBeLessThanOrEqual(3);
+
   for (const [progress, expectedScene] of [
     [0.105, null],
     [0.205, null],
