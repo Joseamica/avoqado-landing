@@ -1,25 +1,135 @@
-import { motion, useTransform, type MotionValue } from 'framer-motion';
+import { motion, useMotionValue, useTransform, type MotionValue } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import SceneFrame from '../SceneFrame';
 import StoryPhotoSlot from '../StoryPhotoSlot';
 import { STORY_FIXTURE } from '../story-fixture';
 import type { StoryScene } from '../story';
 
+interface RouteGeometry {
+  x: number[];
+  y: number[];
+  pathLength: number[];
+}
+
+const ROUTE_TIMES = [0, 0.08, 0.2, 0.3, 0.48, 0.58, 0.72, 0.8, 0.88, 0.94, 1] as const;
+
+function interpolateRoute(progress: number, values: number[]) {
+  for (let index = 1; index < ROUTE_TIMES.length; index += 1) {
+    if (progress <= ROUTE_TIMES[index]) {
+      const start = ROUTE_TIMES[index - 1];
+      const end = ROUTE_TIMES[index];
+      const segmentProgress = (progress - start) / (end - start);
+      return values[index - 1] + (values[index] - values[index - 1]) * segmentProgress;
+    }
+  }
+  return values.at(-1) ?? 0;
+}
+
 export default function ServiceScene({ scene, progress }: { scene: StoryScene; progress: MotionValue<number> }) {
+  const visualRef = useRef<HTMLDivElement>(null);
+  const agendaRef = useRef<HTMLDivElement>(null);
+  const confirmationRef = useRef<HTMLSpanElement>(null);
+  const geometry = useMotionValue<RouteGeometry>({
+    x: Array.from({ length: ROUTE_TIMES.length }, () => 5),
+    y: Array.from({ length: ROUTE_TIMES.length }, () => 0),
+    pathLength: Array.from({ length: ROUTE_TIMES.length }, () => 0),
+  });
+  const [route, setRoute] = useState({ width: 1, height: 1, path: 'M 5 0' });
   const agendaOpacity = useTransform(progress, [0.08, 0.34], [0.25, 1]);
   const agendaY = useTransform(progress, [0.08, 0.4], [24, 0]);
-  const trackLength = useTransform(progress, [0.12, 0.78], [0, 1]);
-  const desktopPulseX = useTransform(progress, [0, 0.16, 0.36, 0.58, 0.78, 1], [0, 28, 170, 430, 28, 0]);
-  const desktopPulseY = useTransform(progress, [0, 0.16, 0.36, 0.58, 0.78, 1], [0, -104, -72, 54, -104, 0]);
-  const mobilePulseX = useTransform(progress, [0, 0.18, 0.4, 0.68, 0.84, 1], [0, 14, 76, 230, 14, 0]);
-  const mobilePulseY = useTransform(progress, [0, 0.18, 0.4, 0.68, 0.84, 1], [0, -48, 18, 88, -48, 0]);
-  const pulseScale = useTransform(progress, [0.3, 0.42, 0.54], [0.94, 1.08, 1]);
+  const trackLength = useTransform(() => interpolateRoute(progress.get(), geometry.get().pathLength));
+  const routeGuideOpacity = useTransform(progress, [0.36, 0.4], [0, 1]);
+  const pulseX = useTransform(() => interpolateRoute(progress.get(), geometry.get().x));
+  const pulseY = useTransform(() => interpolateRoute(progress.get(), geometry.get().y));
+  const pulseScale = useTransform(
+    progress,
+    [0, 0.08, 0.2, 0.54, 0.58, 0.72, 0.76, 0.94, 1],
+    [0.75, 0.75, 1, 1, 1.18, 1.18, 1, 0.75, 0.75],
+  );
+
+  useEffect(() => {
+    const visual = visualRef.current;
+    const agenda = agendaRef.current;
+    const confirmation = confirmationRef.current;
+    if (!visual || !agenda || !confirmation) return;
+
+    const measure = () => {
+      let targetX = confirmation.offsetWidth / 2;
+      let targetY = confirmation.offsetHeight / 2;
+      let current: HTMLElement | null = confirmation;
+      while (current && current !== visual) {
+        targetX += current.offsetLeft;
+        targetY += current.offsetTop;
+        current = current.offsetParent as HTMLElement | null;
+      }
+      if (current !== visual) return;
+
+      const width = Math.max(visual.clientWidth, 1);
+      const height = Math.max(visual.clientHeight, 1);
+      const dock = { x: 5, y: height / 2 };
+      const railX = Math.max(dock.x, agenda.offsetLeft - 12);
+      const railY = Math.max(8, agenda.offsetTop - 10);
+      const topLeft = { x: railX, y: railY };
+      const topTarget = { x: targetX, y: railY };
+      const target = { x: targetX, y: targetY };
+      const toRail = Math.abs(railX - dock.x);
+      const toTop = Math.abs(dock.y - railY);
+      const acrossTop = Math.abs(targetX - railX);
+      const toTarget = Math.abs(targetY - railY);
+      const routeLength = Math.max(toRail + toTop + acrossTop + toTarget, 1);
+      const points = [
+        dock,
+        dock,
+        { x: railX, y: dock.y },
+        topLeft,
+        topTarget,
+        target,
+        target,
+        topTarget,
+        topLeft,
+        { x: railX, y: dock.y },
+        dock,
+      ];
+
+      geometry.set({
+        x: points.map(point => point.x),
+        y: points.map(point => point.y - dock.y),
+        pathLength: [
+          0,
+          0,
+          toRail / routeLength,
+          (toRail + toTop) / routeLength,
+          (toRail + toTop + acrossTop) / routeLength,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+        ],
+      });
+      setRoute({
+        width,
+        height,
+        path: `M ${dock.x} ${dock.y} H ${railX} V ${railY} H ${targetX} V ${targetY}`,
+      });
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(visual);
+    observer.observe(agenda);
+    observer.observe(confirmation);
+    void document.fonts?.ready.then(measure);
+    return () => observer.disconnect();
+  }, [geometry]);
 
   return (
     <SceneFrame
       scene={scene}
-      accessibleSummary={`La agenda confirma a las ${STORY_FIXTURE.appointmentTime} el servicio ${STORY_FIXTURE.service} para ${STORY_FIXTURE.customer}, atendida por ${STORY_FIXTURE.staff} en ${STORY_FIXTURE.venue}, con ${STORY_FIXTURE.product}. Disponible en POS iOS, POS Android, POS Desktop y Windows Service.`}
+      accessibleSummary={`La cita está confirmada a las ${STORY_FIXTURE.appointmentTime}: ${STORY_FIXTURE.service} para ${STORY_FIXTURE.customer}, atendida por ${STORY_FIXTURE.staff} en ${STORY_FIXTURE.venue}, con ${STORY_FIXTURE.product}. Disponible en POS iOS, POS Android, POS Desktop y Windows Service.`}
     >
-      <div className="relative h-full min-h-0">
+      <div ref={visualRef} className="relative h-full min-h-0">
         <StoryPhotoSlot
           id="service-in-action"
           className="absolute right-0 top-0 h-[46%] w-[82%] rounded-[1.1rem] opacity-35 sm:h-[58%] sm:w-[70%] lg:inset-y-[3%] lg:h-[94%] lg:w-[76%] lg:rounded-[1.4rem] lg:opacity-25"
@@ -28,13 +138,20 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
         />
 
         <motion.div
+          ref={agendaRef}
           className="story-service-agenda absolute inset-x-[3%] bottom-[4%] z-10 overflow-hidden rounded-[1rem] border border-white/10 bg-neutral-900 shadow-[0_24px_70px_oklch(0.05_0.003_155_/_0.38)] sm:inset-x-[7%] sm:bottom-[6%] sm:rounded-[1.35rem] lg:inset-x-[5%] lg:bottom-[9%]"
           style={{ opacity: agendaOpacity, y: agendaY }}
         >
           <div className="flex items-center justify-between border-b border-white/8 px-3.5 py-2 sm:px-5 sm:py-3.5">
             <span className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-neutral-500 sm:text-[0.65rem]">Agenda · hoy</span>
             <span className="flex items-center gap-2 text-[0.62rem] font-medium text-avoqado-green sm:text-xs">
-              <span className="size-1.5 rounded-full bg-avoqado-green" />
+              <span
+                ref={confirmationRef}
+                data-service-pulse-target
+                className="inline-flex size-2.5 shrink-0 items-center justify-center rounded-full"
+              >
+                <span className="size-1.5 rounded-full bg-avoqado-green" />
+              </span>
               Confirmada
             </span>
           </div>
@@ -62,25 +179,45 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
             </div>
           </div>
 
-          <div className="story-service-rail border-t border-white/8 px-3.5 py-2 text-[0.5rem] leading-relaxed tracking-[0.06em] text-neutral-500 sm:px-5 sm:py-3 sm:text-[0.62rem] lg:text-xs">
+          <div className="story-service-rail grid grid-cols-2 gap-x-2 border-t border-white/8 px-3.5 py-2 text-[0.5rem] leading-relaxed tracking-[0.06em] text-neutral-500 sm:px-5 sm:py-3 sm:text-[0.62rem] lg:text-xs">
             <span>POS iOS · POS Android</span>
             <span>POS Desktop · Windows Service</span>
           </div>
         </motion.div>
 
-        <svg className="pointer-events-none absolute inset-0 hidden size-full sm:block" viewBox="0 0 760 520" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M 0 260 H 36 V 154 H 192 V 338 H 458" fill="none" stroke="oklch(0.38 0.006 155 / 0.34)" strokeWidth="1" />
-          <motion.path d="M 0 260 H 36 V 154 H 192 V 338 H 458" fill="none" stroke="var(--color-avoqado-green)" strokeWidth="1" style={{ pathLength: trackLength }} />
+        <svg
+          className="pointer-events-none absolute inset-0 z-20 size-full"
+          viewBox={`0 0 ${route.width} ${route.height}`}
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <motion.path
+            data-service-route-path
+            d={route.path}
+            fill="none"
+            stroke="oklch(0.38 0.006 155 / 0.34)"
+            strokeWidth="1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+            style={{ opacity: routeGuideOpacity }}
+          />
+          <motion.path
+            d={route.path}
+            fill="none"
+            stroke="var(--color-avoqado-green)"
+            strokeWidth="1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+            style={{ pathLength: trackLength }}
+          />
         </svg>
         <motion.span
           data-story-primary-pulse
-          className="story-primary-pulse pointer-events-none absolute left-0 top-1/2 z-20 hidden size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green sm:block"
-          style={{ x: desktopPulseX, y: desktopPulseY, scale: pulseScale }}
-        />
-        <motion.span
-          data-story-primary-pulse
-          className="story-primary-pulse pointer-events-none absolute left-0 top-1/2 z-20 size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green sm:hidden"
-          style={{ x: mobilePulseX, y: mobilePulseY, scale: pulseScale }}
+          aria-hidden="true"
+          className="story-primary-pulse pointer-events-none absolute left-0 top-1/2 z-30 -ml-[0.3125rem] -mt-[0.3125rem] size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green outline outline-[4px] outline-avoqado-green/10"
+          style={{ x: pulseX, y: pulseY, scale: pulseScale }}
         />
       </div>
     </SceneFrame>

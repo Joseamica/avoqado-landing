@@ -248,6 +248,130 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
   expect(pulseTarget.alternate).toBe(false);
 });
 
+test('ancla el pulso de Servicio a su ruta y al estado confirmado', async ({ page }, testInfo) => {
+  test.skip(!['chromium-desktop', 'chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
+  await page.goto('/');
+
+  const root = page.locator('[data-story-mode="animated"]');
+  await expect(root).toBeVisible();
+
+  const moveToLocalProgress = async (localProgress: number) => {
+    const globalProgress = 0.20 + localProgress * (0.31 - 0.20);
+    await root.evaluate((element, value) => {
+      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+      const top = element.getBoundingClientRect().top + window.scrollY;
+      const distance = element.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+    }, globalProgress);
+    await expect(root).toHaveAttribute('data-active-scene', 'service');
+  };
+
+  const scene = root.locator('[data-story-scene="service"][data-active="true"]');
+
+  for (const localProgress of [0.2, 0.3, 0.48, 0.58, 0.8, 0.88]) {
+    await moveToLocalProgress(localProgress);
+    const pulse = scene.locator('[data-story-primary-pulse]:visible');
+    const route = scene.locator('[data-service-route-path]');
+    await expect(pulse).toHaveCount(1);
+    await expect(route).toHaveCount(1);
+
+    const routeDistance = await pulse.evaluate((pulseElement, routeElement) => {
+      const pulseRect = pulseElement.getBoundingClientRect();
+      const pulseCenter = {
+        x: pulseRect.left + pulseRect.width / 2,
+        y: pulseRect.top + pulseRect.height / 2,
+      };
+      const path = routeElement as SVGPathElement;
+      const matrix = path.getScreenCTM();
+      if (!matrix) throw new Error('Missing service route matrix');
+
+      const totalLength = path.getTotalLength();
+      let nearestDistance = Number.POSITIVE_INFINITY;
+      for (let step = 0; step <= 240; step += 1) {
+        const point = path.getPointAtLength(totalLength * (step / 240));
+        const screenPoint = {
+          x: matrix.a * point.x + matrix.c * point.y + matrix.e,
+          y: matrix.b * point.x + matrix.d * point.y + matrix.f,
+        };
+        nearestDistance = Math.min(
+          nearestDistance,
+          Math.hypot(pulseCenter.x - screenPoint.x, pulseCenter.y - screenPoint.y),
+        );
+      }
+      return nearestDistance;
+    }, await route.elementHandle());
+
+    expect.soft(
+      routeDistance,
+      `service pulse stays on its route at ${localProgress}`,
+    ).toBeLessThanOrEqual(3);
+
+    if (localProgress <= 0.58) {
+      const activeRoute = scene.locator('svg path').last();
+      const activeEndpointDistance = await pulse.evaluate((pulseElement, routeElement) => {
+        const pulseRect = pulseElement.getBoundingClientRect();
+        const pulseCenter = {
+          x: pulseRect.left + pulseRect.width / 2,
+          y: pulseRect.top + pulseRect.height / 2,
+        };
+        const path = routeElement as SVGPathElement;
+        const matrix = path.getScreenCTM();
+        if (!matrix) throw new Error('Missing active service route matrix');
+
+        const drawnLength = Number.parseFloat(getComputedStyle(path).strokeDasharray);
+        const point = path.getPointAtLength(
+          path.getTotalLength() * Math.min(Math.max(drawnLength, 0), 1),
+        );
+        const endpoint = {
+          x: matrix.a * point.x + matrix.c * point.y + matrix.e,
+          y: matrix.b * point.x + matrix.d * point.y + matrix.f,
+        };
+        return Math.hypot(pulseCenter.x - endpoint.x, pulseCenter.y - endpoint.y);
+      }, await activeRoute.elementHandle());
+
+      expect.soft(
+        activeEndpointDistance,
+        `service pulse leads the drawn route at ${localProgress}`,
+      ).toBeLessThanOrEqual(3);
+    }
+  }
+
+  await moveToLocalProgress(0.58);
+  const pulse = scene.locator('[data-story-primary-pulse]:visible');
+  const target = scene.locator('[data-service-pulse-target]');
+  await expect(target).toHaveCount(1);
+  const readTargetDistance = async () => pulse.evaluate((pulseElement, targetElement) => {
+    const pulseRect = pulseElement.getBoundingClientRect();
+    const targetRect = (targetElement as HTMLElement).getBoundingClientRect();
+    return Math.hypot(
+      pulseRect.left + pulseRect.width / 2 - (targetRect.left + targetRect.width / 2),
+      pulseRect.top + pulseRect.height / 2 - (targetRect.top + targetRect.height / 2),
+    );
+  }, await target.elementHandle());
+  expect(await readTargetDistance()).toBeLessThanOrEqual(3);
+
+  if (testInfo.project.name === 'chromium-desktop') {
+    await moveToLocalProgress(0.3);
+    await page.setViewportSize({ width: 1180, height: 760 });
+    await moveToLocalProgress(0.58);
+    await expect.poll(readTargetDistance).toBeLessThanOrEqual(3);
+  }
+
+  const railGap = await scene.locator('.story-service-rail span').evaluateAll(elements => {
+    const [first, second] = elements.map(element => element.getBoundingClientRect());
+    return second.top > first.top + 1 ? second.top - first.bottom : second.left - first.right;
+  });
+  expect(railGap).toBeGreaterThanOrEqual(6);
+  expect(await scene.locator('.story-service-rail span').allTextContents()).toEqual([
+    'POS iOS · POS Android',
+    'POS Desktop · Windows Service',
+  ]);
+
+  const accessibleSummary = scene.locator('.sr-only');
+  await expect(accessibleSummary).toContainText('La cita está confirmada');
+  await expect(accessibleSummary).toContainText('POS iOS, POS Android, POS Desktop y Windows Service');
+});
+
 test('mantiene un solo pulso primario durante los handoffs', async ({ page }, testInfo) => {
   test.skip(!['chromium-desktop', 'chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
   await page.goto('/');
