@@ -31,7 +31,16 @@ export default function ReducedMotionStory({ mode = 'static' }: Props) {
               <p className={light ? 'mt-6 max-w-2xl text-lg text-neutral-600' : 'mt-6 max-w-2xl text-lg text-neutral-300'}>
                 {scene.body}
               </p>
-              {scene.id === 'payment' ? (
+              {scene.id === 'channels' ? (
+                <div className="mt-6 max-w-md border-y border-black/10 py-4" data-channel-route-summary>
+                  <strong className="block text-lg font-semibold text-green-800">
+                    Booking Widget → Reserva confirmada
+                  </strong>
+                  <span className="mt-1 block text-sm text-neutral-600">
+                    La cita entra con cliente, servicio, hora y sucursal.
+                  </span>
+                </div>
+              ) : scene.id === 'payment' ? (
                 <div className="mt-6 max-w-md border-y border-white/10 py-4" data-payment-route-summary>
                   <strong className="block text-lg font-semibold text-avoqado-green">
                     TPV → Operación diaria

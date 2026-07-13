@@ -50,6 +50,8 @@ test('cuenta la historia completa en orden causal', async ({ page }, testInfo) =
     await expect(main.locator('h1:visible')).toHaveCount(1);
   }
   await expect(main).toContainText('Cuenta de cobro');
+  await expect(main.locator(`[data-story-mode="${mode}"] [data-story-scene="channels"]`))
+    .toContainText('Booking Widget → Reserva confirmada');
   await expect(main.locator(`[data-story-mode="${mode}"] [data-story-scene="payment"]`))
     .toContainText('TPV → Operación diaria');
   await expect(main).toContainText('Una sucursal o diez');
@@ -164,7 +166,7 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
   await page.goto('/');
 
   const root = page.locator('[data-story-mode="animated"]');
-  const chat = page.getByRole('button', { name: 'Abrir chat de ayuda' });
+  const chat = page.locator('button[aria-label="Abrir chat de ayuda"]');
   await expect(chat).toBeVisible();
 
   const moveTo = async (progress: number, scene: string) => {
@@ -210,20 +212,19 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
 
   await moveTo(0.155, 'channels');
   const channels = root.locator('[data-story-scene="channels"][data-active="true"]');
-  await expectClearOfChat(channels.locator('.story-channel-event-venue'));
-  const channelPulse = channels.locator('[data-story-primary-pulse]:visible');
+  await expect(chat).toBeHidden();
+  await expectInsideViewport(channels.locator('.story-channel-event-venue'));
   const activeChannel = channels.locator('[data-channel-active]');
-  await expect(channelPulse).toHaveCount(1);
+  await expect(channels.locator('[data-story-primary-pulse]')).toHaveCount(0);
   await expect(activeChannel).toHaveCount(1);
-  expect(await channelPulse.evaluate((element, targetElement) => {
-    const pulseRect = element.getBoundingClientRect();
-    const targetRect = (targetElement as HTMLElement).getBoundingClientRect();
-    const center = { x: pulseRect.left + pulseRect.width / 2, y: pulseRect.top + pulseRect.height / 2 };
-    return center.x >= targetRect.left && center.x <= targetRect.right && center.y >= targetRect.top && center.y <= targetRect.bottom;
-  }, await activeChannel.elementHandle())).toBe(true);
+  await expect(activeChannel).toContainText('Seleccionado');
+  const channelSummary = channels.locator('[data-channel-route-summary]:visible');
+  await expect(channelSummary).toHaveText('Booking Widget → Reserva confirmada');
+  await expectInsideViewport(channelSummary, 8);
 
   await moveTo(0.255, 'service');
   const service = root.locator('[data-story-scene="service"][data-active="true"]');
+  await expect(chat).toBeVisible();
   await expectClearOfChat(service.getByText('Crema facial 50 ml', { exact: true }), 10);
   await expectClearOfChat(service.getByText('POS Desktop · Windows Service', { exact: true }), 10);
   const railGap = await service.locator('.story-service-rail span').evaluateAll(elements => {
@@ -250,6 +251,89 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
   await expect(payment.locator('[data-payment-route-summary]:visible')).toHaveText('TPV → Operación diaria');
   await expect(selectedMerchant).toHaveCount(1);
   await expect(alternateMerchant).toHaveCount(1);
+});
+
+test('confirma la reserva sin rutas ni puntos decorativos', async ({ page }, testInfo) => {
+  test.skip(!['chromium-desktop', 'chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
+  await page.goto('/');
+
+  const root = page.locator('[data-story-mode="animated"]');
+  const moveToLocalProgress = async (localProgress: number) => {
+    const globalProgress = 0.10 + localProgress * (0.21 - 0.10);
+    await root.evaluate((element, value) => {
+      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+      const top = element.getBoundingClientRect().top + window.scrollY;
+      const distance = element.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+    }, globalProgress);
+    await expect(root).toHaveAttribute('data-active-scene', 'channels');
+  };
+
+  const scene = root.locator('[data-story-scene="channels"][data-active="true"]');
+  await moveToLocalProgress(0.72);
+  await expect(scene.locator('[data-story-primary-pulse]')).toHaveCount(0);
+  await expect(scene.locator('.story-channel-row span.h-px')).toHaveCount(0);
+  await expect(scene.locator('.story-channel-event > span.absolute')).toHaveCount(0);
+  await expect(scene.locator('.story-channel-visual > .pointer-events-none.absolute')).toHaveCount(0);
+  await expect(scene.getByText('Ruta activa', { exact: true })).toHaveCount(0);
+  await expect(scene.locator('[data-channel-route-summary]:visible'))
+    .toHaveText('Booking Widget → Reserva confirmada');
+
+  const eventOpacity: number[] = [];
+  for (const localProgress of [0.30, 0.54, 0.75]) {
+    await moveToLocalProgress(localProgress);
+    eventOpacity.push(await scene.locator('.story-channel-event').evaluate(element =>
+      Number.parseFloat(getComputedStyle(element).opacity)));
+  }
+  expect(eventOpacity[0]).toBeLessThanOrEqual(0.05);
+  expect(eventOpacity[1]).toBeGreaterThan(0.25);
+  expect(eventOpacity[1]).toBeLessThan(0.85);
+  expect(eventOpacity[2]).toBeGreaterThanOrEqual(0.98);
+});
+
+test('mantiene los canales dentro del panel en desktop compacto', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/');
+
+  for (const viewport of [
+    { width: 910, height: 691 },
+    { width: 787, height: 701 },
+    { width: 887, height: 502 },
+  ]) {
+    await page.setViewportSize(viewport);
+    const root = page.locator('[data-story-mode="animated"]');
+    const globalProgress = 0.10 + 0.72 * (0.21 - 0.10);
+    await root.evaluate((element, value) => {
+      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+      const top = element.getBoundingClientRect().top + window.scrollY;
+      const distance = element.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+    }, globalProgress);
+    await expect(root).toHaveAttribute('data-active-scene', 'channels');
+
+    const scene = root.locator('[data-story-scene="channels"][data-active="true"]');
+    const geometry = await scene.evaluate(element => {
+      const visual = element.querySelector('.story-channel-visual')!.getBoundingClientRect();
+      const ledger = element.querySelector('.story-channel-ledger')!.getBoundingClientRect();
+      const event = element.querySelector('.story-channel-event')!.getBoundingClientRect();
+      return {
+        visual: { top: visual.top, right: visual.right, bottom: visual.bottom, left: visual.left },
+        ledger: { top: ledger.top, right: ledger.right, bottom: ledger.bottom, left: ledger.left },
+        event: { top: event.top, right: event.right, bottom: event.bottom, left: event.left },
+        documentWidth: document.documentElement.scrollWidth,
+        viewportWidth: window.innerWidth,
+      };
+    });
+
+    for (const panel of [geometry.ledger, geometry.event]) {
+      expect.soft(panel.top, `${viewport.width}×${viewport.height} top`).toBeGreaterThanOrEqual(geometry.visual.top - 1);
+      expect.soft(panel.bottom, `${viewport.width}×${viewport.height} bottom`).toBeLessThanOrEqual(geometry.visual.bottom + 1);
+      expect.soft(panel.left, `${viewport.width}×${viewport.height} left`).toBeGreaterThanOrEqual(geometry.visual.left - 1);
+      expect.soft(panel.right, `${viewport.width}×${viewport.height} right`).toBeLessThanOrEqual(geometry.visual.right + 1);
+    }
+    await expect(page.locator('button[aria-label="Abrir chat de ayuda"]')).toBeHidden();
+    expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth + 1);
+  }
 });
 
 test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, testInfo) => {
@@ -601,7 +685,7 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
   expect.soft(financeNodeDistance, 'finance pulse follows the visible node').toBeLessThanOrEqual(3);
 
   for (const [progress, expectedScene, expectedPulseCount] of [
-    [0.105, 'channels', 1],
+    [0.105, 'channels', 0],
     [0.205, 'service', 1],
     [0.305, 'payment', 0],
     [0.425, 'aftercare', 0],
