@@ -11,7 +11,7 @@ interface RouteGeometry {
   pathLength: number[];
 }
 
-const ROUTE_TIMES = [0, 0.08, 0.2, 0.3, 0.48, 0.58, 0.72, 0.8, 0.88, 0.94, 1] as const;
+const ROUTE_TIMES = [0, 0.12, 0.3, 0.48, 0.58, 0.88, 1] as const;
 
 function interpolateRoute(progress: number, values: number[]) {
   for (let index = 1; index < ROUTE_TIMES.length; index += 1) {
@@ -27,82 +27,77 @@ function interpolateRoute(progress: number, values: number[]) {
 
 export default function ServiceScene({ scene, progress }: { scene: StoryScene; progress: MotionValue<number> }) {
   const visualRef = useRef<HTMLDivElement>(null);
-  const agendaRef = useRef<HTMLDivElement>(null);
+  const sourceRef = useRef<HTMLSpanElement>(null);
   const confirmationRef = useRef<HTMLSpanElement>(null);
   const geometry = useMotionValue<RouteGeometry>({
-    x: Array.from({ length: ROUTE_TIMES.length }, () => 5),
+    x: Array.from({ length: ROUTE_TIMES.length }, () => 0),
     y: Array.from({ length: ROUTE_TIMES.length }, () => 0),
     pathLength: Array.from({ length: ROUTE_TIMES.length }, () => 0),
   });
-  const [route, setRoute] = useState({ width: 1, height: 1, path: 'M 5 0' });
+  const [route, setRoute] = useState({ width: 1, height: 1, path: 'M 0 0' });
   const agendaOpacity = useTransform(progress, [0.08, 0.34], [0.25, 1]);
-  const agendaY = useTransform(progress, [0.08, 0.4], [24, 0]);
+  const sourceOpacity = useTransform(progress, [0, 0.64, 0.82], [1, 1, 0.42]);
+  const destinationOpacity = useTransform(progress, [0.38, 0.58], [0.45, 1]);
+  const connectorOpacity = useTransform(progress, [0, 0.82, 0.9], [1, 1, 0]);
   const trackLength = useTransform(() => interpolateRoute(progress.get(), geometry.get().pathLength));
-  const routeGuideOpacity = useTransform(progress, [0.36, 0.4], [0, 1]);
   const pulseX = useTransform(() => interpolateRoute(progress.get(), geometry.get().x));
   const pulseY = useTransform(() => interpolateRoute(progress.get(), geometry.get().y));
   const pulseScale = useTransform(
     progress,
-    [0, 0.08, 0.2, 0.54, 0.58, 0.72, 0.76, 0.94, 1],
-    [0.75, 0.75, 1, 1, 1.18, 1.18, 1, 0.75, 0.75],
+    [0, 0.1, 0.12, 0.52, 0.58, 0.7, 1],
+    [0.78, 0.78, 1, 1, 1.18, 1, 1],
   );
 
   useEffect(() => {
     const visual = visualRef.current;
-    const agenda = agendaRef.current;
+    const source = sourceRef.current;
     const confirmation = confirmationRef.current;
-    if (!visual || !agenda || !confirmation) return;
+    if (!visual || !source || !confirmation) return;
 
     const measure = () => {
-      let targetX = confirmation.offsetWidth / 2;
-      let targetY = confirmation.offsetHeight / 2;
-      let current: HTMLElement | null = confirmation;
-      while (current && current !== visual) {
-        targetX += current.offsetLeft;
-        targetY += current.offsetTop;
-        current = current.offsetParent as HTMLElement | null;
-      }
-      if (current !== visual) return;
+      const centerWithinVisual = (element: HTMLElement) => {
+        let x = element.offsetWidth / 2;
+        let y = element.offsetHeight / 2;
+        let current: HTMLElement | null = element;
+        while (current && current !== visual) {
+          x += current.offsetLeft;
+          y += current.offsetTop;
+          current = current.offsetParent as HTMLElement | null;
+        }
+        return current === visual ? { x, y } : null;
+      };
+
+      const start = centerWithinVisual(source);
+      const target = centerWithinVisual(confirmation);
+      if (!start || !target) return;
 
       const width = Math.max(visual.clientWidth, 1);
       const height = Math.max(visual.clientHeight, 1);
-      const dock = { x: 5, y: height / 2 };
-      const railX = Math.max(dock.x, agenda.offsetLeft - 12);
-      const railY = Math.max(8, agenda.offsetTop - 10);
-      const topLeft = { x: railX, y: railY };
-      const topTarget = { x: targetX, y: railY };
-      const target = { x: targetX, y: targetY };
-      const toRail = Math.abs(railX - dock.x);
-      const toTop = Math.abs(dock.y - railY);
-      const acrossTop = Math.abs(targetX - railX);
-      const toTarget = Math.abs(targetY - railY);
-      const routeLength = Math.max(toRail + toTop + acrossTop + toTarget, 1);
+      const elbowY = start.y + (target.y - start.y) * 0.56;
+      const sourceElbow = { x: start.x, y: elbowY };
+      const targetElbow = { x: target.x, y: elbowY };
+      const toSourceElbow = Math.abs(sourceElbow.y - start.y);
+      const across = Math.abs(targetElbow.x - sourceElbow.x);
+      const toTarget = Math.abs(target.y - targetElbow.y);
+      const routeLength = Math.max(toSourceElbow + across + toTarget, 1);
       const points = [
-        dock,
-        dock,
-        { x: railX, y: dock.y },
-        topLeft,
-        topTarget,
+        start,
+        start,
+        sourceElbow,
+        targetElbow,
         target,
         target,
-        topTarget,
-        topLeft,
-        { x: railX, y: dock.y },
-        dock,
+        target,
       ];
 
       geometry.set({
         x: points.map(point => point.x),
-        y: points.map(point => point.y - dock.y),
+        y: points.map(point => point.y - height / 2),
         pathLength: [
           0,
           0,
-          toRail / routeLength,
-          (toRail + toTop) / routeLength,
-          (toRail + toTop + acrossTop) / routeLength,
-          1,
-          1,
-          1,
+          toSourceElbow / routeLength,
+          (toSourceElbow + across) / routeLength,
           1,
           1,
           1,
@@ -111,14 +106,14 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
       setRoute({
         width,
         height,
-        path: `M ${dock.x} ${dock.y} H ${railX} V ${railY} H ${targetX} V ${targetY}`,
+        path: `M ${start.x} ${start.y} V ${sourceElbow.y} H ${targetElbow.x} V ${target.y}`,
       });
     };
 
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(visual);
-    observer.observe(agenda);
+    observer.observe(source);
     observer.observe(confirmation);
     void document.fonts?.ready.then(measure);
     return () => observer.disconnect();
@@ -127,7 +122,7 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
   return (
     <SceneFrame
       scene={scene}
-      accessibleSummary={`La cita está confirmada a las ${STORY_FIXTURE.appointmentTime}: ${STORY_FIXTURE.service} para ${STORY_FIXTURE.customer}, atendida por ${STORY_FIXTURE.staff} en ${STORY_FIXTURE.venue}, con ${STORY_FIXTURE.product}. Disponible en POS iOS, POS Android, POS Desktop y Windows Service.`}
+      accessibleSummary={`La reserva web llega a la agenda como contexto listo. A las ${STORY_FIXTURE.appointmentTime}: ${STORY_FIXTURE.service} para ${STORY_FIXTURE.customer}, atendida por ${STORY_FIXTURE.staff} en ${STORY_FIXTURE.venue}, con ${STORY_FIXTURE.product}. Disponible en POS iOS, POS Android, POS Desktop y Windows Service.`}
     >
       <div ref={visualRef} className="relative h-full min-h-0">
         <StoryPhotoSlot
@@ -138,13 +133,36 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
         />
 
         <motion.div
-          ref={agendaRef}
+          data-service-source-card
+          className="story-service-source absolute right-[5%] top-[2%] z-10 w-[9.25rem] border border-white/10 bg-neutral-950/95 px-2.5 py-2 shadow-[0_16px_44px_oklch(0.05_0.003_155_/_0.32)] sm:right-[7%] sm:top-[5%] sm:w-[11.5rem] sm:px-3 sm:py-2.5 lg:right-[6%] lg:top-[9%]"
+          style={{ opacity: sourceOpacity }}
+        >
+          <div className="flex items-center justify-between gap-2">
+            <span className="whitespace-nowrap text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-neutral-300">Reserva web</span>
+            <span className="story-service-source-channel whitespace-nowrap text-[0.5rem] text-neutral-500 sm:text-[0.55rem]">Booking Widget</span>
+          </div>
+          <p className="story-service-source-detail mt-1 text-[0.62rem] font-medium text-neutral-100 sm:mt-1.5 sm:text-xs">
+            {STORY_FIXTURE.customer} · {STORY_FIXTURE.appointmentTime}
+          </p>
+          <p className="story-service-source-detail mt-0.5 hidden truncate text-[0.6rem] text-neutral-500 sm:block">{STORY_FIXTURE.service}</p>
+          <span
+            ref={sourceRef}
+            data-service-pulse-source
+            className="absolute -bottom-[0.3125rem] right-5 size-2.5 rounded-full border border-avoqado-green/45 bg-neutral-950"
+          />
+        </motion.div>
+
+        <motion.div
           className="story-service-agenda absolute inset-x-[3%] bottom-[4%] z-10 overflow-hidden rounded-[1rem] border border-white/10 bg-neutral-900 shadow-[0_24px_70px_oklch(0.05_0.003_155_/_0.38)] sm:inset-x-[7%] sm:bottom-[6%] sm:rounded-[1.35rem] lg:inset-x-[5%] lg:bottom-[9%]"
-          style={{ opacity: agendaOpacity, y: agendaY }}
+          style={{ opacity: agendaOpacity }}
         >
           <div className="flex items-center justify-between border-b border-white/8 px-3.5 py-2 sm:px-5 sm:py-3.5">
             <span className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-neutral-500 sm:text-[0.65rem]">Agenda · hoy</span>
-            <span className="flex items-center gap-2 text-[0.62rem] font-medium text-avoqado-green sm:text-xs">
+            <motion.span
+              data-service-pulse-destination
+              className="flex items-center gap-2 text-[0.62rem] font-medium text-avoqado-green sm:text-xs"
+              style={{ opacity: destinationOpacity }}
+            >
               <span
                 ref={confirmationRef}
                 data-service-pulse-target
@@ -152,8 +170,8 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
               >
                 <span className="size-1.5 rounded-full bg-avoqado-green" />
               </span>
-              Confirmada
-            </span>
+              Contexto listo
+            </motion.span>
           </div>
 
           <div className="grid grid-cols-[4rem_minmax(0,1fr)] gap-3 px-3.5 py-3 sm:grid-cols-[6.5rem_minmax(0,1fr)] sm:gap-5 sm:px-5 sm:py-5 lg:grid-cols-[8rem_minmax(0,1fr)] lg:px-6 lg:py-6">
@@ -185,11 +203,12 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
           </div>
         </motion.div>
 
-        <svg
+        <motion.svg
           className="pointer-events-none absolute inset-0 z-20 size-full"
           viewBox={`0 0 ${route.width} ${route.height}`}
           preserveAspectRatio="none"
           aria-hidden="true"
+          style={{ opacity: connectorOpacity }}
         >
           <motion.path
             data-service-route-path
@@ -200,9 +219,9 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
             strokeLinecap="round"
             strokeLinejoin="round"
             vectorEffect="non-scaling-stroke"
-            style={{ opacity: routeGuideOpacity }}
           />
           <motion.path
+            data-service-route-active
             d={route.path}
             fill="none"
             stroke="var(--color-avoqado-green)"
@@ -212,12 +231,12 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
             vectorEffect="non-scaling-stroke"
             style={{ pathLength: trackLength }}
           />
-        </svg>
+        </motion.svg>
         <motion.span
           data-story-primary-pulse
           aria-hidden="true"
           className="story-primary-pulse pointer-events-none absolute left-0 top-1/2 z-30 -ml-[0.3125rem] -mt-[0.3125rem] size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green outline outline-[4px] outline-avoqado-green/10"
-          style={{ x: pulseX, y: pulseY, scale: pulseScale }}
+          style={{ x: pulseX, y: pulseY, scale: pulseScale, opacity: connectorOpacity }}
         />
       </div>
     </SceneFrame>
