@@ -605,3 +605,29 @@ test('mantiene una venta coherente desde operación hasta contabilidad', async (
     }
   }
 });
+
+test('cierra con control multi-sucursal y una pregunta accionable', async ({ page }, testInfo) => {
+  test.skip(['chromium-reduced', 'chromium-nojs'].includes(testInfo.project.name));
+  await page.goto('/');
+  const story = page.locator('main[data-scrollytelling]');
+
+  await expect(story).toContainText('Organización');
+  await expect(story).toContainText('Zonas');
+  await expect(story).toContainText('Sucursal Centro');
+  await expect(story).toContainText('Sucursal Norte');
+  await expect(story).toContainText('Cambia de sucursal sin cerrar sesión');
+  await expect(story).toContainText('¿Qué sucursal bajó su ticket');
+
+  const root = page.locator('[data-story-mode="animated"]');
+  await root.evaluate(element => {
+    document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    const distance = element.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: top + distance * 0.94, behavior: 'auto' });
+  });
+  await expect(root).toHaveAttribute('data-active-scene', 'ai');
+  await expect(story.getByRole('link', { name: 'Quiero verlo en mi negocio' })).toHaveAttribute(
+    'href',
+    /\/wa\?src=homepage_story_final/,
+  );
+});

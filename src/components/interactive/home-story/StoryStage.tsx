@@ -1,11 +1,12 @@
 import type { MotionValue } from 'framer-motion';
-import SceneFrame from './SceneFrame';
 import StoryLayer from './StoryLayer';
 import { STORY_SCENES, type StoryScene } from './story';
 import AftercareScene from './scenes/AftercareScene';
+import AiScene from './scenes/AiScene';
 import ChannelsScene from './scenes/ChannelsScene';
 import FinanceScene from './scenes/FinanceScene';
 import HeroScene from './scenes/HeroScene';
+import MultibranchScene from './scenes/MultibranchScene';
 import OperationsScene from './scenes/OperationsScene';
 import PaymentScene from './scenes/PaymentScene';
 import ServiceScene from './scenes/ServiceScene';
@@ -31,8 +32,12 @@ function renderScene(scene: StoryScene, progress: MotionValue<number>) {
       return <OperationsScene scene={scene} progress={progress} />;
     case 'finance':
       return <FinanceScene scene={scene} progress={progress} />;
+    case 'multibranch':
+      return <MultibranchScene scene={scene} progress={progress} />;
+    case 'ai':
+      return <AiScene scene={scene} progress={progress} />;
     default:
-      return <SceneFrame scene={scene}><div className="h-full" /></SceneFrame>;
+      throw new Error(`Unregistered homepage story scene: ${scene.id}`);
   }
 }
 
