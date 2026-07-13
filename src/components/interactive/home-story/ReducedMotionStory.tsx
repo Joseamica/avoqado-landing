@@ -31,6 +31,16 @@ export default function ReducedMotionStory({ mode = 'static' }: Props) {
               <p className={light ? 'mt-6 max-w-2xl text-lg text-neutral-600' : 'mt-6 max-w-2xl text-lg text-neutral-300'}>
                 {scene.body}
               </p>
+              {scene.id === 'payment' ? (
+                <div className="mt-6 max-w-md border-y border-white/10 py-4" data-payment-route-summary>
+                  <strong className="block text-lg font-semibold text-avoqado-green">
+                    TPV → Operación diaria
+                  </strong>
+                  <span className="mt-1 block text-sm text-neutral-400">
+                    Ejemplo en TPV compatible · selección manual de la Cuenta de cobro
+                  </span>
+                </div>
+              ) : null}
               {index === 0 || scene.id === 'ai' ? (
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <a

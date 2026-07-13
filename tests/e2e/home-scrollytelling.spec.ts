@@ -50,6 +50,8 @@ test('cuenta la historia completa en orden causal', async ({ page }, testInfo) =
     await expect(main.locator('h1:visible')).toHaveCount(1);
   }
   await expect(main).toContainText('Cuenta de cobro');
+  await expect(main.locator(`[data-story-mode="${mode}"] [data-story-scene="payment"]`))
+    .toContainText('TPV → Operación diaria');
   await expect(main).toContainText('Una sucursal o diez');
   await expect(main).toContainText('sólo pregunta');
   await expect(page.getByText('Continue scrolling...')).toHaveCount(0);
@@ -193,6 +195,19 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
     expect(metrics.fontSize).toBeGreaterThanOrEqual(minimumFontSize);
   };
 
+  const expectInsideViewport = async (locator: ReturnType<typeof page.locator>, minimumFontSize = 0) => {
+    await expect(locator).toBeVisible();
+    const metrics = await locator.evaluate(element => {
+      const rect = element.getBoundingClientRect();
+      return {
+        fontSize: Number.parseFloat(getComputedStyle(element).fontSize),
+        insideViewport: rect.top >= 0 && rect.left >= 0 && rect.right <= window.innerWidth && rect.bottom <= window.innerHeight,
+      };
+    });
+    expect(metrics.insideViewport).toBe(true);
+    expect(metrics.fontSize).toBeGreaterThanOrEqual(minimumFontSize);
+  };
+
   await moveTo(0.155, 'channels');
   const channels = root.locator('[data-story-scene="channels"][data-active="true"]');
   await expectClearOfChat(channels.locator('.story-channel-event-venue'));
@@ -219,33 +234,22 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
 
   await moveTo(0.365, 'payment');
   const payment = root.locator('[data-story-scene="payment"][data-active="true"]');
-  await expectClearOfChat(payment.getByText('TPV compatible · selección manual', { exact: true }), 10);
-  await expectClearOfChat(payment.getByText('Merchant habilitado', { exact: true }), 10);
-  await expectClearOfChat(payment.getByText('Disponible', { exact: true }), 10);
+  await expect(chat).toBeHidden();
+  await expectInsideViewport(payment.locator('[data-payment-selector]'));
+  await expectInsideViewport(payment.getByText('TPV compatible · selección manual', { exact: true }), 10);
+  await expectInsideViewport(payment.getByText('Merchant habilitado', { exact: true }), 10);
+  await expectInsideViewport(payment.getByText('Disponible', { exact: true }), 10);
   const routeTruth = testInfo.project.name === 'chromium-small'
     ? payment.locator('.story-payment-reference-summary')
     : payment.getByText('Registro manual', { exact: true });
-  await expectClearOfChat(routeTruth, 10);
+  await expectInsideViewport(routeTruth, 10);
 
-  const pulse = payment.locator('[data-story-primary-pulse]:visible');
   const selectedMerchant = payment.locator('[data-merchant-selected]');
   const alternateMerchant = payment.locator('[data-merchant-alternate]');
-  await expect(pulse).toHaveCount(1);
+  await expect(payment.locator('[data-story-primary-pulse]')).toHaveCount(0);
+  await expect(payment.locator('[data-payment-route-summary]:visible')).toHaveText('TPV → Operación diaria');
   await expect(selectedMerchant).toHaveCount(1);
   await expect(alternateMerchant).toHaveCount(1);
-  const pulseTarget = await pulse.evaluate((element, targets) => {
-    const pulseRect = element.getBoundingClientRect();
-    const selectedRect = (targets.selected as HTMLElement).getBoundingClientRect();
-    const alternateRect = (targets.alternate as HTMLElement).getBoundingClientRect();
-    const center = { x: pulseRect.left + pulseRect.width / 2, y: pulseRect.top + pulseRect.height / 2 };
-    const contains = (rect: DOMRect) => center.x >= rect.left && center.x <= rect.right && center.y >= rect.top && center.y <= rect.bottom;
-    return { selected: contains(selectedRect), alternate: contains(alternateRect) };
-  }, {
-    selected: await selectedMerchant.elementHandle(),
-    alternate: await alternateMerchant.elementHandle(),
-  });
-  expect(pulseTarget.selected).toBe(true);
-  expect(pulseTarget.alternate).toBe(false);
 });
 
 test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, testInfo) => {
@@ -390,6 +394,82 @@ test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, t
   await expect(accessibleSummary).toContainText('POS iOS, POS Android, POS Desktop y Windows Service');
 });
 
+test('explica el cobro sin rutas ni puntos decorativos', async ({ page }, testInfo) => {
+  test.skip(!['chromium-desktop', 'chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
+  await page.goto('/');
+
+  const root = page.locator('[data-story-mode="animated"]');
+  const localProgress = 0.78;
+  const globalProgress = 0.30 + localProgress * (0.43 - 0.30);
+  await root.evaluate((element, value) => {
+    document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    const distance = element.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+  }, globalProgress);
+  await expect(root).toHaveAttribute('data-active-scene', 'payment');
+
+  const scene = root.locator('[data-story-scene="payment"][data-active="true"]');
+  await expect(scene.locator('.story-payment-visual > svg')).toHaveCount(0);
+  await expect(scene.locator('[data-story-primary-pulse]')).toHaveCount(0);
+  await expect(scene.locator('.story-payment-reference-grid span.h-px')).toHaveCount(0);
+  await expect(scene.locator('[data-payment-route-summary]:visible')).toHaveText('TPV → Operación diaria');
+  await expect(scene.getByText('TPV compatible · selección manual', { exact: true })).toBeVisible();
+  await expect(scene.getByText('Merchant habilitado', { exact: true })).toBeVisible();
+});
+
+test('mantiene el cobro dentro de su panel en desktop compacto', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/');
+
+  for (const viewport of [
+    { width: 787, height: 701 },
+    { width: 887, height: 502 },
+  ]) {
+    await page.setViewportSize(viewport);
+    const root = page.locator('[data-story-mode="animated"]');
+    const localProgress = 0.78;
+    const globalProgress = 0.30 + localProgress * (0.43 - 0.30);
+    await root.evaluate((element, value) => {
+      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+      const top = element.getBoundingClientRect().top + window.scrollY;
+      const distance = element.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+    }, globalProgress);
+    await expect(root).toHaveAttribute('data-active-scene', 'payment');
+    await expect(page.locator('[data-homepage-chatbot]')).toHaveCount(1);
+    await expect(page.getByRole('button', { name: 'Abrir chat de ayuda' })).toBeHidden();
+
+    const scene = root.locator('[data-story-scene="payment"][data-active="true"]');
+    const geometry = await scene.evaluate(element => {
+      const visual = element.querySelector('.story-payment-visual')!.getBoundingClientRect();
+      const selectedMerchant = element.querySelector('[data-merchant-selected]')!;
+      const selector = selectedMerchant.parentElement!.parentElement!.parentElement!.getBoundingClientRect();
+      const referenceGrid = element.querySelector('.story-payment-reference-grid')!;
+      const references = referenceGrid.getBoundingClientRect();
+      const lastReference = referenceGrid.lastElementChild!.getBoundingClientRect();
+      return {
+        visual: { top: visual.top, right: visual.right, bottom: visual.bottom, left: visual.left },
+        selector: { top: selector.top, right: selector.right, bottom: selector.bottom, left: selector.left },
+        references: { top: references.top, right: references.right, bottom: references.bottom, left: references.left },
+        referenceTailGap: references.bottom - lastReference.bottom,
+        documentWidth: document.documentElement.scrollWidth,
+        viewportWidth: window.innerWidth,
+      };
+    });
+
+    for (const panel of [geometry.selector, geometry.references]) {
+      expect.soft(panel.top, `${viewport.width}×${viewport.height} top`).toBeGreaterThanOrEqual(geometry.visual.top - 1);
+      expect.soft(panel.bottom, `${viewport.width}×${viewport.height} bottom`).toBeLessThanOrEqual(geometry.visual.bottom + 1);
+      expect.soft(panel.left, `${viewport.width}×${viewport.height} left`).toBeGreaterThanOrEqual(geometry.visual.left - 1);
+      expect.soft(panel.right, `${viewport.width}×${viewport.height} right`).toBeLessThanOrEqual(geometry.visual.right + 1);
+    }
+    expect(geometry.referenceTailGap, `${viewport.width}×${viewport.height} reference tail gap`)
+      .toBeLessThanOrEqual(2);
+    expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth + 1);
+  }
+});
+
 test('explica el post-servicio sin rutas ni puntos decorativos', async ({ page }, testInfo) => {
   test.skip(!['chromium-desktop', 'chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
   await page.goto('/');
@@ -523,7 +603,7 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
   for (const [progress, expectedScene, expectedPulseCount] of [
     [0.105, 'channels', 1],
     [0.205, 'service', 1],
-    [0.305, 'payment', 1],
+    [0.305, 'payment', 0],
     [0.425, 'aftercare', 0],
     [0.645, 'operations', 1],
     [0.75, 'finance', 1],
