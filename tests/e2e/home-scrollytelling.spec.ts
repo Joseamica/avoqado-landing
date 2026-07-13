@@ -390,6 +390,72 @@ test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, t
   await expect(accessibleSummary).toContainText('POS iOS, POS Android, POS Desktop y Windows Service');
 });
 
+test('explica el post-servicio sin rutas ni puntos decorativos', async ({ page }, testInfo) => {
+  test.skip(!['chromium-desktop', 'chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
+  await page.goto('/');
+
+  const root = page.locator('[data-story-mode="animated"]');
+  await expect(root).toBeVisible();
+  const localProgress = 0.78;
+  const globalProgress = 0.42 + localProgress * (0.53 - 0.42);
+  await root.evaluate((element, value) => {
+    document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    const distance = element.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+  }, globalProgress);
+  await expect(root).toHaveAttribute('data-active-scene', 'aftercare');
+
+  const scene = root.locator('[data-story-scene="aftercare"][data-active="true"]');
+  await expect(scene.getByText('Recibo digital', { exact: true })).toBeVisible();
+  await expect(scene.getByText('Desde este recibo', { exact: true })).toBeVisible();
+  await expect(scene.getByText('Reseña en Google', { exact: true })).toBeVisible();
+  await expect(scene.getByText('Factúrate desde tu recibo', { exact: true })).toBeVisible();
+  await expect(scene.getByText('Tu cliente captura sus datos y recibe su CFDI.', { exact: true })).toBeVisible();
+  await expect(scene.locator('.story-aftercare-visual > svg')).toHaveCount(0);
+  await expect(scene.locator('.story-aftercare-visual > span.rounded-full')).toHaveCount(0);
+  await expect(scene.locator('[data-story-primary-pulse]')).toHaveCount(0);
+});
+
+test('mantiene el post-servicio dentro de su panel en desktop compacto', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.setViewportSize({ width: 887, height: 502 });
+  await page.goto('/');
+
+  const root = page.locator('[data-story-mode="animated"]');
+  const localProgress = 0.78;
+  const globalProgress = 0.42 + localProgress * (0.53 - 0.42);
+  await root.evaluate((element, value) => {
+    document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    const distance = element.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+  }, globalProgress);
+  await expect(root).toHaveAttribute('data-active-scene', 'aftercare');
+
+  const scene = root.locator('[data-story-scene="aftercare"][data-active="true"]');
+  const geometry = await scene.evaluate(element => {
+    const visual = element.querySelector('.story-frame-visual')!.getBoundingClientRect();
+    const receipt = element.querySelector('.story-aftercare-receipt')!.getBoundingClientRect();
+    const outcomes = element.querySelector('.story-aftercare-outcomes')!.getBoundingClientRect();
+    return {
+      visual: { top: visual.top, right: visual.right, bottom: visual.bottom, left: visual.left },
+      receipt: { top: receipt.top, right: receipt.right, bottom: receipt.bottom, left: receipt.left },
+      outcomes: { top: outcomes.top, right: outcomes.right, bottom: outcomes.bottom, left: outcomes.left },
+      documentWidth: document.documentElement.scrollWidth,
+      viewportWidth: window.innerWidth,
+    };
+  });
+
+  for (const panel of [geometry.receipt, geometry.outcomes]) {
+    expect.soft(panel.top).toBeGreaterThanOrEqual(geometry.visual.top - 1);
+    expect.soft(panel.bottom).toBeLessThanOrEqual(geometry.visual.bottom + 1);
+    expect.soft(panel.left).toBeGreaterThanOrEqual(geometry.visual.left - 1);
+    expect.soft(panel.right).toBeLessThanOrEqual(geometry.visual.right + 1);
+  }
+  expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth + 1);
+});
+
 test('mantiene un solo pulso primario durante los handoffs', async ({ page }, testInfo) => {
   test.skip(!['chromium-desktop', 'chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
   await page.goto('/');
@@ -454,13 +520,13 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
   expect.soft(operationsNodeDistance, 'operations pulse follows the visible node').toBeLessThanOrEqual(3);
   expect.soft(financeNodeDistance, 'finance pulse follows the visible node').toBeLessThanOrEqual(3);
 
-  for (const [progress, expectedScene] of [
-    [0.105, null],
-    [0.205, null],
-    [0.305, null],
-    [0.425, null],
-    [0.645, 'operations'],
-    [0.75, 'finance'],
+  for (const [progress, expectedScene, expectedPulseCount] of [
+    [0.105, 'channels', 1],
+    [0.205, 'service', 1],
+    [0.305, 'payment', 1],
+    [0.425, 'aftercare', 0],
+    [0.645, 'operations', 1],
+    [0.75, 'finance', 1],
   ] as const) {
     await root.evaluate((element, value) => {
       document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
@@ -469,11 +535,15 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
       window.scrollTo({ top: top + distance * value, behavior: 'auto' });
     }, progress);
 
-    if (expectedScene) {
-      await expect(root).toHaveAttribute('data-active-scene', expectedScene);
-      const activeScene = root.locator(
-        `[data-story-scene="${expectedScene}"][data-active="true"]`,
-      );
+    await expect(root).toHaveAttribute('data-active-scene', expectedScene);
+    await page.evaluate(() => new Promise<void>(resolve => {
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    }));
+
+    const activeScene = root.locator(
+      `[data-story-scene="${expectedScene}"][data-active="true"]`,
+    );
+    if (expectedScene === 'operations' || expectedScene === 'finance') {
       await expect(activeScene.locator('[data-story-cascade-path]')).toHaveCount(1);
       await expect(activeScene.locator('[data-story-primary-pulse]')).toHaveCount(1);
     }
@@ -490,7 +560,10 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
         return opacity > 0.05 && rect.width > 0 && rect.height > 0;
       }).length,
     );
-    expect(visiblePrimaryPulses).toBe(1);
+    expect(
+      visiblePrimaryPulses,
+      `${expectedScene} exposes ${expectedPulseCount} primary pulse${expectedPulseCount === 1 ? '' : 's'}`,
+    ).toBe(expectedPulseCount);
   }
 
   const readCascadePulse = async (progress: number, scene: 'operations' | 'finance') => {
