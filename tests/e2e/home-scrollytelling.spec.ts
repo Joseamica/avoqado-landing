@@ -393,6 +393,31 @@ test('conecta Booking Widget con la reserva en un solo sentido', async ({ page }
   expect.soft(await readPulseDistance(target), 'reverse scroll keeps the visible pulse docked').toBeLessThanOrEqual(3);
   expect.soft(await readActiveTargetDistance(), 'reverse scroll keeps the visible route complete').toBeLessThanOrEqual(3);
 
+  const reverseEventState = await scene.locator('.story-channel-event').evaluate(element => {
+    const styles = getComputedStyle(element);
+    const matrix = new DOMMatrixReadOnly(styles.transform);
+    return {
+      opacity: Number.parseFloat(styles.opacity),
+      translateY: matrix.m42,
+    };
+  });
+  expect.soft(reverseEventState.opacity, 'reverse scroll keeps the destination revealed').toBeGreaterThanOrEqual(0.98);
+  expect.soft(Math.abs(reverseEventState.translateY), 'reverse scroll keeps the destination docked').toBeLessThanOrEqual(1);
+
+  await moveToLocalProgress(0.18);
+  await page.evaluate(() => new Promise<void>(resolve => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
+  const resetEventOpacity = await scene.locator('.story-channel-event').evaluate(element =>
+    Number.parseFloat(getComputedStyle(element).opacity));
+  expect.soft(resetEventOpacity, 'the hidden pre-scene zone resets the destination').toBeLessThanOrEqual(0.05);
+
+  await moveToLocalProgress(0.30);
+  await page.evaluate(() => new Promise<void>(resolve => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
+  expect.soft(await readPulseDistance(source), 'a later forward visit replays from the source').toBeLessThanOrEqual(3);
+
   const eventOpacity: number[] = [];
   for (const localProgress of [0.30, 0.54, 0.75]) {
     await moveToLocalProgress(localProgress);
@@ -463,6 +488,7 @@ test('mantiene el conector dentro del panel en todos los viewports', async ({ pa
       const activeEndpoint = activeToScreen(activePath.getPointAtLength(
         activePath.getTotalLength() * Math.min(Math.max(drawnLength, 0), 1),
       ));
+      const routeTopology = (path.getAttribute('d')?.match(/[MHVL]/g) ?? []).join('');
       return {
         visual: { top: visual.top, right: visual.right, bottom: visual.bottom, left: visual.left },
         ledger: { top: ledger.top, right: ledger.right, bottom: ledger.bottom, left: ledger.left },
@@ -474,6 +500,7 @@ test('mantiene el conector dentro del panel en todos los viewports', async ({ pa
         targetDistance: Math.hypot(end.x - targetCenter.x, end.y - targetCenter.y),
         pulseTargetDistance: Math.hypot(pulseCenter.x - targetCenter.x, pulseCenter.y - targetCenter.y),
         activeTargetDistance: Math.hypot(activeEndpoint.x - targetCenter.x, activeEndpoint.y - targetCenter.y),
+        routeTopology,
         documentWidth: document.documentElement.scrollWidth,
         viewportWidth: window.innerWidth,
       };
@@ -495,6 +522,10 @@ test('mantiene el conector dentro del panel en todos los viewports', async ({ pa
     expect.soft(geometry.targetDistance).toBeLessThanOrEqual(3);
     expect.soft(geometry.pulseTargetDistance, `${viewport.width}×${viewport.height} pulse reaches target`).toBeLessThanOrEqual(3);
     expect.soft(geometry.activeTargetDistance, `${viewport.width}×${viewport.height} active route reaches target`).toBeLessThanOrEqual(3);
+    expect.soft(
+      geometry.routeTopology,
+      `${viewport.width}×${viewport.height} route follows the rendered panel layout`,
+    ).toBe(viewport.width >= 640 ? 'MHVH' : 'MVH');
     expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth + 1);
     if (viewport.width < 1024) {
       await expect(page.locator('button[aria-label="Abrir chat de ayuda"]')).toBeHidden();

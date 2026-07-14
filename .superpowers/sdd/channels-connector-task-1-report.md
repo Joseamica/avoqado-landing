@@ -250,3 +250,113 @@ git diff --check
 Exit code: `0`; no output.
 
 Generated Playwright `test-results/.last-run.json` and RED failure artifacts were removed before staging. `/demo` and unrelated homepage scenes remain untouched.
+
+---
+
+## Final visual-coherence correction
+
+In-app visual QA found two remaining coherence defects: reverse scrolling kept the connector docked but hid its destination card, and the anchor-distance heuristic classified every side-by-side viewport as a stacked route. This wave keeps the entire relation monotonic and derives route topology from the rendered panel layout.
+
+### Implementation
+
+- `eventOpacity`, `eventY`, and `pulseScale` now use the same high-water `routeProgress` as pulse position and active-path length.
+- Connector opacity continues to use raw progress, so the complete relation fades before the high-water state resets invisibly at local progress `<= 0.20`.
+- Route measurement now compares the real ledger and event rectangles: non-overlapping horizontal panels use `M-H-V-H`; overlapping stacked panels use `M-V-H`.
+- The ledger and event panels are included in the existing `ResizeObserver`; the existing progress unsubscribe, pending-frame cancellation, observer disconnect, and delayed-font guard remain intact.
+- The reverse-scroll regression now asserts the destination remains at opacity `>= 0.98` and within `1px` of its revealed Y position, then verifies hidden reset and replay from the source.
+- The six-viewport contract now asserts `M-H-V-H` at `1440×900`, `910×691`, `787×701`, and `887×502`, plus `M-V-H` at `390×844` and `320×568`, without weakening any existing `<= 3px` geometry assertion.
+
+### TDD RED A: destination coherence on reverse scroll
+
+```bash
+PLAYWRIGHT_BASE_URL=http://127.0.0.1:4330 npm run test:e2e -- \
+  tests/e2e/home-scrollytelling.spec.ts \
+  --grep "conecta Booking Widget" \
+  --project chromium-desktop
+```
+
+Exit code: `1`.
+
+```text
+reverse scroll keeps the destination revealed
+Expected: >= 0.98
+Received: 0
+
+reverse scroll keeps the destination docked
+Expected: <= 1
+Received: 14
+
+1 failed
+```
+
+### TDD RED B: rendered route topology
+
+```bash
+PLAYWRIGHT_BASE_URL=http://127.0.0.1:4330 npm run test:e2e -- \
+  tests/e2e/home-scrollytelling.spec.ts \
+  --grep "mantiene el conector dentro" \
+  --project chromium-desktop
+```
+
+Exit code: `1`.
+
+For each side-by-side viewport (`1440×900`, `910×691`, `787×701`, `887×502`):
+
+```text
+route follows the rendered panel layout
+Expected: "MHVH"
+Received: "MVH"
+```
+
+The stacked mobile viewports already reported the intended `MVH` topology.
+
+### Targeted GREEN evidence
+
+The exact RED A command exited `0` with:
+
+```text
+1 passed (3.2s)
+```
+
+The exact RED B command exited `0` with:
+
+```text
+1 passed (2.7s)
+```
+
+### Full focused Channels GREEN evidence
+
+```bash
+PLAYWRIGHT_BASE_URL=http://127.0.0.1:4330 npm run test:e2e -- \
+  tests/e2e/home-scrollytelling.spec.ts \
+  --grep "conecta Booking Widget|mantiene la verdad crítica|mantiene un solo pulso|mantiene el conector dentro"
+```
+
+Exit code: `0`.
+
+```text
+Running 20 tests using 5 workers
+11 skipped
+9 passed (10.1s)
+```
+
+### Build and hygiene evidence
+
+```bash
+npm run build
+```
+
+Exit code: `0`.
+
+```text
+[build] Server built in 9.44s
+[build] Complete!
+```
+
+The build repeated only the existing Sentry auth/source-map and Astro prerender warnings.
+
+```bash
+git diff --check
+```
+
+Exit code: `0`; no output. Generated `test-results` artifacts were removed before staging. `/demo`, CSS, and all unrelated scenes remain untouched.

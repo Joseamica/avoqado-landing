@@ -94,19 +94,22 @@ export default function ChannelsScene({ scene, progress }: { scene: StoryScene; 
   });
   const routeProgress = useMotionValue(0);
   const [route, setRoute] = useState({ width: 1, height: 1, path: 'M 0 0', ready: false });
-  const eventOpacity = useTransform(progress, [0.46, 0.68], [0, 1]);
-  const eventY = useTransform(progress, [0.46, 0.70], [14, 0]);
+  const eventOpacity = useTransform(routeProgress, [0.46, 0.68], [0, 1]);
+  const eventY = useTransform(routeProgress, [0.46, 0.70], [14, 0]);
   const connectorOpacity = useTransform(progress, [0.24, 0.30], [0, 1]);
   const trackLength = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().pathLength));
   const pulseX = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().x));
   const pulseY = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().y));
-  const pulseScale = useTransform(progress, [0.30, 0.56, 0.62, 0.72], [0.9, 1, 1.16, 1]);
+  const pulseScale = useTransform(routeProgress, [0.30, 0.56, 0.62, 0.72], [0.9, 1, 1.16, 1]);
 
   useEffect(() => {
     const visual = visualRef.current;
     const source = sourceRef.current;
     const target = targetRef.current;
     if (!visual || !source || !target) return;
+    const ledger = source.closest<HTMLElement>('.story-channel-ledger');
+    const event = target.closest<HTMLElement>('.story-channel-event');
+    if (!ledger || !event) return;
 
     let active = true;
     const measure = () => {
@@ -121,7 +124,9 @@ export default function ChannelsScene({ scene, progress }: { scene: StoryScene; 
       };
       const start = centerWithinVisual(source);
       const destination = centerWithinVisual(target);
-      const sideBySide = destination.x - start.x > 80;
+      const ledgerRect = ledger.getBoundingClientRect();
+      const eventRect = event.getBoundingClientRect();
+      const sideBySide = eventRect.left >= ledgerRect.right - 1;
       const midpointX = start.x + (destination.x - start.x) / 2;
       const midpointY = start.y + (destination.y - start.y) / 2;
       const firstElbow = sideBySide
@@ -161,6 +166,8 @@ export default function ChannelsScene({ scene, progress }: { scene: StoryScene; 
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(visual);
+    observer.observe(ledger);
+    observer.observe(event);
     observer.observe(source);
     observer.observe(target);
     let frame: number | undefined;
