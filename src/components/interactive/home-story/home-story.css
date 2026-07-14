@@ -2,6 +2,30 @@
   opacity: 0 !important;
 }
 
+.story-channel-route-source {
+  left: -0.3125rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.story-channel-route-target {
+  left: 1rem;
+  top: -0.3125rem;
+}
+
+@media (min-width: 640px) {
+  .story-channel-route-source {
+    left: auto;
+    right: -0.3125rem;
+  }
+
+  .story-channel-route-target {
+    left: -0.3125rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
 @media (max-width: 639px) {
   .story-service-context-value {
     font-size: 0.625rem !important;

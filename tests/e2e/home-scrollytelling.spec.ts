@@ -215,7 +215,7 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
   await expect(chat).toBeHidden();
   await expectInsideViewport(channels.locator('.story-channel-event-venue'));
   const activeChannel = channels.locator('[data-channel-active]');
-  await expect(channels.locator('[data-story-primary-pulse]')).toHaveCount(0);
+  await expect(channels.locator('[data-story-primary-pulse]')).toHaveCount(1);
   await expect(activeChannel).toHaveCount(1);
   await expect(activeChannel).toContainText('Seleccionado');
   const channelSummary = channels.locator('[data-channel-route-summary]:visible');
@@ -253,7 +253,7 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
   await expect(alternateMerchant).toHaveCount(1);
 });
 
-test('confirma la reserva sin rutas ni puntos decorativos', async ({ page }, testInfo) => {
+test('conecta Booking Widget con la reserva en un solo sentido', async ({ page }, testInfo) => {
   test.skip(!['chromium-desktop', 'chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
   await page.goto('/');
 
@@ -270,14 +270,96 @@ test('confirma la reserva sin rutas ni puntos decorativos', async ({ page }, tes
   };
 
   const scene = root.locator('[data-story-scene="channels"][data-active="true"]');
-  await moveToLocalProgress(0.72);
-  await expect(scene.locator('[data-story-primary-pulse]')).toHaveCount(0);
+  const source = scene.locator('[data-channel-route-source]');
+  const target = scene.locator('[data-channel-route-target]');
+  const pulse = scene.locator('[data-story-primary-pulse]:visible');
+  const route = scene.locator('[data-channel-route-path]');
+  const activeRoute = scene.locator('[data-channel-route-active]');
+
+  await moveToLocalProgress(0.30);
+  await expect(source).toHaveCount(1);
+  await expect(target).toHaveCount(1);
+  await expect(pulse).toHaveCount(1);
+  await expect(route).toHaveCount(1);
+  await expect(activeRoute).toHaveCount(1);
   await expect(scene.locator('.story-channel-row span.h-px')).toHaveCount(0);
-  await expect(scene.locator('.story-channel-event > span.absolute')).toHaveCount(0);
-  await expect(scene.locator('.story-channel-visual > .pointer-events-none.absolute')).toHaveCount(0);
   await expect(scene.getByText('Ruta activa', { exact: true })).toHaveCount(0);
   await expect(scene.locator('[data-channel-route-summary]:visible'))
     .toHaveText('Booking Widget → Reserva confirmada');
+
+  const readPulseDistance = async (destination: typeof source) => pulse.evaluate(
+    (pulseElement, destinationElement) => {
+      const pulseRect = pulseElement.getBoundingClientRect();
+      const destinationRect = (destinationElement as HTMLElement).getBoundingClientRect();
+      return Math.hypot(
+        pulseRect.left + pulseRect.width / 2 - (destinationRect.left + destinationRect.width / 2),
+        pulseRect.top + pulseRect.height / 2 - (destinationRect.top + destinationRect.height / 2),
+      );
+    },
+    await destination.elementHandle(),
+  );
+
+  expect(await readPulseDistance(source)).toBeLessThanOrEqual(3);
+
+  const endpoints = await route.evaluate((routeElement, anchors) => {
+    const path = routeElement as SVGPathElement;
+    const matrix = path.getScreenCTM();
+    if (!matrix) throw new Error('Missing channel route matrix');
+    const toScreen = (point: DOMPoint) => ({
+      x: matrix.a * point.x + matrix.c * point.y + matrix.e,
+      y: matrix.b * point.x + matrix.d * point.y + matrix.f,
+    });
+    const center = (element: HTMLElement) => {
+      const rect = element.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    };
+    const start = toScreen(path.getPointAtLength(0));
+    const end = toScreen(path.getPointAtLength(path.getTotalLength()));
+    const sourceCenter = center(anchors.source as HTMLElement);
+    const targetCenter = center(anchors.target as HTMLElement);
+    return {
+      source: Math.hypot(start.x - sourceCenter.x, start.y - sourceCenter.y),
+      target: Math.hypot(end.x - targetCenter.x, end.y - targetCenter.y),
+    };
+  }, {
+    source: await source.elementHandle(),
+    target: await target.elementHandle(),
+  });
+  expect.soft(endpoints.source).toBeLessThanOrEqual(3);
+  expect.soft(endpoints.target).toBeLessThanOrEqual(3);
+
+  const targetDistances: number[] = [];
+  for (const localProgress of [0.30, 0.40, 0.52, 0.62]) {
+    await moveToLocalProgress(localProgress);
+    targetDistances.push(await readPulseDistance(target));
+    const activeEndpointDistance = await pulse.evaluate((pulseElement, routeElement) => {
+      const pulseRect = pulseElement.getBoundingClientRect();
+      const pulseCenter = {
+        x: pulseRect.left + pulseRect.width / 2,
+        y: pulseRect.top + pulseRect.height / 2,
+      };
+      const path = routeElement as SVGPathElement;
+      const matrix = path.getScreenCTM();
+      if (!matrix) throw new Error('Missing active channel route matrix');
+      const drawnLength = Number.parseFloat(getComputedStyle(path).strokeDasharray);
+      const point = path.getPointAtLength(path.getTotalLength() * Math.min(Math.max(drawnLength, 0), 1));
+      const endpoint = {
+        x: matrix.a * point.x + matrix.c * point.y + matrix.e,
+        y: matrix.b * point.x + matrix.d * point.y + matrix.f,
+      };
+      return Math.hypot(pulseCenter.x - endpoint.x, pulseCenter.y - endpoint.y);
+    }, await activeRoute.elementHandle());
+    expect.soft(activeEndpointDistance).toBeLessThanOrEqual(3);
+  }
+
+  for (let index = 1; index < targetDistances.length; index += 1) {
+    expect.soft(targetDistances[index]).toBeLessThanOrEqual(targetDistances[index - 1] + 3);
+  }
+
+  for (const localProgress of [0.62, 0.75, 0.88]) {
+    await moveToLocalProgress(localProgress);
+    expect.soft(await readPulseDistance(target)).toBeLessThanOrEqual(3);
+  }
 
   const eventOpacity: number[] = [];
   for (const localProgress of [0.30, 0.54, 0.75]) {
@@ -291,14 +373,17 @@ test('confirma la reserva sin rutas ni puntos decorativos', async ({ page }, tes
   expect(eventOpacity[2]).toBeGreaterThanOrEqual(0.98);
 });
 
-test('mantiene los canales dentro del panel en desktop compacto', async ({ page }, testInfo) => {
+test('mantiene el conector dentro del panel en todos los viewports', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-desktop');
   await page.goto('/');
 
   for (const viewport of [
+    { width: 1440, height: 900 },
     { width: 910, height: 691 },
     { width: 787, height: 701 },
     { width: 887, height: 502 },
+    { width: 390, height: 844 },
+    { width: 320, height: 568 },
   ]) {
     await page.setViewportSize(viewport);
     const root = page.locator('[data-story-mode="animated"]');
@@ -310,29 +395,65 @@ test('mantiene los canales dentro del panel en desktop compacto', async ({ page 
       window.scrollTo({ top: top + distance * value, behavior: 'auto' });
     }, globalProgress);
     await expect(root).toHaveAttribute('data-active-scene', 'channels');
+    await page.evaluate(() => new Promise<void>(resolve => {
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    }));
 
     const scene = root.locator('[data-story-scene="channels"][data-active="true"]');
     const geometry = await scene.evaluate(element => {
-      const visual = element.querySelector('.story-channel-visual')!.getBoundingClientRect();
-      const ledger = element.querySelector('.story-channel-ledger')!.getBoundingClientRect();
-      const event = element.querySelector('.story-channel-event')!.getBoundingClientRect();
+      const rect = (selector: string) => element.querySelector<HTMLElement>(selector)!.getBoundingClientRect();
+      const visual = rect('.story-channel-visual');
+      const ledger = rect('.story-channel-ledger');
+      const event = rect('.story-channel-event');
+      const source = rect('[data-channel-route-source]');
+      const target = rect('[data-channel-route-target]');
+      const pulse = rect('[data-story-primary-pulse]');
+      const path = element.querySelector<SVGPathElement>('[data-channel-route-path]')!;
+      const matrix = path.getScreenCTM();
+      if (!matrix) throw new Error('Missing responsive channel route matrix');
+      const toScreen = (point: DOMPoint) => ({
+        x: matrix.a * point.x + matrix.c * point.y + matrix.e,
+        y: matrix.b * point.x + matrix.d * point.y + matrix.f,
+      });
+      const center = (box: DOMRect) => ({ x: box.left + box.width / 2, y: box.top + box.height / 2 });
+      const start = toScreen(path.getPointAtLength(0));
+      const end = toScreen(path.getPointAtLength(path.getTotalLength()));
+      const sourceCenter = center(source);
+      const targetCenter = center(target);
       return {
         visual: { top: visual.top, right: visual.right, bottom: visual.bottom, left: visual.left },
         ledger: { top: ledger.top, right: ledger.right, bottom: ledger.bottom, left: ledger.left },
         event: { top: event.top, right: event.right, bottom: event.bottom, left: event.left },
+        sourceCenter,
+        targetCenter,
+        pulseCenter: center(pulse),
+        sourceDistance: Math.hypot(start.x - sourceCenter.x, start.y - sourceCenter.y),
+        targetDistance: Math.hypot(end.x - targetCenter.x, end.y - targetCenter.y),
         documentWidth: document.documentElement.scrollWidth,
         viewportWidth: window.innerWidth,
       };
     });
 
     for (const panel of [geometry.ledger, geometry.event]) {
-      expect.soft(panel.top, `${viewport.width}×${viewport.height} top`).toBeGreaterThanOrEqual(geometry.visual.top - 1);
-      expect.soft(panel.bottom, `${viewport.width}×${viewport.height} bottom`).toBeLessThanOrEqual(geometry.visual.bottom + 1);
-      expect.soft(panel.left, `${viewport.width}×${viewport.height} left`).toBeGreaterThanOrEqual(geometry.visual.left - 1);
-      expect.soft(panel.right, `${viewport.width}×${viewport.height} right`).toBeLessThanOrEqual(geometry.visual.right + 1);
+      expect.soft(panel.top).toBeGreaterThanOrEqual(geometry.visual.top - 1);
+      expect.soft(panel.bottom).toBeLessThanOrEqual(geometry.visual.bottom + 1);
+      expect.soft(panel.left).toBeGreaterThanOrEqual(geometry.visual.left - 1);
+      expect.soft(panel.right).toBeLessThanOrEqual(geometry.visual.right + 1);
     }
-    await expect(page.locator('button[aria-label="Abrir chat de ayuda"]')).toBeHidden();
+    for (const point of [geometry.sourceCenter, geometry.targetCenter, geometry.pulseCenter]) {
+      expect.soft(point.x).toBeGreaterThanOrEqual(geometry.visual.left - 1);
+      expect.soft(point.x).toBeLessThanOrEqual(geometry.visual.right + 1);
+      expect.soft(point.y).toBeGreaterThanOrEqual(geometry.visual.top - 1);
+      expect.soft(point.y).toBeLessThanOrEqual(geometry.visual.bottom + 1);
+    }
+    expect.soft(geometry.sourceDistance).toBeLessThanOrEqual(3);
+    expect.soft(geometry.targetDistance).toBeLessThanOrEqual(3);
     expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth + 1);
+    if (viewport.width < 1024) {
+      await expect(page.locator('button[aria-label="Abrir chat de ayuda"]')).toBeHidden();
+    } else {
+      await expect(page.locator('button[aria-label="Abrir chat de ayuda"]')).toBeVisible();
+    }
   }
 });
 
@@ -685,7 +806,7 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
   expect.soft(financeNodeDistance, 'finance pulse follows the visible node').toBeLessThanOrEqual(3);
 
   for (const [progress, expectedScene, expectedPulseCount] of [
-    [0.105, 'channels', 0],
+    [0.15, 'channels', 1],
     [0.205, 'service', 1],
     [0.305, 'payment', 0],
     [0.425, 'aftercare', 0],

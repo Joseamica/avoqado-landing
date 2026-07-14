@@ -1,4 +1,5 @@
-import { motion, useTransform, type MotionValue } from 'framer-motion';
+import { motion, useMotionValue, useTransform, type MotionValue } from 'framer-motion';
+import { useEffect, useRef, useState, type Ref } from 'react';
 import { CalendarDays, Globe2, MonitorSmartphone, Smartphone, type LucideIcon } from 'lucide-react';
 import SceneFrame from '../SceneFrame';
 import { STORY_FIXTURE } from '../story-fixture';
@@ -12,10 +13,39 @@ interface Channel {
   active?: boolean;
 }
 
-function ChannelRow({ channel, index, progress }: {
+interface RoutePoint { x: number; y: number }
+interface RouteGeometry { x: number[]; y: number[]; pathLength: number[] }
+
+const ROUTE_TIMES = [0, 0.30, 0.40, 0.52, 0.62, 1] as const;
+
+function interpolateRoute(progress: number, values: number[]) {
+  for (let index = 1; index < ROUTE_TIMES.length; index += 1) {
+    if (progress <= ROUTE_TIMES[index]) {
+      const start = ROUTE_TIMES[index - 1];
+      const end = ROUTE_TIMES[index];
+      const segmentProgress = (progress - start) / (end - start);
+      return values[index - 1] + (values[index] - values[index - 1]) * segmentProgress;
+    }
+  }
+  return values.at(-1) ?? 0;
+}
+
+function routeFractions(points: RoutePoint[]) {
+  const cumulative = [0];
+  for (let index = 1; index < points.length; index += 1) {
+    const previous = points[index - 1];
+    const current = points[index];
+    cumulative.push(cumulative[index - 1] + Math.hypot(current.x - previous.x, current.y - previous.y));
+  }
+  const total = Math.max(cumulative.at(-1) ?? 0, 1);
+  return cumulative.map(length => length / total);
+}
+
+function ChannelRow({ channel, index, progress, sourceRef }: {
   channel: Channel;
   index: number;
   progress: MotionValue<number>;
+  sourceRef?: Ref<HTMLSpanElement>;
 }) {
   const start = 0.06 + index * 0.08;
   const opacity = useTransform(progress, [start, start + 0.18], [0.35, 1]);
@@ -40,13 +70,105 @@ function ChannelRow({ channel, index, progress }: {
       <span className="text-right text-[0.58rem] font-medium uppercase tracking-[0.08em] text-current opacity-70 sm:text-[0.65rem]">
         {channel.result}
       </span>
+      {channel.active ? (
+        <span
+          ref={sourceRef}
+          data-channel-route-source
+          aria-hidden="true"
+          className="story-channel-route-source absolute z-20 size-2.5 rounded-full border border-avoqado-green/45 bg-neutral-50"
+        />
+      ) : null}
     </motion.li>
   );
 }
 
 export default function ChannelsScene({ scene, progress }: { scene: StoryScene; progress: MotionValue<number> }) {
-  const eventOpacity = useTransform(progress, [0.42, 0.66], [0, 1]);
-  const eventY = useTransform(progress, [0.42, 0.68], [14, 0]);
+  const visualRef = useRef<HTMLDivElement>(null);
+  const sourceRef = useRef<HTMLSpanElement>(null);
+  const targetRef = useRef<HTMLSpanElement>(null);
+  const geometry = useMotionValue<RouteGeometry>({
+    x: Array.from({ length: ROUTE_TIMES.length }, () => 0),
+    y: Array.from({ length: ROUTE_TIMES.length }, () => 0),
+    pathLength: Array.from({ length: ROUTE_TIMES.length }, () => 0),
+  });
+  const [route, setRoute] = useState({ width: 1, height: 1, path: 'M 0 0', ready: false });
+  const eventOpacity = useTransform(progress, [0.46, 0.68], [0, 1]);
+  const eventY = useTransform(progress, [0.46, 0.70], [14, 0]);
+  const connectorOpacity = useTransform(progress, [0.24, 0.30], [0, 1]);
+  const trackLength = useTransform(() => interpolateRoute(progress.get(), geometry.get().pathLength));
+  const pulseX = useTransform(() => interpolateRoute(progress.get(), geometry.get().x));
+  const pulseY = useTransform(() => interpolateRoute(progress.get(), geometry.get().y));
+  const pulseScale = useTransform(progress, [0.30, 0.56, 0.62, 0.72], [0.9, 1, 1.16, 1]);
+
+  useEffect(() => {
+    const visual = visualRef.current;
+    const source = sourceRef.current;
+    const target = targetRef.current;
+    if (!visual || !source || !target) return;
+
+    let active = true;
+    const measure = () => {
+      if (!active) return;
+      const visualRect = visual.getBoundingClientRect();
+      const centerWithinVisual = (element: HTMLElement): RoutePoint => {
+        const rect = element.getBoundingClientRect();
+        return {
+          x: rect.left - visualRect.left + rect.width / 2,
+          y: rect.top - visualRect.top + rect.height / 2,
+        };
+      };
+      const start = centerWithinVisual(source);
+      const destination = centerWithinVisual(target);
+      const sideBySide = destination.x - start.x > 80;
+      const midpointX = start.x + (destination.x - start.x) / 2;
+      const midpointY = start.y + (destination.y - start.y) / 2;
+      const firstElbow = sideBySide
+        ? { x: midpointX, y: start.y }
+        : { x: start.x, y: midpointY };
+      const secondElbow = sideBySide
+        ? { x: midpointX, y: destination.y }
+        : { x: start.x, y: destination.y };
+      const points = [start, start, firstElbow, secondElbow, destination, destination];
+      const width = Math.max(visual.clientWidth, 1);
+      const height = Math.max(visual.clientHeight, 1);
+
+      geometry.set({
+        x: points.map(point => point.x),
+        y: points.map(point => point.y),
+        pathLength: routeFractions(points),
+      });
+      const path = sideBySide
+        ? `M ${start.x} ${start.y} H ${midpointX} V ${destination.y} H ${destination.x}`
+        : `M ${start.x} ${start.y} V ${destination.y} H ${destination.x}`;
+      setRoute(current => (
+        current.width === width && current.height === height && current.path === path && current.ready
+          ? current
+          : { width, height, path, ready: true }
+      ));
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(visual);
+    observer.observe(source);
+    observer.observe(target);
+    let frame: number | undefined;
+    const stopMeasuringProgress = progress.on('change', () => {
+      if (frame !== undefined) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        frame = undefined;
+        measure();
+      });
+    });
+    void document.fonts?.ready.then(measure);
+    return () => {
+      active = false;
+      stopMeasuringProgress();
+      if (frame !== undefined) cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [geometry, progress]);
+
   const channels: Channel[] = [
     { label: 'Consumer App', detail: 'La clienta elige y reserva', result: 'Reserva', icon: Smartphone },
     { label: STORY_FIXTURE.selectedChannel, detail: 'Cita con depósito', result: 'Seleccionado', icon: CalendarDays, active: true },
@@ -59,7 +181,7 @@ export default function ChannelsScene({ scene, progress }: { scene: StoryScene; 
       scene={scene}
       accessibleSummary={`${STORY_FIXTURE.selectedChannel} → Reserva confirmada. Registra ${STORY_FIXTURE.service} para ${STORY_FIXTURE.customer} a las ${STORY_FIXTURE.appointmentTime} en ${STORY_FIXTURE.venue}. Consumer App, ecommerce, liga de pago, POS iOS, POS Android y POS Desktop son canales disponibles.`}
     >
-      <div className="story-channel-visual relative grid h-full min-h-0 content-center gap-3 sm:grid-cols-[minmax(260px,1.05fr)_minmax(220px,0.8fr)] sm:items-center sm:gap-8">
+      <div ref={visualRef} className="story-channel-visual relative grid h-full min-h-0 content-center gap-3 sm:grid-cols-[minmax(260px,1.05fr)_minmax(220px,0.8fr)] sm:items-center sm:gap-8">
         <div className="story-channel-ledger relative border-y border-black/10 bg-neutral-50">
           <p className="border-b border-black/8 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-neutral-400 sm:py-3 sm:text-[0.65rem]">
             Entradas de la operación
@@ -71,6 +193,7 @@ export default function ChannelsScene({ scene, progress }: { scene: StoryScene; 
                 channel={channel}
                 index={index}
                 progress={progress}
+                sourceRef={channel.active ? sourceRef : undefined}
               />
             ))}
           </ol>
@@ -80,6 +203,12 @@ export default function ChannelsScene({ scene, progress }: { scene: StoryScene; 
           className="story-channel-event relative border border-white/8 bg-neutral-950 px-4 py-3.5 text-neutral-50 shadow-[0_20px_60px_oklch(0.13_0.005_155_/_0.16)] sm:px-5 sm:py-5"
           style={{ opacity: eventOpacity, y: eventY }}
         >
+          <span
+            ref={targetRef}
+            data-channel-route-target
+            aria-hidden="true"
+            className="story-channel-route-target absolute z-20 size-2.5 rounded-full border border-avoqado-green/45 bg-neutral-950"
+          />
           <div className="story-channel-event-header flex items-center justify-between border-b border-white/10 pb-2.5 sm:pb-3">
             <span data-channel-route-summary className="text-[0.52rem] font-semibold uppercase leading-tight tracking-[0.08em] text-avoqado-green sm:text-[0.6rem]">
               {STORY_FIXTURE.selectedChannel} → Reserva confirmada
@@ -90,6 +219,32 @@ export default function ChannelsScene({ scene, progress }: { scene: StoryScene; 
           <p className="mt-1 text-xs text-neutral-300 sm:text-sm">{STORY_FIXTURE.customer}</p>
           <p className="story-channel-event-venue mt-2 w-fit text-[0.65rem] text-neutral-500 sm:mt-4 sm:text-xs">{STORY_FIXTURE.venue}</p>
         </motion.div>
+
+        {route.ready ? (
+          <>
+            <motion.svg
+              className="pointer-events-none absolute inset-0 z-20 size-full"
+              viewBox={`0 0 ${route.width} ${route.height}`}
+              preserveAspectRatio="none"
+              aria-hidden="true"
+              style={{ opacity: connectorOpacity }}
+            >
+              <motion.path data-channel-route-path d={route.path} fill="none"
+                stroke="oklch(0.38 0.006 155 / 0.24)" strokeWidth="1"
+                strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
+              <motion.path data-channel-route-active d={route.path} fill="none"
+                stroke="var(--color-avoqado-green)" strokeWidth="1"
+                strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke"
+                style={{ pathLength: trackLength }} />
+            </motion.svg>
+            <motion.span
+              data-story-primary-pulse
+              aria-hidden="true"
+              className="story-primary-pulse pointer-events-none absolute left-0 top-0 z-30 -ml-[0.3125rem] -mt-[0.3125rem] size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green outline outline-[4px] outline-avoqado-green/10"
+              style={{ x: pulseX, y: pulseY, scale: pulseScale, opacity: connectorOpacity }}
+            />
+          </>
+        ) : null}
       </div>
     </SceneFrame>
   );
