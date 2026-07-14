@@ -36,3 +36,6 @@ pnpm-debug.log*
 # Claude Code local settings (per-machine permissions)
 .claude/settings.local.json
 .claude/launch.json
+
+# graphify knowledge graph output
+graphify-out/
