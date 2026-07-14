@@ -17,6 +17,7 @@ interface RoutePoint { x: number; y: number }
 interface RouteGeometry { x: number[]; y: number[]; pathLength: number[] }
 
 const ROUTE_TIMES = [0, 0.30, 0.40, 0.52, 0.62, 1] as const;
+const ROUTE_RESET_PROGRESS = 0.20;
 
 function interpolateRoute(progress: number, values: number[]) {
   for (let index = 1; index < ROUTE_TIMES.length; index += 1) {
@@ -91,13 +92,14 @@ export default function ChannelsScene({ scene, progress }: { scene: StoryScene; 
     y: Array.from({ length: ROUTE_TIMES.length }, () => 0),
     pathLength: Array.from({ length: ROUTE_TIMES.length }, () => 0),
   });
+  const routeProgress = useMotionValue(0);
   const [route, setRoute] = useState({ width: 1, height: 1, path: 'M 0 0', ready: false });
   const eventOpacity = useTransform(progress, [0.46, 0.68], [0, 1]);
   const eventY = useTransform(progress, [0.46, 0.70], [14, 0]);
   const connectorOpacity = useTransform(progress, [0.24, 0.30], [0, 1]);
-  const trackLength = useTransform(() => interpolateRoute(progress.get(), geometry.get().pathLength));
-  const pulseX = useTransform(() => interpolateRoute(progress.get(), geometry.get().x));
-  const pulseY = useTransform(() => interpolateRoute(progress.get(), geometry.get().y));
+  const trackLength = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().pathLength));
+  const pulseX = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().x));
+  const pulseY = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().y));
   const pulseScale = useTransform(progress, [0.30, 0.56, 0.62, 0.72], [0.9, 1, 1.16, 1]);
 
   useEffect(() => {
@@ -147,13 +149,23 @@ export default function ChannelsScene({ scene, progress }: { scene: StoryScene; 
       ));
     };
 
+    const updateRouteProgress = (value: number) => {
+      if (value <= ROUTE_RESET_PROGRESS) {
+        routeProgress.set(0);
+      } else if (value > routeProgress.get()) {
+        routeProgress.set(value);
+      }
+    };
+
+    updateRouteProgress(progress.get());
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(visual);
     observer.observe(source);
     observer.observe(target);
     let frame: number | undefined;
-    const stopMeasuringProgress = progress.on('change', () => {
+    const stopMeasuringProgress = progress.on('change', value => {
+      updateRouteProgress(value);
       if (frame !== undefined) cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         frame = undefined;
@@ -167,7 +179,7 @@ export default function ChannelsScene({ scene, progress }: { scene: StoryScene; 
       if (frame !== undefined) cancelAnimationFrame(frame);
       observer.disconnect();
     };
-  }, [geometry, progress]);
+  }, [geometry, progress, routeProgress]);
 
   const channels: Channel[] = [
     { label: 'Consumer App', detail: 'La clienta elige y reserva', result: 'Reserva', icon: Smartphone },

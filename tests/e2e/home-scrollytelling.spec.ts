@@ -361,6 +361,38 @@ test('conecta Booking Widget con la reserva en un solo sentido', async ({ page }
     expect.soft(await readPulseDistance(target)).toBeLessThanOrEqual(3);
   }
 
+  const readActiveTargetDistance = async () => activeRoute.evaluate((routeElement, targetElement) => {
+    const path = routeElement as SVGPathElement;
+    const matrix = path.getScreenCTM();
+    if (!matrix) throw new Error('Missing reverse-scroll channel route matrix');
+    const drawnLength = Number.parseFloat(getComputedStyle(path).strokeDasharray);
+    const point = path.getPointAtLength(path.getTotalLength() * Math.min(Math.max(drawnLength, 0), 1));
+    const endpoint = {
+      x: matrix.a * point.x + matrix.c * point.y + matrix.e,
+      y: matrix.b * point.x + matrix.d * point.y + matrix.f,
+    };
+    const targetRect = (targetElement as HTMLElement).getBoundingClientRect();
+    const targetCenter = {
+      x: targetRect.left + targetRect.width / 2,
+      y: targetRect.top + targetRect.height / 2,
+    };
+    return Math.hypot(endpoint.x - targetCenter.x, endpoint.y - targetCenter.y);
+  }, await target.elementHandle());
+
+  await moveToLocalProgress(0.75);
+  await page.evaluate(() => new Promise<void>(resolve => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
+  expect.soft(await readPulseDistance(target), 'forward pulse docks at the reservation').toBeLessThanOrEqual(3);
+  expect.soft(await readActiveTargetDistance(), 'forward route reaches the reservation').toBeLessThanOrEqual(3);
+
+  await moveToLocalProgress(0.40);
+  await page.evaluate(() => new Promise<void>(resolve => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
+  expect.soft(await readPulseDistance(target), 'reverse scroll keeps the visible pulse docked').toBeLessThanOrEqual(3);
+  expect.soft(await readActiveTargetDistance(), 'reverse scroll keeps the visible route complete').toBeLessThanOrEqual(3);
+
   const eventOpacity: number[] = [];
   for (const localProgress of [0.30, 0.54, 0.75]) {
     await moveToLocalProgress(localProgress);
@@ -409,26 +441,39 @@ test('mantiene el conector dentro del panel en todos los viewports', async ({ pa
       const target = rect('[data-channel-route-target]');
       const pulse = rect('[data-story-primary-pulse]');
       const path = element.querySelector<SVGPathElement>('[data-channel-route-path]')!;
+      const activePath = element.querySelector<SVGPathElement>('[data-channel-route-active]')!;
       const matrix = path.getScreenCTM();
-      if (!matrix) throw new Error('Missing responsive channel route matrix');
+      const activeMatrix = activePath.getScreenCTM();
+      if (!matrix || !activeMatrix) throw new Error('Missing responsive channel route matrix');
       const toScreen = (point: DOMPoint) => ({
         x: matrix.a * point.x + matrix.c * point.y + matrix.e,
         y: matrix.b * point.x + matrix.d * point.y + matrix.f,
+      });
+      const activeToScreen = (point: DOMPoint) => ({
+        x: activeMatrix.a * point.x + activeMatrix.c * point.y + activeMatrix.e,
+        y: activeMatrix.b * point.x + activeMatrix.d * point.y + activeMatrix.f,
       });
       const center = (box: DOMRect) => ({ x: box.left + box.width / 2, y: box.top + box.height / 2 });
       const start = toScreen(path.getPointAtLength(0));
       const end = toScreen(path.getPointAtLength(path.getTotalLength()));
       const sourceCenter = center(source);
       const targetCenter = center(target);
+      const pulseCenter = center(pulse);
+      const drawnLength = Number.parseFloat(getComputedStyle(activePath).strokeDasharray);
+      const activeEndpoint = activeToScreen(activePath.getPointAtLength(
+        activePath.getTotalLength() * Math.min(Math.max(drawnLength, 0), 1),
+      ));
       return {
         visual: { top: visual.top, right: visual.right, bottom: visual.bottom, left: visual.left },
         ledger: { top: ledger.top, right: ledger.right, bottom: ledger.bottom, left: ledger.left },
         event: { top: event.top, right: event.right, bottom: event.bottom, left: event.left },
         sourceCenter,
         targetCenter,
-        pulseCenter: center(pulse),
+        pulseCenter,
         sourceDistance: Math.hypot(start.x - sourceCenter.x, start.y - sourceCenter.y),
         targetDistance: Math.hypot(end.x - targetCenter.x, end.y - targetCenter.y),
+        pulseTargetDistance: Math.hypot(pulseCenter.x - targetCenter.x, pulseCenter.y - targetCenter.y),
+        activeTargetDistance: Math.hypot(activeEndpoint.x - targetCenter.x, activeEndpoint.y - targetCenter.y),
         documentWidth: document.documentElement.scrollWidth,
         viewportWidth: window.innerWidth,
       };
@@ -448,6 +493,8 @@ test('mantiene el conector dentro del panel en todos los viewports', async ({ pa
     }
     expect.soft(geometry.sourceDistance).toBeLessThanOrEqual(3);
     expect.soft(geometry.targetDistance).toBeLessThanOrEqual(3);
+    expect.soft(geometry.pulseTargetDistance, `${viewport.width}×${viewport.height} pulse reaches target`).toBeLessThanOrEqual(3);
+    expect.soft(geometry.activeTargetDistance, `${viewport.width}×${viewport.height} active route reaches target`).toBeLessThanOrEqual(3);
     expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth + 1);
     if (viewport.width < 1024) {
       await expect(page.locator('button[aria-label="Abrir chat de ayuda"]')).toBeHidden();
