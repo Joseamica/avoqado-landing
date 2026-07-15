@@ -3,6 +3,7 @@ import { useScroll, useTransform } from 'framer-motion';
 import ChannelHandoff from './ChannelHandoff';
 import OpeningMosaic from './OpeningMosaic';
 import OpeningVideo from './OpeningVideo';
+import SharedTileLayer from './SharedTileLayer';
 
 export interface OpeningJourneyProps {
   variant?: 'mosaic-only' | 'channel-handoff';
@@ -14,7 +15,9 @@ export default function OpeningJourney({
   autoplay = true,
 }: OpeningJourneyProps) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [sharedTilesReady, setSharedTilesReady] = useState(false);
   const { scrollYProgress } = useScroll({
     target: rootRef,
     offset: ['start start', 'end end'],
@@ -29,6 +32,10 @@ export default function OpeningJourney({
     return () => media.removeEventListener('change', update);
   }, []);
 
+  useEffect(() => {
+    setSharedTilesReady(false);
+  }, [isMobile]);
+
   const channelProgress = useTransform(scrollYProgress, [0.76, 0.91], [0, 1], { clamp: true });
   const connectorProgress = useTransform(scrollYProgress, [0.84, 0.94], [0, 1], { clamp: true });
 
@@ -39,11 +46,29 @@ export default function OpeningJourney({
       data-opening-variant={variant}
       className={variant === 'mosaic-only' ? 'relative h-[180vh] bg-black' : 'relative h-[260vh] bg-black md:h-[300vh]'}
     >
-      <div className="sticky left-0 top-0 h-screen w-full overflow-hidden">
+      <div ref={stageRef} className="sticky left-0 top-0 h-screen w-full overflow-hidden">
         <OpeningVideo progress={scrollYProgress} isMobile={isMobile} autoplay={autoplay} />
-        <OpeningMosaic progress={scrollYProgress} variant={variant} isMobile={isMobile} />
+        <OpeningMosaic
+          progress={scrollYProgress}
+          variant={variant}
+          isMobile={isMobile}
+          handoffReady={variant === 'channel-handoff' ? sharedTilesReady : false}
+        />
         {variant === 'channel-handoff' ? (
-          <ChannelHandoff progress={channelProgress} connectorProgress={connectorProgress} />
+          <>
+            <ChannelHandoff
+              openingProgress={scrollYProgress}
+              progress={channelProgress}
+              connectorProgress={connectorProgress}
+              ready={sharedTilesReady}
+            />
+            <SharedTileLayer
+              rootRef={stageRef}
+              progress={scrollYProgress}
+              layoutKey={isMobile ? 'mobile' : 'desktop'}
+              onReadyChange={setSharedTilesReady}
+            />
+          </>
         ) : null}
       </div>
     </div>

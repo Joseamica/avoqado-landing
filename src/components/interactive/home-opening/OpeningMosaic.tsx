@@ -15,11 +15,9 @@ function OpeningTileCell({ tile, index, progress, mobile, handoff }: OpeningTile
   const start = 0.18 + index * 0.012;
   const scale = useTransform(progress, [start, Math.min(start + 0.22, 0.50)], [0.25, 1]);
   const entranceOpacity = useTransform(progress, [start, Math.min(start + 0.14, 0.47)], [0, 1]);
-  const exitOpacity = useTransform(
-    progress,
-    handoff && !tile.channelId ? [0.62, 0.72] : [0, 1],
-    handoff && !tile.channelId ? [1, 0] : [1, 1],
-  );
+  const exitRange = !handoff ? [0, 1] : tile.channelId ? [0.615, 0.625] : [0.62, 0.72];
+  const exitValues = !handoff ? [1, 1] : [1, 0];
+  const exitOpacity = useTransform(progress, exitRange, exitValues);
   const opacity = useTransform(() => Math.min(entranceOpacity.get(), exitOpacity.get()));
   const y = useTransform(progress, [start, Math.min(start + 0.22, 0.50)], [50, 0]);
   const position = mobile ? tile.mobile : tile.desktop;
@@ -42,13 +40,15 @@ export default function OpeningMosaic({
   progress,
   variant,
   isMobile,
+  handoffReady,
 }: {
   progress: MotionValue<number>;
   variant: OpeningVariant;
   isMobile: boolean;
+  handoffReady: boolean;
 }) {
   const gridOpacity = useTransform(progress, [0.18, 0.35], [0, 1]);
-  const handoff = variant === 'channel-handoff';
+  const handoff = variant === 'channel-handoff' && handoffReady;
   const copyEntranceOpacity = useTransform(progress, [0.35, 0.50], [0, 1]);
   const copyExitOpacity = useTransform(progress, handoff ? [0.62, 0.72] : [0, 1], handoff ? [1, 0] : [1, 1]);
   const copyOpacity = useTransform(() => Math.min(copyEntranceOpacity.get(), copyExitOpacity.get()));

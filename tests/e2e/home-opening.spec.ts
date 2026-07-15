@@ -89,3 +89,39 @@ test('restores the approved homepage opening and hands off directly to service',
   await expect(story.locator('[data-story-scene]')).toHaveCount(7);
   await expect(story.locator('[data-story-scene]').first()).toHaveAttribute('data-story-scene', 'service');
 });
+
+test('moves the four mosaic tiles continuously into their channel rows', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+
+  const distances: number[][] = [];
+  for (const progress of [0.64, 0.71, 0.80]) {
+    await scrollOpeningTo(page, progress);
+    distances.push(await page.locator('[data-shared-tile-overlay]').evaluateAll(nodes => nodes.map(node => {
+      const id = node.getAttribute('data-shared-tile-overlay');
+      const target = document.querySelector<HTMLElement>(`[data-shared-tile-target="${id}"]`)!;
+      const a = node.getBoundingClientRect();
+      const b = target.getBoundingClientRect();
+      return Math.hypot((a.left + a.width / 2) - (b.left + b.width / 2), (a.top + a.height / 2) - (b.top + b.height / 2));
+    })));
+  }
+
+  expect(distances).toHaveLength(3);
+  for (let index = 0; index < 4; index += 1) {
+    expect(distances[1][index]).toBeLessThan(distances[0][index]);
+    expect(distances[2][index]).toBeLessThan(distances[1][index]);
+    expect(distances[2][index]).toBeLessThanOrEqual(3);
+  }
+});
+
+test('restores the mosaic when scrolling the shared tiles backwards', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+  await scrollOpeningTo(page, 0.80);
+  await scrollOpeningTo(page, 0.61);
+
+  const selectedSources = page.locator('[data-shared-tile-source]');
+  await expect(selectedSources).toHaveCount(4);
+  for (const source of await selectedSources.all()) await expect(source).toBeVisible();
+  await expect(page.locator('[data-opening-channel-handoff]')).toBeHidden();
+});

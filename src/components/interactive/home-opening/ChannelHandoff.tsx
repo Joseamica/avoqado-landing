@@ -33,16 +33,35 @@ function routeFractions(points: RoutePoint[]) {
   return cumulative.map(length => length / total);
 }
 
-function ChannelRow({ channel, index, progress, sourceRef }: {
+function ChannelTarget({ channel, progress }: {
+  channel: (typeof OPENING_CHANNELS)[number];
+  progress: MotionValue<number>;
+}) {
+  const opacity = useTransform(progress, [0.795, 0.805], [0, 1]);
+  const tile = OPENING_TILES.find(item => item.id === channel.tileId)!;
+
+  return (
+    <motion.span
+      data-shared-tile-target={channel.id}
+      style={{ opacity }}
+      className="block h-10 w-12 overflow-hidden rounded-lg bg-neutral-200"
+      aria-hidden="true"
+    >
+      <img src={tile.src} alt="" className="size-full object-cover" />
+    </motion.span>
+  );
+}
+
+function ChannelRow({ channel, index, progress, openingProgress, sourceRef }: {
   channel: (typeof OPENING_CHANNELS)[number];
   index: number;
   progress: MotionValue<number>;
+  openingProgress: MotionValue<number>;
   sourceRef?: Ref<HTMLSpanElement>;
 }) {
   const start = 0.06 + index * 0.08;
   const opacity = useTransform(progress, [start, start + 0.18], [0.35, 1]);
   const x = useTransform(progress, [start, start + 0.18], [-14, 0]);
-  const tile = OPENING_TILES.find(item => item.id === channel.tileId)!;
 
   return (
     <motion.li
@@ -51,9 +70,7 @@ function ChannelRow({ channel, index, progress, sourceRef }: {
       style={{ opacity, x }}
       className={channel.active ? 'story-channel-row relative grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 bg-green-100/70 py-3 text-green-950' : 'story-channel-row relative grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-black/8 py-3 text-neutral-700'}
     >
-      <span data-shared-tile-target={channel.id} className="block h-10 w-12 overflow-hidden rounded-lg bg-neutral-200" aria-hidden="true">
-        <img src={tile.src} alt="" className="size-full object-cover" />
-      </span>
+      <ChannelTarget channel={channel} progress={openingProgress} />
       <strong>{channel.label}</strong>
       <span>{channel.result}</span>
       {channel.active ? <span ref={sourceRef} data-channel-route-source aria-hidden="true" className="story-channel-route-source absolute z-20 size-2.5 rounded-full border border-avoqado-green/45 bg-neutral-50" /> : null}
@@ -61,9 +78,11 @@ function ChannelRow({ channel, index, progress, sourceRef }: {
   );
 }
 
-export default function ChannelHandoff({ progress, connectorProgress }: {
+export default function ChannelHandoff({ openingProgress, progress, connectorProgress, ready }: {
+  openingProgress: MotionValue<number>;
   progress: MotionValue<number>;
   connectorProgress: MotionValue<number>;
+  ready: boolean;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const visualRef = useRef<HTMLDivElement>(null);
@@ -215,7 +234,10 @@ export default function ChannelHandoff({ progress, connectorProgress }: {
       data-story-scene="channels"
       data-active={channelActive && openingVisible ? 'true' : 'false'}
       aria-labelledby="opening-channels-title"
-      style={{ opacity: surfaceOpacity }}
+      style={{
+        opacity: ready ? surfaceOpacity : 0,
+        visibility: channelActive ? 'visible' : 'hidden',
+      }}
       className="pointer-events-none absolute inset-0 z-30 bg-neutral-50 text-neutral-950"
     >
       <div className="mx-auto grid h-full max-w-7xl content-center gap-6 px-5 pb-8 pt-[calc(var(--site-header-height)+1rem)] md:grid-cols-[minmax(220px,.7fr)_minmax(0,1.3fr)] md:items-center md:gap-10 md:px-10">
@@ -227,7 +249,14 @@ export default function ChannelHandoff({ progress, connectorProgress }: {
             </p>
             <ol>
               {OPENING_CHANNELS.map((channel, index) => (
-                <ChannelRow key={channel.id} channel={channel} index={index} progress={progress} sourceRef={channel.active ? sourceRef : undefined} />
+                <ChannelRow
+                  key={channel.id}
+                  channel={channel}
+                  index={index}
+                  progress={progress}
+                  openingProgress={openingProgress}
+                  sourceRef={channel.active ? sourceRef : undefined}
+                />
               ))}
             </ol>
           </div>
