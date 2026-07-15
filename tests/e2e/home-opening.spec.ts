@@ -188,6 +188,13 @@ test('keeps every opening checkpoint inside the viewport at all required sizes',
 
 test('docks all five shared tiles at every required viewport', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-desktop');
+  const expectedIds = [
+    'online-booking',
+    'online-store',
+    'payment-link',
+    'point-of-sale',
+    'payment-terminal',
+  ].sort();
   const viewports = [
     { width: 1440, height: 900 },
     { width: 910, height: 691 },
@@ -220,11 +227,25 @@ test('docks all five shared tiles at every required viewport', async ({ page }, 
           };
         }),
         targets: element.querySelectorAll('[data-shared-tile-target]').length,
+        sources: element.querySelectorAll('[data-shared-tile-source]').length,
+        ids: {
+          overlays: overlays.map(overlay => overlay.dataset.sharedTileOverlay!).sort(),
+          targets: [...element.querySelectorAll<HTMLElement>('[data-shared-tile-target]')]
+            .map(target => target.dataset.sharedTileTarget!)
+            .sort(),
+          sources: [...element.querySelectorAll<HTMLElement>('[data-shared-tile-source]')]
+            .map(source => source.dataset.sharedTileSource!)
+            .sort(),
+        },
         overflowX: document.documentElement.scrollWidth - window.innerWidth,
       };
     });
     expect(state.overlays).toHaveLength(5);
     expect(state.targets).toBe(5);
+    expect(state.sources).toBe(5);
+    expect(state.ids.overlays).toEqual(expectedIds);
+    expect(state.ids.targets).toEqual(expectedIds);
+    expect(state.ids.sources).toEqual(expectedIds);
     expect(state.overflowX).toBeLessThanOrEqual(1);
     for (const overlay of state.overlays) {
       expect.soft(overlay.sourcePresent, `${overlay.id} has a measured source`).toBe(true);
