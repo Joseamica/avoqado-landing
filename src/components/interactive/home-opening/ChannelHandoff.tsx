@@ -216,7 +216,7 @@ export default function ChannelHandoff({ progress, connectorProgress }: {
       data-active={channelActive && openingVisible ? 'true' : 'false'}
       aria-labelledby="opening-channels-title"
       style={{ opacity: surfaceOpacity }}
-      className="absolute inset-0 z-30 bg-neutral-50 text-neutral-950"
+      className="pointer-events-none absolute inset-0 z-30 bg-neutral-50 text-neutral-950"
     >
       <div className="mx-auto grid h-full max-w-7xl content-center gap-6 px-5 pb-8 pt-[calc(var(--site-header-height)+1rem)] md:grid-cols-[minmax(220px,.7fr)_minmax(0,1.3fr)] md:items-center md:gap-10 md:px-10">
         {channelHeading}

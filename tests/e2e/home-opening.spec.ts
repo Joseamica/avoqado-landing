@@ -31,6 +31,43 @@ test('keeps the legacy SquareHero as a video-to-mosaic-only variant', async ({ p
   await expect(page.getByText('Continue scrolling...')).toHaveCount(0);
 });
 
+test('keeps both opening calls to action hit-testable at progress zero', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+  await scrollOpeningTo(page, 0);
+
+  const video = page.locator('[data-opening-video]');
+  const whatsapp = video.getByRole('link', { name: 'Agenda por WhatsApp' });
+  const signup = video.getByRole('link', { name: 'Comienza gratis' });
+
+  await expect(whatsapp).toHaveAttribute(
+    'href',
+    '/wa?src=hero_demo&text=Hola%2C%20me%20interesa%20una%20demo%20de%20Avoqado%20de%2015%20minutos',
+  );
+  await expect(signup).toHaveAttribute('href', 'https://dashboard.avoqado.io/signup');
+
+  for (const cta of [whatsapp, signup]) {
+    expect(await cta.evaluate(element => {
+      const rect = element.getBoundingClientRect();
+      const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      return hit === element || element.contains(hit);
+    })).toBe(true);
+    await cta.evaluate(element => {
+      element.addEventListener('click', event => event.preventDefault(), { capture: true, once: true });
+    });
+  }
+
+  await page.evaluate(() => { window.dataLayer = []; });
+  await whatsapp.click({ modifiers: ['Meta'] });
+  await signup.click({ modifiers: ['Meta'] });
+
+  const events = await page.evaluate(() => window.dataLayer ?? []);
+  expect(events).toEqual(expect.arrayContaining([
+    expect.objectContaining({ event: 'demo_request', demo_type: 'whatsapp', location: 'hero' }),
+    expect.objectContaining({ event: 'get_started_click', source: 'hero' }),
+  ]));
+});
+
 test('restores the approved homepage opening and hands off directly to service', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-desktop');
   await page.goto('/?motion=full');
