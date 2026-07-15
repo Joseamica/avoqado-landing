@@ -30,3 +30,25 @@ test('keeps the legacy SquareHero as a video-to-mosaic-only variant', async ({ p
   await expect(opening.locator('[data-opening-channel-handoff]')).toHaveCount(0);
   await expect(page.getByText('Continue scrolling...')).toHaveCount(0);
 });
+
+test('restores the approved homepage opening and hands off directly to service', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+
+  const opening = page.locator('[data-opening-mode="animated"]');
+  await expect(opening).toHaveAttribute('data-opening-variant', 'channel-handoff');
+  await expect(opening.getByRole('heading', { level: 1 })).toContainText('Tu tienda, tu gym, tu estética');
+  await expect(opening.locator('[data-opening-tile]')).toHaveCount(17);
+
+  await scrollOpeningTo(page, 0.97);
+  const channels = opening.locator('[data-opening-channel-handoff]');
+  await expect(channels).toContainText('Tu cliente empieza como prefiera');
+  await expect(channels.locator('[data-channel-id]')).toHaveCount(4);
+  await expect(channels.locator('[data-channel-id="booking-widget"]')).toContainText('Seleccionado');
+  await expect(channels).toContainText('Booking Widget → Reserva confirmada');
+
+  await expect(page.getByText('Un cliente hace una cosa. Avoqado mueve todo lo demás.')).toHaveCount(0);
+  const story = page.locator('[data-story-mode="animated"]');
+  await expect(story.locator('[data-story-scene]')).toHaveCount(7);
+  await expect(story.locator('[data-story-scene]').first()).toHaveAttribute('data-story-scene', 'service');
+});

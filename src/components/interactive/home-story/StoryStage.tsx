@@ -3,9 +3,7 @@ import StoryLayer from './StoryLayer';
 import { STORY_SCENES, type StoryScene } from './story';
 import AftercareScene from './scenes/AftercareScene';
 import AiScene from './scenes/AiScene';
-import ChannelsScene from './scenes/ChannelsScene';
 import FinanceScene from './scenes/FinanceScene';
-import HeroScene from './scenes/HeroScene';
 import MultibranchScene from './scenes/MultibranchScene';
 import OperationsScene from './scenes/OperationsScene';
 import PaymentScene from './scenes/PaymentScene';
@@ -18,10 +16,6 @@ interface Props {
 
 function renderScene(scene: StoryScene, progress: MotionValue<number>) {
   switch (scene.id) {
-    case 'entry':
-      return <HeroScene scene={scene} progress={progress} />;
-    case 'channels':
-      return <ChannelsScene scene={scene} progress={progress} />;
     case 'service':
       return <ServiceScene scene={scene} progress={progress} />;
     case 'payment':

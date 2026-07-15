@@ -8,12 +8,19 @@ interface OpeningTileCellProps {
   index: number;
   progress: MotionValue<number>;
   mobile: boolean;
+  handoff: boolean;
 }
 
-function OpeningTileCell({ tile, index, progress, mobile }: OpeningTileCellProps) {
+function OpeningTileCell({ tile, index, progress, mobile, handoff }: OpeningTileCellProps) {
   const start = 0.18 + index * 0.012;
   const scale = useTransform(progress, [start, Math.min(start + 0.22, 0.50)], [0.25, 1]);
-  const opacity = useTransform(progress, [start, Math.min(start + 0.14, 0.47)], [0, 1]);
+  const entranceOpacity = useTransform(progress, [start, Math.min(start + 0.14, 0.47)], [0, 1]);
+  const exitOpacity = useTransform(
+    progress,
+    handoff && !tile.channelId ? [0.62, 0.72] : [0, 1],
+    handoff && !tile.channelId ? [1, 0] : [1, 1],
+  );
+  const opacity = useTransform(() => Math.min(entranceOpacity.get(), exitOpacity.get()));
   const y = useTransform(progress, [start, Math.min(start + 0.22, 0.50)], [50, 0]);
   const position = mobile ? tile.mobile : tile.desktop;
 
@@ -41,7 +48,10 @@ export default function OpeningMosaic({
   isMobile: boolean;
 }) {
   const gridOpacity = useTransform(progress, [0.18, 0.35], [0, 1]);
-  const copyOpacity = useTransform(progress, [0.35, 0.50], [0, 1]);
+  const handoff = variant === 'channel-handoff';
+  const copyEntranceOpacity = useTransform(progress, [0.35, 0.50], [0, 1]);
+  const copyExitOpacity = useTransform(progress, handoff ? [0.62, 0.72] : [0, 1], handoff ? [1, 0] : [1, 1]);
+  const copyOpacity = useTransform(() => Math.min(copyEntranceOpacity.get(), copyExitOpacity.get()));
 
   const renderCopy = () => (
     <motion.h2
@@ -70,6 +80,7 @@ export default function OpeningMosaic({
               index={index}
               progress={progress}
               mobile={isMobile}
+              handoff={handoff}
             />
           ))}
           <div className={isMobile ? 'relative z-20 col-span-3 col-start-1 row-start-3 flex items-center justify-center px-2' : 'relative z-20 col-span-9 col-start-1 row-start-3 flex items-center justify-center px-4'}>

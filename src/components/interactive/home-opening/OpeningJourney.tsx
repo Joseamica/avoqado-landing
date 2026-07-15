@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { useScroll } from 'framer-motion';
+import { useScroll, useTransform } from 'framer-motion';
+import ChannelHandoff from './ChannelHandoff';
 import OpeningMosaic from './OpeningMosaic';
 import OpeningVideo from './OpeningVideo';
 
@@ -28,6 +29,9 @@ export default function OpeningJourney({
     return () => media.removeEventListener('change', update);
   }, []);
 
+  const channelProgress = useTransform(scrollYProgress, [0.76, 0.91], [0, 1], { clamp: true });
+  const connectorProgress = useTransform(scrollYProgress, [0.84, 0.94], [0, 1], { clamp: true });
+
   return (
     <div
       ref={rootRef}
@@ -38,6 +42,9 @@ export default function OpeningJourney({
       <div className="sticky left-0 top-0 h-screen w-full overflow-hidden">
         <OpeningVideo progress={scrollYProgress} isMobile={isMobile} autoplay={autoplay} />
         <OpeningMosaic progress={scrollYProgress} variant={variant} isMobile={isMobile} />
+        {variant === 'channel-handoff' ? (
+          <ChannelHandoff progress={channelProgress} connectorProgress={connectorProgress} />
+        ) : null}
       </div>
     </div>
   );

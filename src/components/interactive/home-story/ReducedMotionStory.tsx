@@ -11,8 +11,7 @@ export default function ReducedMotionStory({ mode = 'static' }: Props) {
       data-story-mode={mode}
       className="bg-neutral-950 text-neutral-50"
     >
-      {STORY_SCENES.map((scene, index) => {
-        const Heading = index === 0 ? 'h1' : 'h2';
+      {STORY_SCENES.map(scene => {
         const light = scene.theme === 'light';
 
         return (
@@ -25,22 +24,13 @@ export default function ReducedMotionStory({ mode = 'static' }: Props) {
               <p className={light ? 'text-sm font-medium text-green-800' : 'text-sm font-medium text-avoqado-green'}>
                 {scene.eyebrow}
               </p>
-              <Heading className="mt-4 max-w-4xl text-4xl font-light tracking-[-0.04em] sm:text-5xl lg:text-7xl">
+              <h2 className="mt-4 max-w-4xl text-4xl font-light tracking-[-0.04em] sm:text-5xl lg:text-7xl">
                 {scene.title}
-              </Heading>
+              </h2>
               <p className={light ? 'mt-6 max-w-2xl text-lg text-neutral-600' : 'mt-6 max-w-2xl text-lg text-neutral-300'}>
                 {scene.body}
               </p>
-              {scene.id === 'channels' ? (
-                <div className="mt-6 max-w-md border-y border-black/10 py-4" data-channel-route-summary>
-                  <strong className="block text-lg font-semibold text-green-800">
-                    Booking Widget → Reserva confirmada
-                  </strong>
-                  <span className="mt-1 block text-sm text-neutral-600">
-                    La cita entra con cliente, servicio, hora y sucursal.
-                  </span>
-                </div>
-              ) : scene.id === 'payment' ? (
+              {scene.id === 'payment' ? (
                 <div className="mt-6 max-w-md border-y border-white/10 py-4" data-payment-route-summary>
                   <strong className="block text-lg font-semibold text-avoqado-green">
                     TPV → Operación diaria
@@ -50,18 +40,18 @@ export default function ReducedMotionStory({ mode = 'static' }: Props) {
                   </span>
                 </div>
               ) : null}
-              {index === 0 || scene.id === 'ai' ? (
+              {scene.id === 'ai' ? (
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <a
-                    href={`/wa?src=${index === 0 ? 'homepage_story_hero' : 'homepage_story_final'}&text=Hola%2C%20quiero%20ver%20Avoqado%20en%20mi%20negocio`}
+                    href="/wa?src=homepage_story_final&text=Hola%2C%20quiero%20ver%20Avoqado%20en%20mi%20negocio"
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => pushEvent('demo_request', { demo_type: 'whatsapp', location: index === 0 ? 'homepage_story_hero' : 'homepage_story_final' })}
+                    onClick={() => pushEvent('demo_request', { demo_type: 'whatsapp', location: 'homepage_story_final' })}
                     className={light ? 'inline-flex min-h-11 items-center justify-center rounded-full bg-neutral-950 px-6 text-sm font-semibold text-white' : 'inline-flex min-h-11 items-center justify-center rounded-full bg-neutral-50 px-6 text-sm font-semibold text-neutral-950'}
                   >
-                    {index === 0 ? 'Agenda por WhatsApp' : 'Quiero verlo en mi negocio'}
+                    Quiero verlo en mi negocio
                   </a>
-                  <a href="https://dashboard.avoqado.io/signup" onClick={event => trackGetStarted(event, index === 0 ? 'homepage_story_hero' : 'homepage_story_final')} className="inline-flex min-h-11 items-center justify-center rounded-full border border-current/20 px-6 text-sm font-semibold">Comienza gratis</a>
+                  <a href="https://dashboard.avoqado.io/signup" onClick={event => trackGetStarted(event, 'homepage_story_final')} className="inline-flex min-h-11 items-center justify-center rounded-full border border-current/20 px-6 text-sm font-semibold">Comienza gratis</a>
                 </div>
               ) : null}
             </div>

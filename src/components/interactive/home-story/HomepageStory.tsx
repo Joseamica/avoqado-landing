@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import AnimatedStory from './AnimatedStory';
 import ReducedMotionStory from './ReducedMotionStory';
+import OpeningJourney from '../home-opening/OpeningJourney';
+import ReducedMotionOpening from '../home-opening/ReducedMotionOpening';
 
 export default function HomepageStory() {
   const reduceMotion = useReducedMotion();
@@ -13,11 +15,24 @@ export default function HomepageStory() {
     setMounted(true);
   }, []);
 
+  const staticMode = mounted && reduceMotion && !forceMotion;
+
   return (
     <>
-      {mounted && reduceMotion && !forceMotion ? <ReducedMotionStory /> : <AnimatedStory />}
+      {staticMode ? (
+        <>
+          <ReducedMotionOpening />
+          <ReducedMotionStory />
+        </>
+      ) : (
+        <>
+          <OpeningJourney variant="channel-handoff" autoplay={mounted && (!reduceMotion || forceMotion)} />
+          <AnimatedStory />
+        </>
+      )}
       <noscript>
-        <style dangerouslySetInnerHTML={{ __html: '[data-story-mode="animated"] { display: none !important; }' }} />
+        <style dangerouslySetInnerHTML={{ __html: '[data-opening-mode="animated"], [data-story-mode="animated"] { display: none !important; }' }} />
+        <ReducedMotionOpening mode="noscript" />
         <ReducedMotionStory mode="noscript" />
       </noscript>
     </>

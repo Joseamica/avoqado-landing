@@ -1,4 +1,17 @@
-import { expect, test } from 'playwright/test';
+import { expect, test, type Page } from 'playwright/test';
+
+async function scrollOpeningTo(page: Page, progress: number) {
+  const opening = page.locator('[data-opening-mode="animated"]');
+  await opening.evaluate((element, value) => {
+    document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    const distance = element.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+  }, progress);
+  await page.evaluate(() => new Promise<void>(resolve => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
+}
 
 test('serves the homepage and keeps /demo independent', async ({ page }) => {
   await page.goto('/');
@@ -11,8 +24,6 @@ test('serves the homepage and keeps /demo independent', async ({ page }) => {
 });
 
 const sceneOrder = [
-  'entry',
-  'channels',
   'service',
   'payment',
   'aftercare',
@@ -44,13 +55,13 @@ test('cuenta la historia completa en orden causal', async ({ page }, testInfo) =
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
   await expect(page.getByRole('heading', { level: 1 })).toContainText(
-    'Un cliente hace una cosa',
+    'Tu tienda, tu gym, tu estética',
   );
   if (testInfo.project.name === 'chromium-nojs') {
     await expect(main.locator('h1:visible')).toHaveCount(1);
   }
   await expect(main).toContainText('Cuenta de cobro');
-  await expect(main.locator(`[data-story-mode="${mode}"] [data-story-scene="channels"]`))
+  await expect(main.locator(`[data-opening-mode="${mode}"]`))
     .toContainText('Booking Widget → Reserva confirmada');
   await expect(main.locator(`[data-story-mode="${mode}"] [data-story-scene="payment"]`))
     .toContainText('TPV → Operación diaria');
@@ -67,11 +78,11 @@ test('activa escenas al avanzar y retroceder el scroll', async ({ page }, testIn
   await expect(root).toBeVisible();
 
   for (const [progress, id] of [
-    [0.04, 'entry'],
-    [0.34, 'payment'],
-    [0.79, 'multibranch'],
-    [0.93, 'ai'],
-    [0.34, 'payment'],
+    [0.04, 'service'],
+    [0.22, 'payment'],
+    [0.80, 'multibranch'],
+    [0.94, 'ai'],
+    [0.22, 'payment'],
   ] as const) {
     await root.evaluate((element, value) => {
       const top = element.getBoundingClientRect().top + window.scrollY;
@@ -95,7 +106,7 @@ test('permite forzar la experiencia animada para previsualizarla', async ({ page
   await root.evaluate((element) => {
     const top = element.getBoundingClientRect().top + window.scrollY;
     const distance = element.scrollHeight - window.innerHeight;
-    window.scrollTo({ top: top + distance * 0.34, behavior: 'auto' });
+    window.scrollTo({ top: top + distance * 0.22, behavior: 'auto' });
   });
   await expect(root).toHaveAttribute('data-active-scene', 'payment');
 });
@@ -110,6 +121,14 @@ test('resuelve la geometría sticky contra el viewport', async ({ page }, testIn
   const navigation = page.locator('[data-site-navigation]');
   await expect(shell).toHaveCount(1);
   await expect(navigation).toBeVisible();
+  await root.evaluate(element => {
+    document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top, behavior: 'auto' });
+  });
+  await page.evaluate(() => new Promise<void>(resolve => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
 
   const geometry = await shell.evaluate((element, navigationElement) => {
     const shellStyles = getComputedStyle(element);
@@ -210,8 +229,9 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
     expect(metrics.fontSize).toBeGreaterThanOrEqual(minimumFontSize);
   };
 
-  await moveTo(0.155, 'channels');
-  const channels = root.locator('[data-story-scene="channels"][data-active="true"]');
+  const opening = page.locator('[data-opening-mode="animated"]');
+  await scrollOpeningTo(page, 0.90);
+  const channels = opening.locator('[data-opening-channel-handoff]');
   await expect(chat).toBeHidden();
   await expectInsideViewport(channels.locator('.story-channel-event-venue'));
   const activeChannel = channels.locator('[data-channel-active]');
@@ -222,7 +242,7 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
   await expect(channelSummary).toHaveText('Booking Widget → Reserva confirmada');
   await expectInsideViewport(channelSummary, 8);
 
-  await moveTo(0.255, 'service');
+  await moveTo(0.07, 'service');
   const service = root.locator('[data-story-scene="service"][data-active="true"]');
   await expect(chat).toBeVisible();
   await expectClearOfChat(service.getByText('Crema facial 50 ml', { exact: true }), 10);
@@ -233,7 +253,7 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
   });
   expect(railGap).toBeGreaterThanOrEqual(4);
 
-  await moveTo(0.365, 'payment');
+  await moveTo(0.22, 'payment');
   const payment = root.locator('[data-story-scene="payment"][data-active="true"]');
   await expect(chat).toBeHidden();
   await expectInsideViewport(payment.locator('[data-payment-selector]'));
@@ -257,19 +277,12 @@ test('conecta Booking Widget con la reserva en un solo sentido', async ({ page }
   test.skip(!['chromium-desktop', 'chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
   await page.goto('/');
 
-  const root = page.locator('[data-story-mode="animated"]');
+  const opening = page.locator('[data-opening-mode="animated"]');
   const moveToLocalProgress = async (localProgress: number) => {
-    const globalProgress = 0.10 + localProgress * (0.21 - 0.10);
-    await root.evaluate((element, value) => {
-      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
-      const top = element.getBoundingClientRect().top + window.scrollY;
-      const distance = element.scrollHeight - window.innerHeight;
-      window.scrollTo({ top: top + distance * value, behavior: 'auto' });
-    }, globalProgress);
-    await expect(root).toHaveAttribute('data-active-scene', 'channels');
+    await scrollOpeningTo(page, 0.84 + localProgress * (0.94 - 0.84));
   };
 
-  const scene = root.locator('[data-story-scene="channels"][data-active="true"]');
+  const scene = opening.locator('[data-opening-channel-handoff]');
   const source = scene.locator('[data-channel-route-source]');
   const target = scene.locator('[data-channel-route-target]');
   const pulse = scene.locator('[data-story-primary-pulse]:visible');
@@ -443,20 +456,13 @@ test('mantiene el conector dentro del panel en todos los viewports', async ({ pa
     { width: 320, height: 568 },
   ]) {
     await page.setViewportSize(viewport);
-    const root = page.locator('[data-story-mode="animated"]');
-    const globalProgress = 0.10 + 0.72 * (0.21 - 0.10);
-    await root.evaluate((element, value) => {
-      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
-      const top = element.getBoundingClientRect().top + window.scrollY;
-      const distance = element.scrollHeight - window.innerHeight;
-      window.scrollTo({ top: top + distance * value, behavior: 'auto' });
-    }, globalProgress);
-    await expect(root).toHaveAttribute('data-active-scene', 'channels');
+    const opening = page.locator('[data-opening-mode="animated"]');
+    await scrollOpeningTo(page, 0.84 + 0.72 * (0.94 - 0.84));
     await page.evaluate(() => new Promise<void>(resolve => {
       requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
     }));
 
-    const scene = root.locator('[data-story-scene="channels"][data-active="true"]');
+    const scene = opening.locator('[data-opening-channel-handoff]');
     const geometry = await scene.evaluate(element => {
       const rect = (selector: string) => element.querySelector<HTMLElement>(selector)!.getBoundingClientRect();
       const visual = rect('.story-channel-visual');
@@ -540,16 +546,9 @@ test('remide el origen después de un cambio de transform', async ({ page }, tes
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/?motion=full');
 
-  const root = page.locator('[data-story-mode="animated"]');
-  await root.evaluate((element, value) => {
-    document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
-    history.scrollRestoration = 'auto';
-    const top = element.getBoundingClientRect().top + window.scrollY;
-    const distance = element.scrollHeight - window.innerHeight;
-    window.scrollTo({ top: top + distance * value, behavior: 'auto' });
-  }, 0.10 + 0.52 * (0.21 - 0.10));
-  await expect(root).toHaveAttribute('data-active-scene', 'channels');
-  const scene = root.locator('[data-story-scene="channels"][data-active="true"]');
+  const opening = page.locator('[data-opening-mode="animated"]');
+  await scrollOpeningTo(page, 0.84 + 0.52 * (0.94 - 0.84));
+  const scene = opening.locator('[data-opening-channel-handoff]');
   const sourceRow = scene.locator('.story-channel-row[data-channel-active="true"]');
   await sourceRow.evaluate(element => {
     (element as HTMLElement).style.transform = 'translateX(-14px)';
@@ -587,7 +586,7 @@ test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, t
   await expect(root).toBeVisible();
 
   const moveToLocalProgress = async (localProgress: number) => {
-    const globalProgress = 0.20 + localProgress * (0.31 - 0.20);
+    const globalProgress = localProgress * 0.14;
     await root.evaluate((element, value) => {
       document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
       const top = element.getBoundingClientRect().top + window.scrollY;
@@ -727,7 +726,7 @@ test('explica el cobro sin rutas ni puntos decorativos', async ({ page }, testIn
 
   const root = page.locator('[data-story-mode="animated"]');
   const localProgress = 0.78;
-  const globalProgress = 0.30 + localProgress * (0.43 - 0.30);
+  const globalProgress = 0.13 + localProgress * (0.30 - 0.13);
   await root.evaluate((element, value) => {
     document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
     const top = element.getBoundingClientRect().top + window.scrollY;
@@ -756,7 +755,7 @@ test('mantiene el cobro dentro de su panel en desktop compacto', async ({ page }
     await page.setViewportSize(viewport);
     const root = page.locator('[data-story-mode="animated"]');
     const localProgress = 0.78;
-    const globalProgress = 0.30 + localProgress * (0.43 - 0.30);
+    const globalProgress = 0.13 + localProgress * (0.30 - 0.13);
     await root.evaluate((element, value) => {
       document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
       const top = element.getBoundingClientRect().top + window.scrollY;
@@ -804,7 +803,7 @@ test('explica el post-servicio sin rutas ni puntos decorativos', async ({ page }
   const root = page.locator('[data-story-mode="animated"]');
   await expect(root).toBeVisible();
   const localProgress = 0.78;
-  const globalProgress = 0.42 + localProgress * (0.53 - 0.42);
+  const globalProgress = 0.29 + localProgress * (0.44 - 0.29);
   await root.evaluate((element, value) => {
     document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
     const top = element.getBoundingClientRect().top + window.scrollY;
@@ -831,7 +830,7 @@ test('mantiene el post-servicio dentro de su panel en desktop compacto', async (
 
   const root = page.locator('[data-story-mode="animated"]');
   const localProgress = 0.78;
-  const globalProgress = 0.42 + localProgress * (0.53 - 0.42);
+  const globalProgress = 0.29 + localProgress * (0.44 - 0.29);
   await root.evaluate((element, value) => {
     document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
     const top = element.getBoundingClientRect().top + window.scrollY;
@@ -915,12 +914,12 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
   };
 
   const operationsNodeDistance = await readNodeAlignment(
-    0.52 + 0.54 * (0.67 - 0.52),
+    0.43 + 0.54 * (0.62 - 0.43),
     'operations',
     'Reorden sugerido',
   );
   const financeNodeDistance = await readNodeAlignment(
-    0.66 + 0.54 * (0.77 - 0.66),
+    0.61 + 0.54 * (0.75 - 0.61),
     'finance',
     'Liquidación esperada',
   );
@@ -928,12 +927,11 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
   expect.soft(financeNodeDistance, 'finance pulse follows the visible node').toBeLessThanOrEqual(3);
 
   for (const [progress, expectedScene, expectedPulseCount] of [
-    [0.15, 'channels', 1],
-    [0.205, 'service', 1],
-    [0.305, 'payment', 0],
-    [0.425, 'aftercare', 0],
-    [0.645, 'operations', 1],
-    [0.75, 'finance', 1],
+    [0.01, 'service', 1],
+    [0.14, 'payment', 0],
+    [0.30, 'aftercare', 0],
+    [0.59, 'operations', 1],
+    [0.73, 'finance', 1],
   ] as const) {
     await root.evaluate((element, value) => {
       document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
@@ -998,14 +996,14 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
     });
   };
 
-  const routedPulse = await readCascadePulse(0.595, 'operations');
+  const routedPulse = await readCascadePulse(0.525, 'operations');
   expect.soft(routedPulse.inlineTop).toBe('');
   expect.soft(routedPulse.inlineTransform).toContain('translateX(');
   expect.soft(routedPulse.inlineTransform).toContain('translateY(');
   expect.soft(routedPulse.boxShadow).toBe('none');
 
-  const operationsDock = await readCascadePulse(0.659, 'operations');
-  const financeDock = await readCascadePulse(0.662, 'finance');
+  const operationsDock = await readCascadePulse(0.606, 'operations');
+  const financeDock = await readCascadePulse(0.613, 'finance');
   expect.soft(operationsDock.inlineTop).toBe('');
   expect.soft(financeDock.inlineTop).toBe('');
   expect(
@@ -1056,8 +1054,8 @@ test('mantiene una venta coherente desde operación hasta contabilidad', async (
 
   if (['chromium-mobile', 'chromium-small'].includes(testInfo.project.name)) {
     for (const [progress, scene] of [
-      [0.645, 'operations'],
-      [0.75, 'finance'],
+      [0.59, 'operations'],
+      [0.73, 'finance'],
     ] as const) {
       await root.evaluate((element, value) => {
         document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
