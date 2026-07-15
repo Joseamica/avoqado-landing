@@ -251,7 +251,9 @@ test('docks all five shared tiles at every required viewport', async ({ page }, 
     await page.setViewportSize(viewport);
     await page.goto('/?motion=full');
     await scrollOpeningTo(page, 0.54);
-    const state = await page.locator('[data-opening-mode="animated"]').evaluate(element => {
+    const opening = page.locator('[data-opening-mode="animated"]');
+    await expect(opening.locator('[data-shared-tile-overlay]')).toHaveCount(5);
+    const state = await opening.evaluate(element => {
       const overlays = [...element.querySelectorAll<HTMLElement>('[data-shared-tile-overlay]')];
       return {
         overlays: overlays.map(overlay => {
