@@ -39,7 +39,6 @@ export interface OpeningChannel {
   label: string;
   result: string;
   tileId: OpeningTile['id'];
-  active: boolean;
 }
 
 export const OPENING_TILES: readonly OpeningTile[] = [
@@ -63,9 +62,9 @@ export const OPENING_TILES: readonly OpeningTile[] = [
 ];
 
 export const OPENING_CHANNELS: readonly OpeningChannel[] = [
-  { id: 'online-booking', label: 'Reservación en línea', result: 'Reserva confirmada', tileId: 'tile-7', active: true },
-  { id: 'online-store', label: 'Tienda en línea', result: 'Pedido recibido', tileId: 'tile-12', active: false },
-  { id: 'payment-link', label: 'Liga de pago', result: 'Pago recibido', tileId: 'tile-2', active: false },
-  { id: 'point-of-sale', label: 'Punto de venta', result: 'Venta registrada', tileId: 'tile-15', active: false },
-  { id: 'payment-terminal', label: 'Terminal de cobro', result: 'Cobro aprobado', tileId: 'tile-10', active: false },
+  { id: 'online-booking', label: 'Reservación en línea', result: 'Reserva confirmada', tileId: 'tile-7' },
+  { id: 'online-store', label: 'Tienda en línea', result: 'Pedido recibido', tileId: 'tile-12' },
+  { id: 'payment-link', label: 'Liga de pago', result: 'Pago recibido', tileId: 'tile-2' },
+  { id: 'point-of-sale', label: 'Punto de venta', result: 'Venta registrada', tileId: 'tile-15' },
+  { id: 'payment-terminal', label: 'Terminal de cobro', result: 'Cobro aprobado', tileId: 'tile-10' },
 ] as const;

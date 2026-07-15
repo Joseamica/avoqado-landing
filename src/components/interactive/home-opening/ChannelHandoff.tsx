@@ -66,14 +66,14 @@ function ChannelRow({ channel, index, progress, openingProgress, sourceRef }: {
   return (
     <motion.li
       data-channel-id={channel.id}
-      data-channel-active={channel.active ? 'true' : undefined}
+      data-channel-active={channel.id === 'online-booking' ? 'true' : undefined}
       style={{ opacity, x }}
-      className={channel.active ? 'story-channel-row relative grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 bg-green-100/70 py-3 text-green-950' : 'story-channel-row relative grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-black/8 py-3 text-neutral-700'}
+      className={channel.id === 'online-booking' ? 'story-channel-row relative grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 bg-green-100/70 py-3 text-green-950' : 'story-channel-row relative grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-black/8 py-3 text-neutral-700'}
     >
       <ChannelTarget channel={channel} progress={openingProgress} />
       <strong>{channel.label}</strong>
       <span>{channel.result}</span>
-      {channel.active ? <span ref={sourceRef} data-channel-route-source aria-hidden="true" className="story-channel-route-source absolute z-20 size-2.5 rounded-full border border-avoqado-green/45 bg-neutral-50" /> : null}
+      {channel.id === 'online-booking' ? <span ref={sourceRef} data-channel-route-source aria-hidden="true" className="story-channel-route-source absolute z-20 size-2.5 rounded-full border border-avoqado-green/45 bg-neutral-50" /> : null}
     </motion.li>
   );
 }
@@ -220,7 +220,7 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
   }, [connectorProgress, geometry, routeProgress]);
 
   const surfaceOpacity = useTransform(progress, [0, 0.12], [0, 1]);
-  const activeChannel = OPENING_CHANNELS.find(channel => channel.active)!;
+  const activeChannel = OPENING_CHANNELS.find(channel => channel.id === 'online-booking')!;
   const channelHeading = (
     <div>
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-800">UNA SOLA OPERACIÓN</p>
@@ -261,7 +261,7 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
                   index={index}
                   progress={progress}
                   openingProgress={openingProgress}
-                  sourceRef={channel.active ? sourceRef : undefined}
+                  sourceRef={channel.id === 'online-booking' ? sourceRef : undefined}
                 />
               ))}
             </ol>

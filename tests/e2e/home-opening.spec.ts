@@ -280,6 +280,27 @@ test('keeps the same opening truth without JavaScript', async ({ page }, testInf
   await expect(opening).toContainText('Reservación en línea → Reserva confirmada');
 });
 
+test('exposes the three concise operation results in static modes', async ({ page }, testInfo) => {
+  test.skip(!['chromium-reduced', 'chromium-nojs'].includes(testInfo.project.name));
+  await page.goto('/');
+
+  const mode = testInfo.project.name === 'chromium-reduced' ? 'static' : 'noscript';
+  const opening = page.locator(`[data-opening-mode="${mode}"]`);
+
+  for (const [id, summary, primary, detail, context] of [
+    ['online-booking', 'Reservación en línea → Reserva confirmada', 'Facial hidratante', 'María G. · 11:30', 'Sucursal Centro'],
+    ['payment-link', 'Liga de pago → Pago recibido', '$1,250', 'Liga enviada por WhatsApp', 'Pago con tarjeta'],
+    ['payment-terminal', 'Terminal de cobro → Cobro aprobado', '$348', 'Pago sin contacto', 'Terminal física · Sucursal Centro'],
+  ] as const) {
+    const result = opening.locator(`[data-channel-static-result="${id}"]`);
+    await expect(result).toHaveCount(1);
+    await expect(result).toContainText(summary);
+    await expect(result).toContainText(primary);
+    await expect(result).toContainText(detail);
+    await expect(result).toContainText(context);
+  }
+});
+
 test('uses understandable operation entry names in every rendering mode', async ({ page }, testInfo) => {
   await page.goto(testInfo.project.name === 'chromium-desktop' ? '/?motion=full' : '/');
   const mode = testInfo.project.name === 'chromium-reduced'

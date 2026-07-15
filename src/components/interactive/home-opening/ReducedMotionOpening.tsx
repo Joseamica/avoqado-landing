@@ -1,9 +1,11 @@
 import { pushEvent, trackGetStarted } from '../../../lib/gtm';
 import { OPENING_CHANNELS, OPENING_TILES } from './opening-tiles';
+import {
+  OPENING_CHANNEL_DEMONSTRATIONS,
+  openingChannelById,
+} from './opening-channel-results';
 
 export default function ReducedMotionOpening({ mode = 'static' }: { mode?: 'static' | 'noscript' }) {
-  const activeChannel = OPENING_CHANNELS.find(channel => channel.active)!;
-
   return (
     <section data-opening-mode={mode} className="bg-neutral-950 text-neutral-50">
       <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-24 text-center">
@@ -41,11 +43,24 @@ export default function ReducedMotionOpening({ mode = 'static' }: { mode?: 'stat
           <ol className="mt-8 border-y border-black/10">
             {OPENING_CHANNELS.map(channel => <li key={channel.id} data-channel-id={channel.id} className="flex items-center justify-between border-b border-black/8 py-3 last:border-b-0"><strong>{channel.label}</strong><span>{channel.result}</span></li>)}
           </ol>
-          <div data-channel-route-summary className="mt-6 border-y border-black/10 py-4">
-            <strong className="block text-lg font-semibold text-green-800">
-              {activeChannel.label} → {activeChannel.result}
-            </strong>
-            <span className="mt-1 block text-sm text-neutral-600">La cita entra con cliente, servicio, hora y sucursal.</span>
+          <div data-channel-static-results className="mt-6 grid gap-3 sm:grid-cols-3">
+            {OPENING_CHANNEL_DEMONSTRATIONS.map(demonstration => {
+              const channel = openingChannelById(demonstration.channelId);
+              return (
+                <article
+                  key={demonstration.channelId}
+                  data-channel-static-result={demonstration.channelId}
+                  className="border border-black/10 bg-white p-4"
+                >
+                  <strong className="block text-sm font-semibold text-green-800">
+                    {channel.label} → {channel.result}
+                  </strong>
+                  <span className="mt-3 block text-lg font-medium">{demonstration.primary}</span>
+                  <span className="mt-1 block text-sm text-neutral-600">{demonstration.detail}</span>
+                  <span className="mt-2 block text-xs text-neutral-500">{demonstration.context}</span>
+                </article>
+              );
+            })}
           </div>
         </div>
       </div>
