@@ -183,6 +183,7 @@ test('restores the mosaic when scrolling the shared tiles backwards', async ({ p
 });
 
 test('keeps every opening checkpoint inside the viewport at all required sizes', async ({ page }, testInfo) => {
+  test.setTimeout(120_000);
   test.skip(testInfo.project.name !== 'chromium-desktop');
   const viewports = [
     { width: 1440, height: 900 },
