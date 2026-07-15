@@ -94,6 +94,7 @@ test('moves the four mosaic tiles continuously into their channel rows', async (
   test.skip(testInfo.project.name !== 'chromium-desktop');
   await page.goto('/?motion=full');
 
+  await expect(page.locator('[data-shared-tile-overlay]')).toHaveCount(4);
   const distances: number[][] = [];
   for (const progress of [0.64, 0.71, 0.80]) {
     await scrollOpeningTo(page, progress);
@@ -122,8 +123,57 @@ test('restores the mosaic when scrolling the shared tiles backwards', async ({ p
 
   const selectedSources = page.locator('[data-shared-tile-source]');
   await expect(selectedSources).toHaveCount(4);
-  for (const source of await selectedSources.all()) await expect(source).toBeVisible();
+  for (const source of await selectedSources.all()) {
+    await expect(source).toBeVisible();
+    expect(Number.parseFloat(await source.evaluate(element => getComputedStyle(element).opacity))).toBeCloseTo(1, 2);
+  }
   await expect(page.locator('[data-opening-channel-handoff]')).toBeHidden();
+});
+
+test('keeps every opening checkpoint inside the viewport at all required sizes', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  const viewports = [
+    { width: 1440, height: 900 },
+    { width: 910, height: 691 },
+    { width: 787, height: 701 },
+    { width: 887, height: 502 },
+    { width: 390, height: 844 },
+    { width: 320, height: 568 },
+  ];
+  const checkpoints = [0.02, 0.55, 0.70, 0.82, 0.97];
+  const errors: string[] = [];
+  page.on('console', message => {
+    if (message.type() === 'error') errors.push(message.text());
+  });
+  page.on('pageerror', error => errors.push(error.message));
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await page.goto('/?motion=full');
+    for (const progress of checkpoints) {
+      await scrollOpeningTo(page, progress);
+      const geometry = await page.locator('[data-opening-mode="animated"] > div').evaluate(element => {
+        const rects = [...element.querySelectorAll<HTMLElement>('[data-opening-tile], [data-shared-tile-overlay], [data-opening-channel-handoff], [data-channel-route-source], [data-channel-route-target]')]
+          .filter(node => {
+            const style = getComputedStyle(node);
+            return style.display !== 'none' && Number.parseFloat(style.opacity || '1') > 0.05;
+          })
+          .map(node => node.getBoundingClientRect());
+        return {
+          overflowX: document.documentElement.scrollWidth - window.innerWidth,
+          outside: rects.filter(rect => rect.left < -3 || rect.right > window.innerWidth + 3 || rect.top < -3 || rect.bottom > window.innerHeight + 3).length,
+        };
+      });
+      expect(geometry.overflowX).toBeLessThanOrEqual(1);
+      expect(geometry.outside).toBe(0);
+      await testInfo.attach(`opening-${viewport.width}x${viewport.height}-${Math.round(progress * 100)}`, {
+        body: await page.screenshot({ fullPage: false }),
+        contentType: 'image/png',
+      });
+    }
+  }
+
+  expect(errors).toEqual([]);
 });
 
 test('uses a static semantic opening for reduced motion', async ({ page }, testInfo) => {
