@@ -4,6 +4,15 @@
 **Status:** Approved in conversation on 2026-07-15  
 **Scope:** Animated homepage opening channel handoff, its reduced-motion/no-JavaScript truth, and related acceptance tests
 
+## Relationship to earlier specifications
+
+This document supersedes only the single-reservation restrictions in
+`2026-07-14-channels-measured-connector-design.md` and
+`2026-07-15-homepage-copy-five-entry-handoff-design.md`: the reservation is no longer the
+only animated example, and the handoff may now retarget the one measured route twice. The
+existing measured-anchor architecture, five public entries, moving mosaic tiles, copy,
+responsive geometry requirements, fallbacks, and later-scene boundaries remain in force.
+
 ## Goal
 
 Make the final opening screen prove that several kinds of customer activity arrive in the
