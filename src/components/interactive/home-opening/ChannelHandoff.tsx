@@ -8,7 +8,7 @@ interface RoutePoint { x: number; y: number }
 interface RouteGeometry { x: number[]; y: number[]; pathLength: number[] }
 
 const ROUTE_TIMES = [0, 0.30, 0.40, 0.52, 0.62, 1] as const;
-const ROUTE_RESET_PROGRESS = 0.20;
+const ROUTE_RESET_PROGRESS = 0.24;
 
 function interpolateRoute(progress: number, values: number[]) {
   for (let index = 1; index < ROUTE_TIMES.length; index += 1) {
@@ -97,9 +97,10 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
   const [route, setRoute] = useState({ width: 1, height: 1, path: 'M 0 0', ready: false });
   const [channelActive, setChannelActive] = useState(false);
   const openingVisible = useInView(sectionRef, { amount: 0.1 });
-  const eventOpacity = useTransform(routeProgress, [0.46, 0.68], [0, 1]);
+  const routeEventOpacity = useTransform(routeProgress, [0.46, 0.68], [0, 1]);
   const eventY = useTransform(routeProgress, [0.46, 0.70], [14, 0]);
   const connectorOpacity = useTransform(connectorProgress, [0.24, 0.30], [0, 1]);
+  const eventOpacity = useTransform(() => Math.min(routeEventOpacity.get(), connectorOpacity.get()));
   const trackLength = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().pathLength));
   const pulseX = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().x));
   const pulseY = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().y));

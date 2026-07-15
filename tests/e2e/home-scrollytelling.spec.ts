@@ -404,30 +404,75 @@ test('conecta Booking Widget con la reserva en un solo sentido', async ({ page }
   expect.soft(await readPulseDistance(target), 'forward pulse docks at the reservation').toBeLessThanOrEqual(3);
   expect.soft(await readActiveTargetDistance(), 'forward route reaches the reservation').toBeLessThanOrEqual(3);
 
-  await moveToLocalProgress(0.40);
-  await page.evaluate(() => new Promise<void>(resolve => {
-    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-  }));
-  expect.soft(await readPulseDistance(target), 'reverse scroll keeps the visible pulse docked').toBeLessThanOrEqual(3);
-  expect.soft(await readActiveTargetDistance(), 'reverse scroll keeps the visible route complete').toBeLessThanOrEqual(3);
+  const reverseSamples: Array<{
+    localProgress: number;
+    eventOpacity: number;
+    eventTranslateY: number;
+    routeOpacity: number;
+    pulseOpacity: number;
+    pulseTargetDistance: number;
+    activeTargetDistance: number;
+  }> = [];
 
-  const reverseEventState = await scene.locator('.story-channel-event').evaluate(element => {
-    const styles = getComputedStyle(element);
-    const matrix = new DOMMatrixReadOnly(styles.transform);
-    return {
-      opacity: Number.parseFloat(styles.opacity),
-      translateY: matrix.m42,
-    };
-  });
-  expect.soft(reverseEventState.opacity, 'reverse scroll keeps the destination revealed').toBeGreaterThanOrEqual(0.98);
-  expect.soft(Math.abs(reverseEventState.translateY), 'reverse scroll keeps the destination docked').toBeLessThanOrEqual(1);
+  for (const localProgress of [0.35, 0.30, 0.29, 0.27, 0.25, 0.24, 0.21, 0.18]) {
+    await moveToLocalProgress(localProgress);
+    await page.evaluate(() => new Promise<void>(resolve => {
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    }));
 
-  await moveToLocalProgress(0.18);
-  await page.evaluate(() => new Promise<void>(resolve => {
-    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-  }));
-  const resetEventOpacity = await scene.locator('.story-channel-event').evaluate(element =>
-    Number.parseFloat(getComputedStyle(element).opacity));
+    const eventState = await scene.locator('.story-channel-event').evaluate(element => {
+      const styles = getComputedStyle(element);
+      return {
+        opacity: Number.parseFloat(styles.opacity),
+        translateY: new DOMMatrixReadOnly(styles.transform).m42,
+      };
+    });
+    const routeOpacity = await activeRoute.evaluate(element =>
+      Number.parseFloat(getComputedStyle(element.parentElement!).opacity));
+    const pulseOpacity = await pulse.evaluate(element =>
+      Number.parseFloat(getComputedStyle(element).opacity));
+    reverseSamples.push({
+      localProgress,
+      eventOpacity: eventState.opacity,
+      eventTranslateY: eventState.translateY,
+      routeOpacity,
+      pulseOpacity,
+      pulseTargetDistance: await readPulseDistance(target),
+      activeTargetDistance: await readActiveTargetDistance(),
+    });
+  }
+
+  for (let index = 1; index < reverseSamples.length; index += 1) {
+    const previous = reverseSamples[index - 1];
+    const current = reverseSamples[index];
+    expect.soft(current.eventOpacity, `card opacity decays at ${current.localProgress}`)
+      .toBeLessThanOrEqual(previous.eventOpacity + 0.02);
+    expect.soft(current.routeOpacity, `route opacity decays at ${current.localProgress}`)
+      .toBeLessThanOrEqual(previous.routeOpacity + 0.02);
+    expect.soft(current.pulseOpacity, `pulse opacity decays at ${current.localProgress}`)
+      .toBeLessThanOrEqual(previous.pulseOpacity + 0.02);
+  }
+
+  for (const sample of reverseSamples) {
+    expect.soft(Math.abs(sample.eventOpacity - sample.routeOpacity), `card and route fade together at ${sample.localProgress}`)
+      .toBeLessThanOrEqual(0.06);
+    expect.soft(Math.abs(sample.eventOpacity - sample.pulseOpacity), `card and pulse fade together at ${sample.localProgress}`)
+      .toBeLessThanOrEqual(0.06);
+    expect.soft(
+      sample.routeOpacity <= 0.05 && sample.eventOpacity >= 0.95,
+      `route cannot be hidden while card is opaque at ${sample.localProgress}`,
+    ).toBe(false);
+    if (sample.pulseOpacity > 0.05) {
+      expect.soft(sample.pulseTargetDistance, `visible reverse pulse stays docked at ${sample.localProgress}`)
+        .toBeLessThanOrEqual(3);
+      expect.soft(sample.activeTargetDistance, `visible reverse route stays complete at ${sample.localProgress}`)
+        .toBeLessThanOrEqual(3);
+      expect.soft(Math.abs(sample.eventTranslateY), `visible reverse card stays docked at ${sample.localProgress}`)
+        .toBeLessThanOrEqual(1);
+    }
+  }
+
+  const resetEventOpacity = reverseSamples.at(-1)!.eventOpacity;
   expect.soft(resetEventOpacity, 'the hidden pre-scene zone resets the destination').toBeLessThanOrEqual(0.05);
 
   await moveToLocalProgress(0.30);
