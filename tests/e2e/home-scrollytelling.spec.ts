@@ -53,7 +53,12 @@ test('cuenta la historia completa en orden causal', async ({ page }, testInfo) =
   expect(await scenes.evaluateAll(nodes => nodes.map(node => node.getAttribute('data-story-scene'))))
     .toEqual(sceneOrder);
 
+  const activeExperience = main.locator(
+    `[data-opening-mode="${mode}"], [data-story-mode="${mode}"]`,
+  );
   await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
+  await expect(activeExperience.locator('a[href*="/wa?src=hero_demo"]')).toHaveCount(1);
+  await expect(activeExperience.locator('a[href="https://dashboard.avoqado.io/signup"]')).toHaveCount(2);
   await expect(page.getByRole('heading', { level: 1 })).toContainText(
     'Tu tienda, tu gym, tu estética',
   );

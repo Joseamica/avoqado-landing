@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useTransform, type MotionValue } from 'framer-motion';
 import { pushEvent, trackGetStarted } from '../../../lib/gtm';
 
@@ -10,6 +10,7 @@ interface Props {
 
 export default function OpeningVideo({ progress, isMobile, autoplay }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoFailed, setVideoFailed] = useState(false);
   const scale = useTransform(progress, [0, 0.38], [1, isMobile ? 0.31 : 0.105]);
   const borderRadius = useTransform(progress, [0, 0.38], [0, 16]);
   const x = useTransform(progress, [0, 0.38], ['0%', isMobile ? '34.5%' : '44%']);
@@ -21,9 +22,13 @@ export default function OpeningVideo({ progress, isMobile, autoplay }: Props) {
   const textOpacity = useTransform(progress, [0, 0.08], [1, 0]);
 
   useEffect(() => {
-    if (autoplay) void videoRef.current?.play().catch(() => undefined);
-    else videoRef.current?.pause();
-  }, [autoplay]);
+    if (!autoplay || videoFailed) {
+      videoRef.current?.pause();
+      return;
+    }
+
+    void videoRef.current?.play().catch(() => undefined);
+  }, [autoplay, videoFailed]);
 
   return (
     <motion.div
@@ -31,16 +36,26 @@ export default function OpeningVideo({ progress, isMobile, autoplay }: Props) {
       style={{ scale, x, y, borderRadius, clipPath }}
       className="absolute inset-0 z-20 origin-top-left overflow-hidden bg-black shadow-2xl"
     >
-      <video
-        ref={videoRef}
-        src="/video4.webm"
-        poster="/video4-poster.webp"
-        loop
-        muted
-        playsInline
-        preload="metadata"
+      <img
+        data-opening-video-fallback
+        src="/video4-poster.webp"
+        alt=""
+        aria-hidden="true"
         className="absolute inset-0 size-full object-cover"
       />
+      {!videoFailed ? (
+        <video
+          ref={videoRef}
+          src="/video4.webm"
+          poster="/video4-poster.webp"
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          onError={() => setVideoFailed(true)}
+          className="absolute inset-0 size-full object-cover"
+        />
+      ) : null}
       <motion.div style={{ opacity: textOpacity }} className="absolute inset-0 bg-black/50" />
       <motion.div
         style={{ opacity: textOpacity }}

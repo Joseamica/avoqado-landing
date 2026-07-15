@@ -125,3 +125,32 @@ test('restores the mosaic when scrolling the shared tiles backwards', async ({ p
   for (const source of await selectedSources.all()) await expect(source).toBeVisible();
   await expect(page.locator('[data-opening-channel-handoff]')).toBeHidden();
 });
+
+test('uses a static semantic opening for reduced motion', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-reduced');
+  await page.goto('/');
+  await expect(page.locator('[data-opening-mode="static"]')).toBeVisible();
+  await expect(page.locator('[data-opening-mode="animated"]')).toHaveCount(0);
+  await expect(page.locator('video')).toHaveCount(0);
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Tu tienda, tu gym, tu estética');
+  await expect(page.locator('[data-opening-mode="static"]')).toContainText('Booking Widget → Reserva confirmada');
+});
+
+test('keeps the same opening truth without JavaScript', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-nojs');
+  await page.goto('/');
+  const opening = page.locator('[data-opening-mode="noscript"]');
+  await expect(opening).toBeVisible();
+  await expect(opening.getByRole('heading', { level: 1 })).toContainText('Tu tienda, tu gym, tu estética');
+  await expect(opening).toContainText('Consumer App');
+  await expect(opening).toContainText('Booking Widget → Reserva confirmada');
+});
+
+test('keeps the poster visible when video playback fails', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.route('**/video4.webm', route => route.abort('failed'));
+  await page.goto('/?motion=full');
+  const fallback = page.locator('[data-opening-video-fallback]');
+  await expect(fallback).toBeVisible();
+  await expect(fallback).toHaveAttribute('src', '/video4-poster.webp');
+});
