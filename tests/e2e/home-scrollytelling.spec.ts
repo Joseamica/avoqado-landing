@@ -535,6 +535,50 @@ test('mantiene el conector dentro del panel en todos los viewports', async ({ pa
   }
 });
 
+test('remide el origen después de un cambio de transform', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/?motion=full');
+
+  const root = page.locator('[data-story-mode="animated"]');
+  await root.evaluate((element, value) => {
+    document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+    history.scrollRestoration = 'auto';
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    const distance = element.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+  }, 0.10 + 0.52 * (0.21 - 0.10));
+  await expect(root).toHaveAttribute('data-active-scene', 'channels');
+  const scene = root.locator('[data-story-scene="channels"][data-active="true"]');
+  const sourceRow = scene.locator('.story-channel-row[data-channel-active="true"]');
+  await sourceRow.evaluate(element => {
+    (element as HTMLElement).style.transform = 'translateX(-14px)';
+  });
+  await page.evaluate(() => new Promise<void>(resolve => {
+    requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+  }));
+
+  const source = scene.locator('[data-channel-route-source]');
+  const route = scene.locator('[data-channel-route-path]');
+  const sourceDistance = await route.evaluate((routeElement, sourceElement) => {
+    const path = routeElement as SVGPathElement;
+    const matrix = path.getScreenCTM();
+    if (!matrix) throw new Error('Missing restored channel route matrix');
+    const start = path.getPointAtLength(0);
+    const screenStart = {
+      x: matrix.a * start.x + matrix.c * start.y + matrix.e,
+      y: matrix.b * start.x + matrix.d * start.y + matrix.f,
+    };
+    const sourceRect = (sourceElement as HTMLElement).getBoundingClientRect();
+    return Math.hypot(
+      screenStart.x - (sourceRect.left + sourceRect.width / 2),
+      screenStart.y - (sourceRect.top + sourceRect.height / 2),
+    );
+  }, await source.elementHandle());
+
+  expect(sourceDistance).toBeLessThanOrEqual(3);
+});
+
 test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, testInfo) => {
   test.skip(!['chromium-desktop', 'chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
   await page.goto('/');

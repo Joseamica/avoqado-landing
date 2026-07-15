@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useTransform, type MotionValue } from 'framer-motion';
+import { cancelFrame, frame, motion, useMotionValue, useTransform, type MotionValue } from 'framer-motion';
 import { useEffect, useRef, useState, type Ref } from 'react';
 import { CalendarDays, Globe2, MonitorSmartphone, Smartphone, type LucideIcon } from 'lucide-react';
 import SceneFrame from '../SceneFrame';
@@ -108,14 +108,32 @@ export default function ChannelsScene({ scene, progress }: { scene: StoryScene; 
     const target = targetRef.current;
     if (!visual || !source || !target) return;
     const ledger = source.closest<HTMLElement>('.story-channel-ledger');
+    const sourceRow = source.closest<HTMLElement>('.story-channel-row');
     const event = target.closest<HTMLElement>('.story-channel-event');
-    if (!ledger || !event) return;
+    if (!ledger || !sourceRow || !event) return;
 
     let active = true;
     const measure = () => {
       if (!active) return;
       const visualRect = visual.getBoundingClientRect();
       const centerWithinVisual = (element: HTMLElement): RoutePoint => {
+        let x = element.offsetWidth / 2;
+        let y = element.offsetHeight / 2;
+        let current: HTMLElement | null = element;
+
+        while (current && current !== visual) {
+          x += current.offsetLeft;
+          y += current.offsetTop;
+          const transform = getComputedStyle(current).transform;
+          if (transform !== 'none') {
+            const matrix = new DOMMatrixReadOnly(transform);
+            x += matrix.m41;
+            y += matrix.m42;
+          }
+          current = current.offsetParent as HTMLElement | null;
+        }
+
+        if (current === visual) return { x, y };
         const rect = element.getBoundingClientRect();
         return {
           x: rect.left - visualRect.left + rect.width / 2,
@@ -162,29 +180,33 @@ export default function ChannelsScene({ scene, progress }: { scene: StoryScene; 
       }
     };
 
+    const scheduleMeasure = () => {
+      if (active) frame.postRender(measure);
+    };
+
     updateRouteProgress(progress.get());
-    measure();
-    const observer = new ResizeObserver(measure);
+    frame.postRender(scheduleMeasure);
+    const observer = new ResizeObserver(scheduleMeasure);
     observer.observe(visual);
     observer.observe(ledger);
     observer.observe(event);
     observer.observe(source);
     observer.observe(target);
-    let frame: number | undefined;
+    const transformObserver = new MutationObserver(scheduleMeasure);
+    transformObserver.observe(sourceRow, { attributes: true, attributeFilter: ['style'] });
+    transformObserver.observe(event, { attributes: true, attributeFilter: ['style'] });
     const stopMeasuringProgress = progress.on('change', value => {
       updateRouteProgress(value);
-      if (frame !== undefined) cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        frame = undefined;
-        measure();
-      });
+      scheduleMeasure();
     });
-    void document.fonts?.ready.then(measure);
+    void document.fonts?.ready.then(scheduleMeasure);
     return () => {
       active = false;
       stopMeasuringProgress();
-      if (frame !== undefined) cancelAnimationFrame(frame);
+      cancelFrame(scheduleMeasure);
+      cancelFrame(measure);
       observer.disconnect();
+      transformObserver.disconnect();
     };
   }, [geometry, progress, routeProgress]);
 
