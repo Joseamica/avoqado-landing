@@ -1,7 +1,7 @@
 # Homepage three-result channel handoff design
 
-**Date:** 2026-07-15  
-**Status:** Approved in conversation on 2026-07-15  
+**Date:** 2026-07-15
+**Status:** Approved in conversation on 2026-07-15
 **Scope:** Animated homepage opening channel handoff, its reduced-motion/no-JavaScript truth, and related acceptance tests
 
 ## Relationship to earlier specifications
