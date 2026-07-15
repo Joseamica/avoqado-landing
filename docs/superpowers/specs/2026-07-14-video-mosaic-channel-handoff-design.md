@@ -240,7 +240,9 @@ canales y relación con la reserva existen en el HTML inicial.
 - el poster se genera del mismo video y debe ser menor de 150 KiB;
 - las miniaturas no seleccionadas conservan `loading="lazy"` cuando sea compatible con su
   aparición; las cuatro supervivientes se precargan con el mosaico;
-- sólo se animan `transform`, `opacity`, `pathLength` y colores puntuales;
+- sólo se animan `transform`, `opacity`, `pathLength` y colores puntuales; como excepción
+  aprobada, `OpeningVideo` puede animar `border-radius` y `clip-path` únicamente durante la
+  reducción del video para conservar la transición original hacia el mosaico;
 - `will-change` se limita al video y a las cuatro miniaturas durante su fase activa;
 - si el video falla, el poster permanece y el scroll continúa normalmente;
 - si falta geometría medida, no hay salto a coordenadas por defecto: se conserva el último

@@ -16,7 +16,7 @@
 - Keep `/video4.webm`, all 17 existing hero assets, all approved copy, CTA destinations, and GTM events.
 - Use exactly `300vh` for the animated opening on desktop and `260vh` on mobile; use `800vh` and `700vh` respectively for the seven-scene story that follows.
 - The selected channel assets are fixed: Consumer App `hero-tile-02.jpg`, Booking Widget `hero-tile-07.jpg`, Online `hero-tile-12.jpg`, and Punto de venta `hero-tile-10.jpg`.
-- Animate only `transform`, `opacity`, `pathLength`, and punctual color changes; do not animate layout properties.
+- Animate only `transform`, `opacity`, `pathLength`, and punctual color changes; the user-approved exception allows `OpeningVideo` to animate `border-radius` and `clip-path` only while the video shrinks into the mosaic. Do not animate layout properties.
 - All source/target travel geometry must come from measured DOM anchors, never breakpoint-specific travel coordinates.
 - The poster path is `public/video4-poster.webp` and its size must be at most 153,600 bytes.
 - Reduced motion must not autoplay video or mount a long sticky; no-JS must expose the same semantic story.
