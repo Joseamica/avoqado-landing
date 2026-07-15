@@ -1,0 +1,77 @@
+import { useEffect, useRef } from 'react';
+import { motion, useTransform, type MotionValue } from 'framer-motion';
+import { pushEvent, trackGetStarted } from '../../../lib/gtm';
+
+interface Props {
+  progress: MotionValue<number>;
+  isMobile: boolean;
+  autoplay: boolean;
+}
+
+export default function OpeningVideo({ progress, isMobile, autoplay }: Props) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const scale = useTransform(progress, [0, 0.38], [1, isMobile ? 0.31 : 0.105]);
+  const borderRadius = useTransform(progress, [0, 0.38], [0, 16]);
+  const x = useTransform(progress, [0, 0.38], ['0%', isMobile ? '34.5%' : '44%']);
+  const y = useTransform(progress, [0, 0.38], ['0px', isMobile ? '23%' : '65%']);
+  const clipPath = useTransform(progress, [0, 0.38], [
+    'inset(0% 0% 0% 0%)',
+    isMobile ? 'inset(25% 0% 25% 0%)' : 'inset(0% 0% 0% 0%)',
+  ]);
+  const textOpacity = useTransform(progress, [0, 0.08], [1, 0]);
+
+  useEffect(() => {
+    if (autoplay) void videoRef.current?.play().catch(() => undefined);
+    else videoRef.current?.pause();
+  }, [autoplay]);
+
+  return (
+    <motion.div
+      data-opening-video
+      style={{ scale, x, y, borderRadius, clipPath }}
+      className="absolute inset-0 z-20 origin-top-left overflow-hidden bg-black shadow-2xl"
+    >
+      <video
+        ref={videoRef}
+        src="/video4.webm"
+        poster="/video4-poster.webp"
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        className="absolute inset-0 size-full object-cover"
+      />
+      <motion.div style={{ opacity: textOpacity }} className="absolute inset-0 bg-black/50" />
+      <motion.div
+        style={{ opacity: textOpacity }}
+        className="absolute inset-0 z-30 flex flex-col items-center justify-center px-4 text-center md:px-8"
+      >
+        <h1 className="mb-6 max-w-5xl text-center text-2xl font-light tracking-tight text-white sm:text-3xl md:mb-10 md:text-5xl lg:text-7xl">
+          Tu tienda, tu gym, tu estética.<br />Un solo sistema.
+        </h1>
+        <p className="mb-8 max-w-2xl text-center text-sm text-gray-300 sm:text-base md:mb-12 md:text-lg lg:text-xl">
+          Punto de venta, cobros, citas, inventario y reportes — todo en una app.<br className="hidden sm:block" />
+          Más barato que lo que ya pagas en pedacitos.
+        </p>
+        <div className="flex flex-col items-center gap-4 sm:flex-row md:gap-6">
+          <a
+            href="/wa?src=hero_demo&text=Hola%2C%20me%20interesa%20una%20demo%20de%20Avoqado%20de%2015%20minutos"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => pushEvent('demo_request', { demo_type: 'whatsapp', location: 'hero' })}
+            className="cursor-pointer rounded-full bg-white px-6 py-3 text-lg font-bold text-black transition-transform hover:scale-105 md:px-10 md:py-4 md:text-2xl"
+          >
+            Agenda por WhatsApp
+          </a>
+          <a
+            href="https://dashboard.avoqado.io/signup"
+            onClick={event => trackGetStarted(event, 'hero')}
+            className="cursor-pointer rounded-full border-2 border-white/30 bg-black/60 px-6 py-3 text-lg font-bold text-white transition-transform hover:scale-105 md:px-10 md:py-4 md:text-2xl"
+          >
+            Comienza gratis
+          </a>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
