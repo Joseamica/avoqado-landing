@@ -16,7 +16,7 @@ export const STORY_FIXTURE = {
   stockAfter: 7,
   selectedMerchant: 'Operación diaria',
   alternateMerchant: 'Facturación',
-  selectedChannel: 'Booking Widget',
+  selectedChannel: 'Reservación en línea',
 } as const;
 
 export type StoryFixture = typeof STORY_FIXTURE;

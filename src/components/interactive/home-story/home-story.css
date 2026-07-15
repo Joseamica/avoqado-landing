@@ -50,18 +50,19 @@
   }
 
   [data-opening-channel-handoff] .story-channel-ledger > p {
-    padding-block: 0.2rem;
+    padding-block: 0.1rem;
   }
 
   [data-opening-channel-handoff] .story-channel-row {
-    grid-template-columns: 2.4rem minmax(0, 1fr) auto;
-    gap: 0.4rem;
-    padding-block: 0.2rem;
+    grid-template-columns: 2.2rem minmax(0, 1fr) auto;
+    gap: 0.35rem;
+    padding-block: 0.1rem;
+    font-size: 0.7rem;
   }
 
   [data-opening-channel-handoff] [data-shared-tile-target] {
-    width: 2.4rem;
-    height: 2rem;
+    width: 2.2rem;
+    height: 1.7rem;
   }
 
   [data-opening-channel-handoff] .story-channel-event {
@@ -429,7 +430,7 @@
   }
 
   .story-channel-row {
-    padding-block: 0.3rem !important;
+    padding-block: 0.1rem !important;
   }
 
   .story-channel-event {

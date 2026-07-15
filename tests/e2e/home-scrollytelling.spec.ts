@@ -67,7 +67,7 @@ test('cuenta la historia completa en orden causal', async ({ page }, testInfo) =
   }
   await expect(main).toContainText('Cuenta de cobro');
   await expect(main.locator(`[data-opening-mode="${mode}"]`))
-    .toContainText('Booking Widget → Reserva confirmada');
+    .toContainText('Reservación en línea → Reserva confirmada');
   await expect(main.locator(`[data-story-mode="${mode}"] [data-story-scene="payment"]`))
     .toContainText('TPV → Operación diaria');
   await expect(main).toContainText('Una sucursal o diez');
@@ -173,8 +173,11 @@ test('presenta canales y routing sin prometer routing bancario inteligente', asy
   await page.goto('/');
   const story = page.locator('main[data-scrollytelling]');
 
-  await expect(story).toContainText('Consumer App');
-  await expect(story).toContainText('Booking Widget');
+  await expect(story).toContainText('Reservación en línea');
+  await expect(story).toContainText('Tienda en línea');
+  await expect(story).toContainText('Liga de pago');
+  await expect(story).toContainText('Punto de venta');
+  await expect(story).toContainText('Terminal de cobro');
   await expect(story).toContainText('POS iOS');
   await expect(story).toContainText('POS Android');
   await expect(story).toContainText('POS Desktop');
@@ -183,6 +186,9 @@ test('presenta canales y routing sin prometer routing bancario inteligente', asy
   await expect(story).toContainText('TPV compatible');
   await expect(story).not.toContainText('routing inteligente');
   await expect(story).not.toContainText('elige tu cuenta bancaria');
+  await expect(story).not.toContainText('Consumer App');
+  await expect(story).not.toContainText('Booking Widget');
+  await expect(story.getByText('Online', { exact: true })).toHaveCount(0);
 });
 
 test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({ page }, testInfo) => {
@@ -242,9 +248,9 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
   const activeChannel = channels.locator('[data-channel-active]');
   await expect(channels.locator('[data-story-primary-pulse]')).toHaveCount(1);
   await expect(activeChannel).toHaveCount(1);
-  await expect(activeChannel).toContainText('Seleccionado');
+  await expect(activeChannel).toContainText('Reserva confirmada');
   const channelSummary = channels.locator('[data-channel-route-summary]:visible');
-  await expect(channelSummary).toHaveText('Booking Widget → Reserva confirmada');
+  await expect(channelSummary).toHaveText('Reservación en línea → Reserva confirmada');
   await expectInsideViewport(channelSummary, 8);
 
   await moveTo(0.07, 'service');
@@ -278,7 +284,7 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
   await expect(alternateMerchant).toHaveCount(1);
 });
 
-test('conecta Booking Widget con la reserva en un solo sentido', async ({ page }, testInfo) => {
+test('conecta la reservación en línea con la reserva en un solo sentido', async ({ page }, testInfo) => {
   test.skip(!['chromium-desktop', 'chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
   await page.goto('/');
 
@@ -294,7 +300,7 @@ test('conecta Booking Widget con la reserva en un solo sentido', async ({ page }
   const route = scene.locator('[data-channel-route-path]');
   const activeRoute = scene.locator('[data-channel-route-active]');
 
-  await moveToLocalProgress(0.30);
+  await moveToLocalProgress(0.29);
   await expect(source).toHaveCount(1);
   await expect(target).toHaveCount(1);
   await expect(pulse).toHaveCount(1);
@@ -303,7 +309,7 @@ test('conecta Booking Widget con la reserva en un solo sentido', async ({ page }
   await expect(scene.locator('.story-channel-row span.h-px')).toHaveCount(0);
   await expect(scene.getByText('Ruta activa', { exact: true })).toHaveCount(0);
   await expect(scene.locator('[data-channel-route-summary]:visible'))
-    .toHaveText('Booking Widget → Reserva confirmada');
+    .toHaveText('Reservación en línea → Reserva confirmada');
 
   const readPulseDistance = async (destination: typeof source) => pulse.evaluate(
     (pulseElement, destinationElement) => {
@@ -475,7 +481,7 @@ test('conecta Booking Widget con la reserva en un solo sentido', async ({ page }
   const resetEventOpacity = reverseSamples.at(-1)!.eventOpacity;
   expect.soft(resetEventOpacity, 'the hidden pre-scene zone resets the destination').toBeLessThanOrEqual(0.05);
 
-  await moveToLocalProgress(0.30);
+  await moveToLocalProgress(0.29);
   await page.evaluate(() => new Promise<void>(resolve => {
     requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
   }));
@@ -658,7 +664,7 @@ test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, t
   await moveToLocalProgress(0.12);
   await expect(sourceCard).toHaveCount(1);
   await expect(sourceCard).toContainText('Reserva web');
-  await expect(sourceCard).toContainText('Booking Widget');
+  await expect(sourceCard).toContainText('Reservación en línea');
   await expect(source).toHaveCount(1);
   await expect(destination).toContainText('Contexto listo');
   await expect(target).toHaveCount(1);

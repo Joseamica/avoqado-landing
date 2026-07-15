@@ -139,7 +139,7 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
         >
           <div className="flex items-center justify-between gap-2">
             <span className="whitespace-nowrap text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-neutral-300">Reserva web</span>
-            <span className="story-service-source-channel whitespace-nowrap text-[0.5rem] text-neutral-500 sm:text-[0.55rem]">Booking Widget</span>
+            <span className="story-service-source-channel whitespace-nowrap text-[0.5rem] text-neutral-500 sm:text-[0.55rem]">{STORY_FIXTURE.selectedChannel}</span>
           </div>
           <p className="story-service-source-detail mt-1 text-[0.62rem] font-medium text-neutral-100 sm:mt-1.5 sm:text-xs">
             {STORY_FIXTURE.customer} · {STORY_FIXTURE.appointmentTime}

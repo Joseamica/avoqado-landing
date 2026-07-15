@@ -87,10 +87,12 @@ test('restores the approved homepage opening and hands off directly to service',
 
   await scrollOpeningTo(page, 0.97);
   const channels = opening.locator('[data-opening-channel-handoff]');
-  await expect(channels).toContainText('Tu cliente empieza como prefiera');
-  await expect(channels.locator('[data-channel-id]')).toHaveCount(4);
-  await expect(channels.locator('[data-channel-id="booking-widget"]')).toContainText('Seleccionado');
-  await expect(channels).toContainText('Booking Widget → Reserva confirmada');
+  await expect(channels).toContainText('Tu cliente reserva, compra o paga como prefiera');
+  await expect(channels.locator('[data-channel-id]')).toHaveCount(5);
+  await expect(channels.locator('[data-channel-id="online-booking"]')).toContainText('Reserva confirmada');
+  await expect(channels.locator('[data-channel-active="true"]')).toHaveCount(1);
+  await expect(channels.locator('[data-channel-route-summary]:visible'))
+    .toHaveText('Reservación en línea → Reserva confirmada');
 
   await expect(page.getByText('Un cliente hace una cosa. Avoqado mueve todo lo demás.')).toHaveCount(0);
   const story = page.locator('[data-story-mode="animated"]');
@@ -98,11 +100,11 @@ test('restores the approved homepage opening and hands off directly to service',
   await expect(story.locator('[data-story-scene]').first()).toHaveAttribute('data-story-scene', 'service');
 });
 
-test('moves the four mosaic tiles continuously into their channel rows', async ({ page }, testInfo) => {
+test('moves the five mosaic tiles continuously into their operation rows', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-desktop');
   await page.goto('/?motion=full');
 
-  await expect(page.locator('[data-shared-tile-overlay]')).toHaveCount(4);
+  await expect(page.locator('[data-shared-tile-overlay]')).toHaveCount(5);
   const distances: number[][] = [];
   for (const progress of [0.64, 0.71, 0.80]) {
     await scrollOpeningTo(page, progress);
@@ -116,7 +118,7 @@ test('moves the four mosaic tiles continuously into their channel rows', async (
   }
 
   expect(distances).toHaveLength(3);
-  for (let index = 0; index < 4; index += 1) {
+  for (let index = 0; index < 5; index += 1) {
     expect(distances[1][index]).toBeLessThan(distances[0][index]);
     expect(distances[2][index]).toBeLessThan(distances[1][index]);
     expect(distances[2][index]).toBeLessThanOrEqual(3);
@@ -130,7 +132,7 @@ test('restores the mosaic when scrolling the shared tiles backwards', async ({ p
   await scrollOpeningTo(page, 0.61);
 
   const selectedSources = page.locator('[data-shared-tile-source]');
-  await expect(selectedSources).toHaveCount(4);
+  await expect(selectedSources).toHaveCount(5);
   for (const source of await selectedSources.all()) {
     await expect(source).toBeVisible();
     expect(Number.parseFloat(await source.evaluate(element => getComputedStyle(element).opacity))).toBeCloseTo(1, 2);
@@ -195,7 +197,7 @@ test('uses a static semantic opening for reduced motion', async ({ page }, testI
   await expect(opening.getByRole('heading', { level: 1 })).toHaveText(HERO_HEADING);
   await expect(opening).toContainText(HERO_SUPPORT);
   await expect(opening).not.toContainText('Tu tienda, tu gym, tu estética.');
-  await expect(opening).toContainText('Booking Widget → Reserva confirmada');
+  await expect(opening).toContainText('Reservación en línea → Reserva confirmada');
 });
 
 test('keeps the same opening truth without JavaScript', async ({ page }, testInfo) => {
@@ -207,8 +209,32 @@ test('keeps the same opening truth without JavaScript', async ({ page }, testInf
   await expect(opening.getByRole('heading', { level: 1 })).toHaveText(HERO_HEADING);
   await expect(opening).toContainText(HERO_SUPPORT);
   await expect(opening).not.toContainText('Tu tienda, tu gym, tu estética.');
-  await expect(opening).toContainText('Consumer App');
-  await expect(opening).toContainText('Booking Widget → Reserva confirmada');
+  await expect(opening).toContainText('Reservación en línea → Reserva confirmada');
+});
+
+test('uses understandable operation entry names in every rendering mode', async ({ page }, testInfo) => {
+  await page.goto(testInfo.project.name === 'chromium-desktop' ? '/?motion=full' : '/');
+  const mode = testInfo.project.name === 'chromium-reduced'
+    ? 'static'
+    : testInfo.project.name === 'chromium-nojs'
+      ? 'noscript'
+      : 'animated';
+  const opening = page.locator(`[data-opening-mode="${mode}"]`);
+  if (mode === 'animated') await scrollOpeningTo(page, 0.97);
+
+  for (const [label, result] of [
+    ['Reservación en línea', 'Reserva confirmada'],
+    ['Tienda en línea', 'Pedido recibido'],
+    ['Liga de pago', 'Pago recibido'],
+    ['Punto de venta', 'Venta registrada'],
+    ['Terminal de cobro', 'Cobro aprobado'],
+  ] as const) {
+    await expect(opening).toContainText(label);
+    await expect(opening).toContainText(result);
+  }
+  await expect(opening).not.toContainText('Consumer App');
+  await expect(opening).not.toContainText('Booking Widget');
+  await expect(opening.getByText('Online', { exact: true })).toHaveCount(0);
 });
 
 test('keeps the poster visible when video playback fails', async ({ page }, testInfo) => {

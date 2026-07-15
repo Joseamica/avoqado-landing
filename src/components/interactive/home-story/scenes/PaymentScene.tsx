@@ -20,7 +20,7 @@ export default function PaymentScene({ scene, progress }: { scene: StoryScene; p
   const selectionX = useTransform(progress, [0.44, 0.68], [8, 0]);
   const references: PaymentReference[] = [
     { label: 'TPV', detail: `TPV → ${STORY_FIXTURE.selectedMerchant}`, icon: CreditCard, active: true },
-    { label: 'Online', detail: 'ecommerce + liga', icon: Link2 },
+    { label: 'Tienda en línea', detail: 'ecommerce + liga', icon: Link2 },
     { label: 'Efectivo', detail: 'Registro manual', icon: Banknote },
   ];
 
@@ -57,7 +57,7 @@ export default function PaymentScene({ scene, progress }: { scene: StoryScene; p
         </motion.div>
         <p className="story-payment-reference-summary hidden border-y border-white/10 py-2 text-center text-[0.62rem] leading-snug text-neutral-400">
           <span data-payment-route-summary className="block text-avoqado-green">TPV → {STORY_FIXTURE.selectedMerchant}</span>
-          <span className="block">Online + liga · Efectivo</span>
+          <span className="block">Tienda en línea + liga · Efectivo</span>
         </p>
 
         <motion.div

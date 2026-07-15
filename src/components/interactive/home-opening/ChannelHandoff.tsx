@@ -220,11 +220,16 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
   }, [connectorProgress, geometry, routeProgress]);
 
   const surfaceOpacity = useTransform(progress, [0, 0.12], [0, 1]);
+  const activeChannel = OPENING_CHANNELS.find(channel => channel.active)!;
   const channelHeading = (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-800">Una sola entrada de verdad</p>
-      <h2 id="opening-channels-title" className="mt-3 text-3xl font-light tracking-[-0.04em] sm:text-5xl lg:text-6xl">Tu cliente empieza como prefiera.</h2>
-      <p className="mt-4 max-w-xl text-sm text-neutral-600 sm:text-base">Reserva, compra o paga desde tu web, una liga, la app o directamente en sucursal.</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-800">UNA SOLA OPERACIÓN</p>
+      <h2 id="opening-channels-title" className="mt-3 text-3xl font-light tracking-[-0.04em] sm:text-5xl lg:text-6xl">
+        Tu cliente reserva, compra o paga como prefiera.
+      </h2>
+      <p className="mt-4 max-w-xl text-sm text-neutral-600 sm:text-base">
+        Desde una reservación o liga de pago hasta el punto de venta o la terminal física: todo llega conectado a Avoqado.
+      </p>
     </div>
   );
 
@@ -274,7 +279,7 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
             />
             <div className="story-channel-event-header flex items-center justify-between border-b border-white/10 pb-2.5 sm:pb-3">
               <span data-channel-route-summary className="text-[0.52rem] font-semibold uppercase leading-tight tracking-[0.08em] text-avoqado-green sm:text-[0.6rem]">
-                {STORY_FIXTURE.selectedChannel} → Reserva confirmada
+                {activeChannel.label} → {activeChannel.result}
               </span>
               <span className="text-[0.65rem] text-neutral-400 sm:text-xs">{STORY_FIXTURE.appointmentTime}</span>
             </div>
@@ -310,7 +315,9 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
           ) : null}
         </div>
       </div>
-      <p className="sr-only">Booking Widget produce una reserva confirmada para {STORY_FIXTURE.customer}, con servicio, hora y sucursal.</p>
+      <p className="sr-only">
+        {activeChannel.label} produce una reserva confirmada para {STORY_FIXTURE.customer}, con servicio, hora y sucursal.
+      </p>
     </motion.section>
   );
 }
