@@ -186,6 +186,53 @@ test('keeps every opening checkpoint inside the viewport at all required sizes',
   expect(errors).toEqual([]);
 });
 
+test('docks all five shared tiles at every required viewport', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  const viewports = [
+    { width: 1440, height: 900 },
+    { width: 910, height: 691 },
+    { width: 787, height: 701 },
+    { width: 887, height: 502 },
+    { width: 390, height: 844 },
+    { width: 320, height: 568 },
+  ];
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await page.goto('/?motion=full');
+    await scrollOpeningTo(page, 0.80);
+    const state = await page.locator('[data-opening-mode="animated"]').evaluate(element => {
+      const overlays = [...element.querySelectorAll<HTMLElement>('[data-shared-tile-overlay]')];
+      return {
+        overlays: overlays.map(overlay => {
+          const id = overlay.dataset.sharedTileOverlay!;
+          const target = element.querySelector<HTMLElement>(`[data-shared-tile-target="${id}"]`)!;
+          const source = element.querySelector<HTMLElement>(`[data-shared-tile-source="${id}"]`)!;
+          const a = overlay.getBoundingClientRect();
+          const b = target.getBoundingClientRect();
+          return {
+            id,
+            sourcePresent: Boolean(source),
+            distance: Math.hypot(
+              a.left + a.width / 2 - (b.left + b.width / 2),
+              a.top + a.height / 2 - (b.top + b.height / 2),
+            ),
+          };
+        }),
+        targets: element.querySelectorAll('[data-shared-tile-target]').length,
+        overflowX: document.documentElement.scrollWidth - window.innerWidth,
+      };
+    });
+    expect(state.overlays).toHaveLength(5);
+    expect(state.targets).toBe(5);
+    expect(state.overflowX).toBeLessThanOrEqual(1);
+    for (const overlay of state.overlays) {
+      expect.soft(overlay.sourcePresent, `${overlay.id} has a measured source`).toBe(true);
+      expect.soft(overlay.distance, `${overlay.id} docks at its row`).toBeLessThanOrEqual(3);
+    }
+  }
+});
+
 test('uses a static semantic opening for reduced motion', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-reduced');
   await page.goto('/');
