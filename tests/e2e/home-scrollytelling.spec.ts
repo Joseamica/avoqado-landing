@@ -1,5 +1,7 @@
 import { expect, test, type Page } from 'playwright/test';
 
+const HERO_HEADING = 'El primer sistema todo en uno en México para cobrar, administrar y hacer crecer tu negocio.';
+
 async function scrollOpeningTo(page: Page, progress: number) {
   const opening = page.locator('[data-opening-mode="animated"]');
   await opening.evaluate((element, value) => {
@@ -59,9 +61,7 @@ test('cuenta la historia completa en orden causal', async ({ page }, testInfo) =
   await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
   await expect(activeExperience.locator('a[href*="/wa?src=hero_demo"]')).toHaveCount(1);
   await expect(activeExperience.locator('a[href="https://dashboard.avoqado.io/signup"]')).toHaveCount(2);
-  await expect(page.getByRole('heading', { level: 1 })).toContainText(
-    'Tu tienda, tu gym, tu estética',
-  );
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(HERO_HEADING);
   if (testInfo.project.name === 'chromium-nojs') {
     await expect(main.locator('h1:visible')).toHaveCount(1);
   }

@@ -1,5 +1,9 @@
 import { expect, test, type Page } from 'playwright/test';
 
+const HERO_EYEBROW = 'PARA TODO TIPO DE NEGOCIO';
+const HERO_HEADING = 'El primer sistema todo en uno en México para cobrar, administrar y hacer crecer tu negocio.';
+const HERO_SUPPORT = 'Pagos y terminales, punto de venta, tienda en línea, reservaciones, inventario, clientes, facturación, contabilidad y reportes — todo conectado en tiempo real.';
+
 export async function scrollOpeningTo(page: Page, progress: number) {
   const opening = page.locator('[data-opening-mode="animated"]');
   await opening.evaluate((element, value) => {
@@ -20,9 +24,10 @@ test('keeps the legacy SquareHero as a video-to-mosaic-only variant', async ({ p
   const opening = page.locator('[data-opening-mode="animated"]');
   await expect(opening).toHaveAttribute('data-opening-variant', 'mosaic-only');
   await expect(opening.locator('video[src="/video4.webm"]')).toHaveCount(1);
-  await expect(opening.getByRole('heading', { level: 1 })).toContainText(
-    'Tu tienda, tu gym, tu estética',
-  );
+  await expect(opening).toContainText(HERO_EYEBROW);
+  await expect(opening.getByRole('heading', { level: 1 })).toHaveText(HERO_HEADING);
+  await expect(opening).toContainText(HERO_SUPPORT);
+  await expect(opening).not.toContainText('Tu tienda, tu gym, tu estética.');
 
   await scrollOpeningTo(page, 0.72);
   await expect(opening.locator('[data-opening-tile]')).toHaveCount(17);
@@ -74,7 +79,10 @@ test('restores the approved homepage opening and hands off directly to service',
 
   const opening = page.locator('[data-opening-mode="animated"]');
   await expect(opening).toHaveAttribute('data-opening-variant', 'channel-handoff');
-  await expect(opening.getByRole('heading', { level: 1 })).toContainText('Tu tienda, tu gym, tu estética');
+  await expect(opening).toContainText(HERO_EYEBROW);
+  await expect(opening.getByRole('heading', { level: 1 })).toHaveText(HERO_HEADING);
+  await expect(opening).toContainText(HERO_SUPPORT);
+  await expect(opening).not.toContainText('Tu tienda, tu gym, tu estética.');
   await expect(opening.locator('[data-opening-tile]')).toHaveCount(17);
 
   await scrollOpeningTo(page, 0.97);
@@ -179,11 +187,15 @@ test('keeps every opening checkpoint inside the viewport at all required sizes',
 test('uses a static semantic opening for reduced motion', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-reduced');
   await page.goto('/');
-  await expect(page.locator('[data-opening-mode="static"]')).toBeVisible();
+  const opening = page.locator('[data-opening-mode="static"]');
+  await expect(opening).toBeVisible();
   await expect(page.locator('[data-opening-mode="animated"]')).toHaveCount(0);
   await expect(page.locator('video')).toHaveCount(0);
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Tu tienda, tu gym, tu estética');
-  await expect(page.locator('[data-opening-mode="static"]')).toContainText('Booking Widget → Reserva confirmada');
+  await expect(opening).toContainText(HERO_EYEBROW);
+  await expect(opening.getByRole('heading', { level: 1 })).toHaveText(HERO_HEADING);
+  await expect(opening).toContainText(HERO_SUPPORT);
+  await expect(opening).not.toContainText('Tu tienda, tu gym, tu estética.');
+  await expect(opening).toContainText('Booking Widget → Reserva confirmada');
 });
 
 test('keeps the same opening truth without JavaScript', async ({ page }, testInfo) => {
@@ -191,7 +203,10 @@ test('keeps the same opening truth without JavaScript', async ({ page }, testInf
   await page.goto('/');
   const opening = page.locator('[data-opening-mode="noscript"]');
   await expect(opening).toBeVisible();
-  await expect(opening.getByRole('heading', { level: 1 })).toContainText('Tu tienda, tu gym, tu estética');
+  await expect(opening).toContainText(HERO_EYEBROW);
+  await expect(opening.getByRole('heading', { level: 1 })).toHaveText(HERO_HEADING);
+  await expect(opening).toContainText(HERO_SUPPORT);
+  await expect(opening).not.toContainText('Tu tienda, tu gym, tu estética.');
   await expect(opening).toContainText('Consumer App');
   await expect(opening).toContainText('Booking Widget → Reserva confirmada');
 });
