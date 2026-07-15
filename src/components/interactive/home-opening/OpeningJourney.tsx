@@ -36,20 +36,32 @@ export default function OpeningJourney({
     setSharedTilesReady(false);
   }, [isMobile]);
 
-  const channelProgress = useTransform(scrollYProgress, [0.76, 0.91], [0, 1], { clamp: true });
-  const connectorProgress = useTransform(scrollYProgress, [0.84, 0.94], [0, 1], { clamp: true });
+  const legacyEnd = isMobile ? 0.52 : 0.56;
+  const remappedOpeningProgress = useTransform(
+    scrollYProgress,
+    [0, legacyEnd],
+    [0, 0.84],
+    { clamp: true },
+  );
+  const openingProgress = variant === 'channel-handoff'
+    ? remappedOpeningProgress
+    : scrollYProgress;
+  const channelProgress = useTransform(scrollYProgress, [0.50, 0.62], [0, 1], { clamp: true });
+  const sequenceProgress = useTransform(scrollYProgress, [0.60, 0.98], [0, 1], { clamp: true });
 
   return (
     <div
       ref={rootRef}
       data-opening-mode="animated"
       data-opening-variant={variant}
-      className={variant === 'mosaic-only' ? 'relative h-[180vh] bg-black' : 'relative h-[260vh] bg-black md:h-[300vh]'}
+      className={variant === 'mosaic-only'
+        ? 'relative h-[180vh] bg-black'
+        : 'relative h-[360vh] bg-black md:h-[400vh]'}
     >
       <div ref={stageRef} className="sticky left-0 top-0 h-screen w-full overflow-hidden">
-        <OpeningVideo progress={scrollYProgress} isMobile={isMobile} autoplay={autoplay} />
+        <OpeningVideo progress={openingProgress} isMobile={isMobile} autoplay={autoplay} />
         <OpeningMosaic
-          progress={scrollYProgress}
+          progress={openingProgress}
           variant={variant}
           isMobile={isMobile}
           handoffReady={variant === 'channel-handoff' ? sharedTilesReady : false}
@@ -57,14 +69,14 @@ export default function OpeningJourney({
         {variant === 'channel-handoff' ? (
           <>
             <ChannelHandoff
-              openingProgress={scrollYProgress}
+              openingProgress={openingProgress}
               progress={channelProgress}
-              connectorProgress={connectorProgress}
+              sequenceProgress={sequenceProgress}
               ready={sharedTilesReady}
             />
             <SharedTileLayer
               rootRef={stageRef}
-              progress={scrollYProgress}
+              progress={openingProgress}
               layoutKey={isMobile ? 'mobile' : 'desktop'}
               onReadyChange={setSharedTilesReady}
             />

@@ -17,6 +17,16 @@ export async function scrollOpeningTo(page: Page, progress: number) {
   }));
 }
 
+const CHANNEL_SEQUENCE_START = 0.60;
+const CHANNEL_SEQUENCE_END = 0.98;
+
+async function scrollChannelSequenceTo(page: Page, progress: number) {
+  await scrollOpeningTo(
+    page,
+    CHANNEL_SEQUENCE_START + progress * (CHANNEL_SEQUENCE_END - CHANNEL_SEQUENCE_START),
+  );
+}
+
 test('keeps the legacy SquareHero as a video-to-mosaic-only variant', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-desktop');
   await page.goto('/scrollytelling');
@@ -92,12 +102,44 @@ test('restores the approved homepage opening and hands off directly to service',
   await expect(channels.locator('[data-channel-id="online-booking"]')).toContainText('Reserva confirmada');
   await expect(channels.locator('[data-channel-active="true"]')).toHaveCount(1);
   await expect(channels.locator('[data-channel-route-summary]:visible'))
-    .toHaveText('Reservación en línea → Reserva confirmada');
+    .toHaveText('Terminal de cobro → Cobro aprobado');
 
   await expect(page.getByText('Un cliente hace una cosa. Avoqado mueve todo lo demás.')).toHaveCount(0);
   const story = page.locator('[data-story-mode="animated"]');
   await expect(story.locator('[data-story-scene]')).toHaveCount(7);
   await expect(story.locator('[data-story-scene]').first()).toHaveAttribute('data-story-scene', 'service');
+});
+
+test('shows reservation, payment-link, and terminal results as scroll advances and reverses', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+
+  const scene = page.locator('[data-opening-channel-handoff]');
+  const checkpoints = [
+    [0.16, 'online-booking', 'Reservación en línea → Reserva confirmada', 'Facial hidratante', 'María G. · 11:30', 'Sucursal Centro'],
+    [0.49, 'payment-link', 'Liga de pago → Pago recibido', '$1,250', 'Liga enviada por WhatsApp', 'Pago con tarjeta'],
+    [0.82, 'payment-terminal', 'Terminal de cobro → Cobro aprobado', '$348', 'Pago sin contacto', 'Terminal física · Sucursal Centro'],
+  ] as const;
+
+  for (const [progress, id, summary, primary, detail, context] of checkpoints) {
+    await scrollChannelSequenceTo(page, progress);
+    await expect(scene.locator('[data-channel-active="true"]')).toHaveAttribute('data-channel-id', id);
+    await expect(scene.locator('[data-channel-event-content]')).toHaveAttribute('data-channel-event-content', id);
+    await expect(scene.locator('[data-channel-route-summary]:visible')).toHaveText(summary);
+    await expect(scene.locator('[data-channel-event-primary]:visible')).toHaveText(primary);
+    await expect(scene.locator('[data-channel-event-detail]:visible')).toHaveText(detail);
+    await expect(scene.locator('[data-channel-event-context]:visible')).toHaveText(context);
+  }
+
+  for (const [progress, id] of [
+    [0.82, 'payment-terminal'],
+    [0.49, 'payment-link'],
+    [0.16, 'online-booking'],
+  ] as const) {
+    await scrollChannelSequenceTo(page, progress);
+    await expect(scene.locator('[data-channel-active="true"]')).toHaveAttribute('data-channel-id', id);
+    await expect(scene.locator('[data-channel-event-content]')).toHaveAttribute('data-channel-event-content', id);
+  }
 });
 
 test('moves the five mosaic tiles continuously into their operation rows', async ({ page }, testInfo) => {

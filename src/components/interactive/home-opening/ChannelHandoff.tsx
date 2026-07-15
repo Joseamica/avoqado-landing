@@ -1,15 +1,27 @@
-import { cancelFrame, frame, motion, useInView, useMotionValue, useMotionValueEvent, useTransform, type MotionValue } from 'framer-motion';
+import {
+  AnimatePresence,
+  cancelFrame,
+  frame,
+  motion,
+  useInView,
+  useMotionValue,
+  useMotionValueEvent,
+  useTransform,
+  type MotionValue,
+} from 'framer-motion';
 import { useEffect, useRef, useState, type Ref } from 'react';
 import '../home-story/home-story.css';
-import { STORY_FIXTURE } from '../home-story/story-fixture';
-import { OPENING_CHANNELS, OPENING_TILES } from './opening-tiles';
+import {
+  OPENING_CHANNEL_DEMONSTRATIONS,
+  openingChannelById,
+  resolveOpeningChannelSequence,
+} from './opening-channel-results';
+import { OPENING_CHANNELS, OPENING_TILES, type OpeningChannelId } from './opening-tiles';
 
 interface RoutePoint { x: number; y: number }
 interface RouteGeometry { x: number[]; y: number[]; pathLength: number[] }
 
 const ROUTE_TIMES = [0, 0.30, 0.40, 0.52, 0.62, 1] as const;
-const ROUTE_RESET_PROGRESS = 0.24;
-
 function interpolateRoute(progress: number, values: number[]) {
   for (let index = 1; index < ROUTE_TIMES.length; index += 1) {
     if (progress <= ROUTE_TIMES[index]) {
@@ -52,11 +64,12 @@ function ChannelTarget({ channel, progress }: {
   );
 }
 
-function ChannelRow({ channel, index, progress, openingProgress, sourceRef }: {
+function ChannelRow({ channel, index, progress, openingProgress, active, sourceRef }: {
   channel: (typeof OPENING_CHANNELS)[number];
   index: number;
   progress: MotionValue<number>;
   openingProgress: MotionValue<number>;
+  active: boolean;
   sourceRef?: Ref<HTMLSpanElement>;
 }) {
   const start = 0.06 + index * 0.08;
@@ -66,41 +79,59 @@ function ChannelRow({ channel, index, progress, openingProgress, sourceRef }: {
   return (
     <motion.li
       data-channel-id={channel.id}
-      data-channel-active={channel.id === 'online-booking' ? 'true' : undefined}
+      data-channel-active={active ? 'true' : undefined}
       style={{ opacity, x }}
-      className={channel.id === 'online-booking' ? 'story-channel-row relative grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 bg-green-100/70 py-3 text-green-950' : 'story-channel-row relative grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-black/8 py-3 text-neutral-700'}
+      className={active
+        ? 'story-channel-row relative grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 bg-green-100/70 py-3 text-green-950'
+        : 'story-channel-row relative grid grid-cols-[3rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-black/8 py-3 text-neutral-700'}
     >
       <ChannelTarget channel={channel} progress={openingProgress} />
       <strong>{channel.label}</strong>
-      <span>{channel.result}</span>
-      {channel.id === 'online-booking' ? <span ref={sourceRef} data-channel-route-source aria-hidden="true" className="story-channel-route-source absolute z-20 size-2.5 rounded-full border border-avoqado-green/45 bg-neutral-50" /> : null}
+      <span className="story-channel-result text-right leading-tight">{channel.result}</span>
+      {active ? (
+        <span
+          ref={sourceRef}
+          data-channel-route-source
+          aria-hidden="true"
+          className="story-channel-route-source absolute z-20 size-2.5 rounded-full border border-avoqado-green/45 bg-neutral-50"
+        />
+      ) : null}
     </motion.li>
   );
 }
 
-export default function ChannelHandoff({ openingProgress, progress, connectorProgress, ready }: {
+export default function ChannelHandoff({ openingProgress, progress, sequenceProgress, ready }: {
   openingProgress: MotionValue<number>;
   progress: MotionValue<number>;
-  connectorProgress: MotionValue<number>;
+  sequenceProgress: MotionValue<number>;
   ready: boolean;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const visualRef = useRef<HTMLDivElement>(null);
   const sourceRef = useRef<HTMLSpanElement>(null);
   const targetRef = useRef<HTMLSpanElement>(null);
+  const initialSequence = resolveOpeningChannelSequence(sequenceProgress.get());
+  const [activeIndex, setActiveIndex] = useState(initialSequence.index);
+  const routeProgress = useMotionValue(initialSequence.routeProgress);
+  const activeDemonstration = OPENING_CHANNEL_DEMONSTRATIONS[activeIndex];
+  const activeChannel = openingChannelById(activeDemonstration.channelId);
   const geometry = useMotionValue<RouteGeometry>({
     x: Array.from({ length: ROUTE_TIMES.length }, () => 0),
     y: Array.from({ length: ROUTE_TIMES.length }, () => 0),
     pathLength: Array.from({ length: ROUTE_TIMES.length }, () => 0),
   });
-  const routeProgress = useMotionValue(0);
-  const [route, setRoute] = useState({ width: 1, height: 1, path: 'M 0 0', ready: false });
+  const [route, setRoute] = useState({
+    width: 1,
+    height: 1,
+    path: 'M 0 0',
+    ready: false,
+    channelId: null as OpeningChannelId | null,
+  });
   const [channelActive, setChannelActive] = useState(false);
   const openingVisible = useInView(sectionRef, { amount: 0.1 });
-  const routeEventOpacity = useTransform(routeProgress, [0.46, 0.68], [0, 1]);
-  const eventY = useTransform(routeProgress, [0.46, 0.70], [14, 0]);
-  const connectorOpacity = useTransform(connectorProgress, [0.24, 0.30], [0, 1]);
-  const eventOpacity = useTransform(() => Math.min(routeEventOpacity.get(), connectorOpacity.get()));
+  const eventOpacity = useTransform(sequenceProgress, [0, 0.04], [0, 1]);
+  const eventY = useTransform(sequenceProgress, [0, 0.04], [8, 0]);
+  const connectorOpacity = useTransform(routeProgress, [0, 0.08], [0, 1]);
   const trackLength = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().pathLength));
   const pulseX = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().x));
   const pulseY = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().y));
@@ -109,6 +140,12 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
   useMotionValueEvent(progress, 'change', value => {
     const active = value > 0.05;
     setChannelActive(current => current === active ? current : active);
+  });
+
+  useMotionValueEvent(sequenceProgress, 'change', value => {
+    const next = resolveOpeningChannelSequence(value);
+    routeProgress.set(next.routeProgress);
+    setActiveIndex(current => current === next.index ? current : next.index);
   });
 
   useEffect(() => {
@@ -120,6 +157,8 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
     const sourceRow = source.closest<HTMLElement>('.story-channel-row');
     const event = target.closest<HTMLElement>('.story-channel-event');
     if (!ledger || !sourceRow || !event) return;
+
+    setRoute(current => ({ ...current, ready: false }));
 
     let active = true;
     const measure = () => {
@@ -175,25 +214,26 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
         ? `M ${start.x} ${start.y} H ${midpointX} V ${destination.y} H ${destination.x}`
         : `M ${start.x} ${start.y} V ${destination.y} H ${destination.x}`;
       setRoute(current => (
-        current.width === width && current.height === height && current.path === path && current.ready
+        current.width === width
+          && current.height === height
+          && current.path === path
+          && current.ready
+          && current.channelId === activeDemonstration.channelId
           ? current
-          : { width, height, path, ready: true }
+          : {
+              width,
+              height,
+              path,
+              ready: true,
+              channelId: activeDemonstration.channelId,
+            }
       ));
-    };
-
-    const updateRouteProgress = (value: number) => {
-      if (value <= ROUTE_RESET_PROGRESS) {
-        routeProgress.set(0);
-      } else if (value > routeProgress.get()) {
-        routeProgress.set(value);
-      }
     };
 
     const scheduleMeasure = () => {
       if (active) frame.postRender(measure);
     };
 
-    updateRouteProgress(connectorProgress.get());
     frame.postRender(scheduleMeasure);
     const observer = new ResizeObserver(scheduleMeasure);
     observer.observe(visual);
@@ -204,10 +244,7 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
     const transformObserver = new MutationObserver(scheduleMeasure);
     transformObserver.observe(sourceRow, { attributes: true, attributeFilter: ['style'] });
     transformObserver.observe(event, { attributes: true, attributeFilter: ['style'] });
-    const stopMeasuringProgress = connectorProgress.on('change', value => {
-      updateRouteProgress(value);
-      scheduleMeasure();
-    });
+    const stopMeasuringProgress = sequenceProgress.on('change', scheduleMeasure);
     void document.fonts?.ready.then(scheduleMeasure);
     return () => {
       active = false;
@@ -217,10 +254,9 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
       observer.disconnect();
       transformObserver.disconnect();
     };
-  }, [connectorProgress, geometry, routeProgress]);
+  }, [activeDemonstration.channelId, geometry, routeProgress, sequenceProgress]);
 
   const surfaceOpacity = useTransform(progress, [0, 0.12], [0, 1]);
-  const activeChannel = OPENING_CHANNELS.find(channel => channel.id === 'online-booking')!;
   const channelHeading = (
     <div>
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-800">UNA SOLA OPERACIÓN</p>
@@ -238,6 +274,7 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
       ref={sectionRef}
       data-opening-channel-handoff
       data-story-scene="channels"
+      data-channel-demo-index={activeIndex}
       data-active={channelActive && openingVisible ? 'true' : 'false'}
       aria-labelledby="opening-channels-title"
       style={{
@@ -254,16 +291,20 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
               Entradas de la operación
             </p>
             <ol>
-              {OPENING_CHANNELS.map((channel, index) => (
-                <ChannelRow
-                  key={channel.id}
-                  channel={channel}
-                  index={index}
-                  progress={progress}
-                  openingProgress={openingProgress}
-                  sourceRef={channel.id === 'online-booking' ? sourceRef : undefined}
-                />
-              ))}
+              {OPENING_CHANNELS.map((channel, index) => {
+                const active = channel.id === activeChannel.id;
+                return (
+                  <ChannelRow
+                    key={channel.id}
+                    channel={channel}
+                    index={index}
+                    progress={progress}
+                    openingProgress={openingProgress}
+                    active={active}
+                    sourceRef={active ? sourceRef : undefined}
+                  />
+                );
+              })}
             </ol>
           </div>
 
@@ -277,18 +318,38 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
               aria-hidden="true"
               className="story-channel-route-target absolute z-20 size-2.5 rounded-full border border-avoqado-green/45 bg-neutral-950"
             />
-            <div className="story-channel-event-header flex items-center justify-between border-b border-white/10 pb-2.5 sm:pb-3">
-              <span data-channel-route-summary className="text-[0.52rem] font-semibold uppercase leading-tight tracking-[0.08em] text-avoqado-green sm:text-[0.6rem]">
-                {activeChannel.label} → {activeChannel.result}
-              </span>
-              <span className="text-[0.65rem] text-neutral-400 sm:text-xs">{STORY_FIXTURE.appointmentTime}</span>
-            </div>
-            <p className="story-channel-event-service mt-3 text-base font-medium tracking-[-0.02em] sm:mt-5 sm:text-xl">{STORY_FIXTURE.service}</p>
-            <p className="mt-1 text-xs text-neutral-300 sm:text-sm">{STORY_FIXTURE.customer}</p>
-            <p className="story-channel-event-venue mt-2 w-fit text-[0.65rem] text-neutral-500 sm:mt-4 sm:text-xs">{STORY_FIXTURE.venue}</p>
+            <AnimatePresence initial={false} mode="wait">
+              <motion.div
+                key={activeDemonstration.channelId}
+                data-channel-event-content={activeDemonstration.channelId}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.16, ease: 'easeOut' }}
+                className="min-h-[7.5rem] sm:min-h-[9rem]"
+              >
+                <div className="story-channel-event-header flex items-center justify-between gap-3 border-b border-white/10 pb-2.5 sm:pb-3">
+                  <span data-channel-route-summary className="text-[0.52rem] font-semibold uppercase leading-tight tracking-[0.08em] text-avoqado-green sm:text-[0.6rem]">
+                    {activeChannel.label} → {activeChannel.result}
+                  </span>
+                  <span className="shrink-0 text-[0.65rem] text-neutral-400 sm:text-xs">
+                    {activeDemonstration.status}
+                  </span>
+                </div>
+                <p data-channel-event-primary className="story-channel-event-service mt-3 text-base font-medium tracking-[-0.02em] sm:mt-5 sm:text-xl">
+                  {activeDemonstration.primary}
+                </p>
+                <p data-channel-event-detail className="mt-1 text-xs text-neutral-300 sm:text-sm">
+                  {activeDemonstration.detail}
+                </p>
+                <p data-channel-event-context className="story-channel-event-venue mt-2 w-fit text-[0.65rem] text-neutral-500 sm:mt-4 sm:text-xs">
+                  {activeDemonstration.context}
+                </p>
+              </motion.div>
+            </AnimatePresence>
           </motion.div>
 
-          {route.ready ? (
+          {route.ready && route.channelId === activeDemonstration.channelId ? (
             <>
               <motion.svg
                 className="pointer-events-none absolute inset-0 z-20 size-full"
@@ -316,7 +377,10 @@ export default function ChannelHandoff({ openingProgress, progress, connectorPro
         </div>
       </div>
       <p className="sr-only">
-        {activeChannel.label} produce una reserva confirmada para {STORY_FIXTURE.customer}, con servicio, hora y sucursal.
+        {OPENING_CHANNEL_DEMONSTRATIONS.map(demonstration => {
+          const channel = openingChannelById(demonstration.channelId);
+          return `${channel.label} produce ${channel.result}. `;
+        })}
       </p>
     </motion.section>
   );

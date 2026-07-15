@@ -38,3 +38,16 @@ export function openingChannelById(id: OpeningChannelId) {
   if (!channel) throw new Error(`Unknown opening channel: ${id}`);
   return channel;
 }
+
+const ROUTE_DRAW_FRACTION = 0.44;
+
+export function resolveOpeningChannelSequence(progress: number) {
+  const clamped = Math.min(Math.max(progress, 0), 1 - Number.EPSILON);
+  const scaled = clamped * OPENING_CHANNEL_DEMONSTRATIONS.length;
+  const index = Math.min(Math.floor(scaled), OPENING_CHANNEL_DEMONSTRATIONS.length - 1);
+  const localProgress = scaled - index;
+  return {
+    index,
+    routeProgress: Math.min(localProgress / ROUTE_DRAW_FRACTION, 1),
+  };
+}
