@@ -170,8 +170,8 @@ test('moves the five mosaic tiles continuously into their operation rows', async
 test('restores the mosaic when scrolling the shared tiles backwards', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-desktop');
   await page.goto('/?motion=full');
-  await scrollOpeningTo(page, 0.80);
-  await scrollOpeningTo(page, 0.61);
+  await scrollOpeningTo(page, 0.54);
+  await scrollOpeningTo(page, 0.41);
 
   const selectedSources = page.locator('[data-shared-tile-source]');
   await expect(selectedSources).toHaveCount(5);
