@@ -22,12 +22,20 @@ export default function OpeningVideo({ progress, isMobile, autoplay }: Props) {
   const textOpacity = useTransform(progress, [0, 0.08], [1, 0]);
 
   useEffect(() => {
-    if (!autoplay || videoFailed) {
-      videoRef.current?.pause();
+    const video = videoRef.current;
+
+    if (video?.error) {
+      video.pause();
+      if (!videoFailed) setVideoFailed(true);
       return;
     }
 
-    void videoRef.current?.play().catch(() => undefined);
+    if (!autoplay || videoFailed) {
+      video?.pause();
+      return;
+    }
+
+    void video?.play().catch(() => undefined);
   }, [autoplay, videoFailed]);
 
   return (

@@ -148,9 +148,25 @@ test('keeps the same opening truth without JavaScript', async ({ page }, testInf
 
 test('keeps the poster visible when video playback fails', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.addInitScript(() => {
+    const originalPlay = HTMLMediaElement.prototype.play;
+    const state = window as Window & { __openingVideoPlayCalls: number };
+    state.__openingVideoPlayCalls = 0;
+    HTMLMediaElement.prototype.play = function () {
+      if (this instanceof HTMLVideoElement && this.getAttribute('src') === '/video4.webm') {
+        state.__openingVideoPlayCalls += 1;
+      }
+      return originalPlay.call(this);
+    };
+  });
   await page.route('**/video4.webm', route => route.abort('failed'));
   await page.goto('/?motion=full');
   const fallback = page.locator('[data-opening-video-fallback]');
   await expect(fallback).toBeVisible();
   await expect(fallback).toHaveAttribute('src', '/video4-poster.webp');
+  await expect(fallback.locator('xpath=ancestor::astro-island')).not.toHaveAttribute('ssr', '');
+  await expect(page.locator('video[src="/video4.webm"]')).toHaveCount(0);
+  expect(await page.evaluate(() => (
+    window as Window & { __openingVideoPlayCalls: number }
+  ).__openingVideoPlayCalls)).toBe(0);
 });
