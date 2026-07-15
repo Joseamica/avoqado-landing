@@ -14,9 +14,13 @@
 }
 
 @media (min-width: 640px) {
+  .story-channel-row {
+    padding-right: 1.5rem;
+  }
+
   .story-channel-route-source {
     left: auto;
-    right: -0.3125rem;
+    right: 0.25rem;
   }
 
   .story-channel-route-target {
@@ -26,9 +30,19 @@
   }
 }
 
+@media (max-width: 639px) {
+  [data-opening-channel-handoff] .story-channel-row {
+    padding-right: 0;
+  }
+}
+
 @media (max-width: 639px) and (min-height: 641px) {
   [data-opening-channel-handoff] .story-channel-visual {
     gap: 0.5rem;
+  }
+
+  [data-opening-channel-handoff] .story-channel-row {
+    padding-block: 0.625rem;
   }
 }
 
@@ -160,6 +174,7 @@
 
   .story-channel-row {
     padding-block: 0.2rem !important;
+    font-size: 0.875rem;
   }
 
   .story-channel-event {

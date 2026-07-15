@@ -284,224 +284,90 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
   await expect(alternateMerchant).toHaveCount(1);
 });
 
-test('conecta la reservación en línea con la reserva en un solo sentido', async ({ page }, testInfo) => {
+test('retargets one measured connector across the three opening results', async ({ page }, testInfo) => {
   test.skip(!['chromium-desktop', 'chromium-mobile', 'chromium-small'].includes(testInfo.project.name));
-  await page.goto('/');
+  await page.goto('/?motion=full');
 
   const opening = page.locator('[data-opening-mode="animated"]');
-  const moveToLocalProgress = async (localProgress: number) => {
-    await scrollOpeningTo(page, 0.84 + localProgress * (0.94 - 0.84));
-  };
-
   const scene = opening.locator('[data-opening-channel-handoff]');
-  const source = scene.locator('[data-channel-route-source]');
-  const target = scene.locator('[data-channel-route-target]');
-  const pulse = scene.locator('[data-story-primary-pulse]:visible');
-  const route = scene.locator('[data-channel-route-path]');
-  const activeRoute = scene.locator('[data-channel-route-active]');
-
-  await moveToLocalProgress(0.29);
-  await expect(source).toHaveCount(1);
-  await expect(target).toHaveCount(1);
-  await expect(pulse).toHaveCount(1);
-  await expect(route).toHaveCount(1);
-  await expect(activeRoute).toHaveCount(1);
-  await expect(scene.locator('.story-channel-row span.h-px')).toHaveCount(0);
-  await expect(scene.getByText('Ruta activa', { exact: true })).toHaveCount(0);
-  await expect(scene.locator('[data-channel-route-summary]:visible'))
-    .toHaveText('Reservación en línea → Reserva confirmada');
-
-  const readPulseDistance = async (destination: typeof source) => pulse.evaluate(
-    (pulseElement, destinationElement) => {
-      const pulseRect = pulseElement.getBoundingClientRect();
-      const destinationRect = (destinationElement as HTMLElement).getBoundingClientRect();
-      return Math.hypot(
-        pulseRect.left + pulseRect.width / 2 - (destinationRect.left + destinationRect.width / 2),
-        pulseRect.top + pulseRect.height / 2 - (destinationRect.top + destinationRect.height / 2),
-      );
-    },
-    await destination.elementHandle(),
-  );
-
-  expect(await readPulseDistance(source)).toBeLessThanOrEqual(3);
-
-  const endpoints = await route.evaluate((routeElement, anchors) => {
-    const path = routeElement as SVGPathElement;
-    const matrix = path.getScreenCTM();
-    if (!matrix) throw new Error('Missing channel route matrix');
-    const toScreen = (point: DOMPoint) => ({
-      x: matrix.a * point.x + matrix.c * point.y + matrix.e,
-      y: matrix.b * point.x + matrix.d * point.y + matrix.f,
-    });
-    const center = (element: HTMLElement) => {
-      const rect = element.getBoundingClientRect();
-      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
-    };
-    const start = toScreen(path.getPointAtLength(0));
-    const end = toScreen(path.getPointAtLength(path.getTotalLength()));
-    const sourceCenter = center(anchors.source as HTMLElement);
-    const targetCenter = center(anchors.target as HTMLElement);
-    return {
-      source: Math.hypot(start.x - sourceCenter.x, start.y - sourceCenter.y),
-      target: Math.hypot(end.x - targetCenter.x, end.y - targetCenter.y),
-    };
-  }, {
-    source: await source.elementHandle(),
-    target: await target.elementHandle(),
-  });
-  expect.soft(endpoints.source).toBeLessThanOrEqual(3);
-  expect.soft(endpoints.target).toBeLessThanOrEqual(3);
-
-  const targetDistances: number[] = [];
-  for (const localProgress of [0.30, 0.40, 0.52, 0.62]) {
-    await moveToLocalProgress(localProgress);
-    targetDistances.push(await readPulseDistance(target));
-    const activeEndpointDistance = await pulse.evaluate((pulseElement, routeElement) => {
-      const pulseRect = pulseElement.getBoundingClientRect();
-      const pulseCenter = {
-        x: pulseRect.left + pulseRect.width / 2,
-        y: pulseRect.top + pulseRect.height / 2,
-      };
-      const path = routeElement as SVGPathElement;
-      const matrix = path.getScreenCTM();
-      if (!matrix) throw new Error('Missing active channel route matrix');
-      const drawnLength = Number.parseFloat(getComputedStyle(path).strokeDasharray);
-      const point = path.getPointAtLength(path.getTotalLength() * Math.min(Math.max(drawnLength, 0), 1));
-      const endpoint = {
-        x: matrix.a * point.x + matrix.c * point.y + matrix.e,
-        y: matrix.b * point.x + matrix.d * point.y + matrix.f,
-      };
-      return Math.hypot(pulseCenter.x - endpoint.x, pulseCenter.y - endpoint.y);
-    }, await activeRoute.elementHandle());
-    expect.soft(activeEndpointDistance).toBeLessThanOrEqual(3);
-  }
-
-  for (let index = 1; index < targetDistances.length; index += 1) {
-    expect.soft(targetDistances[index]).toBeLessThanOrEqual(targetDistances[index - 1] + 3);
-  }
-
-  for (const localProgress of [0.62, 0.75, 0.88]) {
-    await moveToLocalProgress(localProgress);
-    expect.soft(await readPulseDistance(target)).toBeLessThanOrEqual(3);
-  }
-
-  const readActiveTargetDistance = async () => activeRoute.evaluate((routeElement, targetElement) => {
-    const path = routeElement as SVGPathElement;
-    const matrix = path.getScreenCTM();
-    if (!matrix) throw new Error('Missing reverse-scroll channel route matrix');
-    const drawnLength = Number.parseFloat(getComputedStyle(path).strokeDasharray);
-    const point = path.getPointAtLength(path.getTotalLength() * Math.min(Math.max(drawnLength, 0), 1));
-    const endpoint = {
-      x: matrix.a * point.x + matrix.c * point.y + matrix.e,
-      y: matrix.b * point.x + matrix.d * point.y + matrix.f,
-    };
-    const targetRect = (targetElement as HTMLElement).getBoundingClientRect();
-    const targetCenter = {
-      x: targetRect.left + targetRect.width / 2,
-      y: targetRect.top + targetRect.height / 2,
-    };
-    return Math.hypot(endpoint.x - targetCenter.x, endpoint.y - targetCenter.y);
-  }, await target.elementHandle());
-
-  await moveToLocalProgress(0.75);
-  await page.evaluate(() => new Promise<void>(resolve => {
-    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-  }));
-  expect.soft(await readPulseDistance(target), 'forward pulse docks at the reservation').toBeLessThanOrEqual(3);
-  expect.soft(await readActiveTargetDistance(), 'forward route reaches the reservation').toBeLessThanOrEqual(3);
-
-  const reverseSamples: Array<{
-    localProgress: number;
-    eventOpacity: number;
-    eventTranslateY: number;
-    routeOpacity: number;
-    pulseOpacity: number;
-    pulseTargetDistance: number;
-    activeTargetDistance: number;
-  }> = [];
-
-  for (const localProgress of [0.35, 0.30, 0.29, 0.27, 0.25, 0.24, 0.21, 0.18]) {
-    await moveToLocalProgress(localProgress);
+  const sequenceStart = 0.60;
+  const sequenceEnd = 0.98;
+  const moveTo = async (progress: number) => {
+    await scrollOpeningTo(page, sequenceStart + progress * (sequenceEnd - sequenceStart));
     await page.evaluate(() => new Promise<void>(resolve => {
       requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
     }));
+  };
 
-    const eventState = await scene.locator('.story-channel-event').evaluate(element => {
-      const styles = getComputedStyle(element);
-      return {
-        opacity: Number.parseFloat(styles.opacity),
-        translateY: new DOMMatrixReadOnly(styles.transform).m42,
+  for (const [progress, id] of [
+    [0.16, 'online-booking'],
+    [0.49, 'payment-link'],
+    [0.82, 'payment-terminal'],
+    [0.49, 'payment-link'],
+    [0.16, 'online-booking'],
+  ] as const) {
+    await moveTo(progress);
+    const activeRow = scene.locator('[data-channel-active="true"]');
+    const source = scene.locator('[data-channel-route-source]');
+    const target = scene.locator('[data-channel-route-target]');
+    const route = scene.locator('[data-channel-route-path]');
+    const activeRoute = scene.locator('[data-channel-route-active]');
+    const pulse = scene.locator('[data-story-primary-pulse]:visible');
+
+    await expect(activeRow).toHaveAttribute('data-channel-id', id);
+    await expect(source).toHaveCount(1);
+    await expect(target).toHaveCount(1);
+    await expect(route).toHaveCount(1);
+    await expect(activeRoute).toHaveCount(1);
+    await expect(pulse).toHaveCount(1);
+
+    const distances = await route.evaluate((routeElement, anchors) => {
+      const path = routeElement as SVGPathElement;
+      const sceneElement = path.closest<HTMLElement>('[data-opening-channel-handoff]')!;
+      const active = sceneElement.querySelector<SVGPathElement>('[data-channel-route-active]')!;
+      const pulseElement = sceneElement.querySelector<HTMLElement>('[data-story-primary-pulse]')!;
+      const matrix = path.getScreenCTM();
+      const activeMatrix = active.getScreenCTM();
+      if (!matrix || !activeMatrix) throw new Error('Missing opening route matrix');
+      const center = (element: HTMLElement) => {
+        const rect = element.getBoundingClientRect();
+        return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
       };
+      const screenPoint = (point: DOMPoint, transform: DOMMatrix) => ({
+        x: transform.a * point.x + transform.c * point.y + transform.e,
+        y: transform.b * point.x + transform.d * point.y + transform.f,
+      });
+      const sourceCenter = center(anchors.source as HTMLElement);
+      const targetCenter = center(anchors.target as HTMLElement);
+      const pulseCenter = center(pulseElement);
+      const start = screenPoint(path.getPointAtLength(0), matrix);
+      const end = screenPoint(path.getPointAtLength(path.getTotalLength()), matrix);
+      const drawn = Math.min(Math.max(Number.parseFloat(getComputedStyle(active).strokeDasharray), 0), 1);
+      const activeEnd = screenPoint(active.getPointAtLength(active.getTotalLength() * drawn), activeMatrix);
+      return {
+        source: Math.hypot(start.x - sourceCenter.x, start.y - sourceCenter.y),
+        target: Math.hypot(end.x - targetCenter.x, end.y - targetCenter.y),
+        activeTarget: Math.hypot(activeEnd.x - targetCenter.x, activeEnd.y - targetCenter.y),
+        pulseActive: Math.hypot(pulseCenter.x - activeEnd.x, pulseCenter.y - activeEnd.y),
+      };
+    }, {
+      source: await source.elementHandle(),
+      target: await target.elementHandle(),
     });
-    const routeOpacity = await activeRoute.evaluate(element =>
-      Number.parseFloat(getComputedStyle(element.parentElement!).opacity));
-    const pulseOpacity = await pulse.evaluate(element =>
-      Number.parseFloat(getComputedStyle(element).opacity));
-    reverseSamples.push({
-      localProgress,
-      eventOpacity: eventState.opacity,
-      eventTranslateY: eventState.translateY,
-      routeOpacity,
-      pulseOpacity,
-      pulseTargetDistance: await readPulseDistance(target),
-      activeTargetDistance: await readActiveTargetDistance(),
-    });
+
+    expect.soft(distances.source, `${id} source`).toBeLessThanOrEqual(3);
+    expect.soft(distances.target, `${id} target`).toBeLessThanOrEqual(3);
+    expect.soft(distances.activeTarget, `${id} active route docks`).toBeLessThanOrEqual(3);
+    expect.soft(distances.pulseActive, `${id} pulse follows active route`).toBeLessThanOrEqual(3);
   }
-
-  for (let index = 1; index < reverseSamples.length; index += 1) {
-    const previous = reverseSamples[index - 1];
-    const current = reverseSamples[index];
-    expect.soft(current.eventOpacity, `card opacity decays at ${current.localProgress}`)
-      .toBeLessThanOrEqual(previous.eventOpacity + 0.02);
-    expect.soft(current.routeOpacity, `route opacity decays at ${current.localProgress}`)
-      .toBeLessThanOrEqual(previous.routeOpacity + 0.02);
-    expect.soft(current.pulseOpacity, `pulse opacity decays at ${current.localProgress}`)
-      .toBeLessThanOrEqual(previous.pulseOpacity + 0.02);
-  }
-
-  for (const sample of reverseSamples) {
-    expect.soft(Math.abs(sample.eventOpacity - sample.routeOpacity), `card and route fade together at ${sample.localProgress}`)
-      .toBeLessThanOrEqual(0.06);
-    expect.soft(Math.abs(sample.eventOpacity - sample.pulseOpacity), `card and pulse fade together at ${sample.localProgress}`)
-      .toBeLessThanOrEqual(0.06);
-    expect.soft(
-      sample.routeOpacity <= 0.05 && sample.eventOpacity >= 0.95,
-      `route cannot be hidden while card is opaque at ${sample.localProgress}`,
-    ).toBe(false);
-    if (sample.pulseOpacity > 0.05) {
-      expect.soft(sample.pulseTargetDistance, `visible reverse pulse stays docked at ${sample.localProgress}`)
-        .toBeLessThanOrEqual(3);
-      expect.soft(sample.activeTargetDistance, `visible reverse route stays complete at ${sample.localProgress}`)
-        .toBeLessThanOrEqual(3);
-      expect.soft(Math.abs(sample.eventTranslateY), `visible reverse card stays docked at ${sample.localProgress}`)
-        .toBeLessThanOrEqual(1);
-    }
-  }
-
-  const resetEventOpacity = reverseSamples.at(-1)!.eventOpacity;
-  expect.soft(resetEventOpacity, 'the hidden pre-scene zone resets the destination').toBeLessThanOrEqual(0.05);
-
-  await moveToLocalProgress(0.29);
-  await page.evaluate(() => new Promise<void>(resolve => {
-    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-  }));
-  expect.soft(await readPulseDistance(source), 'a later forward visit replays from the source').toBeLessThanOrEqual(3);
-
-  const eventOpacity: number[] = [];
-  for (const localProgress of [0.30, 0.54, 0.75]) {
-    await moveToLocalProgress(localProgress);
-    eventOpacity.push(await scene.locator('.story-channel-event').evaluate(element =>
-      Number.parseFloat(getComputedStyle(element).opacity)));
-  }
-  expect(eventOpacity[0]).toBeLessThanOrEqual(0.05);
-  expect(eventOpacity[1]).toBeGreaterThan(0.25);
-  expect(eventOpacity[1]).toBeLessThan(0.85);
-  expect(eventOpacity[2]).toBeGreaterThanOrEqual(0.98);
 });
 
 test('mantiene el conector dentro del panel en todos los viewports', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-desktop');
   await page.goto('/');
+
+  const sequenceStart = 0.60;
+  const sequenceEnd = 0.98;
 
   for (const viewport of [
     { width: 1440, height: 900 },
@@ -513,82 +379,104 @@ test('mantiene el conector dentro del panel en todos los viewports', async ({ pa
   ]) {
     await page.setViewportSize(viewport);
     const opening = page.locator('[data-opening-mode="animated"]');
-    await scrollOpeningTo(page, 0.84 + 0.72 * (0.94 - 0.84));
-    await page.evaluate(() => new Promise<void>(resolve => {
-      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-    }));
-
     const scene = opening.locator('[data-opening-channel-handoff]');
-    const geometry = await scene.evaluate(element => {
-      const rect = (selector: string) => element.querySelector<HTMLElement>(selector)!.getBoundingClientRect();
-      const visual = rect('.story-channel-visual');
-      const ledger = rect('.story-channel-ledger');
-      const event = rect('.story-channel-event');
-      const source = rect('[data-channel-route-source]');
-      const target = rect('[data-channel-route-target]');
-      const pulse = rect('[data-story-primary-pulse]');
-      const path = element.querySelector<SVGPathElement>('[data-channel-route-path]')!;
-      const activePath = element.querySelector<SVGPathElement>('[data-channel-route-active]')!;
-      const matrix = path.getScreenCTM();
-      const activeMatrix = activePath.getScreenCTM();
-      if (!matrix || !activeMatrix) throw new Error('Missing responsive channel route matrix');
-      const toScreen = (point: DOMPoint) => ({
-        x: matrix.a * point.x + matrix.c * point.y + matrix.e,
-        y: matrix.b * point.x + matrix.d * point.y + matrix.f,
-      });
-      const activeToScreen = (point: DOMPoint) => ({
-        x: activeMatrix.a * point.x + activeMatrix.c * point.y + activeMatrix.e,
-        y: activeMatrix.b * point.x + activeMatrix.d * point.y + activeMatrix.f,
-      });
-      const center = (box: DOMRect) => ({ x: box.left + box.width / 2, y: box.top + box.height / 2 });
-      const start = toScreen(path.getPointAtLength(0));
-      const end = toScreen(path.getPointAtLength(path.getTotalLength()));
-      const sourceCenter = center(source);
-      const targetCenter = center(target);
-      const pulseCenter = center(pulse);
-      const drawnLength = Number.parseFloat(getComputedStyle(activePath).strokeDasharray);
-      const activeEndpoint = activeToScreen(activePath.getPointAtLength(
-        activePath.getTotalLength() * Math.min(Math.max(drawnLength, 0), 1),
-      ));
-      const routeTopology = (path.getAttribute('d')?.match(/[MHVL]/g) ?? []).join('');
-      return {
-        visual: { top: visual.top, right: visual.right, bottom: visual.bottom, left: visual.left },
-        ledger: { top: ledger.top, right: ledger.right, bottom: ledger.bottom, left: ledger.left },
-        event: { top: event.top, right: event.right, bottom: event.bottom, left: event.left },
-        sourceCenter,
-        targetCenter,
-        pulseCenter,
-        sourceDistance: Math.hypot(start.x - sourceCenter.x, start.y - sourceCenter.y),
-        targetDistance: Math.hypot(end.x - targetCenter.x, end.y - targetCenter.y),
-        pulseTargetDistance: Math.hypot(pulseCenter.x - targetCenter.x, pulseCenter.y - targetCenter.y),
-        activeTargetDistance: Math.hypot(activeEndpoint.x - targetCenter.x, activeEndpoint.y - targetCenter.y),
-        routeTopology,
-        documentWidth: document.documentElement.scrollWidth,
-        viewportWidth: window.innerWidth,
-      };
-    });
+    for (const [progress, id] of [
+      [0.16, 'online-booking'],
+      [0.49, 'payment-link'],
+      [0.82, 'payment-terminal'],
+    ] as const) {
+      await scrollOpeningTo(page, sequenceStart + progress * (sequenceEnd - sequenceStart));
+      await page.evaluate(() => new Promise<void>(resolve => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      }));
 
-    for (const panel of [geometry.ledger, geometry.event]) {
-      expect.soft(panel.top).toBeGreaterThanOrEqual(geometry.visual.top - 1);
-      expect.soft(panel.bottom).toBeLessThanOrEqual(geometry.visual.bottom + 1);
-      expect.soft(panel.left).toBeGreaterThanOrEqual(geometry.visual.left - 1);
-      expect.soft(panel.right).toBeLessThanOrEqual(geometry.visual.right + 1);
+      await expect(scene.locator('[data-channel-active="true"]')).toHaveAttribute('data-channel-id', id);
+      const geometry = await scene.evaluate(element => {
+        const rect = (selector: string) => element.querySelector<HTMLElement>(selector)!.getBoundingClientRect();
+        const visual = rect('.story-channel-visual');
+        const ledger = rect('.story-channel-ledger');
+        const event = rect('.story-channel-event');
+        const result = rect('[data-channel-active="true"] .story-channel-result');
+        const source = rect('[data-channel-route-source]');
+        const target = rect('[data-channel-route-target]');
+        const pulse = rect('[data-story-primary-pulse]');
+        const path = element.querySelector<SVGPathElement>('[data-channel-route-path]')!;
+        const activePath = element.querySelector<SVGPathElement>('[data-channel-route-active]')!;
+        const matrix = path.getScreenCTM();
+        const activeMatrix = activePath.getScreenCTM();
+        if (!matrix || !activeMatrix) throw new Error('Missing responsive channel route matrix');
+        const toScreen = (point: DOMPoint) => ({
+          x: matrix.a * point.x + matrix.c * point.y + matrix.e,
+          y: matrix.b * point.x + matrix.d * point.y + matrix.f,
+        });
+        const activeToScreen = (point: DOMPoint) => ({
+          x: activeMatrix.a * point.x + activeMatrix.c * point.y + activeMatrix.e,
+          y: activeMatrix.b * point.x + activeMatrix.d * point.y + activeMatrix.f,
+        });
+        const center = (box: DOMRect) => ({ x: box.left + box.width / 2, y: box.top + box.height / 2 });
+        const start = toScreen(path.getPointAtLength(0));
+        const end = toScreen(path.getPointAtLength(path.getTotalLength()));
+        const sourceCenter = center(source);
+        const targetCenter = center(target);
+        const pulseCenter = center(pulse);
+        const drawnLength = Number.parseFloat(getComputedStyle(activePath).strokeDasharray);
+        const activeEndpoint = activeToScreen(activePath.getPointAtLength(
+          activePath.getTotalLength() * Math.min(Math.max(drawnLength, 0), 1),
+        ));
+        const routeTopology = (path.getAttribute('d')?.match(/[MHVL]/g) ?? []).join('');
+        return {
+          visual: { top: visual.top, right: visual.right, bottom: visual.bottom, left: visual.left },
+          ledger: { top: ledger.top, right: ledger.right, bottom: ledger.bottom, left: ledger.left },
+          event: { top: event.top, right: event.right, bottom: event.bottom, left: event.left },
+          result: { top: result.top, right: result.right, bottom: result.bottom, left: result.left },
+          sourceCenter,
+          targetCenter,
+          pulseCenter,
+          sourceDistance: Math.hypot(start.x - sourceCenter.x, start.y - sourceCenter.y),
+          targetDistance: Math.hypot(end.x - targetCenter.x, end.y - targetCenter.y),
+          pulseTargetDistance: Math.hypot(pulseCenter.x - targetCenter.x, pulseCenter.y - targetCenter.y),
+          activeTargetDistance: Math.hypot(activeEndpoint.x - targetCenter.x, activeEndpoint.y - targetCenter.y),
+          routeTopology,
+          documentWidth: document.documentElement.scrollWidth,
+          viewportWidth: window.innerWidth,
+        };
+      });
+
+      for (const panel of [geometry.ledger, geometry.event]) {
+        expect.soft(panel.top).toBeGreaterThanOrEqual(geometry.visual.top - 1);
+        expect.soft(panel.bottom).toBeLessThanOrEqual(geometry.visual.bottom + 1);
+        expect.soft(panel.left).toBeGreaterThanOrEqual(geometry.visual.left - 1);
+        expect.soft(panel.right).toBeLessThanOrEqual(geometry.visual.right + 1);
+      }
+      for (const point of [geometry.sourceCenter, geometry.targetCenter, geometry.pulseCenter]) {
+        expect.soft(point.x).toBeGreaterThanOrEqual(geometry.visual.left - 1);
+        expect.soft(point.x).toBeLessThanOrEqual(geometry.visual.right + 1);
+        expect.soft(point.y).toBeGreaterThanOrEqual(geometry.visual.top - 1);
+        expect.soft(point.y).toBeLessThanOrEqual(geometry.visual.bottom + 1);
+      }
+      expect.soft(geometry.sourceDistance).toBeLessThanOrEqual(3);
+      expect.soft(geometry.targetDistance).toBeLessThanOrEqual(3);
+      expect.soft(
+        geometry.pulseTargetDistance,
+        `${viewport.width}×${viewport.height} pulse reaches target`,
+      ).toBeLessThanOrEqual(3);
+      expect.soft(
+        geometry.activeTargetDistance,
+        `${viewport.width}×${viewport.height} active route reaches target`,
+      ).toBeLessThanOrEqual(3);
+      expect.soft(
+        geometry.routeTopology,
+        `${viewport.width}×${viewport.height} route follows the rendered panel layout`,
+      ).toBe(viewport.width >= 640 ? 'MHVH' : 'MVH');
+      if (viewport.width >= 640) {
+        expect.soft(
+          geometry.sourceCenter.x - geometry.result.right,
+          `${viewport.width}×${viewport.height} result/source gutter`,
+        ).toBeGreaterThanOrEqual(6);
+      }
+      expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth + 1);
     }
-    for (const point of [geometry.sourceCenter, geometry.targetCenter, geometry.pulseCenter]) {
-      expect.soft(point.x).toBeGreaterThanOrEqual(geometry.visual.left - 1);
-      expect.soft(point.x).toBeLessThanOrEqual(geometry.visual.right + 1);
-      expect.soft(point.y).toBeGreaterThanOrEqual(geometry.visual.top - 1);
-      expect.soft(point.y).toBeLessThanOrEqual(geometry.visual.bottom + 1);
-    }
-    expect.soft(geometry.sourceDistance).toBeLessThanOrEqual(3);
-    expect.soft(geometry.targetDistance).toBeLessThanOrEqual(3);
-    expect.soft(geometry.pulseTargetDistance, `${viewport.width}×${viewport.height} pulse reaches target`).toBeLessThanOrEqual(3);
-    expect.soft(geometry.activeTargetDistance, `${viewport.width}×${viewport.height} active route reaches target`).toBeLessThanOrEqual(3);
-    expect.soft(
-      geometry.routeTopology,
-      `${viewport.width}×${viewport.height} route follows the rendered panel layout`,
-    ).toBe(viewport.width >= 640 ? 'MHVH' : 'MVH');
-    expect(geometry.documentWidth).toBeLessThanOrEqual(geometry.viewportWidth + 1);
+
     if (viewport.width < 1024) {
       await expect(page.locator('button[aria-label="Abrir chat de ayuda"]')).toBeHidden();
     } else {

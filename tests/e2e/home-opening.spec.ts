@@ -148,7 +148,7 @@ test('moves the five mosaic tiles continuously into their operation rows', async
 
   await expect(page.locator('[data-shared-tile-overlay]')).toHaveCount(5);
   const distances: number[][] = [];
-  for (const progress of [0.64, 0.71, 0.80]) {
+  for (const progress of [0.43, 0.48, 0.54]) {
     await scrollOpeningTo(page, progress);
     distances.push(await page.locator('[data-shared-tile-overlay]').evaluateAll(nodes => nodes.map(node => {
       const id = node.getAttribute('data-shared-tile-overlay');
@@ -192,7 +192,7 @@ test('keeps every opening checkpoint inside the viewport at all required sizes',
     { width: 390, height: 844 },
     { width: 320, height: 568 },
   ];
-  const checkpoints = [0.02, 0.55, 0.70, 0.82, 0.97];
+  const checkpoints = [0.02, 0.36, 0.48, 0.56, 0.66, 0.79, 0.97];
   const errors: string[] = [];
   page.on('console', message => {
     if (message.type() === 'error') errors.push(message.text());
@@ -249,7 +249,7 @@ test('docks all five shared tiles at every required viewport', async ({ page }, 
   for (const viewport of viewports) {
     await page.setViewportSize(viewport);
     await page.goto('/?motion=full');
-    await scrollOpeningTo(page, 0.80);
+    await scrollOpeningTo(page, 0.54);
     const state = await page.locator('[data-opening-mode="animated"]').evaluate(element => {
       const overlays = [...element.querySelectorAll<HTMLElement>('[data-shared-tile-overlay]')];
       return {
