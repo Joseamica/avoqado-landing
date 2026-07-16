@@ -1,4 +1,6 @@
+import type { NarrativeBeat } from '../home-story/story';
 import { STORY_FIXTURE } from '../home-story/story-fixture';
+import { smoothstep, stepWindow } from '../home-story/story-motion';
 import { OPENING_CHANNELS, type OpeningChannelId } from './opening-tiles';
 
 export interface OpeningChannelDemonstration {
@@ -33,21 +35,46 @@ export const OPENING_CHANNEL_DEMONSTRATIONS = [
   },
 ] as const satisfies readonly OpeningChannelDemonstration[];
 
+export const OPENING_CHANNEL_NARRATIVE = {
+  eyebrow: 'Una sola operación',
+  title: 'Tu cliente reserva, compra o paga como prefiera.',
+  thread: 'Reservación en línea → Reserva confirmada',
+  result: 'Todo llega conectado al mismo negocio.',
+  body: 'Desde una reservación o liga de pago hasta el punto de venta o la terminal física: todo llega conectado a Avoqado.',
+  stepThresholds: [0.30, 0.45, 0.60],
+} as const satisfies NarrativeBeat;
+
 export function openingChannelById(id: OpeningChannelId) {
   const channel = OPENING_CHANNELS.find(item => item.id === id);
   if (!channel) throw new Error(`Unknown opening channel: ${id}`);
   return channel;
 }
 
-const ROUTE_DRAW_FRACTION = 0.44;
+function channelRouteWindow(index: number, threshold: number, fadeOutStart: number, switchAt: number) {
+  const [start, end] = stepWindow(threshold);
+  return { index, threshold, start, end, fadeOutStart, switchAt };
+}
+
+const CHANNEL_ROUTE_WINDOWS = [
+  channelRouteWindow(0, 0.30, 0.39, 0.43),
+  channelRouteWindow(1, 0.45, 0.54, 0.58),
+  channelRouteWindow(2, 0.60, 1, 1),
+] as const;
+
+const clamp01 = (value: number) => Math.min(Math.max(value, 0), 1);
 
 export function resolveOpeningChannelSequence(progress: number) {
-  const clamped = Math.min(Math.max(progress, 0), 1 - Number.EPSILON);
-  const scaled = clamped * OPENING_CHANNEL_DEMONSTRATIONS.length;
-  const index = Math.min(Math.floor(scaled), OPENING_CHANNEL_DEMONSTRATIONS.length - 1);
-  const localProgress = scaled - index;
+  const value = clamp01(progress);
+  const index = value < 0.43 ? 0 : value < 0.58 ? 1 : 2;
+  const window = CHANNEL_ROUTE_WINDOWS[index];
+  const draw = smoothstep(clamp01((value - window.start) / (window.end - window.start)));
+  const fade = index === 2
+    ? 1
+    : 1 - smoothstep(clamp01((value - window.fadeOutStart) / (window.switchAt - window.fadeOutStart)));
   return {
     index,
-    routeProgress: Math.min(localProgress / ROUTE_DRAW_FRACTION, 1),
+    routeProgress: draw,
+    routeOpacity: draw * fade,
+    started: value >= window.start,
   };
 }

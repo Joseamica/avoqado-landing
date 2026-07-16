@@ -112,7 +112,7 @@ test('restores the approved homepage opening and hands off directly to service',
       .toHaveAttribute('src', new RegExp(imageName));
   }
   await expect(channels.locator('[data-channel-active="true"]')).toHaveCount(1);
-  await expect(channels.locator('[data-channel-route-summary]:visible'))
+  await expect(channels.locator('[data-channel-event-content][data-active="true"] [data-channel-route-summary]'))
     .toHaveText('Terminal de cobro → Cobro aprobado');
 
   await expect(page.getByText('Un cliente hace una cosa. Avoqado mueve todo lo demás.')).toHaveCount(0);
@@ -127,29 +127,31 @@ test('shows reservation, payment-link, and terminal results as scroll advances a
 
   const scene = page.locator('[data-opening-channel-handoff]');
   const checkpoints = [
-    [0.16, 'online-booking', 'Reservación en línea → Reserva confirmada', 'Facial hidratante', 'María G. · 11:30', 'Sucursal Centro'],
-    [0.49, 'payment-link', 'Liga de pago → Pago recibido', '$1,250', 'Liga enviada por WhatsApp', 'Pago con tarjeta'],
-    [0.82, 'payment-terminal', 'Terminal de cobro → Cobro aprobado', '$348', 'Pago sin contacto', 'Terminal física · Sucursal Centro'],
+    [0.36, 'online-booking', 'Reservación en línea → Reserva confirmada', 'Facial hidratante', 'María G. · 11:30', 'Sucursal Centro'],
+    [0.52, 'payment-link', 'Liga de pago → Pago recibido', '$1,250', 'Liga enviada por WhatsApp', 'Pago con tarjeta'],
+    [0.66, 'payment-terminal', 'Terminal de cobro → Cobro aprobado', '$348', 'Pago sin contacto', 'Terminal física · Sucursal Centro'],
   ] as const;
 
   for (const [progress, id, summary, primary, detail, context] of checkpoints) {
     await scrollChannelSequenceTo(page, progress);
     await expect(scene.locator('[data-channel-active="true"]')).toHaveAttribute('data-channel-id', id);
-    await expect(scene.locator('[data-channel-event-content]')).toHaveAttribute('data-channel-event-content', id);
-    await expect(scene.locator('[data-channel-route-summary]:visible')).toHaveText(summary);
-    await expect(scene.locator('[data-channel-event-primary]:visible')).toHaveText(primary);
-    await expect(scene.locator('[data-channel-event-detail]:visible')).toHaveText(detail);
-    await expect(scene.locator('[data-channel-event-context]:visible')).toHaveText(context);
+    const event = scene.locator('[data-channel-event-content][data-active="true"]');
+    await expect(event).toHaveAttribute('data-channel-event-content', id);
+    expect(await event.evaluate(element => Number.parseFloat(getComputedStyle(element).opacity))).toBeGreaterThan(0.95);
+    await expect(event.locator('[data-channel-route-summary]')).toHaveText(summary);
+    await expect(event.locator('[data-channel-event-primary]')).toHaveText(primary);
+    await expect(event.locator('[data-channel-event-detail]')).toHaveText(detail);
+    await expect(event.locator('[data-channel-event-context]')).toHaveText(context);
   }
 
   for (const [progress, id] of [
-    [0.82, 'payment-terminal'],
-    [0.49, 'payment-link'],
-    [0.16, 'online-booking'],
+    [0.66, 'payment-terminal'],
+    [0.52, 'payment-link'],
+    [0.36, 'online-booking'],
   ] as const) {
     await scrollChannelSequenceTo(page, progress);
     await expect(scene.locator('[data-channel-active="true"]')).toHaveAttribute('data-channel-id', id);
-    await expect(scene.locator('[data-channel-event-content]')).toHaveAttribute('data-channel-event-content', id);
+    await expect(scene.locator('[data-channel-event-content][data-active="true"]')).toHaveAttribute('data-channel-event-content', id);
   }
 });
 
@@ -198,6 +200,7 @@ test('keeps every opening checkpoint inside the viewport at all required sizes',
   test.skip(testInfo.project.name !== 'chromium-desktop');
   const viewports = [
     { width: 1440, height: 900 },
+    { width: 1024, height: 768 },
     { width: 910, height: 691 },
     { width: 787, height: 701 },
     { width: 887, height: 502 },
@@ -251,6 +254,7 @@ test('docks all five shared tiles at every required viewport', async ({ page }, 
   ].sort();
   const viewports = [
     { width: 1440, height: 900 },
+    { width: 1024, height: 768 },
     { width: 910, height: 691 },
     { width: 787, height: 701 },
     { width: 887, height: 502 },

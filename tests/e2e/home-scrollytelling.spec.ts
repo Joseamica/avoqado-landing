@@ -341,11 +341,11 @@ test('retargets one measured connector across the three opening results', async 
   };
 
   for (const [progress, id] of [
-    [0.16, 'online-booking'],
-    [0.49, 'payment-link'],
-    [0.82, 'payment-terminal'],
-    [0.49, 'payment-link'],
-    [0.16, 'online-booking'],
+    [0.32, 'online-booking'],
+    [0.47, 'payment-link'],
+    [0.62, 'payment-terminal'],
+    [0.47, 'payment-link'],
+    [0.32, 'online-booking'],
   ] as const) {
     await moveTo(progress);
     const activeRow = scene.locator('[data-channel-active="true"]');
@@ -420,7 +420,7 @@ test('replays the remapped opening connector lifecycle', async ({ page }, testIn
     const pulse = element.querySelector<HTMLElement>('[data-story-primary-pulse]')!;
     const route = element.querySelector<SVGPathElement>('[data-channel-route-path]')!;
     const active = element.querySelector<SVGPathElement>('[data-channel-route-active]')!;
-    const event = element.querySelector<HTMLElement>('.story-channel-event')!;
+    const event = element.querySelector<HTMLElement>('[data-channel-event-content][data-active="true"]')!;
     const matrix = route.getScreenCTM();
     const activeMatrix = active.getScreenCTM();
     if (!matrix || !activeMatrix) throw new Error('Missing lifecycle route matrix');
@@ -453,13 +453,12 @@ test('replays the remapped opening connector lifecycle', async ({ page }, testIn
       activeTarget: distance(activeEnd, targetCenter),
       pulseActive: distance(pulseCenter, activeEnd),
       eventOpacity: Number.parseFloat(eventStyles.opacity),
-      eventTranslateY: new DOMMatrixReadOnly(eventStyles.transform).m42,
       routeOpacity: Number.parseFloat(getComputedStyle(active.parentElement!).opacity),
       pulseOpacity: Number.parseFloat(getComputedStyle(pulse).opacity),
     };
   });
 
-  await moveTo(0.04);
+  await moveTo(0.28);
   await expect(scene.locator('[data-channel-route-path]')).toHaveCount(1);
   const sourceStart = await readState();
   expect(sourceStart.id).toBe('online-booking');
@@ -469,9 +468,12 @@ test('replays the remapped opening connector lifecycle', async ({ page }, testIn
   expect.soft(sourceStart.activeSource).toBeLessThanOrEqual(3);
   expect.soft(sourceStart.pulseActive).toBeLessThanOrEqual(3);
   expect.soft(sourceStart.drawn).toBeLessThanOrEqual(0.01);
+  expect.soft(sourceStart.eventOpacity).toBeLessThanOrEqual(0.05);
+  expect.soft(sourceStart.routeOpacity).toBeLessThanOrEqual(0.05);
+  expect.soft(sourceStart.pulseOpacity).toBeLessThanOrEqual(0.05);
 
-  const forward = [];
-  for (const progress of [0.04, 0.06, 0.08, 0.10]) {
+  const forward = [{ progress: 0.28, ...sourceStart }];
+  for (const progress of [0.29, 0.30, 0.31, 0.32]) {
     await moveTo(progress);
     forward.push({ progress, ...await readState() });
   }
@@ -485,21 +487,16 @@ test('replays the remapped opening connector lifecycle', async ({ page }, testIn
     expect.soft(forward[index].pulseActive, `pulse follows stroke at ${forward[index].progress}`)
       .toBeLessThanOrEqual(3);
   }
-  expect.soft(forward[1].pulseTarget).toBeLessThan(forward[0].pulseTarget - 3);
-  expect.soft(forward[1].pulseTarget).toBeGreaterThan(3);
-  expect.soft(forward[1].drawn).toBeGreaterThan(forward[0].drawn + 0.01);
   expect.soft(forward.at(-1)!.pulseTarget).toBeLessThanOrEqual(3);
   expect.soft(forward.at(-1)!.activeTarget).toBeLessThanOrEqual(3);
 
-  await moveTo(0.16);
-  const docked = await readState();
-  expect.soft(docked.pulseTarget).toBeLessThanOrEqual(3);
-  expect.soft(docked.activeTarget).toBeLessThanOrEqual(3);
-  expect.soft(docked.pulseActive).toBeLessThanOrEqual(3);
-  expect.soft(docked.drawn).toBeGreaterThanOrEqual(0.98);
+  expect.soft(forward.at(-1)!.drawn).toBeGreaterThanOrEqual(0.98);
+  expect.soft(forward.at(-1)!.eventOpacity).toBeGreaterThanOrEqual(0.95);
+  expect.soft(forward.at(-1)!.routeOpacity).toBeGreaterThanOrEqual(0.95);
+  expect.soft(forward.at(-1)!.pulseOpacity).toBeGreaterThanOrEqual(0.95);
 
   const reverse = [];
-  for (const progress of [0.10, 0.08, 0.06, 0.04, 0.03, 0.01, -0.05]) {
+  for (const progress of [0.31, 0.30, 0.29, 0.28, 0.27, 0.25, 0]) {
     await moveTo(progress);
     reverse.push({ progress, ...await readState() });
   }
@@ -514,49 +511,28 @@ test('replays the remapped opening connector lifecycle', async ({ page }, testIn
   expect.soft(reverse[3].pulseSource).toBeLessThanOrEqual(3);
   expect.soft(reverse[3].activeSource).toBeLessThanOrEqual(3);
 
-  const reverseFade = reverse.slice(4);
-  for (let index = 1; index < reverseFade.length; index += 1) {
-    expect.soft(reverseFade[index].eventOpacity, `event fades at ${reverseFade[index].progress}`)
-      .toBeLessThanOrEqual(reverseFade[index - 1].eventOpacity + 0.02);
-    expect.soft(reverseFade[index].routeOpacity, `route fades at ${reverseFade[index].progress}`)
-      .toBeLessThanOrEqual(reverseFade[index - 1].routeOpacity + 0.02);
-    expect.soft(reverseFade[index].pulseOpacity, `pulse fades at ${reverseFade[index].progress}`)
-      .toBeLessThanOrEqual(reverseFade[index - 1].pulseOpacity + 0.02);
+  for (let index = 1; index < 4; index += 1) {
+    expect.soft(reverse[index].drawn, `reverse stroke shrinks at ${reverse[index].progress}`)
+      .toBeLessThanOrEqual(reverse[index - 1].drawn);
   }
-  for (const sample of reverseFade) {
-    expect.soft(sample.routeOpacity + 0.05, `route does not hide before event at ${sample.progress}`)
-      .toBeGreaterThanOrEqual(sample.eventOpacity);
+  for (const sample of reverse.slice(3)) {
+    expect.soft(sample.eventOpacity, `event resets at ${sample.progress}`).toBeLessThanOrEqual(0.05);
+    expect.soft(sample.routeOpacity, `route resets at ${sample.progress}`).toBeLessThanOrEqual(0.05);
+    expect.soft(sample.pulseOpacity, `pulse resets at ${sample.progress}`).toBeLessThanOrEqual(0.05);
+    expect.soft(sample.pulseSource, `pulse returns to source at ${sample.progress}`).toBeLessThanOrEqual(3);
+    expect.soft(sample.activeSource, `stroke returns to source at ${sample.progress}`).toBeLessThanOrEqual(3);
+    expect.soft(sample.drawn, `stroke clears at ${sample.progress}`).toBeLessThanOrEqual(0.01);
   }
-  for (const sample of reverse) {
-    if (sample.pulseOpacity > 0.05) {
-      expect.soft(sample.pulseActive, `visible reverse pulse follows stroke at ${sample.progress}`)
-        .toBeLessThanOrEqual(3);
-    }
-  }
-  expect.soft(reverseFade[0].eventOpacity).toBeGreaterThan(0.5);
-  expect.soft(reverseFade[0].eventOpacity).toBeLessThan(0.95);
-  expect.soft(reverseFade[0].routeOpacity).toBeGreaterThanOrEqual(0.95);
-  expect.soft(reverseFade[1].routeOpacity).toBeGreaterThan(reverseFade[1].eventOpacity + 0.25);
 
-  const reset = reverseFade.at(-1)!;
-  expect.soft(reset.eventOpacity).toBeLessThanOrEqual(0.05);
-  expect.soft(reset.routeOpacity).toBeLessThanOrEqual(0.05);
-  expect.soft(reset.pulseOpacity).toBeLessThanOrEqual(0.05);
-  expect.soft(reset.pulseSource).toBeLessThanOrEqual(3);
-  expect.soft(reset.activeSource).toBeLessThanOrEqual(3);
-  expect.soft(reset.drawn).toBeLessThanOrEqual(0.01);
-  expect.soft(reset.eventTranslateY).toBeGreaterThanOrEqual(7);
-
-  await moveTo(0.04);
+  await moveTo(0.30);
   const replay = await readState();
   expect(replay.id).toBe('online-booking');
-  expect.soft(replay.pulseSource).toBeLessThanOrEqual(3);
-  expect.soft(replay.activeSource).toBeLessThanOrEqual(3);
   expect.soft(replay.pulseActive).toBeLessThanOrEqual(3);
-  expect.soft(replay.drawn).toBeLessThanOrEqual(0.01);
-  expect.soft(replay.eventOpacity).toBeGreaterThanOrEqual(0.95);
-  expect.soft(replay.routeOpacity).toBeGreaterThanOrEqual(0.95);
-  expect.soft(replay.pulseOpacity).toBeGreaterThanOrEqual(0.95);
+  expect.soft(replay.drawn).toBeGreaterThan(0.05);
+  expect.soft(replay.drawn).toBeLessThan(0.95);
+  expect.soft(replay.eventOpacity).toBeGreaterThan(0.05);
+  expect.soft(replay.routeOpacity).toBeGreaterThan(0.05);
+  expect.soft(replay.pulseOpacity).toBeGreaterThan(0.05);
 });
 
 test('mantiene el conector dentro del panel en todos los viewports', async ({ page }, testInfo) => {
@@ -565,6 +541,7 @@ test('mantiene el conector dentro del panel en todos los viewports', async ({ pa
 
   for (const viewport of [
     { width: 1440, height: 900 },
+    { width: 1024, height: 768 },
     { width: 910, height: 691 },
     { width: 787, height: 701 },
     { width: 887, height: 502 },
@@ -575,9 +552,9 @@ test('mantiene el conector dentro del panel en todos los viewports', async ({ pa
     const opening = page.locator('[data-opening-mode="animated"]');
     const scene = opening.locator('[data-opening-channel-handoff]');
     for (const [progress, id] of [
-      [0.16, 'online-booking'],
-      [0.49, 'payment-link'],
-      [0.82, 'payment-terminal'],
+      [0.32, 'online-booking'],
+      [0.47, 'payment-link'],
+      [0.62, 'payment-terminal'],
     ] as const) {
       await scrollChannelSequenceTo(page, progress);
       await page.evaluate(() => new Promise<void>(resolve => {

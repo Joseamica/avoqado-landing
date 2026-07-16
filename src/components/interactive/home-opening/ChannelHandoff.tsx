@@ -1,5 +1,4 @@
 import {
-  AnimatePresence,
   cancelFrame,
   frame,
   motion,
@@ -10,11 +9,15 @@ import {
   type MotionValue,
 } from 'framer-motion';
 import { useEffect, useRef, useState, type Ref } from 'react';
+import NarrativeAnchor from '../home-story/NarrativeAnchor';
 import '../home-story/home-story.css';
+import { smoothstep, useNarrativeVisualMotion } from '../home-story/story-motion';
 import {
   OPENING_CHANNEL_DEMONSTRATIONS,
+  OPENING_CHANNEL_NARRATIVE,
   openingChannelById,
   resolveOpeningChannelSequence,
+  type OpeningChannelDemonstration,
 } from './opening-channel-results';
 import { OPENING_CHANNELS, OPENING_TILES, type OpeningChannelId } from './opening-tiles';
 
@@ -100,6 +103,85 @@ function ChannelRow({ channel, index, progress, openingProgress, active, sourceR
   );
 }
 
+const CHANNEL_EVENT_OPACITY = [
+  { input: [0, 0.28, 0.32, 0.39, 0.43], output: [0, 0, 1, 1, 0] },
+  { input: [0.43, 0.47, 0.54, 0.58], output: [0, 1, 1, 0] },
+  { input: [0.58, 0.62, 1], output: [0, 1, 1] },
+] as const;
+
+function useChannelOpacity(progress: MotionValue<number>, index: number) {
+  const ranges = CHANNEL_EVENT_OPACITY[index];
+  return useTransform(progress, [...ranges.input], [...ranges.output], { ease: smoothstep });
+}
+
+function ChannelThreadContent({ demonstration, index, activeIndex, progress }: {
+  demonstration: OpeningChannelDemonstration;
+  index: number;
+  activeIndex: number;
+  progress: MotionValue<number>;
+}) {
+  const opacity = useChannelOpacity(progress, index);
+  const channel = openingChannelById(demonstration.channelId);
+  return (
+    <motion.span
+      data-channel-thread={demonstration.channelId}
+      data-active={index === activeIndex ? 'true' : 'false'}
+      aria-hidden={index === activeIndex ? undefined : 'true'}
+      className="col-start-1 row-start-1"
+      style={{ opacity }}
+    >
+      {channel.label} → {channel.result}
+    </motion.span>
+  );
+}
+
+function ChannelEventContent({
+  demonstration,
+  index,
+  activeIndex,
+  progress,
+}: {
+  demonstration: OpeningChannelDemonstration;
+  index: number;
+  activeIndex: number;
+  progress: MotionValue<number>;
+}) {
+  const opacity = useChannelOpacity(progress, index);
+  const channel = openingChannelById(demonstration.channelId);
+
+  return (
+    <motion.div
+      data-channel-event-content={demonstration.channelId}
+      data-active={index === activeIndex ? 'true' : 'false'}
+      data-story-step={demonstration.channelId === 'online-booking'
+        ? 'booking'
+        : demonstration.channelId === 'payment-link'
+          ? 'payment-link'
+          : 'terminal'}
+      className="absolute inset-0"
+      style={{ opacity, pointerEvents: 'none' }}
+    >
+      <div className="story-channel-event-header flex items-center justify-between gap-3 border-b border-white/10 pb-2.5 sm:pb-3">
+        <span data-channel-route-summary className="text-[0.52rem] font-semibold uppercase leading-tight tracking-[0.08em] text-avoqado-green sm:text-[0.6rem]">
+          {channel.label} → {channel.result}
+        </span>
+        <span className="shrink-0 text-[0.65rem] text-neutral-400 sm:text-xs">
+          {demonstration.status}
+        </span>
+      </div>
+      <p data-channel-event-primary className="story-channel-event-service mt-3 text-base font-medium tracking-[-0.02em] sm:mt-5 sm:text-xl">
+        {demonstration.primary}
+      </p>
+      <p data-channel-event-detail className="mt-1 text-xs text-neutral-300 sm:text-sm">
+        {demonstration.detail}
+      </p>
+      <p data-channel-event-context className="story-channel-event-venue mt-2 w-fit text-[0.65rem] text-neutral-500 sm:mt-4 sm:text-xs">
+        {demonstration.context}
+      </p>
+    </motion.div>
+  );
+}
+
 export default function ChannelHandoff({ openingProgress, progress, sequenceProgress, ready }: {
   openingProgress: MotionValue<number>;
   progress: MotionValue<number>;
@@ -113,6 +195,9 @@ export default function ChannelHandoff({ openingProgress, progress, sequenceProg
   const initialSequence = resolveOpeningChannelSequence(sequenceProgress.get());
   const [activeIndex, setActiveIndex] = useState(initialSequence.index);
   const routeProgress = useMotionValue(initialSequence.routeProgress);
+  const routeOpacity = useMotionValue(initialSequence.routeOpacity);
+  const [routeStarted, setRouteStarted] = useState(initialSequence.started);
+  const visualMotion = useNarrativeVisualMotion(sequenceProgress);
   const activeDemonstration = OPENING_CHANNEL_DEMONSTRATIONS[activeIndex];
   const activeChannel = openingChannelById(activeDemonstration.channelId);
   const geometry = useMotionValue<RouteGeometry>({
@@ -127,11 +212,8 @@ export default function ChannelHandoff({ openingProgress, progress, sequenceProg
     ready: false,
     channelId: null as OpeningChannelId | null,
   });
-  const [channelActive, setChannelActive] = useState(false);
+  const [channelActive, setChannelActive] = useState(() => progress.get() > 0.05);
   const openingVisible = useInView(sectionRef, { amount: 0.1 });
-  const eventOpacity = useTransform(sequenceProgress, [0, 0.04], [0, 1]);
-  const eventY = useTransform(sequenceProgress, [0, 0.04], [8, 0]);
-  const connectorOpacity = useTransform(routeProgress, [0, 0.08], [0, 1]);
   const trackLength = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().pathLength));
   const pulseX = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().x));
   const pulseY = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().y));
@@ -142,9 +224,15 @@ export default function ChannelHandoff({ openingProgress, progress, sequenceProg
     setChannelActive(current => current === active ? current : active);
   });
 
+  useEffect(() => {
+    setChannelActive(progress.get() > 0.05);
+  }, [progress]);
+
   useMotionValueEvent(sequenceProgress, 'change', value => {
     const next = resolveOpeningChannelSequence(value);
     routeProgress.set(next.routeProgress);
+    routeOpacity.set(next.routeOpacity);
+    setRouteStarted(current => current === next.started ? current : next.started);
     setActiveIndex(current => current === next.index ? current : next.index);
   });
 
@@ -257,16 +345,18 @@ export default function ChannelHandoff({ openingProgress, progress, sequenceProg
   }, [activeDemonstration.channelId, geometry, routeProgress, sequenceProgress]);
 
   const surfaceOpacity = useTransform(progress, [0, 0.12], [0, 1]);
-  const channelHeading = (
-    <div>
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-800">UNA SOLA OPERACIÓN</p>
-      <h2 id="opening-channels-title" className="mt-3 text-3xl font-light tracking-[-0.04em] sm:text-5xl lg:text-6xl">
-        Tu cliente reserva, compra o paga como prefiera.
-      </h2>
-      <p className="mt-4 max-w-xl text-sm text-neutral-600 sm:text-base">
-        Desde una reservación o liga de pago hasta el punto de venta o la terminal física: todo llega conectado a Avoqado.
-      </p>
-    </div>
+  const activeThread = (
+    <span className="inline-grid min-w-0">
+      {OPENING_CHANNEL_DEMONSTRATIONS.map((demonstration, index) => (
+        <ChannelThreadContent
+          key={demonstration.channelId}
+          demonstration={demonstration}
+          index={index}
+          activeIndex={activeIndex}
+          progress={sequenceProgress}
+        />
+      ))}
+    </span>
   );
 
   return (
@@ -275,6 +365,7 @@ export default function ChannelHandoff({ openingProgress, progress, sequenceProg
       data-opening-channel-handoff
       data-story-scene="channels"
       data-channel-demo-index={activeIndex}
+      data-channel-route-started={routeStarted ? 'true' : 'false'}
       data-active={channelActive && openingVisible ? 'true' : 'false'}
       aria-labelledby="opening-channels-title"
       style={{
@@ -284,8 +375,19 @@ export default function ChannelHandoff({ openingProgress, progress, sequenceProg
       className="pointer-events-none absolute inset-0 z-30 bg-neutral-50 text-neutral-950"
     >
       <div className="mx-auto grid h-full max-w-7xl content-center gap-6 px-5 pb-8 pt-[calc(var(--site-header-height)+1rem)] md:grid-cols-[minmax(220px,.7fr)_minmax(0,1.3fr)] md:items-center md:gap-10 md:px-10">
-        {channelHeading}
-        <div ref={visualRef} className="story-channel-visual relative grid h-full min-h-0 content-center gap-3 sm:grid-cols-[minmax(260px,1.05fr)_minmax(220px,0.8fr)] sm:items-center sm:gap-8">
+        <NarrativeAnchor
+          narrative={OPENING_CHANNEL_NARRATIVE}
+          progress={sequenceProgress}
+          thread={activeThread}
+          headingId="opening-channels-title"
+          light
+        />
+        <motion.div
+          ref={visualRef}
+          data-narrative-visual
+          className="story-channel-visual relative grid h-full min-h-0 content-center gap-3 sm:grid-cols-[minmax(260px,1.05fr)_minmax(220px,0.8fr)] sm:items-center sm:gap-8"
+          style={visualMotion}
+        >
           <div className="story-channel-ledger relative border-y border-black/10 bg-neutral-50">
             <p className="border-b border-black/8 px-3 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-neutral-400 sm:py-3 sm:text-[0.65rem]">
               Entradas de la operación
@@ -308,9 +410,8 @@ export default function ChannelHandoff({ openingProgress, progress, sequenceProg
             </ol>
           </div>
 
-          <motion.div
+          <div
             className="story-channel-event relative border border-white/8 bg-neutral-950 px-4 py-3.5 text-neutral-50 shadow-[0_20px_60px_oklch(0.13_0.005_155_/_0.16)] sm:px-5 sm:py-5"
-            style={{ opacity: eventOpacity, y: eventY }}
           >
             <span
               ref={targetRef}
@@ -318,45 +419,28 @@ export default function ChannelHandoff({ openingProgress, progress, sequenceProg
               aria-hidden="true"
               className="story-channel-route-target absolute z-20 size-2.5 rounded-full border border-avoqado-green/45 bg-neutral-950"
             />
-            <AnimatePresence initial={false} mode="wait">
-              <motion.div
-                key={activeDemonstration.channelId}
-                data-channel-event-content={activeDemonstration.channelId}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.16, ease: 'easeOut' }}
-                className="min-h-[7.5rem] sm:min-h-[9rem]"
-              >
-                <div className="story-channel-event-header flex items-center justify-between gap-3 border-b border-white/10 pb-2.5 sm:pb-3">
-                  <span data-channel-route-summary className="text-[0.52rem] font-semibold uppercase leading-tight tracking-[0.08em] text-avoqado-green sm:text-[0.6rem]">
-                    {activeChannel.label} → {activeChannel.result}
-                  </span>
-                  <span className="shrink-0 text-[0.65rem] text-neutral-400 sm:text-xs">
-                    {activeDemonstration.status}
-                  </span>
-                </div>
-                <p data-channel-event-primary className="story-channel-event-service mt-3 text-base font-medium tracking-[-0.02em] sm:mt-5 sm:text-xl">
-                  {activeDemonstration.primary}
-                </p>
-                <p data-channel-event-detail className="mt-1 text-xs text-neutral-300 sm:text-sm">
-                  {activeDemonstration.detail}
-                </p>
-                <p data-channel-event-context className="story-channel-event-venue mt-2 w-fit text-[0.65rem] text-neutral-500 sm:mt-4 sm:text-xs">
-                  {activeDemonstration.context}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
+            <div className="relative min-h-[7.5rem] sm:min-h-[9rem]">
+              {OPENING_CHANNEL_DEMONSTRATIONS.map((demonstration, index) => (
+                <ChannelEventContent
+                  key={demonstration.channelId}
+                  demonstration={demonstration}
+                  index={index}
+                  activeIndex={activeIndex}
+                  progress={sequenceProgress}
+                />
+              ))}
+            </div>
+          </div>
 
           {route.ready && route.channelId === activeDemonstration.channelId ? (
             <>
               <motion.svg
+                data-channel-route
                 className="pointer-events-none absolute inset-0 z-20 size-full"
                 viewBox={`0 0 ${route.width} ${route.height}`}
                 preserveAspectRatio="none"
                 aria-hidden="true"
-                style={{ opacity: connectorOpacity }}
+                style={{ opacity: routeOpacity, visibility: routeStarted ? 'visible' : 'hidden' }}
               >
                 <motion.path data-channel-route-path d={route.path} fill="none"
                   stroke="oklch(0.38 0.006 155 / 0.24)" strokeWidth="1"
@@ -370,11 +454,11 @@ export default function ChannelHandoff({ openingProgress, progress, sequenceProg
                 data-story-primary-pulse
                 aria-hidden="true"
                 className="story-primary-pulse pointer-events-none absolute left-0 top-0 z-30 -ml-[0.3125rem] -mt-[0.3125rem] size-2.5 rounded-full border border-avoqado-green/30 bg-avoqado-green outline outline-[4px] outline-avoqado-green/10"
-                style={{ x: pulseX, y: pulseY, scale: pulseScale, opacity: connectorOpacity }}
+                style={{ x: pulseX, y: pulseY, scale: pulseScale, opacity: routeOpacity, visibility: routeStarted ? 'visible' : 'hidden' }}
               />
             </>
           ) : null}
-        </div>
+        </motion.div>
       </div>
       <p className="sr-only">
         {OPENING_CHANNEL_DEMONSTRATIONS.map(demonstration => {

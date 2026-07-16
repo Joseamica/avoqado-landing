@@ -35,12 +35,16 @@ export default function ReducedMotionOpening({ mode = 'static' }: { mode?: 'stat
         <div className="mx-auto mt-12 max-w-3xl">
           <h2 className="text-3xl font-light tracking-[-0.03em] sm:text-5xl">Tiendas, gyms, estéticas, clínicas y más.<br />Cobra, organiza y crece desde un solo lugar.</h2>
           <div className="my-14 h-px bg-black/10" aria-hidden="true" />
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-800">UNA SOLA OPERACIÓN</p>
-          <h2 className="text-3xl font-light tracking-[-0.03em] sm:text-5xl">Tu cliente reserva, compra o paga como prefiera.</h2>
-          <p className="mt-4 text-neutral-600">Desde una reservación o liga de pago hasta el punto de venta o la terminal física: todo llega conectado a Avoqado.</p>
+          <p data-narrative-eyebrow className="text-xs font-semibold uppercase tracking-[0.18em] text-green-800">UNA SOLA OPERACIÓN</p>
+          <h2 data-narrative-title className="text-3xl font-light tracking-[-0.03em] sm:text-5xl">Tu cliente reserva, compra o paga como prefiera.</h2>
+          <p data-narrative-body className="mt-4 text-neutral-600">Desde una reservación o liga de pago hasta el punto de venta o la terminal física: todo llega conectado a Avoqado.</p>
           <ol className="mt-8 border-y border-black/10">
             {OPENING_CHANNELS.map(channel => <li key={channel.id} data-channel-id={channel.id} className="flex items-center justify-between border-b border-black/8 py-3 last:border-b-0"><strong>{channel.label}</strong><span>{channel.result}</span></li>)}
           </ol>
+          <p data-narrative-thread className="mt-6 flex items-center gap-2 text-sm font-semibold text-neutral-700">
+            <span aria-hidden="true" className="size-[7px] rounded-full bg-avoqado-green" />
+            Reservación en línea → Reserva confirmada
+          </p>
           <div data-channel-static-results className="mt-6 grid gap-3 sm:grid-cols-3">
             {OPENING_CHANNEL_DEMONSTRATIONS.map(demonstration => {
               const channel = openingChannelById(demonstration.channelId);
@@ -60,6 +64,9 @@ export default function ReducedMotionOpening({ mode = 'static' }: { mode?: 'stat
               );
             })}
           </div>
+          <p data-narrative-result className="mt-8 text-xl font-medium text-neutral-950">
+            Todo llega conectado al mismo negocio.
+          </p>
         </div>
       </div>
     </section>

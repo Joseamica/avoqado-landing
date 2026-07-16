@@ -17,28 +17,6 @@ interface Geometry {
 type GeometryMap = Partial<Record<OpeningChannelId, Geometry>>;
 
 function boxWithin(root: HTMLElement, element: HTMLElement): Box {
-  let left = 0;
-  let top = 0;
-  let current: HTMLElement | null = element;
-  while (current && current !== root) {
-    left += current.offsetLeft;
-    top += current.offsetTop;
-    const transform = getComputedStyle(current).transform;
-    if (transform !== 'none') {
-      const matrix = new DOMMatrixReadOnly(transform);
-      left += matrix.m41;
-      top += matrix.m42;
-    }
-    current = current.offsetParent as HTMLElement | null;
-  }
-  if (current === root) {
-    return {
-      left,
-      top,
-      width: element.offsetWidth,
-      height: element.offsetHeight,
-    };
-  }
   const rootRect = root.getBoundingClientRect();
   const rect = element.getBoundingClientRect();
   return {
