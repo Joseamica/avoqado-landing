@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Navbar from '../components/layout/Navbar.astro';
 import HomepageStory from '../components/interactive/home-story/HomepageStory';
+import FAQ from '../components/interactive/FAQ';
 import Footer from '../components/layout/Footer.astro';
 import FloatingChatbot from '../components/interactive/FloatingChatbot';
 ---
@@ -24,6 +25,9 @@ import FloatingChatbot from '../components/interactive/FloatingChatbot';
 		<main data-scrollytelling>
 			<HomepageStory client:load />
 		</main>
+		<div id="faq-section" class="faq-section-wrapper">
+			<FAQ client:visible />
+		</div>
 		<Footer />
 		<div data-homepage-chatbot>
 			<FloatingChatbot client:idle />

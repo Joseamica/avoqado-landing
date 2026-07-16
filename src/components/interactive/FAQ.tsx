@@ -1,12 +1,15 @@
 import { useRef, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import DoodleBackground from './DoodleBackground';
 
 export default function FAQ() {
   const containerRef = useRef<HTMLElement>(null);
   const [mounted, setMounted] = useState(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const motionPreference = useReducedMotion();
+  const [mediaReducedMotion, setMediaReducedMotion] = useState(false);
+  const reducedMotion = mounted && Boolean(motionPreference || mediaReducedMotion);
 
   useEffect(() => {
     setMounted(true);
@@ -19,7 +22,37 @@ export default function FAQ() {
     
     updateSize();
     window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const updateMotionPreference = () => setMediaReducedMotion(motionQuery.matches);
+    updateMotionPreference();
+    motionQuery.addEventListener('change', updateMotionPreference);
+
+    const section = containerRef.current;
+    const pageChrome = Array.from(document.querySelectorAll<HTMLElement>(
+      '[data-site-navigation], [data-founders-banner]',
+    ));
+    const setPageChromeHidden = (hidden: boolean) => {
+      document.body.classList.toggle('faq-invitation-active', hidden);
+      pageChrome.forEach(element => {
+        element.inert = hidden;
+        if (hidden) element.setAttribute('aria-hidden', 'true');
+        else element.removeAttribute('aria-hidden');
+      });
+    };
+    const visibilityObserver = section
+      ? new IntersectionObserver(([entry]) => {
+          setPageChromeHidden(entry.isIntersecting);
+        }, { rootMargin: '-99% 0px 0px 0px', threshold: 0 })
+      : null;
+
+    if (section) visibilityObserver?.observe(section);
+
+    return () => {
+      window.removeEventListener('resize', updateSize);
+      motionQuery.removeEventListener('change', updateMotionPreference);
+      visibilityObserver?.disconnect();
+      setPageChromeHidden(false);
+    };
   }, []);
   
   // Track scroll progress of this specific section (200vh height)
@@ -97,7 +130,12 @@ export default function FAQ() {
   `;
 
   return (
-    <section ref={containerRef} className="w-full h-[300vh] bg-black text-white relative">
+    <section
+      ref={containerRef}
+      data-homepage-chatbot-invitation
+      data-reduced-motion={reducedMotion ? 'true' : 'false'}
+      className={`w-full bg-black text-white relative ${reducedMotion ? 'h-screen' : 'h-[300vh]'}`}
+    >
       {/* Background Texture (Subtle Chalkboard effect) - only within this section */}
       <div className="absolute inset-0 opacity-20 pointer-events-none"
            style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/black-scales.png")' }}></div>
@@ -105,7 +143,7 @@ export default function FAQ() {
       {/* Sticky Content - Stays centered while scrolling */}
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
         {/* Doodles Background with Parallax */}
-        <DoodleBackground scrollYProgress={scrollYProgress} />
+        <DoodleBackground scrollYProgress={scrollYProgress} reducedMotion={reducedMotion} />
 
         <div className="max-w-4xl mx-auto px-4 text-center z-10 relative">
           
@@ -119,7 +157,7 @@ export default function FAQ() {
                </span>
                {/* Reveal Mask */}
                <motion.div 
-                 style={{ width: writeProgress1 }}
+                 style={{ width: reducedMotion ? '100%' : writeProgress1 }}
                  className="absolute top-0 left-0 h-full overflow-hidden whitespace-nowrap"
                >
                  <span className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
@@ -136,7 +174,7 @@ export default function FAQ() {
                  todo de Avoqado?
                </span>
                <motion.div 
-                 style={{ width: writeProgress2 }}
+                 style={{ width: reducedMotion ? '100%' : writeProgress2 }}
                  className="absolute top-0 left-0 h-full overflow-hidden whitespace-nowrap"
                >
                  <span className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-baby leading-tight text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]">
@@ -152,7 +190,7 @@ export default function FAQ() {
       {/* Global Overlay Portal - Renders outside of any transform context */}
       {mounted && createPortal(
         <motion.div
-          style={{ opacity: overlayOpacity }}
+          style={{ opacity: reducedMotion ? 1 : overlayOpacity }}
           className="fixed inset-0 pointer-events-none z-[40] overflow-hidden"
         >
           <svg
@@ -163,6 +201,7 @@ export default function FAQ() {
           > 
              {/* Arrow Path using calculated coordinates */}
              <motion.path
+               data-chatbot-invitation-arrow
                d={arrowPathD}
                fill="none"
                stroke="#7ADD2C"
@@ -170,8 +209,8 @@ export default function FAQ() {
                strokeLinecap="round"
                strokeDasharray="15 10 5 10" // Organic chalk
                style={{ 
-                 pathLength: lineDraw,
-                 opacity: arrowLineOpacity 
+                 pathLength: reducedMotion ? 1 : lineDraw,
+                 opacity: reducedMotion ? 1 : arrowLineOpacity
                }}
              />
              
@@ -182,18 +221,19 @@ export default function FAQ() {
                 stroke="#7ADD2C"
                 strokeWidth="5"
                 strokeLinecap="round"
-                style={{ opacity: arrowHeadOpacity }} 
+                style={{ opacity: reducedMotion ? 1 : arrowHeadOpacity }}
              />
              
              {/* Double-Loop Scribble Oval */}
              <motion.path
+                data-chatbot-invitation-circle
                 d={scribblePathD}
                 fill="none"
                 stroke="#7ADD2C"
                 strokeWidth="3" // Slightly thinner for the scribble to look detailed
                 strokeDasharray="20 5 10 5" 
                 style={{ 
-                  pathLength: circleDraw,
+                  pathLength: reducedMotion ? 1 : circleDraw,
                   rotate: -10 
                 }}
              />

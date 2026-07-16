@@ -1266,3 +1266,67 @@ test('cierra con control multi-sucursal y una pregunta accionable', async ({ pag
     /\/wa\?src=homepage_story_final/,
   );
 });
+
+test('recupera el cierre ilustrado y deja abrir el asistente', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.addInitScript(() => localStorage.removeItem('avoqado-chat-open'));
+  await page.goto('/?motion=full');
+
+  const invitation = page.locator('[data-homepage-chatbot-invitation]');
+  await expect(invitation).toHaveCount(1);
+  await expect(invitation).toContainText('¿Quieres saber');
+  await expect(invitation).toContainText('todo de Avoqado?');
+
+  expect(await invitation.evaluate(element => {
+    const footer = document.querySelector('footer');
+    return Boolean(footer && (element.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING));
+  })).toBe(true);
+
+  await invitation.evaluate(element => {
+    document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    const distance = element.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: top + distance * 0.92, behavior: 'auto' });
+  });
+
+  await expect(page.locator('[data-chatbot-invitation-arrow]')).toHaveCount(1);
+  await expect(page.locator('[data-chatbot-invitation-circle]')).toHaveCount(1);
+  await expect(page.locator('[data-site-navigation]')).toHaveCSS('opacity', '0');
+  await expect(page.locator('[data-founders-banner]')).toHaveCSS('opacity', '0');
+  await expect(page.locator('[data-site-navigation]')).toHaveAttribute('aria-hidden', 'true');
+  await expect(page.locator('[data-founders-banner]')).toHaveAttribute('aria-hidden', 'true');
+  expect(await page.locator('[data-site-navigation]').evaluate(element => element.inert)).toBe(true);
+  expect(await page.locator('[data-founders-banner]').evaluate(element => element.inert)).toBe(true);
+
+  const openChat = page.getByRole('button', { name: 'Abrir chat de ayuda' });
+  await expect(openChat).toBeVisible();
+  await openChat.click();
+  await expect(page.getByRole('heading', { name: '¿Dudas sobre Avoqado?' })).toBeVisible();
+
+  await page.locator('footer').evaluate(element => element.scrollIntoView({ block: 'start' }));
+  await expect(page.locator('[data-site-navigation]')).toHaveCSS('opacity', '1');
+  await expect(page.locator('[data-founders-banner]')).toHaveCSS('opacity', '1');
+  await expect(page.locator('[data-site-navigation]')).not.toHaveAttribute('aria-hidden', 'true');
+  await expect(page.locator('[data-founders-banner]')).not.toHaveAttribute('aria-hidden', 'true');
+  expect(await page.locator('[data-site-navigation]').evaluate(element => element.inert)).toBe(false);
+  expect(await page.locator('[data-founders-banner]').evaluate(element => element.inert)).toBe(false);
+});
+
+test('muestra el cierre ilustrado estático con movimiento reducido', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-reduced');
+  await page.goto('/');
+
+  const invitation = page.locator('[data-homepage-chatbot-invitation]');
+  await invitation.scrollIntoViewIfNeeded();
+  await expect(invitation).toHaveAttribute('data-reduced-motion', 'true');
+
+  const geometry = await invitation.evaluate(element => ({
+    height: element.getBoundingClientRect().height,
+    viewportHeight: window.innerHeight,
+  }));
+  expect(geometry.height).toBeLessThanOrEqual(geometry.viewportHeight + 1);
+  await expect(invitation).toContainText('¿Quieres saber');
+  await expect(invitation).toContainText('todo de Avoqado?');
+  await expect(page.locator('[data-chatbot-invitation-arrow]')).toHaveCount(1);
+  await expect(page.locator('[data-chatbot-invitation-circle]')).toHaveCount(1);
+});

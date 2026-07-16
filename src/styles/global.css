@@ -244,6 +244,18 @@ button:focus-visible {
   border-radius: 0.5rem;
 }
 
+/* Keep the closing chatbot invitation immersive, as in the original homepage. */
+[data-founders-banner] {
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+
+body.faq-invitation-active [data-site-navigation],
+body.faq-invitation-active [data-founders-banner] {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-100%);
+}
+
 /* ─── Avoqado Labs sub-brand: Dark + Mint (matches Avoqado main brand) ─── */
 [data-theme="labs"] {
   --labs-bg: #212121;
