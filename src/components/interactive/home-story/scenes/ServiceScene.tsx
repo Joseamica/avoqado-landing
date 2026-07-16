@@ -2,6 +2,7 @@ import { motion, useMotionValue, useTransform, type MotionValue } from 'framer-m
 import { useEffect, useRef, useState } from 'react';
 import SceneFrame from '../SceneFrame';
 import StoryPhotoSlot from '../StoryPhotoSlot';
+import { smoothstep, useStepReveal } from '../story-motion';
 import { STORY_FIXTURE } from '../story-fixture';
 import type { StoryScene } from '../story';
 
@@ -35,13 +36,20 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
     pathLength: Array.from({ length: ROUTE_TIMES.length }, () => 0),
   });
   const [route, setRoute] = useState({ width: 1, height: 1, path: 'M 0 0' });
-  const agendaOpacity = useTransform(progress, [0.08, 0.34], [0.25, 1]);
-  const sourceOpacity = useTransform(progress, [0, 0.64, 0.82], [1, 1, 0.42]);
-  const destinationOpacity = useTransform(progress, [0.38, 0.58], [0.45, 1]);
-  const connectorOpacity = useTransform(progress, [0, 0.82, 0.9], [1, 1, 0]);
-  const trackLength = useTransform(() => interpolateRoute(progress.get(), geometry.get().pathLength));
-  const pulseX = useTransform(() => interpolateRoute(progress.get(), geometry.get().x));
-  const pulseY = useTransform(() => interpolateRoute(progress.get(), geometry.get().y));
+  const [reservationAt, routeAt, agendaAt, contextAt] = scene.stepThresholds;
+  const reservation = useStepReveal(progress, reservationAt);
+  const agenda = useStepReveal(progress, agendaAt);
+  const context = useStepReveal(progress, contextAt);
+  const routeProgress = useTransform(progress, [routeAt - 0.02, routeAt + 0.02], [0, 1], { ease: smoothstep });
+  const connectorOpacity = useTransform(
+    progress,
+    [routeAt - 0.02, routeAt + 0.02, routeAt + 0.04, 0.93, 1],
+    [0, 1, 0.42, 0.42, 0],
+    { ease: smoothstep },
+  );
+  const trackLength = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().pathLength));
+  const pulseX = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().x));
+  const pulseY = useTransform(() => interpolateRoute(routeProgress.get(), geometry.get().y));
   const pulseScale = useTransform(
     progress,
     [0, 0.1, 0.12, 0.52, 0.58, 0.7, 1],
@@ -134,8 +142,9 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
 
         <motion.div
           data-service-source-card
+          data-story-step="reservation"
           className="story-service-source absolute right-[5%] top-[2%] z-10 w-[9.25rem] border border-white/10 bg-neutral-950/95 px-2.5 py-2 shadow-[0_16px_44px_oklch(0.05_0.003_155_/_0.32)] sm:right-[7%] sm:top-[5%] sm:w-[11.5rem] sm:px-3 sm:py-2.5 lg:right-[6%] lg:top-[9%]"
-          style={{ opacity: sourceOpacity }}
+          style={{ opacity: reservation.opacity, y: reservation.offset }}
         >
           <div className="flex items-center justify-between gap-2">
             <span className="whitespace-nowrap text-[0.625rem] font-semibold uppercase tracking-[0.12em] text-neutral-300">Reserva web</span>
@@ -153,15 +162,16 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
         </motion.div>
 
         <motion.div
+          data-story-step="agenda"
           className="story-service-agenda absolute inset-x-[3%] bottom-[4%] z-10 overflow-hidden rounded-[1rem] border border-white/10 bg-neutral-900 shadow-[0_24px_70px_oklch(0.05_0.003_155_/_0.38)] sm:inset-x-[7%] sm:bottom-[6%] sm:rounded-[1.35rem] lg:inset-x-[5%] lg:bottom-[9%]"
-          style={{ opacity: agendaOpacity }}
+          style={{ opacity: agenda.opacity, y: agenda.offset }}
         >
           <div className="flex items-center justify-between border-b border-white/8 px-3.5 py-2 sm:px-5 sm:py-3.5">
             <span className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-neutral-500 sm:text-[0.65rem]">Agenda · hoy</span>
             <motion.span
               data-service-pulse-destination
               className="flex items-center gap-2 text-[0.62rem] font-medium text-avoqado-green sm:text-xs"
-              style={{ opacity: destinationOpacity }}
+              style={{ opacity: context.opacity }}
             >
               <span
                 ref={confirmationRef}
@@ -181,7 +191,11 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
             </div>
             <div className="min-w-0">
               <p className="truncate text-sm font-medium tracking-[-0.02em] text-neutral-50 sm:text-xl lg:text-2xl">{STORY_FIXTURE.service}</p>
-              <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5 sm:mt-4 sm:gap-y-3">
+              <motion.div
+                data-story-step="context"
+                className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5 sm:mt-4 sm:gap-y-3"
+                style={{ opacity: context.opacity, y: context.offset }}
+              >
                 {[
                   ['Cliente', STORY_FIXTURE.customer],
                   ['Colaboradora', STORY_FIXTURE.staff],
@@ -193,7 +207,7 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
                     <span className="story-service-context-value mt-0.5 block truncate text-[0.62rem] text-neutral-300 sm:text-xs lg:text-sm">{value}</span>
                   </p>
                 ))}
-              </div>
+              </motion.div>
             </div>
           </div>
 
@@ -204,6 +218,8 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
         </motion.div>
 
         <motion.svg
+          data-story-step="route"
+          data-story-service-connector
           className="pointer-events-none absolute inset-0 z-20 size-full"
           viewBox={`0 0 ${route.width} ${route.height}`}
           preserveAspectRatio="none"

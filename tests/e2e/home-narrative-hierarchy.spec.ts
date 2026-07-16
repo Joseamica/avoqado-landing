@@ -205,3 +205,50 @@ test('mantiene la jerarquía de Entradas en los siete viewports y al restaurar s
   await expect(restored).toHaveCSS('visibility', 'visible');
   await expect(restored.locator('[data-channel-thread][data-active="true"]')).toHaveText('Liga de pago → Pago recibido');
 });
+
+const simpleStepContracts = {
+  service: [
+    { id: 'reservation', minimumOpacity: 0.95 },
+    { id: 'route', minimumOpacity: 0.35 },
+    { id: 'agenda', minimumOpacity: 0.95 },
+    { id: 'context', minimumOpacity: 0.95 },
+  ],
+  payment: ['channel', 'selector', 'account'].map(id => ({ id, minimumOpacity: 0.95 })),
+  aftercare: ['receipt', 'review', 'invoice'].map(id => ({ id, minimumOpacity: 0.95 })),
+} as const;
+
+test('acumula Servicio, Cobro y Cliente antes del resultado y los revierte', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+
+  for (const [sceneId, steps] of Object.entries(simpleStepContracts)) {
+    await scrollStorySceneTo(page, sceneId as keyof typeof simpleStepContracts, 0.72);
+    const scene = page.locator(`[data-story-scene="${sceneId}"][data-active="true"]`);
+    for (const step of steps) {
+      const element = scene.locator(`[data-story-step="${step.id}"]`);
+      await expect(element).toHaveCount(1);
+      expect(await element.evaluate(node => Number.parseFloat(getComputedStyle(node).opacity)))
+        .toBeGreaterThanOrEqual(step.minimumOpacity);
+    }
+
+    await scrollStorySceneTo(page, sceneId as keyof typeof simpleStepContracts, 0.10);
+    for (const step of steps) {
+      expect(await scene.locator(`[data-story-step="${step.id}"]`).evaluate(node => (
+        Number.parseFloat(getComputedStyle(node).opacity)
+      ))).toBeLessThanOrEqual(0.05);
+    }
+  }
+});
+
+test('Cobro y Cliente conservan marcador estático y cero pulsos o rutas', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+
+  for (const sceneId of ['payment', 'aftercare'] as const) {
+    await scrollStorySceneTo(page, sceneId, 0.55);
+    const scene = page.locator(`[data-story-scene="${sceneId}"][data-active="true"]`);
+    await expect(scene.locator('[data-narrative-thread-marker]')).toHaveCount(1);
+    await expect(scene.locator('[data-story-primary-pulse]')).toHaveCount(0);
+    await expect(scene.locator('[data-story-cascade-path], [data-story-service-connector]')).toHaveCount(0);
+  }
+});

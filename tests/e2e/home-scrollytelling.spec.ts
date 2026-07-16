@@ -702,7 +702,7 @@ test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, t
   await expect(root).toBeVisible();
 
   const moveToLocalProgress = async (localProgress: number) => {
-    const globalProgress = localProgress * 0.14;
+    const globalProgress = localProgress * 0.15;
     await root.evaluate((element, value) => {
       document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
       const top = element.getBoundingClientRect().top + window.scrollY;
@@ -721,7 +721,7 @@ test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, t
   const route = scene.locator('[data-service-route-path]');
   const activeRoute = scene.locator('[data-service-route-active]');
 
-  await moveToLocalProgress(0.12);
+  await moveToLocalProgress(0.41);
   await expect(sourceCard).toHaveCount(1);
   await expect(sourceCard).toContainText('Reserva web');
   await expect(sourceCard).toContainText('Reservación en línea');
@@ -750,6 +750,7 @@ test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, t
   }, await destination.elementHandle());
   expect(await readPulseDistance(source)).toBeLessThanOrEqual(3);
 
+  await moveToLocalProgress(0.58);
   const endpoints = await route.evaluate((routeElement, destinations) => {
     const path = routeElement as SVGPathElement;
     const matrix = path.getScreenCTM();
@@ -778,7 +779,7 @@ test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, t
   expect.soft(endpoints.target, 'route ends at the context-ready state').toBeLessThanOrEqual(3);
 
   const targetDistances: number[] = [];
-  for (const localProgress of [0.12, 0.24, 0.38, 0.5, 0.58]) {
+  for (const localProgress of [0.41, 0.42, 0.43, 0.44, 0.45, 0.56, 0.58]) {
     await moveToLocalProgress(localProgress);
     targetDistances.push(await readPulseDistance(target));
 
@@ -832,8 +833,9 @@ test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, t
   ]);
 
   const accessibleSummary = scene.locator('.sr-only');
-  await expect(accessibleSummary).toContainText('La reserva web llega a la agenda');
-  await expect(accessibleSummary).toContainText('POS iOS, POS Android, POS Desktop y Windows Service');
+  await expect(accessibleSummary).toHaveText(
+    'María, su servicio, la colaboradora, la sucursal y el producto llegan juntos.',
+  );
 });
 
 test('explica el cobro sin rutas ni puntos decorativos', async ({ page }, testInfo) => {
@@ -842,7 +844,7 @@ test('explica el cobro sin rutas ni puntos decorativos', async ({ page }, testIn
 
   const root = page.locator('[data-story-mode="animated"]');
   const localProgress = 0.78;
-  const globalProgress = 0.13 + localProgress * (0.30 - 0.13);
+  const globalProgress = 0.14 + localProgress * (0.30 - 0.14);
   await root.evaluate((element, value) => {
     document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
     const top = element.getBoundingClientRect().top + window.scrollY;
@@ -871,7 +873,7 @@ test('mantiene el cobro dentro de su panel en desktop compacto', async ({ page }
     await page.setViewportSize(viewport);
     const root = page.locator('[data-story-mode="animated"]');
     const localProgress = 0.78;
-    const globalProgress = 0.13 + localProgress * (0.30 - 0.13);
+    const globalProgress = 0.14 + localProgress * (0.30 - 0.14);
     await root.evaluate((element, value) => {
       document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
       const top = element.getBoundingClientRect().top + window.scrollY;
@@ -933,7 +935,8 @@ test('explica el post-servicio sin rutas ni puntos decorativos', async ({ page }
   await expect(scene.getByText('Desde este recibo', { exact: true })).toBeVisible();
   await expect(scene.getByText('Reseña en Google', { exact: true })).toBeVisible();
   await expect(scene.getByText('Factúrate desde tu recibo', { exact: true })).toBeVisible();
-  await expect(scene.getByText('Tu cliente captura sus datos y recibe su CFDI.', { exact: true })).toBeVisible();
+  await expect(scene.getByText('Disponible cuando tu sucursal la configura.', { exact: true })).toBeVisible();
+  await expect(scene.locator('[data-payment-reference]')).toHaveText('Referencia AVQ-34810');
   await expect(scene.locator('.story-aftercare-visual > svg')).toHaveCount(0);
   await expect(scene.locator('.story-aftercare-visual > span.rounded-full')).toHaveCount(0);
   await expect(scene.locator('[data-story-primary-pulse]')).toHaveCount(0);
