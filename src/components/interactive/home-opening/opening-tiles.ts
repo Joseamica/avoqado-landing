@@ -5,15 +5,15 @@ import img5 from '../../../assets/hero/hero-tile-05.jpg';
 import img6 from '../../../assets/hero/hero-tile-06.jpg';
 import img8 from '../../../assets/hero/hero-tile-08.jpg';
 import img9 from '../../../assets/hero/hero-tile-09.jpg';
-import img10 from '../../../assets/hero/hero-tile-10.jpg';
 import img11 from '../../../assets/hero/hero-tile-11.jpg';
-import img12 from '../../../assets/hero/hero-tile-12.jpg';
 import img13 from '../../../assets/hero/hero-tile-13.jpg';
 import img14 from '../../../assets/hero/hero-tile-14.jpg';
 import img16 from '../../../assets/hero/hero-tile-16.jpg';
 import img17 from '../../../assets/hero/hero-tile-17.jpg';
 import bookingImg from '../../../assets/hero/hero-entry-online-booking.jpg';
+import onlineStoreImg from '../../../assets/hero/hero-entry-online-store.jpg';
 import paymentLinkImg from '../../../assets/hero/hero-entry-payment-link.jpg';
+import paymentTerminalImg from '../../../assets/hero/hero-entry-payment-terminal.jpg';
 import posImg from '../../../assets/hero/hero-entry-point-of-sale.jpg';
 
 export const OPENING_CHANNEL_IDS = [
@@ -51,9 +51,9 @@ export const OPENING_TILES: readonly OpeningTile[] = [
   { id: 'tile-7', src: bookingImg.src, desktop: { col: 5, row: 2 }, mobile: { col: 3, row: 2 }, channelId: 'online-booking' },
   { id: 'tile-8', src: img8.src, desktop: { col: 7, row: 2 }, mobile: null },
   { id: 'tile-9', src: img9.src, desktop: { col: 9, row: 2 }, mobile: null },
-  { id: 'tile-10', src: img10.src, desktop: { col: 1, row: 4 }, mobile: { col: 1, row: 4 }, channelId: 'payment-terminal' },
+  { id: 'tile-10', src: paymentTerminalImg.src, desktop: { col: 1, row: 4 }, mobile: { col: 1, row: 4 }, channelId: 'payment-terminal' },
   { id: 'tile-11', src: img11.src, desktop: { col: 3, row: 4 }, mobile: { col: 2, row: 4 } },
-  { id: 'tile-12', src: img12.src, desktop: { col: 7, row: 4 }, mobile: { col: 3, row: 4 }, channelId: 'online-store' },
+  { id: 'tile-12', src: onlineStoreImg.src, desktop: { col: 7, row: 4 }, mobile: { col: 3, row: 4 }, channelId: 'online-store' },
   { id: 'tile-13', src: img13.src, desktop: { col: 9, row: 4 }, mobile: null },
   { id: 'tile-14', src: img14.src, desktop: { col: 2, row: 5 }, mobile: { col: 1, row: 5 } },
   { id: 'tile-15', src: posImg.src, desktop: { col: 4, row: 5 }, mobile: { col: 2, row: 5 }, channelId: 'point-of-sale' },

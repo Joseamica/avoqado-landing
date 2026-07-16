@@ -100,6 +100,17 @@ test('restores the approved homepage opening and hands off directly to service',
   await expect(channels).toContainText('Tu cliente reserva, compra o paga como prefiera');
   await expect(channels.locator('[data-channel-id]')).toHaveCount(5);
   await expect(channels.locator('[data-channel-id="online-booking"]')).toContainText('Reserva confirmada');
+  const expectedChannelImages = {
+    'online-booking': 'hero-entry-online-booking',
+    'online-store': 'hero-entry-online-store',
+    'payment-link': 'hero-entry-payment-link',
+    'point-of-sale': 'hero-entry-point-of-sale',
+    'payment-terminal': 'hero-entry-payment-terminal',
+  } as const;
+  for (const [channelId, imageName] of Object.entries(expectedChannelImages)) {
+    await expect(channels.locator(`[data-channel-id="${channelId}"] img`))
+      .toHaveAttribute('src', new RegExp(imageName));
+  }
   await expect(channels.locator('[data-channel-active="true"]')).toHaveCount(1);
   await expect(channels.locator('[data-channel-route-summary]:visible'))
     .toHaveText('Terminal de cobro → Cobro aprobado');
