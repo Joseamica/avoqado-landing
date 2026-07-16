@@ -31,7 +31,7 @@ test('serves the homepage and keeps /demo independent', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle(/Avoqado/);
 
-  await page.goto('/demo');
+  await page.goto('/demo', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('heading', { level: 1 })).toContainText(
     'Prueba Avoqado en 60 segundos',
   );
@@ -221,24 +221,6 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
     await expect(root).toHaveAttribute('data-active-scene', scene);
   };
 
-  const expectClearOfChat = async (locator: ReturnType<typeof page.locator>, minimumFontSize = 0) => {
-    await expect(locator).toBeVisible();
-    const metrics = await locator.evaluate((element, chatElement) => {
-      const rect = element.getBoundingClientRect();
-      const chatRect = (chatElement as HTMLElement).getBoundingClientRect();
-      const overlapWidth = Math.max(0, Math.min(rect.right, chatRect.right) - Math.max(rect.left, chatRect.left));
-      const overlapHeight = Math.max(0, Math.min(rect.bottom, chatRect.bottom) - Math.max(rect.top, chatRect.top));
-      return {
-        fontSize: Number.parseFloat(getComputedStyle(element).fontSize),
-        insideViewport: rect.top >= 0 && rect.left >= 0 && rect.right <= window.innerWidth && rect.bottom <= window.innerHeight,
-        overlapArea: overlapWidth * overlapHeight,
-      };
-    }, await chat.elementHandle());
-    expect(metrics.insideViewport).toBe(true);
-    expect(metrics.overlapArea).toBe(0);
-    expect(metrics.fontSize).toBeGreaterThanOrEqual(minimumFontSize);
-  };
-
   const expectInsideViewport = async (locator: ReturnType<typeof page.locator>, minimumFontSize = 0) => {
     await expect(locator).toBeVisible();
     const metrics = await locator.evaluate(element => {
@@ -299,11 +281,11 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
     await expectInsideViewport(eventContext);
   }
 
-  await moveTo(0.07, 'service');
+  await moveTo(0.11, 'service');
   const service = root.locator('[data-story-scene="service"][data-active="true"]');
-  await expect(chat).toBeVisible();
-  await expectClearOfChat(service.getByText('Crema facial 50 ml', { exact: true }), 10);
-  await expectClearOfChat(service.getByText('POS Desktop · Windows Service', { exact: true }), 10);
+  await expect(chat).toBeHidden();
+  await expectInsideViewport(service.getByText('Crema facial 50 ml', { exact: true }), 10);
+  await expectInsideViewport(service.getByText('POS Desktop · Windows Service', { exact: true }), 10);
   const railGap = await service.locator('.story-service-rail span').evaluateAll(elements => {
     const [first, second] = elements.map(element => element.getBoundingClientRect());
     return second.top > first.top + 1 ? second.top - first.bottom : second.left - first.right;

@@ -266,6 +266,7 @@
 
 @media (max-width: 1023px) {
   main[data-scrollytelling]:has([data-opening-channel-handoff][data-active='true']) ~ [data-homepage-chatbot],
+  main[data-scrollytelling]:has([data-story-mode='animated'][data-story-engaged='true']) ~ [data-homepage-chatbot],
   main[data-scrollytelling]:has([data-story-mode='animated'][data-active-scene='payment']) ~ [data-homepage-chatbot] {
     opacity: 0;
     visibility: hidden;

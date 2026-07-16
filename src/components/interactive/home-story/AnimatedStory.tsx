@@ -9,6 +9,7 @@ export default function AnimatedStory() {
   const rootRef = useRef<HTMLDivElement>(null);
   const completedRef = useRef(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [engaged, setEngaged] = useState(false);
   const { scrollYProgress } = useScroll({
     target: rootRef,
     offset: ['start start', 'end end'],
@@ -17,6 +18,8 @@ export default function AnimatedStory() {
   useMotionValueEvent(scrollYProgress, 'change', value => {
     const nextIndex = getActiveSceneIndex(value);
     setActiveIndex(current => current === nextIndex ? current : nextIndex);
+    const nextEngaged = value > 0.001 && value < 0.89;
+    setEngaged(current => current === nextEngaged ? current : nextEngaged);
     if (value >= 0.9 && !completedRef.current) {
       completedRef.current = true;
       pushEvent('homepage_story_complete');
@@ -27,6 +30,7 @@ export default function AnimatedStory() {
     <div
       ref={rootRef}
       data-story-mode="animated"
+      data-story-engaged={engaged ? 'true' : 'false'}
       data-active-scene={STORY_SCENES[activeIndex].id}
       className="relative h-[900vh] bg-neutral-950 lg:h-[1000vh]"
     >

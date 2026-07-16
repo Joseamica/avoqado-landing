@@ -177,6 +177,14 @@ test('mantiene la jerarquía de Entradas en los siete viewports y al restaurar s
     for (const progress of [0.10, 0.55, 0.86] as const) {
       await scrollOpeningNarrativeTo(page, progress);
       const scene = page.locator('[data-opening-channel-handoff]');
+      const visibleAnchor = progress === 0.10
+        ? '[data-narrative-eyebrow]'
+        : progress === 0.55
+          ? '[data-narrative-thread]'
+          : '[data-narrative-result]';
+      await expect.poll(() => scene.locator(visibleAnchor).evaluate(element => (
+        Number.parseFloat(getComputedStyle(element).opacity)
+      )), `${viewport.width}x${viewport.height} anchor at ${progress}`).toBeGreaterThanOrEqual(0.95);
       const geometry = await scene.evaluate(element => {
         const title = element.querySelector<HTMLElement>('[data-narrative-title]')!;
         const visual = element.querySelector<HTMLElement>('[data-narrative-visual]')!;
