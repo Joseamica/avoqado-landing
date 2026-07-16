@@ -10,9 +10,11 @@ export default function FAQ() {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const motionPreference = useReducedMotion();
   const [mediaReducedMotion, setMediaReducedMotion] = useState(false);
-  const reducedMotion = mounted && Boolean(motionPreference || mediaReducedMotion);
+  const [forceMotion, setForceMotion] = useState(false);
+  const reducedMotion = mounted && Boolean(motionPreference || mediaReducedMotion) && !forceMotion;
 
   useEffect(() => {
+    setForceMotion(new URLSearchParams(window.location.search).get('motion') === 'full');
     setMounted(true);
     const updateSize = () => {
       setWindowSize({

@@ -1339,3 +1339,51 @@ test('muestra el cierre ilustrado estático con movimiento reducido', async ({ p
   await expect(page.locator('[data-chatbot-invitation-arrow]')).toHaveCount(0);
   await expect(page.locator('[data-chatbot-invitation-circle]')).toHaveCount(0);
 });
+
+test('fuerza y revierte el dibujo del cierre con motion=full', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-reduced');
+  await page.goto('/?motion=full');
+
+  const invitation = page.locator('[data-homepage-chatbot-invitation]');
+  await invitation.scrollIntoViewIfNeeded();
+  await invitation.evaluate(() => new Promise<void>(resolve => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
+
+  await expect(invitation).toHaveAttribute('data-reduced-motion', 'false');
+  const geometry = await invitation.evaluate(element => ({
+    height: element.getBoundingClientRect().height,
+    viewportHeight: window.innerHeight,
+  }));
+  expect(geometry.height).toBeGreaterThanOrEqual(geometry.viewportHeight * 2.9);
+
+  const readDrawing = async () => page.locator('[data-chatbot-invitation-arrow]').evaluate(element => ({
+    dash: Number.parseFloat(getComputedStyle(element).strokeDasharray),
+    opacity: Number.parseFloat(getComputedStyle(element).opacity),
+  }));
+  const scrollToProgress = async (progress: number) => invitation.evaluate((element, value) => {
+    document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    const distance = element.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: top + distance * value, behavior: 'auto' });
+  }, progress);
+
+  await scrollToProgress(0.2);
+  await expect.poll(readDrawing).toEqual({ dash: 0, opacity: 0 });
+
+  await scrollToProgress(0.5);
+  await expect.poll(async () => (await readDrawing()).dash).toBeGreaterThan(0.6);
+
+  await scrollToProgress(0.92);
+  await expect.poll(async () => page.locator('[data-chatbot-invitation-circle]').evaluate(element => (
+    Number.parseFloat(getComputedStyle(element).strokeDasharray)
+  ))).toBeGreaterThan(0.95);
+
+  await scrollToProgress(0.5);
+  await expect.poll(async () => page.locator('[data-chatbot-invitation-circle]').evaluate(element => (
+    Number.parseFloat(getComputedStyle(element).strokeDasharray)
+  ))).toBe(0);
+
+  await scrollToProgress(0.2);
+  await expect.poll(readDrawing).toEqual({ dash: 0, opacity: 0 });
+});
