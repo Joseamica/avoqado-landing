@@ -17,7 +17,7 @@ export default function AftercareScene({ scene, progress }: { scene: StoryScene;
   return (
     <SceneFrame
       scene={scene}
-      accessibleSummary={`El recibo de ${STORY_FIXTURE.customer} por ${STORY_FIXTURE.total} se envía y permite compartir una reseña en Google. Si la sucursal tiene facturación configurada, el cliente captura sus datos y recibe su CFDI desde el recibo.`}
+      progress={progress}
     >
       <div className="story-aftercare-visual relative grid h-full min-h-0 grid-rows-[minmax(100px,0.82fr)_minmax(0,1.18fr)] content-center gap-2.5 sm:grid-cols-[38fr_62fr] sm:grid-rows-1 sm:items-center sm:gap-8 lg:gap-12">
         <motion.div

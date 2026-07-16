@@ -27,7 +27,7 @@ export default function PaymentScene({ scene, progress }: { scene: StoryScene; p
   return (
     <SceneFrame
       scene={scene}
-      accessibleSummary={`El total es ${STORY_FIXTURE.total}. En una TPV compatible, la Cuenta de cobro se selecciona manualmente entre ${STORY_FIXTURE.selectedMerchant}, elegida, y ${STORY_FIXTURE.alternateMerchant}, disponible. También se registran pagos online y en efectivo.`}
+      progress={progress}
     >
       <div className="story-payment-visual relative grid h-full min-h-0 content-center gap-2.5 sm:grid-cols-[minmax(190px,0.88fr)_minmax(250px,1.12fr)] sm:grid-rows-[minmax(0,1fr)] sm:content-stretch sm:items-center sm:gap-8 lg:grid-cols-[minmax(260px,44fr)_minmax(280px,56fr)] lg:gap-12">
         <motion.div

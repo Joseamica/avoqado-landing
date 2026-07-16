@@ -121,7 +121,7 @@ export default function FinanceScene({
   return (
     <SceneFrame
       scene={scene}
-      accessibleSummary={`El pago de ${STORY_FIXTURE.total} en ${STORY_FIXTURE.selectedMerchant} sigue la ruta Costo, Liquidación esperada, Conciliación y Póliza; la liquidación se presenta como esperada, no garantizada.`}
+      progress={progress}
     >
       <div className="flex h-full items-center justify-center">
         <div

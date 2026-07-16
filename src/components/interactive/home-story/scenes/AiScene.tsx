@@ -41,8 +41,8 @@ export default function AiScene({
   return (
     <SceneFrame
       scene={scene}
+      progress={progress}
       actions={actions}
-      accessibleSummary={`Pregunta a Avoqado MCP: ¿Qué sucursal bajó su ticket y qué debo reordenar? Respuesta ilustrativa basada en esta historia: ${answer}`}
     >
       <div className="flex h-full min-h-0 min-w-0 items-center justify-center">
         <div

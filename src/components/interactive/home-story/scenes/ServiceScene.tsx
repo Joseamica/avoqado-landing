@@ -122,7 +122,7 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
   return (
     <SceneFrame
       scene={scene}
-      accessibleSummary={`La reserva web llega a la agenda como contexto listo. A las ${STORY_FIXTURE.appointmentTime}: ${STORY_FIXTURE.service} para ${STORY_FIXTURE.customer}, atendida por ${STORY_FIXTURE.staff} en ${STORY_FIXTURE.venue}, con ${STORY_FIXTURE.product}. Disponible en POS iOS, POS Android, POS Desktop y Windows Service.`}
+      progress={progress}
     >
       <div ref={visualRef} className="relative h-full min-h-0">
         <StoryPhotoSlot

@@ -59,7 +59,7 @@ export default function MultibranchScene({
   return (
     <SceneFrame
       scene={scene}
-      accessibleSummary={`Organización → Zonas → Sucursales: ${STORY_FIXTURE.organization} reúne Zona Centro con ${STORY_FIXTURE.venue} y Sucursal Roma, y Zona Norte con ${STORY_FIXTURE.comparisonVenue}. En el dashboard web consolidado, el selector cambia de ${STORY_FIXTURE.venue} a ${STORY_FIXTURE.comparisonVenue} sin cerrar sesión; muestra Ingresos $60,050, Ventas 312, Ticket $192 y Pagos 298.`}
+      progress={progress}
     >
       <div className="relative h-full min-h-0">
         <motion.div

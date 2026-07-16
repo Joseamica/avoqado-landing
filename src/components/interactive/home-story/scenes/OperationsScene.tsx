@@ -119,7 +119,7 @@ export default function OperationsScene({
   return (
     <SceneFrame
       scene={scene}
-      accessibleSummary={`La venta de ${STORY_FIXTURE.total} atendida por ${STORY_FIXTURE.staff} descuenta una unidad de ${STORY_FIXTURE.product}, cambia el stock de ${STORY_FIXTURE.stockBefore} a ${STORY_FIXTURE.stockAfter}, sugiere reorden, suma ${STORY_FIXTURE.points} puntos a ${STORY_FIXTURE.customer} y registra una comisión de ${STORY_FIXTURE.commission}.`}
+      progress={progress}
     >
       <div className="flex h-full items-center justify-center">
         <div
