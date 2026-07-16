@@ -1,6 +1,6 @@
 import { expect, test } from 'playwright/test';
 import { STORY_SCENES } from '../../src/components/interactive/home-story/story';
-import { scrollOpeningNarrativeTo, scrollStorySceneTo } from './helpers/home-story-scroll';
+import { scrollOpeningNarrativeTo, scrollStoryGlobalTo, scrollStorySceneTo } from './helpers/home-story-scroll';
 
 const staticTruth = [
   ['service', 'La reservación llega con todo el contexto.', 'María, su servicio, la colaboradora, la sucursal y el producto llegan juntos.', 'María G. · 11:30 · Facial hidratante', 'Tu equipo sabe a quién atender y qué preparar.'],
@@ -325,4 +325,111 @@ test('Sucursales prueba el dato que IA explica después', async ({ page }, testI
   await expect.poll(async () => page.locator('[data-story-mode="animated"]').getAttribute('data-active-scene')).toBe('ai');
   const restoredActions = page.locator('[data-story-scene="ai"][data-active="true"] .story-frame-actions');
   await expect.poll(async () => restoredActions.evaluate(element => element.inert)).toBe(false);
+});
+
+test('usa 9/10 viewports y transiciones relativas a cada escena', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+  const root = page.locator('[data-story-mode="animated"]');
+
+  expect(await root.evaluate(element => element.offsetHeight / window.innerHeight)).toBeCloseTo(10, 1);
+  await scrollStorySceneTo(page, 'operations', 0.03);
+  const entering = root.locator('[data-story-scene="operations"]');
+  const enteringOpacity = await entering.evaluate(node => Number.parseFloat(getComputedStyle(node).opacity));
+  expect(enteringOpacity).toBeGreaterThan(0.20);
+  expect(enteringOpacity).toBeLessThan(0.80);
+
+  await scrollStorySceneTo(page, 'operations', 0.50);
+  await expect(root).toHaveAttribute('data-active-scene', 'operations');
+  await expect(root.locator('[data-story-scene][data-active="true"]')).toHaveCount(1);
+  await expect(root.locator('[data-story-scene][aria-hidden="false"]')).toHaveCount(1);
+  expect(await root.locator('[data-story-scene][data-active="false"]').evaluateAll(nodes => (
+    nodes.every(node => (node as HTMLElement).inert)
+  ))).toBe(true);
+
+  const rail = page.getByRole('navigation', { name: 'Progreso de la historia' });
+  await expect(rail).toContainText('Servicio');
+  await expect(rail).not.toContainText('Entrada');
+});
+
+test('mantiene estados estables dentro de intro, demo y resultado', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+
+  const demoPlateaus = {
+    service: [0.34, 0.39],
+    payment: [0.36, 0.46],
+    aftercare: [0.36, 0.46],
+    operations: [0.33, 0.37],
+    finance: [0.33, 0.37],
+    multibranch: [0.33, 0.37],
+    ai: [0.36, 0.48],
+  } as const;
+
+  for (const scene of STORY_SCENES) {
+    const samples = [
+      [0.08, 0.14],
+      demoPlateaus[scene.id],
+      [0.85, 0.91],
+    ] as const;
+    for (const [first, second] of samples) {
+      await scrollStorySceneTo(page, scene.id, first);
+      const root = page.locator(`[data-story-scene="${scene.id}"][data-active="true"]`);
+      const before = await root.evaluate(element => ({
+        title: element.querySelector('[data-narrative-title]')?.textContent,
+        resultVisible: Number.parseFloat(getComputedStyle(element.querySelector('[data-narrative-result]')!).opacity) >= 0.95,
+        completeSteps: Array.from(element.querySelectorAll<HTMLElement>('[data-story-step]'))
+          .filter(node => Number.parseFloat(getComputedStyle(node).opacity) >= 0.95)
+          .map(node => node.dataset.storyStep),
+      }));
+      await scrollStorySceneTo(page, scene.id, second);
+      const after = await root.evaluate(element => ({
+        title: element.querySelector('[data-narrative-title]')?.textContent,
+        resultVisible: Number.parseFloat(getComputedStyle(element.querySelector('[data-narrative-result]')!).opacity) >= 0.95,
+        completeSteps: Array.from(element.querySelectorAll<HTMLElement>('[data-story-step]'))
+          .filter(node => Number.parseFloat(getComputedStyle(node).opacity) >= 0.95)
+          .map(node => node.dataset.storyStep),
+      }));
+      expect(after).toEqual(before);
+    }
+  }
+});
+
+test('termina todos los pasos antes de introducir el resultado', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+
+  for (const scene of STORY_SCENES) {
+    await scrollStorySceneTo(page, scene.id, 0.72);
+    const root = page.locator(`[data-story-scene="${scene.id}"][data-active="true"]`);
+    const before = await root.locator('[data-story-step]').evaluateAll(nodes => nodes.map(node => (
+      Number.parseFloat(getComputedStyle(node).opacity).toFixed(3)
+    )));
+    await scrollStorySceneTo(page, scene.id, 0.74);
+    const after = await root.locator('[data-story-step]').evaluateAll(nodes => nodes.map(node => (
+      Number.parseFloat(getComputedStyle(node).opacity).toFixed(3)
+    )));
+    expect(after).toEqual(before);
+    expect(await root.locator('[data-narrative-result]').evaluate(node => (
+      Number.parseFloat(getComputedStyle(node).opacity)
+    ))).toBeGreaterThan(0);
+  }
+});
+
+test('registra una sola vez la historia completa aunque el usuario regrese', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+  await page.evaluate(() => { window.dataLayer = []; });
+
+  await scrollStoryGlobalTo(page, 0.91);
+  await scrollStoryGlobalTo(page, 0.70);
+  await scrollStoryGlobalTo(page, 0.95);
+
+  const completions = await page.evaluate(() => (window.dataLayer ?? []).filter(entry => (
+    typeof entry === 'object'
+    && entry !== null
+    && 'event' in entry
+    && entry.event === 'homepage_story_complete'
+  )));
+  expect(completions).toHaveLength(1);
 });

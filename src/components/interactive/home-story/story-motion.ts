@@ -43,7 +43,5 @@ export function useNarrativeVisualMotion(progress: MotionValue<number>) {
   const result = useTransform(progress, STORY_PHASES.result, [0, 1], { ease: smoothstep });
   return {
     opacity: useTransform(() => (0.14 + 0.86 * demo.get()) * (1 - 0.35 * result.get())),
-    y: useTransform(() => 14 * (1 - demo.get())),
-    scale: useTransform(() => 0.987 + 0.013 * demo.get()),
   };
 }

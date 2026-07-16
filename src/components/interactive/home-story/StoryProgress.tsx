@@ -8,7 +8,9 @@ interface Props {
 
 export default function StoryProgress({ progress, activeIndex }: Props) {
   const mobileScale = useTransform(progress, [0, 1], [0, 1]);
-  const milestones = STORY_SCENES.filter(scene => ['entry', 'payment', 'operations', 'multibranch', 'ai'].includes(scene.id));
+  const milestones = STORY_SCENES.filter(scene => (
+    ['service', 'payment', 'operations', 'multibranch', 'ai'].includes(scene.id)
+  ));
   const activeStart = STORY_SCENES[activeIndex].range[0];
   const activeMilestone = milestones.reduce((current, scene, index) => scene.range[0] <= activeStart ? index : current, 0);
 

@@ -28,7 +28,7 @@ export default function AnimatedStory() {
       ref={rootRef}
       data-story-mode="animated"
       data-active-scene={STORY_SCENES[activeIndex].id}
-      className="relative h-[700vh] bg-neutral-950 lg:h-[800vh]"
+      className="relative h-[900vh] bg-neutral-950 lg:h-[1000vh]"
     >
       <div
         className="sticky overflow-hidden"

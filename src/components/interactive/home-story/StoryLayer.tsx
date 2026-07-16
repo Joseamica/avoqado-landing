@@ -1,6 +1,7 @@
 import { motion, useTransform, type MotionValue } from 'framer-motion';
 import { useEffect, useRef, type ReactNode } from 'react';
 import type { StoryScene } from './story';
+import { smoothstep } from './story-motion';
 
 interface Props {
   scene: StoryScene;
@@ -15,22 +16,17 @@ export default function StoryLayer({ scene, index, total, progress, active, chil
   const layerRef = useRef<HTMLElement>(null);
   const [start, end] = scene.range;
   const localProgress = useTransform(progress, [start, end], [0, 1], { clamp: true });
-  const values = index === 0
-    ? [1, 1, 1, 0]
+  const opacityInput = index === 0
+    ? [0, 0.93, 1]
     : index === total - 1
-      ? [0, 1, 1, 1]
+      ? [0, 0.07, 1]
+      : [0, 0.07, 0.93, 1];
+  const opacityOutput = index === 0
+    ? [1, 1, 0]
+    : index === total - 1
+      ? [0, 1, 1]
       : [0, 1, 1, 0];
-  const opacity = useTransform(
-    progress,
-    [start, Math.min(start + 0.018, end), Math.max(end - 0.018, start), end],
-    values,
-  );
-  const preservesCascadeDock = scene.id === 'operations' || scene.id === 'finance';
-  const y = useTransform(
-    localProgress,
-    [0, 0.18, 0.82, 1],
-    preservesCascadeDock ? [0, 0, 0, 0] : [24, 0, 0, -18],
-  );
+  const opacity = useTransform(localProgress, opacityInput, opacityOutput, { ease: smoothstep });
 
   useEffect(() => {
     layerRef.current?.toggleAttribute('inert', !active);
@@ -43,7 +39,7 @@ export default function StoryLayer({ scene, index, total, progress, active, chil
       data-active={active ? 'true' : 'false'}
       aria-hidden={!active}
       className="absolute inset-0"
-      style={{ opacity, y, pointerEvents: active ? 'auto' : 'none' }}
+      style={{ opacity, pointerEvents: active ? 'auto' : 'none' }}
     >
       {children(localProgress)}
     </motion.section>

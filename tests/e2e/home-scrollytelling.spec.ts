@@ -1,4 +1,5 @@
 import { expect, test, type Page } from 'playwright/test';
+import { scrollStoryGlobalTo } from './helpers/home-story-scroll';
 
 const HERO_HEADING = 'El primer sistema todo-en-uno en México';
 
@@ -1121,8 +1122,19 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
   expect.soft(routedPulse.inlineTransform).toContain('translateY(');
   expect.soft(routedPulse.boxShadow).toBe('none');
 
-  const operationsDock = await readCascadePulse(0.431, 'operations');
-  const financeDock = await readCascadePulse(0.613, 'finance');
+  await scrollStoryGlobalTo(page, 0.62);
+  const readDock = async (sceneId: 'operations' | 'finance') => {
+    const pulse = root.locator(`[data-story-scene="${sceneId}"] [data-story-primary-pulse]`);
+    return pulse.evaluate(element => {
+      const rect = element.getBoundingClientRect();
+      return {
+        center: { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
+        inlineTop: (element as HTMLElement).style.top,
+      };
+    });
+  };
+  const operationsDock = await readDock('operations');
+  const financeDock = await readDock('finance');
   expect.soft(operationsDock.inlineTop).toBe('');
   expect.soft(financeDock.inlineTop).toBe('');
   expect(
