@@ -1,8 +1,9 @@
-import { motion, useTransform, type MotionValue } from 'framer-motion';
+import { motion, type MotionValue } from 'framer-motion';
 import { pushEvent, trackGetStarted } from '../../../../lib/gtm';
 import SceneFrame from '../SceneFrame';
 import type { StoryScene } from '../story';
 import { STORY_FIXTURE } from '../story-fixture';
+import { useStepReveal } from '../story-motion';
 
 export default function AiScene({
   scene,
@@ -11,12 +12,11 @@ export default function AiScene({
   scene: StoryScene;
   progress: MotionValue<number>;
 }) {
-  const questionOpacity = useTransform(progress, [0.14, 0.34], [0, 1]);
-  const questionY = useTransform(progress, [0.14, 0.34], [12, 0]);
-  const answerOpacity = useTransform(progress, [0.38, 0.64], [0, 1]);
-  const answerY = useTransform(progress, [0.38, 0.64], [12, 0]);
-  const closeOpacity = useTransform(progress, [0.68, 0.88], [0, 1]);
-  const answer = `${STORY_FIXTURE.comparisonVenue} aparece con menor ticket esta semana. ${STORY_FIXTURE.product} quedó en ${STORY_FIXTURE.stockAfter} piezas y tiene un reorden sugerido.`;
+  const [questionAt, answerAt, contextAt] = scene.stepThresholds;
+  const question = useStepReveal(progress, questionAt, 12);
+  const response = useStepReveal(progress, answerAt, 12);
+  const context = useStepReveal(progress, contextAt, 12);
+  const answer = `Sucursal Norte bajó su ticket a ${STORY_FIXTURE.comparisonVenueTicket} (${STORY_FIXTURE.comparisonVenueTicketChange}). ${STORY_FIXTURE.product} quedó en ${STORY_FIXTURE.stockAfter} piezas y tiene un reorden sugerido.`;
   const actions = (
     <div className="grid gap-2.5 sm:flex sm:flex-wrap lg:gap-3">
       <a
@@ -60,30 +60,33 @@ export default function AiScene({
             </div>
 
             <motion.div
+              data-story-step="question"
               data-story-panel-copy
               className="ml-auto mt-2.5 max-w-[92%] rounded-xl rounded-br-sm bg-neutral-50 px-3 py-2 text-[0.7rem] leading-[1.35] text-neutral-950 sm:mt-5 sm:max-w-[85%] sm:rounded-2xl sm:px-4 sm:py-3 sm:text-sm"
-              style={{ opacity: questionOpacity, y: questionY }}
+              style={{ opacity: question.opacity, y: question.offset }}
             >
               ¿Qué sucursal bajó su ticket y qué debo reordenar?
             </motion.div>
             <motion.div
+              data-story-step="answer"
               data-story-panel-copy
               className="mt-2 max-w-[96%] rounded-xl rounded-bl-sm bg-white/6 px-3 py-2 text-[0.625rem] leading-[1.4] text-neutral-200 sm:mt-4 sm:max-w-[92%] sm:rounded-2xl sm:px-4 sm:py-3 sm:text-sm sm:leading-relaxed"
-              style={{ opacity: answerOpacity, y: answerY }}
+              style={{ opacity: response.opacity, y: response.offset }}
             >
               {answer}
             </motion.div>
           </div>
 
           <motion.div
+            data-story-step="context"
             className="flex items-center justify-between gap-3 bg-avoqado-green px-3 py-2.5 text-neutral-950 sm:px-6 sm:py-4"
-            style={{ opacity: closeOpacity }}
+            style={{ opacity: context.opacity, y: context.offset }}
           >
             <p data-story-panel-copy className="max-w-[34ch] text-[0.7rem] font-medium leading-tight sm:text-base">
               Todo tu negocio, en el mismo contexto.
             </p>
-            <span data-story-panel-copy className="hidden shrink-0 text-[0.625rem] font-semibold uppercase tracking-[0.12em] opacity-60 sm:inline">
-              Pregunta y actúa
+            <span data-payment-reference className="hidden shrink-0 text-[0.625rem] font-semibold uppercase tracking-[0.12em] opacity-60 sm:inline">
+              Referencia {STORY_FIXTURE.paymentReference}
             </span>
           </motion.div>
         </div>

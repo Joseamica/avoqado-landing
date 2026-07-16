@@ -294,3 +294,35 @@ test('acumula las dos cascadas y conserva el pulso en el último nodo durante la
     expect(exitDistances.at(-1)).toBeLessThanOrEqual(1);
   }
 });
+
+test('Sucursales prueba el dato que IA explica después', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+
+  await scrollStorySceneTo(page, 'multibranch', 0.72);
+  const branches = page.locator('[data-story-scene="multibranch"][data-active="true"]');
+  await expect(branches.locator('[data-story-step="north-selector"]')).toContainText('Sucursal Norte');
+  await expect(branches.locator('[data-branch-breadcrumb]')).toHaveText('Estudio Lumina → Sucursal Norte');
+  await expect(branches.locator('[data-branch-ticket]')).toHaveText('Ticket $184 · -8%');
+
+  await scrollStorySceneTo(page, 'ai', 0.55);
+  const ai = page.locator('[data-story-scene="ai"][data-active="true"]');
+  await expect(ai.locator('[data-story-step="question"]')).toContainText('¿Qué sucursal bajó su ticket y qué debo reordenar?');
+  await expect(ai.locator('[data-story-step="answer"]')).toContainText('Sucursal Norte bajó su ticket a $184 (-8%).');
+  expect(await ai.locator('.story-frame-actions').evaluate(element => element.inert)).toBe(true);
+
+  await scrollStorySceneTo(page, 'ai', 0.86);
+  expect(await ai.locator('.story-frame-actions').evaluate(element => element.inert)).toBe(false);
+  await expect(ai.locator('[data-narrative-result]')).toHaveCSS('opacity', '1');
+
+  for (const sceneId of ['aftercare', 'operations', 'finance', 'ai'] as const) {
+    await scrollStorySceneTo(page, sceneId, 0.72);
+    await expect(page.locator(`[data-story-scene="${sceneId}"]`)).toContainText('AVQ-34810');
+  }
+
+  await scrollStorySceneTo(page, 'ai', 0.86);
+  await page.reload();
+  await expect.poll(async () => page.locator('[data-story-mode="animated"]').getAttribute('data-active-scene')).toBe('ai');
+  const restoredActions = page.locator('[data-story-scene="ai"][data-active="true"] .story-frame-actions');
+  await expect.poll(async () => restoredActions.evaluate(element => element.inert)).toBe(false);
+});
