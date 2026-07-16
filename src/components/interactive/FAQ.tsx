@@ -6,6 +6,7 @@ import DoodleBackground from './DoodleBackground';
 export default function FAQ() {
   const containerRef = useRef<HTMLElement>(null);
   const [mounted, setMounted] = useState(false);
+  const [invitationActive, setInvitationActive] = useState(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const motionPreference = useReducedMotion();
   const [mediaReducedMotion, setMediaReducedMotion] = useState(false);
@@ -41,6 +42,7 @@ export default function FAQ() {
     };
     const visibilityObserver = section
       ? new IntersectionObserver(([entry]) => {
+          setInvitationActive(entry.isIntersecting);
           setPageChromeHidden(entry.isIntersecting);
         }, { rootMargin: '-99% 0px 0px 0px', threshold: 0 })
       : null;
@@ -188,7 +190,7 @@ export default function FAQ() {
       </div>
 
       {/* Global Overlay Portal - Renders outside of any transform context */}
-      {mounted && createPortal(
+      {mounted && invitationActive && createPortal(
         <motion.div
           style={{ opacity: reducedMotion ? 1 : overlayOpacity }}
           className="fixed inset-0 pointer-events-none z-[40] overflow-hidden"

@@ -1319,6 +1319,7 @@ test('muestra el cierre ilustrado estático con movimiento reducido', async ({ p
   const invitation = page.locator('[data-homepage-chatbot-invitation]');
   await invitation.scrollIntoViewIfNeeded();
   await expect(invitation).toHaveAttribute('data-reduced-motion', 'true');
+  await invitation.evaluate(element => element.scrollIntoView({ block: 'start' }));
 
   const geometry = await invitation.evaluate(element => ({
     height: element.getBoundingClientRect().height,
@@ -1329,4 +1330,12 @@ test('muestra el cierre ilustrado estático con movimiento reducido', async ({ p
   await expect(invitation).toContainText('todo de Avoqado?');
   await expect(page.locator('[data-chatbot-invitation-arrow]')).toHaveCount(1);
   await expect(page.locator('[data-chatbot-invitation-circle]')).toHaveCount(1);
+
+  const story = page.locator('[data-story-mode="static"]');
+  await story.evaluate(element => {
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top: top + element.scrollHeight - window.innerHeight, behavior: 'auto' });
+  });
+  await expect(page.locator('[data-chatbot-invitation-arrow]')).toHaveCount(0);
+  await expect(page.locator('[data-chatbot-invitation-circle]')).toHaveCount(0);
 });
