@@ -1,5 +1,5 @@
 import { expect, test, type Page } from 'playwright/test';
-import { scrollStoryGlobalTo } from './helpers/home-story-scroll';
+import { scrollStoryGlobalTo, scrollStorySceneTo, settleFrames } from './helpers/home-story-scroll';
 
 const HERO_HEADING = 'El primer sistema todo-en-uno en México';
 
@@ -283,10 +283,11 @@ test('mantiene la verdad crítica visible fuera del chatbot en móvil', async ({
       await expectInsideViewport(row.locator('.story-channel-result'));
     }
 
-    const channelSummary = channels.locator('[data-channel-route-summary]:visible');
-    const eventPrimary = channels.locator('[data-channel-event-primary]:visible');
-    const eventDetail = channels.locator('[data-channel-event-detail]:visible');
-    const eventContext = channels.locator('[data-channel-event-context]:visible');
+    const activeEvent = channels.locator('[data-channel-event-content][data-active="true"]');
+    const channelSummary = activeEvent.locator('[data-channel-route-summary]');
+    const eventPrimary = activeEvent.locator('[data-channel-event-primary]');
+    const eventDetail = activeEvent.locator('[data-channel-event-detail]');
+    const eventContext = activeEvent.locator('[data-channel-event-context]');
     await expect(channelSummary).toHaveText(summary);
     await expect(eventPrimary).toHaveText(primary);
     await expect(eventDetail).toHaveText(detail);
@@ -1269,6 +1270,10 @@ test('recupera el cierre ilustrado y deja abrir el asistente', async ({ page }, 
   await expect(invitation).toContainText('¿Quieres saber');
   await expect(invitation).toContainText('todo de Avoqado?');
 
+  expect(await page.locator('#faq-section').evaluate(element => (
+    element.previousElementSibling?.matches('main[data-scrollytelling]') === true
+  ))).toBe(true);
+
   expect(await invitation.evaluate(element => {
     const footer = document.querySelector('footer');
     return Boolean(footer && (element.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING));
@@ -1378,4 +1383,18 @@ test('fuerza y revierte el dibujo del cierre con motion=full', async ({ page }, 
 
   await scrollToProgress(0.2);
   await expect.poll(readDrawing).toEqual({ dash: 0, opacity: 0 });
+
+  await expect(page.locator('[data-chatbot-invitation-arrow]')).toHaveCount(1);
+  await expect(page.locator('[data-chatbot-invitation-circle]')).toHaveCount(1);
+  await expect(page.locator('[data-chatbot-invitation-arrow]')).toHaveCSS('opacity', '0');
+  await expect.poll(async () => page.locator('[data-chatbot-invitation-circle]').evaluate(element => (
+    Number.parseFloat(getComputedStyle(element).strokeDasharray)
+  ))).toBe(0);
+
+  await scrollStorySceneTo(page, 'ai', 0.94);
+  await settleFrames(page);
+  await expect(page.locator('[data-chatbot-invitation-arrow]')).toHaveCount(0);
+  await expect(page.locator('[data-chatbot-invitation-circle]')).toHaveCount(0);
+  await expect(page.locator('[data-site-navigation]')).toHaveCSS('opacity', '1');
+  await expect(page.locator('[data-founders-banner]')).toHaveCSS('opacity', '1');
 });

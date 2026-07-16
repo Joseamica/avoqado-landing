@@ -28,7 +28,7 @@ export default function PaymentScene({ scene, progress }: { scene: StoryScene; p
       scene={scene}
       progress={progress}
     >
-      <div className="story-payment-visual relative grid h-full min-h-0 content-center gap-2.5 sm:grid-cols-[minmax(190px,0.88fr)_minmax(250px,1.12fr)] sm:grid-rows-[minmax(0,1fr)] sm:content-stretch sm:items-center sm:gap-8 lg:grid-cols-[minmax(260px,44fr)_minmax(280px,56fr)] lg:gap-12">
+      <div className="story-payment-visual relative grid h-full min-h-0 content-center gap-2.5 sm:grid-cols-[minmax(190px,0.88fr)_minmax(250px,1.12fr)] sm:grid-rows-[minmax(0,1fr)] sm:content-stretch sm:items-center sm:gap-8 lg:grid-cols-[minmax(210px,44fr)_minmax(250px,56fr)] lg:gap-8 xl:grid-cols-[minmax(260px,44fr)_minmax(280px,56fr)] xl:gap-12">
         <motion.div
           data-story-step="channel"
           className="story-payment-channel min-w-0 self-center"

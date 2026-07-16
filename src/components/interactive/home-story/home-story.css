@@ -2,6 +2,106 @@
   opacity: 0 !important;
 }
 
+.story-frame-actions a,
+.story-frame-actions button {
+  min-height: 44px;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .story-frame-grid {
+    grid-template-rows: minmax(285px, 50fr) minmax(0, 50fr);
+    gap: 0.75rem;
+    padding: 1.25rem 2.5rem 1.5rem;
+  }
+
+  .story-narrative-title {
+    max-width: 13ch;
+    font-size: clamp(2rem, 5.5vw, 3.25rem);
+  }
+
+  .story-narrative-result {
+    min-height: 4.75rem;
+    margin-top: 1rem;
+  }
+
+  .story-frame-actions {
+    margin-top: 0.75rem !important;
+  }
+
+  [data-story-panel='operations'],
+  [data-story-panel='finance'] {
+    padding: 0.75rem;
+  }
+
+  [data-story-panel='operations'] > div:first-child,
+  [data-story-panel='finance'] > div:first-child {
+    padding-bottom: 0.5rem;
+  }
+
+  [data-story-panel='operations'] [data-story-cascade-stage],
+  [data-story-panel='finance'] [data-story-cascade-stage] {
+    padding-block: 0.25rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) and (max-height: 640px) {
+  .story-frame-grid {
+    grid-template-columns: minmax(250px, 41fr) minmax(0, 59fr);
+    grid-template-rows: minmax(0, 1fr);
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.75rem 2rem 1rem;
+  }
+
+  .story-narrative-title {
+    font-size: clamp(2.25rem, 4.5vw, 2.75rem);
+  }
+}
+
+@media (max-width: 767px) {
+  .story-frame-grid {
+    padding-left: max(1.5rem, env(safe-area-inset-left));
+    padding-right: max(1.5rem, env(safe-area-inset-right));
+  }
+
+  .story-frame-visual {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 479px) and (max-height: 640px) {
+  .story-narrative-meta {
+    height: 0.75rem;
+  }
+
+  .story-narrative-result strong {
+    font-size: 0.875rem;
+    line-height: 1.25;
+  }
+
+  .story-frame-actions > div {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  [data-story-panel='operations'],
+  [data-story-panel='finance'] {
+    padding: 0.5rem !important;
+  }
+
+  [data-story-panel='operations'] > div:first-child,
+  [data-story-panel='finance'] > div:first-child {
+    padding-bottom: 0.35rem !important;
+  }
+
+  [data-story-panel='operations'] [data-story-cascade-stage],
+  [data-story-panel='finance'] [data-story-cascade-stage] {
+    padding-block: 0.125rem !important;
+  }
+}
+
 .story-narrative-result {
   min-height: 5.5rem;
 }

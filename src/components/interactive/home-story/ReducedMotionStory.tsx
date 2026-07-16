@@ -1,5 +1,6 @@
 import { pushEvent, trackGetStarted } from '../../../lib/gtm';
 import { STORY_SCENES } from './story';
+import StoryStaticEvidence from './StoryStaticEvidence';
 
 interface Props {
   mode?: 'static' | 'noscript';
@@ -36,6 +37,7 @@ export default function ReducedMotionStory({ mode = 'static' }: Props) {
               <p data-narrative-result className="mt-6 max-w-2xl text-xl font-medium">
                 {scene.result}
               </p>
+              <StoryStaticEvidence sceneId={scene.id} />
               {scene.id === 'payment' ? (
                 <div className="mt-6 max-w-md border-y border-white/10 py-4" data-payment-route-summary>
                   <strong className="block text-lg font-semibold text-avoqado-green">

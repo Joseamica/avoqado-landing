@@ -49,7 +49,7 @@ export default function AiScene({
           data-story-panel="ai"
           className="w-full min-w-0 max-w-full overflow-hidden rounded-[1.25rem] border border-white/10 bg-neutral-900 shadow-2xl shadow-black/35 sm:max-w-2xl sm:rounded-[1.75rem]"
         >
-          <div className="p-2.5 sm:p-6 lg:p-7">
+          <div className="p-2.5 lg:p-7">
             <div className="flex min-w-0 items-center justify-between gap-3">
               <p data-story-panel-copy className="truncate text-[0.625rem] font-medium uppercase tracking-[0.16em] text-neutral-500 sm:text-xs">
                 Avoqado MCP · Claude / ChatGPT
@@ -62,7 +62,7 @@ export default function AiScene({
             <motion.div
               data-story-step="question"
               data-story-panel-copy
-              className="ml-auto mt-2.5 max-w-[92%] rounded-xl rounded-br-sm bg-neutral-50 px-3 py-2 text-[0.7rem] leading-[1.35] text-neutral-950 sm:mt-5 sm:max-w-[85%] sm:rounded-2xl sm:px-4 sm:py-3 sm:text-sm"
+              className="ml-auto mt-2.5 max-w-[92%] rounded-xl rounded-br-sm bg-neutral-50 px-3 py-2 text-[0.7rem] leading-[1.35] text-neutral-950 sm:max-w-[85%] sm:rounded-2xl sm:px-4 sm:text-sm lg:mt-5 lg:py-3"
               style={{ opacity: question.opacity, y: question.offset }}
             >
               ¿Qué sucursal bajó su ticket y qué debo reordenar?
@@ -70,7 +70,7 @@ export default function AiScene({
             <motion.div
               data-story-step="answer"
               data-story-panel-copy
-              className="mt-2 max-w-[96%] rounded-xl rounded-bl-sm bg-white/6 px-3 py-2 text-[0.625rem] leading-[1.4] text-neutral-200 sm:mt-4 sm:max-w-[92%] sm:rounded-2xl sm:px-4 sm:py-3 sm:text-sm sm:leading-relaxed"
+              className="mt-2 max-w-[96%] rounded-xl rounded-bl-sm bg-white/6 px-3 py-2 text-[0.625rem] leading-[1.4] text-neutral-200 sm:max-w-[92%] sm:rounded-2xl sm:px-4 sm:text-sm sm:leading-relaxed lg:mt-4 lg:py-3"
               style={{ opacity: response.opacity, y: response.offset }}
             >
               {answer}
@@ -79,7 +79,7 @@ export default function AiScene({
 
           <motion.div
             data-story-step="context"
-            className="flex items-center justify-between gap-3 bg-avoqado-green px-3 py-2.5 text-neutral-950 sm:px-6 sm:py-4"
+            className="flex items-center justify-between gap-3 bg-avoqado-green px-3 py-2.5 text-neutral-950 sm:px-6 lg:py-4"
             style={{ opacity: context.opacity, y: context.offset }}
           >
             <p data-story-panel-copy className="max-w-[34ch] text-[0.7rem] font-medium leading-tight sm:text-base">
