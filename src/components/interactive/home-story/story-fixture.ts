@@ -17,6 +17,10 @@ export const STORY_FIXTURE = {
   selectedMerchant: 'Operación diaria',
   alternateMerchant: 'Facturación',
   selectedChannel: 'Reservación en línea',
+  paymentReference: 'AVQ-34810',
+  organizationTicket: '$192',
+  comparisonVenueTicket: '$184',
+  comparisonVenueTicketChange: '-8%',
 } as const;
 
 export type StoryFixture = typeof STORY_FIXTURE;

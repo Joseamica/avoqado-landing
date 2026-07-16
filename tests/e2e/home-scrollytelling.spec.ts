@@ -80,8 +80,8 @@ test('cuenta la historia completa en orden causal', async ({ page }, testInfo) =
     .toContainText('Reservación en línea → Reserva confirmada');
   await expect(main.locator(`[data-story-mode="${mode}"] [data-story-scene="payment"]`))
     .toContainText('TPV → Operación diaria');
-  await expect(main).toContainText('Una sucursal o diez');
-  await expect(main).toContainText('sólo pregunta');
+  await expect(main).toContainText('Cada sucursal cuenta en la misma vista.');
+  await expect(main).toContainText('Para entender tu negocio, solo pregunta.');
   await expect(page.getByText('Continue scrolling...')).toHaveCount(0);
 });
 
