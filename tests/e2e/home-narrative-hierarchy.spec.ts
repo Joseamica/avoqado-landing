@@ -415,6 +415,35 @@ test('mantiene estados estables dentro de intro, demo y resultado', async ({ pag
   }
 });
 
+test('retiene cada resultado antes de salir y recupera la pausa al subir', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+
+  for (const [index, scene] of STORY_SCENES.entries()) {
+    await scrollStorySceneTo(page, scene.id, 0.955);
+    const layer = page.locator(`[data-story-scene="${scene.id}"]`);
+    const held = await layer.evaluate(element => ({
+      layer: Number.parseFloat(getComputedStyle(element).opacity).toFixed(3),
+      result: Number.parseFloat(getComputedStyle(element.querySelector('[data-narrative-result]')!).opacity).toFixed(3),
+    }));
+
+    expect(Number.parseFloat(held.layer), `${scene.id} layer at 0.955`).toBeGreaterThanOrEqual(0.95);
+    expect(Number.parseFloat(held.result), `${scene.id} result at 0.955`).toBeGreaterThanOrEqual(0.95);
+
+    if (index === STORY_SCENES.length - 1) continue;
+
+    await scrollStorySceneTo(page, scene.id, 0.98);
+    expect(await layer.evaluate(element => Number.parseFloat(getComputedStyle(element).opacity)))
+      .toBeLessThan(0.95);
+
+    await scrollStorySceneTo(page, scene.id, 0.955);
+    expect(await layer.evaluate(element => ({
+      layer: Number.parseFloat(getComputedStyle(element).opacity).toFixed(3),
+      result: Number.parseFloat(getComputedStyle(element.querySelector('[data-narrative-result]')!).opacity).toFixed(3),
+    }))).toEqual(held);
+  }
+});
+
 test('termina todos los pasos antes de introducir el resultado', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-desktop');
   await page.goto('/?motion=full');
@@ -661,7 +690,7 @@ test('tolera rueda lenta, rueda rápida y Page Down sin errores', async ({ page 
   const beforeReverseY = await scrollY();
   await page.mouse.wheel(0, -1400);
   await settleFrames(page);
-  for (let index = 0; index < 12; index += 1) {
+  for (let index = 0; index < 40 && await activeIndex() >= forwardPeak; index += 1) {
     await page.mouse.wheel(0, -80);
     await settleFrames(page);
   }

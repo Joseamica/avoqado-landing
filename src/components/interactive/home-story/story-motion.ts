@@ -12,8 +12,8 @@ export const STORY_PHASES: {
 } = {
   compact: [0.18, 0.38],
   result: [0.73, 0.84],
-  hold: [0.84, 0.93],
-  exit: [0.93, 1],
+  hold: [0.84, 0.96],
+  exit: [0.96, 1],
   layerEnter: [0, 0.07],
   stepHalfWindow: 0.02,
 };
