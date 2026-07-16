@@ -1,4 +1,4 @@
-import { motion, useTransform, type MotionValue } from 'framer-motion';
+import { motion, type MotionValue } from 'framer-motion';
 import {
   BadgeDollarSign,
   Box,
@@ -11,10 +11,12 @@ import type { StoryScene } from '../story';
 import { STORY_FIXTURE } from '../story-fixture';
 import CascadeTimeline from '../CascadeTimeline';
 import SceneFrame from '../SceneFrame';
+import { useStepReveal } from '../story-motion';
 
 function OperationRow({
   progress,
-  start,
+  threshold,
+  stepId,
   icon: Icon,
   title,
   detail,
@@ -22,21 +24,22 @@ function OperationRow({
   premium = false,
 }: {
   progress: MotionValue<number>;
-  start: number;
+  threshold: number;
+  stepId: string;
   icon: LucideIcon;
   title: string;
   detail: string;
   status: string;
   premium?: boolean;
 }) {
-  const opacity = useTransform(progress, [start, start + 0.18], [0, 1]);
-  const x = useTransform(progress, [start, start + 0.18], [24, 0]);
+  const reveal = useStepReveal(progress, threshold, 24);
 
   return (
     <motion.li
+      data-story-step={stepId}
       data-story-cascade-stage={title}
       className="relative grid grid-cols-[1.5rem_minmax(0,1fr)_auto] items-center gap-2 py-1 sm:grid-cols-[1.75rem_minmax(0,1fr)_auto] sm:gap-3 sm:py-2"
-      style={{ opacity, x }}
+      style={{ opacity: reveal.opacity, x: reveal.offset }}
     >
       <span
         data-story-cascade-node
@@ -79,14 +82,12 @@ export default function OperationsScene({
 }) {
   const rows = [
     {
-      start: 0.08,
       icon: ChartNoAxesCombined,
       title: 'Venta registrada',
       detail: `${STORY_FIXTURE.total} · ${STORY_FIXTURE.staff}`,
       status: 'Registrada',
     },
     {
-      start: 0.22,
       icon: Box,
       title: 'Inventario',
       detail: `${STORY_FIXTURE.product} −1`,
@@ -94,27 +95,25 @@ export default function OperationsScene({
       premium: true,
     },
     {
-      start: 0.36,
       icon: RotateCw,
       title: 'Reorden sugerido',
       detail: `Stock ${STORY_FIXTURE.stockBefore} → ${STORY_FIXTURE.stockAfter}`,
       status: 'Sugerido',
     },
     {
-      start: 0.50,
       icon: Star,
       title: 'CRM y lealtad',
       detail: `${STORY_FIXTURE.customer} +${STORY_FIXTURE.points} puntos`,
       status: `+${STORY_FIXTURE.points}`,
     },
     {
-      start: 0.64,
       icon: BadgeDollarSign,
       title: 'Equipo',
       detail: `${STORY_FIXTURE.staff} +${STORY_FIXTURE.commission}`,
       status: `+${STORY_FIXTURE.commission}`,
     },
   ] as const;
+  const operationSteps = ['sale', 'inventory', 'reorder', 'crm', 'team'] as const;
 
   return (
     <SceneFrame
@@ -137,6 +136,9 @@ export default function OperationsScene({
               >
                 {STORY_FIXTURE.total} · ahora
               </p>
+              <p data-payment-reference className="mt-1 text-[0.625rem] text-neutral-500">
+                Referencia {STORY_FIXTURE.paymentReference}
+              </p>
             </div>
             <span
               data-story-panel-copy
@@ -145,10 +147,16 @@ export default function OperationsScene({
               En cascada
             </span>
           </div>
-          <CascadeTimeline progress={progress} tone="dark">
+          <CascadeTimeline progress={progress} thresholds={scene.stepThresholds} tone="dark">
             <ol className="relative">
-              {rows.map(row => (
-                <OperationRow key={row.title} progress={progress} {...row} />
+              {rows.map((row, index) => (
+                <OperationRow
+                  key={row.title}
+                  {...row}
+                  progress={progress}
+                  stepId={operationSteps[index]}
+                  threshold={scene.stepThresholds[index]}
+                />
               ))}
             </ol>
           </CascadeTimeline>

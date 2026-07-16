@@ -252,3 +252,45 @@ test('Cobro y Cliente conservan marcador estático y cero pulsos o rutas', async
     await expect(scene.locator('[data-story-cascade-path], [data-story-service-connector]')).toHaveCount(0);
   }
 });
+
+const cascadeContracts = {
+  operations: ['sale', 'inventory', 'reorder', 'crm', 'team'],
+  finance: ['payment', 'cost', 'settlement', 'reconciliation', 'policy'],
+} as const;
+
+test('acumula las dos cascadas y conserva el pulso en el último nodo durante la pausa', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/?motion=full');
+
+  for (const [sceneId, steps] of Object.entries(cascadeContracts)) {
+    await scrollStorySceneTo(page, sceneId as keyof typeof cascadeContracts, 0.72);
+    const sceneLayer = page.locator(`[data-story-scene="${sceneId}"]`);
+    await expect(sceneLayer).toHaveAttribute('data-active', 'true');
+    for (const step of steps) {
+      expect(await sceneLayer.locator(`[data-story-step="${step}"]`).evaluate(node => (
+        Number.parseFloat(getComputedStyle(node).opacity)
+      ))).toBeGreaterThanOrEqual(0.95);
+    }
+
+    const finalNode = sceneLayer.locator('[data-story-cascade-node]').last();
+    const pulse = sceneLayer.locator('[data-story-primary-pulse]');
+    const atResult = await Promise.all([finalNode.boundingBox(), pulse.boundingBox()]);
+    expect(atResult[0]).not.toBeNull();
+    expect(atResult[1]).not.toBeNull();
+    expect(Math.abs((atResult[0]!.y + atResult[0]!.height / 2) - (atResult[1]!.y + atResult[1]!.height / 2)))
+      .toBeLessThanOrEqual(8);
+
+    const exitDistances = [];
+    for (const localProgress of [0.93, 0.96, 0.99, 1]) {
+      await scrollStorySceneTo(page, sceneId as keyof typeof cascadeContracts, localProgress);
+      exitDistances.push(await pulse.evaluate(node => {
+        const matrix = new DOMMatrixReadOnly(getComputedStyle(node).transform);
+        return Math.hypot(matrix.m41, matrix.m42);
+      }));
+    }
+    for (let index = 1; index < exitDistances.length; index += 1) {
+      expect(exitDistances[index]).toBeLessThanOrEqual(exitDistances[index - 1] + 0.5);
+    }
+    expect(exitDistances.at(-1)).toBeLessThanOrEqual(1);
+  }
+});

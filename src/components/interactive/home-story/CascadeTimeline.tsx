@@ -1,19 +1,18 @@
 import { motion, useMotionValue, useTransform, type MotionValue } from 'framer-motion';
 import { useEffect, useRef, type ReactNode } from 'react';
+import { smoothstep } from './story-motion';
 
 interface Geometry {
   spineX: number;
   nodeY: number[];
 }
 
-const ROUTE_TIMES = [0, 0.04, 0.26, 0.4, 0.54, 0.68, 0.82, 0.86, 0.92, 1] as const;
-
-function interpolateRoute(progress: number, values: number[]) {
-  for (let index = 1; index < ROUTE_TIMES.length; index += 1) {
-    if (progress <= ROUTE_TIMES[index]) {
-      const start = ROUTE_TIMES[index - 1];
-      const end = ROUTE_TIMES[index];
-      const segmentProgress = (progress - start) / (end - start);
+function interpolateRoute(progress: number, times: readonly number[], values: readonly number[]) {
+  for (let index = 1; index < times.length; index += 1) {
+    if (progress <= times[index]) {
+      const start = times[index - 1];
+      const end = times[index];
+      const segmentProgress = smoothstep(Math.min(Math.max((progress - start) / (end - start), 0), 1));
       return values[index - 1] + (values[index] - values[index - 1]) * segmentProgress;
     }
   }
@@ -22,13 +21,19 @@ function interpolateRoute(progress: number, values: number[]) {
 
 export default function CascadeTimeline({
   progress,
+  thresholds,
   tone,
   children,
 }: {
   progress: MotionValue<number>;
+  thresholds: readonly number[];
   tone: 'dark' | 'light';
   children: ReactNode;
 }) {
+  if (thresholds.length !== 5) {
+    throw new Error('CascadeTimeline requires five thresholds');
+  }
+
   const containerRef = useRef<HTMLDivElement>(null);
   const geometry = useMotionValue<Geometry>({ spineX: 0, nodeY: [0, 0, 0, 0, 0] });
 
@@ -70,26 +75,50 @@ export default function CascadeTimeline({
     return () => observer.disconnect();
   }, [geometry]);
 
+  const routeTimes = [
+    0,
+    thresholds[0] - 0.02,
+    thresholds[0] + 0.02,
+    thresholds[1] - 0.02,
+    thresholds[1] + 0.02,
+    thresholds[2] - 0.02,
+    thresholds[2] + 0.02,
+    thresholds[3] - 0.02,
+    thresholds[3] + 0.02,
+    thresholds[4] - 0.02,
+    thresholds[4] + 0.02,
+    0.93,
+    1,
+  ] as const;
+
   const x = useTransform(() => {
     const { spineX } = geometry.get();
-    return interpolateRoute(progress.get(), [0, 0, spineX, spineX, spineX, spineX, spineX, spineX, 0, 0]);
+    return interpolateRoute(progress.get(), routeTimes, [0, 0, spineX, spineX, spineX, spineX, spineX, spineX, spineX, spineX, spineX, spineX, 0]);
   });
   const y = useTransform(() => {
     const { nodeY } = geometry.get();
-    return interpolateRoute(progress.get(), [
+    return interpolateRoute(progress.get(), routeTimes, [
       0,
       0,
       nodeY[0] ?? 0,
+      nodeY[0] ?? 0,
+      nodeY[1] ?? 0,
       nodeY[1] ?? 0,
       nodeY[2] ?? 0,
+      nodeY[2] ?? 0,
+      nodeY[3] ?? 0,
       nodeY[3] ?? 0,
       nodeY[4] ?? 0,
       nodeY[4] ?? 0,
       0,
-      0,
     ]);
   });
-  const scale = useTransform(progress, [0, 0.04, 0.12, 0.84, 0.92, 1], [0.75, 0.75, 1, 1, 0.75, 0.75]);
+  const scale = useTransform(
+    progress,
+    [0, thresholds[0] - 0.02, thresholds[0] + 0.02, 0.93, 1],
+    [0.75, 0.75, 1, 1, 0.75],
+    { ease: smoothstep },
+  );
   const connectorWidth = useTransform(() => Math.max(geometry.get().spineX, 0));
   const pathClass = tone === 'dark' ? 'bg-white/12' : 'bg-black/10';
 

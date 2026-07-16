@@ -1,14 +1,14 @@
-import { motion, useTransform, type MotionValue } from 'framer-motion';
+import { motion, type MotionValue } from 'framer-motion';
 import type { StoryScene } from '../story';
 import { STORY_FIXTURE } from '../story-fixture';
 import CascadeTimeline from '../CascadeTimeline';
 import SceneFrame from '../SceneFrame';
+import { useStepReveal } from '../story-motion';
 
 interface Stage {
   title: string;
   value: string;
   detail: string;
-  start: number;
   status: string;
   premium?: boolean;
 }
@@ -17,19 +17,23 @@ function FinanceStage({
   stage,
   progress,
   index,
+  threshold,
+  stepId,
 }: {
   stage: Stage;
   progress: MotionValue<number>;
   index: number;
+  threshold: number;
+  stepId: string;
 }) {
-  const opacity = useTransform(progress, [stage.start, stage.start + 0.2], [0, 1]);
-  const y = useTransform(progress, [stage.start, stage.start + 0.2], [20, 0]);
+  const reveal = useStepReveal(progress, threshold, 20);
 
   return (
     <motion.li
+      data-story-step={stepId}
       data-story-cascade-stage={stage.title}
       className="relative grid grid-cols-[1.5rem_minmax(0,1fr)_auto] items-center gap-2 py-1 sm:grid-cols-[1.75rem_minmax(0,1fr)_auto] sm:gap-3 sm:py-2"
-      style={{ opacity, y }}
+      style={{ opacity: reveal.opacity, y: reveal.offset }}
     >
       <span
         data-story-cascade-node
@@ -84,39 +88,35 @@ export default function FinanceScene({
       title: 'Pago',
       value: STORY_FIXTURE.total,
       detail: `merchant: ${STORY_FIXTURE.selectedMerchant}`,
-      start: 0.05,
       status: 'Registrado',
     },
     {
       title: 'Costo',
       value: 'Calculado',
       detail: 'procesador y comisión',
-      start: 0.18,
       status: 'Calculado',
     },
     {
       title: 'Liquidación esperada',
       value: 'En seguimiento',
       detail: 'fecha y monto neto',
-      start: 0.31,
       status: 'Esperada',
     },
     {
       title: 'Conciliación',
       value: 'Referencia ligada',
       detail: 'saldo y movimientos',
-      start: 0.44,
       status: 'Ligada',
     },
     {
       title: 'Póliza',
       value: 'Lista para libros',
       detail: 'IVA · ISR · contabilidad',
-      start: 0.57,
       status: 'Premium',
       premium: true,
     },
   ];
+  const financeSteps = ['payment', 'cost', 'settlement', 'reconciliation', 'policy'] as const;
 
   return (
     <SceneFrame
@@ -137,7 +137,7 @@ export default function FinanceScene({
                 data-story-panel-copy
                 className="mt-0.5 text-sm font-medium text-neutral-950 sm:mt-1 sm:text-lg"
               >
-                Referencia AVQ-34810
+                Referencia {STORY_FIXTURE.paymentReference}
               </p>
             </div>
             <span
@@ -147,10 +147,17 @@ export default function FinanceScene({
               Trazable
             </span>
           </div>
-          <CascadeTimeline progress={progress} tone="light">
+          <CascadeTimeline progress={progress} thresholds={scene.stepThresholds} tone="light">
             <ol className="relative">
               {stages.map((stage, index) => (
-                <FinanceStage key={stage.title} stage={stage} progress={progress} index={index} />
+                <FinanceStage
+                  key={stage.title}
+                  stage={stage}
+                  progress={progress}
+                  index={index}
+                  stepId={financeSteps[index]}
+                  threshold={scene.stepThresholds[index]}
+                />
               ))}
             </ol>
           </CascadeTimeline>

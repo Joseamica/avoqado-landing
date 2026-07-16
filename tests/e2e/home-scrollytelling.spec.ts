@@ -1038,7 +1038,7 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
     'Reorden sugerido',
   );
   const financeNodeDistance = await readNodeAlignment(
-    0.61 + 0.54 * (0.75 - 0.61),
+    0.61 + 0.54 * (0.76 - 0.61),
     'finance',
     'Liquidación esperada',
   );
@@ -1046,7 +1046,7 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
   expect.soft(financeNodeDistance, 'finance pulse follows the visible node').toBeLessThanOrEqual(3);
 
   for (const [progress, expectedScene, expectedPulseCount] of [
-    [0.01, 'service', 1],
+    [0.08, 'service', 1],
     [0.14, 'payment', 0],
     [0.30, 'aftercare', 0],
     [0.59, 'operations', 1],
@@ -1121,7 +1121,7 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
   expect.soft(routedPulse.inlineTransform).toContain('translateY(');
   expect.soft(routedPulse.boxShadow).toBe('none');
 
-  const operationsDock = await readCascadePulse(0.606, 'operations');
+  const operationsDock = await readCascadePulse(0.431, 'operations');
   const financeDock = await readCascadePulse(0.613, 'finance');
   expect.soft(operationsDock.inlineTop).toBe('');
   expect.soft(financeDock.inlineTop).toBe('');
@@ -1155,10 +1155,10 @@ test('mantiene una venta coherente desde operación hasta contabilidad', async (
   const financeScene = root.locator('[data-story-scene="finance"]');
 
   await expect(operationsScene.locator('.sr-only')).toContainText(
-    'La venta de $348.10 atendida por Ana Torres descuenta una unidad de Crema facial 50 ml, cambia el stock de 8 a 7, sugiere reorden, suma 29 puntos a María G. y registra una comisión de $29.50.',
+    'El mismo evento actualiza venta, inventario, reorden, cliente y equipo.',
   );
   await expect(financeScene.locator('.sr-only')).toContainText(
-    'El pago de $348.10 en Operación diaria sigue la ruta Costo, Liquidación esperada, Conciliación y Póliza; la liquidación se presenta como esperada, no garantizada.',
+    'Costo, liquidación esperada, conciliación y póliza conservan la misma referencia.',
   );
 
   for (const [scene, sceneRoot] of [
