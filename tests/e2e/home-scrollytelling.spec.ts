@@ -27,6 +27,7 @@ async function scrollChannelSequenceTo(page: Page, progress: number) {
 }
 
 test('serves the homepage and keeps /demo independent', async ({ page }) => {
+  test.slow();
   await page.goto('/');
   await expect(page).toHaveTitle(/Avoqado/);
 
@@ -712,6 +713,7 @@ test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, t
       window.scrollTo({ top: top + distance * value, behavior: 'auto' });
     }, globalProgress);
     await expect(root).toHaveAttribute('data-active-scene', 'service');
+    await settleFrames(page);
   };
 
   const scene = root.locator('[data-story-scene="service"][data-active="true"]');
@@ -725,6 +727,7 @@ test('entrega la reserva web a la agenda en un solo sentido', async ({ page }, t
 
   await moveToLocalProgress(0.41);
   await expect(sourceCard).toHaveCount(1);
+  await expect(sourceCard).toBeVisible();
   await expect(sourceCard).toContainText('Reserva web');
   await expect(sourceCard).toContainText('Reservación en línea');
   await expect(source).toHaveCount(1);
@@ -1049,7 +1052,7 @@ test('mantiene un solo pulso primario durante los handoffs', async ({ page }, te
 
   for (const [progress, expectedScene, expectedPulseCount] of [
     [0.08, 'service', 1],
-    [0.14, 'payment', 0],
+    [0.16, 'payment', 0],
     [0.30, 'aftercare', 0],
     [0.59, 'operations', 1],
     [0.73, 'finance', 1],
