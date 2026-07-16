@@ -1,8 +1,8 @@
 import { expect, test, type Page } from 'playwright/test';
 
-const HERO_EYEBROW = 'PARA TODO TIPO DE NEGOCIO';
-const HERO_HEADING = 'El primer sistema todo en uno en México para cobrar, administrar y hacer crecer tu negocio.';
-const HERO_SUPPORT = 'Pagos y terminales, punto de venta, tienda en línea, reservaciones, inventario, clientes, facturación, contabilidad y reportes — todo conectado en tiempo real.';
+const HERO_EYEBROW = 'Cobra, administra y crece.';
+const HERO_HEADING = 'El primer sistema todo-en-uno en México';
+const HERO_SUPPORT = 'Pagos y terminales, punto de venta, tienda en línea, reservaciones, inventario, clientes, facturación, contabilidad, reportes, conexión con ChatGPT y Claude. Todo conectado en tiempo real.';
 
 export async function scrollOpeningTo(page: Page, progress: number) {
   const opening = page.locator('[data-opening-mode="animated"]');

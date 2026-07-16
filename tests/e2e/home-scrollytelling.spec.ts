@@ -1,6 +1,6 @@
 import { expect, test, type Page } from 'playwright/test';
 
-const HERO_HEADING = 'El primer sistema todo en uno en México para cobrar, administrar y hacer crecer tu negocio.';
+const HERO_HEADING = 'El primer sistema todo-en-uno en México';
 
 async function scrollOpeningTo(page: Page, progress: number) {
   const opening = page.locator('[data-opening-mode="animated"]');

@@ -70,17 +70,15 @@ export default function OpeningVideo({ progress, isMobile, autoplay }: Props) {
         className="absolute inset-0 z-30 flex flex-col items-center justify-center px-4 text-center md:px-8"
       >
         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-avoqado-green sm:text-sm">
-          PARA TODO TIPO DE NEGOCIO
+          Cobra, administra y crece.
         </p>
         <h1 className="mb-6 max-w-6xl text-center text-2xl font-light tracking-tight text-white sm:text-3xl md:mb-8 md:text-4xl lg:text-6xl">
-          El primer sistema todo en uno en México
+          El primer sistema
           <br className="hidden md:block" />{' '}
-          para cobrar, administrar
-          <br className="hidden md:block" />{' '}
-          y hacer crecer tu negocio.
+          todo-en-uno en México
         </h1>
-        <p className="mb-8 max-w-4xl text-center text-sm text-gray-200 sm:text-base md:mb-10 md:text-lg lg:text-xl">
-          Pagos y terminales, punto de venta, tienda en línea, reservaciones, inventario, clientes, facturación, contabilidad y reportes — todo conectado en tiempo real.
+        <p className="mb-8 max-w-5xl text-center text-sm text-gray-200 sm:text-base md:mb-10 md:text-lg xl:text-xl">
+          Pagos y terminales, punto de venta, tienda en línea, reservaciones, inventario, clientes, facturación, contabilidad, reportes, conexión con ChatGPT y Claude. Todo conectado en tiempo real.
         </p>
         <div className="flex flex-col items-center gap-4 sm:flex-row md:gap-6">
           <a
