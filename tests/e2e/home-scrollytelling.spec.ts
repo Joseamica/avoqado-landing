@@ -110,6 +110,15 @@ test('activa escenas al avanzar y retroceder el scroll', async ({ page }, testIn
   }
 });
 
+test('usa una foto aprobada del facial en la escena de servicio', async ({ page }, testInfo) => {
+  test.skip(['chromium-reduced', 'chromium-nojs'].includes(testInfo.project.name));
+  await page.goto('/');
+
+  const photo = page.locator('[data-story-photo="service-in-action"]');
+  await expect(photo).toHaveAttribute('data-photo-status', 'approved');
+  await expect(photo.locator('img')).toHaveAttribute('alt', /facial hidratante/i);
+});
+
 test('permite forzar la experiencia animada para previsualizarla', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-reduced');
   await page.goto('/?motion=full');

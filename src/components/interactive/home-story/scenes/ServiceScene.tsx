@@ -137,7 +137,7 @@ export default function ServiceScene({ scene, progress }: { scene: StoryScene; p
           id="service-in-action"
           className="absolute right-0 top-0 h-[46%] w-[82%] rounded-[1.1rem] opacity-35 sm:h-[58%] sm:w-[70%] lg:inset-y-[3%] lg:h-[94%] lg:w-[76%] lg:rounded-[1.4rem] lg:opacity-25"
           imageClassName="saturate-[0.55] contrast-[1.08]"
-          overlayClassName="bg-[linear-gradient(90deg,oklch(0.13_0.005_155_/_0.62),oklch(0.13_0.005_155_/_0.18))]"
+          overlayClassName="bg-[linear-gradient(90deg,oklch(0.13_0.005_155_/_0.30),oklch(0.13_0.005_155_/_0.10))]"
         />
 
         <motion.div

@@ -1,5 +1,5 @@
 import type { ImageMetadata } from 'astro';
-import servicePlaceholder from '../../../assets/hero/hero-tile-07.jpg';
+import servicePhoto from '../../../assets/story/service-facial.webp';
 import customerPlaceholder from '../../../assets/hero/hero-tile-05.jpg';
 import ownerPlaceholder from '../../../assets/hero/hero-tile-04.jpg';
 import paymentPlaceholder from '../../../assets/hero/hero-tile-17.jpg';
@@ -28,12 +28,12 @@ export interface StoryPhotoSlot {
 export const STORY_MEDIA = {
   'service-in-action': {
     id: 'service-in-action',
-    src: servicePlaceholder,
-    alt: 'Una artesana trabaja con una pieza en su taller.',
-    objectPosition: '50% 42%',
+    src: servicePhoto,
+    alt: 'Una clienta recibe un facial hidratante mientras una especialista aplica una mascarilla.',
+    objectPosition: '42% 50%',
     fit: 'cover',
     priority: true,
-    status: 'placeholder',
+    status: 'approved',
   },
   'customer-mobile': {
     id: 'customer-mobile',
