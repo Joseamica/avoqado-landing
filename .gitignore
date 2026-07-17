@@ -29,6 +29,7 @@ pnpm-debug.log*
 .wrangler/.dev.vars
 .dev.vars
 .gstack/
+.worktrees/
 
 # Playwright MCP test artifacts (console logs + page snapshots)
 .playwright-mcp/
