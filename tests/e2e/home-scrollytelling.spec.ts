@@ -642,7 +642,7 @@ test('mantiene el conector dentro del panel en todos los viewports', async ({ pa
   }
 });
 
-test('remide el origen después de un cambio de transform', async ({ page }, testInfo) => {
+test('remide el origen después de un cambio real de layout', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-desktop');
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/?motion=full');
@@ -650,15 +650,14 @@ test('remide el origen después de un cambio de transform', async ({ page }, tes
   const opening = page.locator('[data-opening-mode="animated"]');
   await scrollOpeningTo(page, 0.84 + 0.52 * (0.94 - 0.84));
   const scene = opening.locator('[data-opening-channel-handoff]');
-  const sourceRow = scene.locator('.story-channel-row[data-channel-active="true"]');
-  await sourceRow.evaluate(element => {
-    (element as HTMLElement).style.transform = 'translateX(-14px)';
+  const source = scene.locator('[data-channel-route-source]');
+  await source.evaluate(element => {
+    (element as HTMLElement).style.width = '2rem';
   });
   await page.evaluate(() => new Promise<void>(resolve => {
     requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
   }));
 
-  const source = scene.locator('[data-channel-route-source]');
   const route = scene.locator('[data-channel-route-path]');
   const sourceDistance = await route.evaluate((routeElement, sourceElement) => {
     const path = routeElement as SVGPathElement;

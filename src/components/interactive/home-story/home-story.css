@@ -115,8 +115,7 @@
 
 .story-channel-route-source {
   left: -0.3125rem;
-  top: 50%;
-  transform: translateY(-50%);
+  top: calc(50% - 0.3125rem);
 }
 
 .story-channel-route-target {
@@ -136,8 +135,7 @@
 
   .story-channel-route-target {
     left: -0.3125rem;
-    top: 50%;
-    transform: translateY(-50%);
+    top: calc(50% - 0.3125rem);
   }
 }
 

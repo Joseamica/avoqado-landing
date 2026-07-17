@@ -3,6 +3,7 @@ import { expect, test, type Page } from 'playwright/test';
 declare global {
   interface Window {
     __avoqadoOpeningLayoutReads: number;
+    __avoqadoOpeningChannelLayoutReads: number;
   }
 }
 
@@ -10,13 +11,20 @@ async function installLayoutReadCounter(page: Page) {
   await page.addInitScript(() => {
     const sharedTileSelector =
       '[data-shared-tile-source], [data-shared-tile-target], [data-shared-tile-overlay]';
+    const channelRouteSelector =
+      '[data-channel-route-source], [data-channel-route-target], [data-channel-route]';
     const track = (element: unknown) => {
-      if (element instanceof Element && element.matches(sharedTileSelector)) {
+      if (!(element instanceof Element)) return;
+      if (element.matches(sharedTileSelector)) {
         window.__avoqadoOpeningLayoutReads += 1;
+      }
+      if (element.matches(channelRouteSelector)) {
+        window.__avoqadoOpeningChannelLayoutReads += 1;
       }
     };
 
     window.__avoqadoOpeningLayoutReads = 0;
+    window.__avoqadoOpeningChannelLayoutReads = 0;
 
     const rectDescriptor = Object.getOwnPropertyDescriptor(
       Element.prototype,
@@ -103,4 +111,17 @@ test('early opening does not measure shared tiles on every frame', async ({ page
   const layoutReads = await page.evaluate(() => window.__avoqadoOpeningLayoutReads);
   console.log(`opening shared-tile layout reads: ${layoutReads}`);
   expect(layoutReads).toBeLessThan(300);
+});
+
+test('channel handoff does not measure its route on every frame', async ({ page }) => {
+  await installLayoutReadCounter(page);
+  await page.goto('/?motion=full');
+  await page.evaluate(() => {
+    window.__avoqadoOpeningChannelLayoutReads = 0;
+  });
+  await scrollOpeningRange(page, 0.62, 0.98);
+
+  const layoutReads = await page.evaluate(() => window.__avoqadoOpeningChannelLayoutReads);
+  console.log(`opening channel-handoff layout reads: ${layoutReads}`);
+  expect(layoutReads).toBeLessThan(250);
 });

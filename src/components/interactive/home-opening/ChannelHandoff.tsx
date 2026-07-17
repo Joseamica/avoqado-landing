@@ -242,16 +242,14 @@ export default function ChannelHandoff({ openingProgress, progress, sequenceProg
     const target = targetRef.current;
     if (!visual || !source || !target) return;
     const ledger = source.closest<HTMLElement>('.story-channel-ledger');
-    const sourceRow = source.closest<HTMLElement>('.story-channel-row');
     const event = target.closest<HTMLElement>('.story-channel-event');
-    if (!ledger || !sourceRow || !event) return;
+    if (!ledger || !event) return;
 
     setRoute(current => ({ ...current, ready: false }));
 
     let active = true;
     const measure = () => {
       if (!active) return;
-      const visualRect = visual.getBoundingClientRect();
       const centerWithinVisual = (element: HTMLElement): RoutePoint => {
         let x = element.offsetWidth / 2;
         let y = element.offsetHeight / 2;
@@ -260,16 +258,11 @@ export default function ChannelHandoff({ openingProgress, progress, sequenceProg
         while (current && current !== visual) {
           x += current.offsetLeft;
           y += current.offsetTop;
-          const transform = getComputedStyle(current).transform;
-          if (transform !== 'none') {
-            const matrix = new DOMMatrixReadOnly(transform);
-            x += matrix.m41;
-            y += matrix.m42;
-          }
           current = current.offsetParent as HTMLElement | null;
         }
 
         if (current === visual) return { x, y };
+        const visualRect = visual.getBoundingClientRect();
         const rect = element.getBoundingClientRect();
         return {
           x: rect.left - visualRect.left + rect.width / 2,
@@ -329,20 +322,14 @@ export default function ChannelHandoff({ openingProgress, progress, sequenceProg
     observer.observe(event);
     observer.observe(source);
     observer.observe(target);
-    const transformObserver = new MutationObserver(scheduleMeasure);
-    transformObserver.observe(sourceRow, { attributes: true, attributeFilter: ['style'] });
-    transformObserver.observe(event, { attributes: true, attributeFilter: ['style'] });
-    const stopMeasuringProgress = sequenceProgress.on('change', scheduleMeasure);
     void document.fonts?.ready.then(scheduleMeasure);
     return () => {
       active = false;
-      stopMeasuringProgress();
       cancelFrame(scheduleMeasure);
       cancelFrame(measure);
       observer.disconnect();
-      transformObserver.disconnect();
     };
-  }, [activeDemonstration.channelId, geometry, routeProgress, sequenceProgress]);
+  }, [activeDemonstration.channelId, geometry, routeProgress]);
 
   const surfaceOpacity = useTransform(progress, [0, 0.12], [0, 1]);
   const activeThread = (
