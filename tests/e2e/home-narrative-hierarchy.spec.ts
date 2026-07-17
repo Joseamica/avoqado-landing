@@ -24,7 +24,7 @@ const staticEvidence = {
 
 test('mantiene la narrativa completa en reduced motion y no-JS', async ({ page }, testInfo) => {
   test.skip(!['chromium-reduced', 'chromium-nojs'].includes(testInfo.project.name));
-  await page.goto('/');
+  await page.goto(testInfo.project.name === 'chromium-reduced' ? '/?motion=reduced' : '/');
   const mode = testInfo.project.name === 'chromium-reduced' ? 'static' : 'noscript';
   const story = page.locator(`[data-story-mode="${mode}"]`);
 
@@ -124,7 +124,7 @@ test('mantiene el titular de Entradas mientras demuestra tres canales', async ({
 
 test('conserva idea, hilo, demostraciones y resultado de Entradas sin scrub', async ({ page }, testInfo) => {
   test.skip(!['chromium-reduced', 'chromium-nojs'].includes(testInfo.project.name));
-  await page.goto('/');
+  await page.goto(testInfo.project.name === 'chromium-reduced' ? '/?motion=reduced' : '/');
   const mode = testInfo.project.name === 'chromium-reduced' ? 'static' : 'noscript';
   const opening = page.locator(`[data-opening-mode="${mode}"]`);
   await expect(opening.locator('[data-narrative-title]')).toHaveText('Tu cliente reserva, compra o paga como prefiera.');

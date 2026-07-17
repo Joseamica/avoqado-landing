@@ -13,11 +13,9 @@ export interface ConnectionHint {
 
 export function resolveMotionProfile({
   override,
-  prefersReducedMotion,
 }: MotionProfileInput): MotionProfile {
-  if (override === 'full') return 'full';
   if (override === 'reduced') return 'reduced';
-  return prefersReducedMotion ? 'reduced' : 'full';
+  return 'full';
 }
 
 export function resolveMediaProfile(connection?: ConnectionHint): MediaProfile {

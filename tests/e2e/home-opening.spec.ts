@@ -316,7 +316,7 @@ test('docks all five shared tiles at every required viewport', async ({ page }, 
 
 test('uses a static semantic opening for reduced motion', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-reduced');
-  await page.goto('/');
+  await page.goto('/?motion=reduced');
   const opening = page.locator('[data-opening-mode="static"]');
   await expect(opening).toBeVisible();
   await expect(page.locator('[data-opening-mode="animated"]')).toHaveCount(0);
@@ -342,7 +342,7 @@ test('keeps the same opening truth without JavaScript', async ({ page }, testInf
 
 test('exposes the three concise operation results in static modes', async ({ page }, testInfo) => {
   test.skip(!['chromium-reduced', 'chromium-nojs'].includes(testInfo.project.name));
-  await page.goto('/');
+  await page.goto(testInfo.project.name === 'chromium-reduced' ? '/?motion=reduced' : '/');
 
   const mode = testInfo.project.name === 'chromium-reduced' ? 'static' : 'noscript';
   const opening = page.locator(`[data-opening-mode="${mode}"]`);
@@ -362,7 +362,13 @@ test('exposes the three concise operation results in static modes', async ({ pag
 });
 
 test('uses understandable operation entry names in every rendering mode', async ({ page }, testInfo) => {
-  await page.goto(testInfo.project.name === 'chromium-desktop' ? '/?motion=full' : '/');
+  await page.goto(
+    testInfo.project.name === 'chromium-reduced'
+      ? '/?motion=reduced'
+      : testInfo.project.name === 'chromium-desktop'
+        ? '/?motion=full'
+        : '/',
+  );
   const mode = testInfo.project.name === 'chromium-reduced'
     ? 'static'
     : testInfo.project.name === 'chromium-nojs'

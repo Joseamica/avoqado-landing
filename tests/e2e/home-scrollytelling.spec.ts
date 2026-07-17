@@ -48,7 +48,7 @@ const sceneOrder = [
 ] as const;
 
 test('cuenta la historia completa en orden causal', async ({ page }, testInfo) => {
-  await page.goto('/');
+  await page.goto(testInfo.project.name === 'chromium-reduced' ? '/?motion=reduced' : '/');
 
   if (testInfo.project.name === 'chromium-reduced') {
     expect(await page.evaluate(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)).toBe(true);
@@ -1295,7 +1295,7 @@ test('recupera el cierre ilustrado y deja abrir el asistente', async ({ page }, 
 
 test('muestra el cierre ilustrado estático con movimiento reducido', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-reduced');
-  await page.goto('/');
+  await page.goto('/?motion=reduced');
 
   const invitation = page.locator('[data-homepage-chatbot-invitation]');
   await invitation.scrollIntoViewIfNeeded();
