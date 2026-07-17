@@ -313,33 +313,19 @@ const COLORS = {
 
 interface DoodleBackgroundProps {
   scrollYProgress: MotionValue<number>;
-  reducedMotion?: boolean;
 }
 
-export default function DoodleBackground({ scrollYProgress, reducedMotion = false }: DoodleBackgroundProps) {
+export default function DoodleBackground({ scrollYProgress }: DoodleBackgroundProps) {
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
       {doodleConfigs.map((doodle) => (
-        <DoodleItem
-          key={doodle.id}
-          doodle={doodle}
-          scrollYProgress={scrollYProgress}
-          reducedMotion={reducedMotion}
-        />
+        <DoodleItem key={doodle.id} doodle={doodle} scrollYProgress={scrollYProgress} />
       ))}
     </div>
   );
 }
 
-function DoodleItem({
-  doodle,
-  scrollYProgress,
-  reducedMotion,
-}: {
-  doodle: DoodleConfig;
-  scrollYProgress: MotionValue<number>;
-  reducedMotion: boolean;
-}) {
+function DoodleItem({ doodle, scrollYProgress }: { doodle: DoodleConfig; scrollYProgress: MotionValue<number> }) {
   const y = useTransform(
     scrollYProgress,
     [0, 1],
@@ -358,7 +344,7 @@ function DoodleItem({
         rotate: doodle.rotation,
         scale: doodle.scale,
         opacity: doodle.opacity,
-        y: reducedMotion ? 0 : y,
+        y,
       }}
     >
       {DoodleSVG(color)}

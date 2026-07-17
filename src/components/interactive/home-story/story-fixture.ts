@@ -1,0 +1,26 @@
+export const STORY_FIXTURE = {
+  organization: 'Estudio Lumina',
+  venue: 'Sucursal Centro',
+  comparisonVenue: 'Sucursal Norte',
+  customer: 'María G.',
+  staff: 'Ana Torres',
+  appointmentTime: '11:30',
+  service: 'Facial hidratante',
+  product: 'Crema facial 50 ml',
+  subtotal: '$295.00',
+  tip: '$53.10',
+  total: '$348.10',
+  points: 29,
+  commission: '$29.50',
+  stockBefore: 8,
+  stockAfter: 7,
+  selectedMerchant: 'Operación diaria',
+  alternateMerchant: 'Facturación',
+  selectedChannel: 'Reservación en línea',
+  paymentReference: 'AVQ-34810',
+  organizationTicket: '$192',
+  comparisonVenueTicket: '$184',
+  comparisonVenueTicketChange: '-8%',
+} as const;
+
+export type StoryFixture = typeof STORY_FIXTURE;

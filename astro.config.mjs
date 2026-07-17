@@ -80,8 +80,8 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      // Keep the internal asset-export stage out of the public sitemap
-      filter: (page) => !page.includes('/export-stage'),
+      // Keep internal and archived routes out of the public sitemap
+      filter: (page) => !page.includes('/export-stage') && !page.includes('/legacy'),
     }),
     sentry()
   ],

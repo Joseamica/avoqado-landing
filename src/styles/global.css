@@ -68,6 +68,10 @@
 
 /* Product accent colors (used in /productos pages) */
 :root {
+  --site-banner-height: 36px;
+  --site-nav-height: 60px;
+  --site-header-height: calc(var(--site-banner-height) + var(--site-nav-height));
+
   --color-product-dashboard: oklch(0.72 0.14 240);
   --color-product-tpv: oklch(0.81 0.22 135);
   --color-product-pos: oklch(0.68 0.15 290);
@@ -117,6 +121,12 @@
   --color-mockup-ink-faint: oklch(0.45 0.005 155);
   --color-mockup-light-bg: oklch(0.955 0.003 155);
   --color-mockup-light-card: oklch(1.0 0.003 155);
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --site-nav-height: 52px;
+  }
 }
 
 @keyframes fade-in {
@@ -232,6 +242,18 @@ button:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px var(--color-avoqado-dark-bg), 0 0 0 4px var(--color-avoqado-green);
   border-radius: 0.5rem;
+}
+
+/* Keep the closing chatbot invitation immersive, as in the original homepage. */
+[data-founders-banner] {
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+
+body.faq-invitation-active [data-site-navigation],
+body.faq-invitation-active [data-founders-banner] {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-100%);
 }
 
 /* ─── Avoqado Labs sub-brand: Dark + Mint (matches Avoqado main brand) ─── */

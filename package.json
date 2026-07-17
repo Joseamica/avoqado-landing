@@ -8,6 +8,9 @@
     "help:inventory": "node scripts/help-inventory.mjs",
     "help:check": "node scripts/help-check.mjs",
     "assets:export": "node scripts/export-marketing-assets.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:update": "playwright test --update-snapshots=all",
     "preview": "cloudflared tunnel run --url http://localhost:4321 avoqado-dev",
     "astro": "astro"
   },
