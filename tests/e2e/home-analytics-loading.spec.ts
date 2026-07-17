@@ -2,6 +2,18 @@ import { expect, test } from 'playwright/test';
 
 const externalAnalytics = /googletagmanager\.com\/gtm\.js|posthog.*\/static\/array\.js/;
 
+declare global {
+  interface Window {
+    __avoqadoLoadAt: number;
+    __avoqadoPreIdleCheckpoint: Promise<void>;
+    __avoqadoPreIdleCheckpointAt: number;
+  }
+}
+
+test.beforeEach(async ({}, testInfo) => {
+  test.skip(testInfo.project.name === 'chromium-nojs', 'requires JavaScript');
+});
+
 test('homepage defers external analytics until interaction or idle delay', async ({ page }) => {
   const requests: string[] = [];
   page.on('request', request => {
@@ -62,8 +74,25 @@ test('homepage starts deferred analytics after the post-load idle delay', async 
     if (externalAnalytics.test(request.url())) requests.push(request.url());
   });
 
+  await page.addInitScript(() => {
+    window.__avoqadoLoadAt = 0;
+    window.__avoqadoPreIdleCheckpointAt = 0;
+    window.__avoqadoPreIdleCheckpoint = new Promise(resolve => {
+      addEventListener('load', () => {
+        window.__avoqadoLoadAt = performance.now();
+        setTimeout(() => {
+          window.__avoqadoPreIdleCheckpointAt = performance.now();
+          resolve();
+        }, 2_250);
+      }, { once: true });
+    });
+  });
   await page.goto('/', { waitUntil: 'load' });
-  await page.waitForTimeout(2_250);
+  const checkpointAfterLoad = await page.evaluate(async () => {
+    await window.__avoqadoPreIdleCheckpoint;
+    return window.__avoqadoPreIdleCheckpointAt - window.__avoqadoLoadAt;
+  });
+  expect(checkpointAfterLoad).toBeGreaterThanOrEqual(2_250);
   expect(requests).toEqual([]);
 
   await expect.poll(() => requests, { timeout: 5_000 }).toHaveLength(2);
