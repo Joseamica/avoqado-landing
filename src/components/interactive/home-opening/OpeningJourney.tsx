@@ -77,6 +77,7 @@ export default function OpeningJourney({
             <SharedTileLayer
               rootRef={stageRef}
               progress={openingProgress}
+              channelProgress={channelProgress}
               layoutKey={isMobile ? 'mobile' : 'desktop'}
               onReadyChange={setSharedTilesReady}
             />
