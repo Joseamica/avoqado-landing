@@ -108,6 +108,17 @@ test('non-homepage routes retain immediate analytics bootstrap', async ({ page }
   await expect.poll(() => requests.length).toBeGreaterThan(0);
 });
 
+for (const hostname of ['links.avoqado.io', 'tpv.avoqado.io']) {
+  test(`${hostname} rewritten root retains immediate analytics bootstrap`, async ({ request }) => {
+    const response = await request.get('/', { headers: { host: hostname } });
+    const html = await response.text();
+
+    expect(response.ok()).toBe(true);
+    expect(html).toContain('googletagmanager.com/gtm.js');
+    expect(html).not.toContain("['pointerdown','touchstart','keydown']");
+  });
+}
+
 test('homepage keeps consent defaults ahead of deferred vendors', async ({ page }) => {
   await page.goto('/?_cc=DE', { waitUntil: 'domcontentloaded' });
   expect(await page.evaluate(() => Array.isArray(window.dataLayer))).toBe(true);

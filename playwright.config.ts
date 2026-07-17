@@ -19,6 +19,7 @@ export default defineConfig({
     : {
         command: 'npm run dev -- --host 127.0.0.1',
         url: baseURL,
+        env: { __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS: '.avoqado.io' },
         reuseExistingServer: true,
         timeout: 120_000,
       },
