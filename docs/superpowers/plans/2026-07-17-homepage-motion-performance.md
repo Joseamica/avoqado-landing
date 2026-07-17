@@ -1217,3 +1217,32 @@ After explicit approval to ship:
 5. Repeat the 8-second live opening trace.
 
 Rollback target: production commit `058e4fdd03fecfae898bc8d34b279d851d026800`.
+
+## Verification results
+
+Verified locally on 2026-07-17 from the production build served with
+`wrangler pages dev dist` at 1440×900 in Playwright Chromium.
+
+- Build: PASS. Only the pre-existing Cloudflare/Sentry/Astro prerender warnings
+  remained.
+- Static checks: `git diff --check` PASS; `public/video4.webm` is 2,362,617 bytes
+  (limit 2,621,440 bytes).
+- Complete serial homepage matrix: 148 passed, 192 intentionally skipped, 0 failed
+  in 4.4 minutes across desktop, mobile, small, reduced-motion, and no-JavaScript
+  projects.
+- Full-motion initial LCP: 1,000 ms. LCP was captured after the initial hero settled
+  and before the scripted scroll.
+- Eight-second full-motion opening scroll: maximum frame interval 34.2 ms;
+  20 intervals above 20 ms; 0 intervals above 50 ms; 0 long tasks above 50 ms.
+- Opening `getBoundingClientRect()` activity during the eight-second scroll:
+  12 reads total, or 1.5 reads/second. This is 980× below the measured
+  1,470 reads/second baseline.
+- Reduced motion: PASS with profile `reduced`, 3 opening chapters, 7 story chapters,
+  and no video element.
+- Save-Data: PASS with profile `lite`, complete animated story present, no video
+  element, and zero requests for `/video4.webm`.
+
+The frame and geometry measurements use a reproducible Playwright script under the
+ignored `.superpowers/sdd/` workspace. Frame intervals come from `requestAnimationFrame`;
+application long tasks come from `PerformanceObserver`; LCP is observed before the
+programmatic scroll so later chapters cannot replace the initial candidate.
