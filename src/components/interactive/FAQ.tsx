@@ -1,20 +1,21 @@
 import { useRef, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import DoodleBackground from './DoodleBackground';
+import { resolveMotionProfile } from './home-story/experience-profile';
 
 export default function FAQ() {
   const containerRef = useRef<HTMLElement>(null);
   const [mounted, setMounted] = useState(false);
   const [invitationActive, setInvitationActive] = useState(false);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
-  const motionPreference = useReducedMotion();
-  const [mediaReducedMotion, setMediaReducedMotion] = useState(false);
-  const [forceMotion, setForceMotion] = useState(false);
-  const reducedMotion = mounted && Boolean(motionPreference || mediaReducedMotion) && !forceMotion;
+  const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
-    setForceMotion(new URLSearchParams(window.location.search).get('motion') === 'full');
+    setReducedMotion(resolveMotionProfile({
+      override: new URLSearchParams(window.location.search).get('motion'),
+      prefersReducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    }) === 'reduced');
     setMounted(true);
     const updateSize = () => {
       setWindowSize({
@@ -25,10 +26,6 @@ export default function FAQ() {
     
     updateSize();
     window.addEventListener('resize', updateSize);
-    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const updateMotionPreference = () => setMediaReducedMotion(motionQuery.matches);
-    updateMotionPreference();
-    motionQuery.addEventListener('change', updateMotionPreference);
 
     const section = containerRef.current;
     const pageChrome = Array.from(document.querySelectorAll<HTMLElement>(
@@ -53,7 +50,6 @@ export default function FAQ() {
 
     return () => {
       window.removeEventListener('resize', updateSize);
-      motionQuery.removeEventListener('change', updateMotionPreference);
       visibilityObserver?.disconnect();
       setPageChromeHidden(false);
     };

@@ -1330,6 +1330,32 @@ test('muestra el cierre ilustrado estático con movimiento reducido', async ({ p
   await expect(page.locator('[data-chatbot-invitation-circle]')).toHaveCount(0);
 });
 
+test('mantiene el cierre animado en la portada aunque el sistema reduzca movimiento', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-reduced');
+  await page.goto('/');
+
+  const invitation = page.locator('[data-homepage-chatbot-invitation]');
+  await invitation.scrollIntoViewIfNeeded();
+  await invitation.evaluate(() => new Promise<void>(resolve => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
+
+  await expect(invitation).toHaveAttribute('data-reduced-motion', 'false');
+  const geometry = await invitation.evaluate(element => ({
+    height: element.getBoundingClientRect().height,
+    viewportHeight: window.innerHeight,
+  }));
+  expect(geometry.height).toBeGreaterThanOrEqual(geometry.viewportHeight * 2.9);
+
+  await invitation.evaluate(element => {
+    document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+    const top = element.getBoundingClientRect().top + window.scrollY;
+    const distance = element.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: top + distance * 0.2, behavior: 'auto' });
+  });
+  await expect(page.locator('[data-chatbot-invitation-arrow]')).toHaveCSS('opacity', '0');
+});
+
 test('fuerza y revierte el dibujo del cierre con motion=full', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'chromium-reduced');
   await page.goto('/?motion=full');
