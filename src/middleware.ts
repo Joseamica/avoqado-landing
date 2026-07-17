@@ -40,14 +40,38 @@ const gtmConsentDefault = (
 ) => `<!-- Consent Mode v2 defaults -->
 <script>(function(){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;var d=${grantedByDefault};var c={analytics:d,marketing:d};try{var s=JSON.parse(localStorage.getItem('cookieConsent')||'null');if(s){c.analytics=!!s.analytics;c.marketing=!!s.marketing;}}catch(e){}try{if(/[?&](gclid|gbraid|wbraid|fbclid|msclkid|li_fat_id|wa)=/.test(location.search)||/[?&]utm_medium=(cpc|ppc|paid|paidsocial|paid_social|display)/i.test(location.search)){c.analytics=true;c.marketing=true;}}catch(e){}gtag('consent','default',{ad_storage:c.marketing?'granted':'denied',ad_user_data:c.marketing?'granted':'denied',ad_personalization:c.marketing?'granted':'denied',analytics_storage:c.analytics?'granted':'denied',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});})();</script>`;
 
-// Head snippet — injected as high in <head> as possible (GTM requirement).
-const GTM_HEAD = `<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+// Executable GTM body. The wrapper is selected per route below so the homepage
+// can defer the external container without delaying Consent Mode defaults.
+const GTM_BOOTSTRAP = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','${GTM_ID}');</script>
-<!-- End Google Tag Manager -->`;
+})(window,document,'script','dataLayer','${GTM_ID}');`;
+
+const immediateScript = (code: string) => `<script>${code}</script>`;
+
+const deferredScript = (code: string) => `<script>
+(function(){
+  var started=false;
+  function start(){
+    if(started)return;
+    started=true;
+    ${code}
+  }
+  ['pointerdown','touchstart','keydown'].forEach(function(type){
+    addEventListener(type,start,{once:true,passive:true,capture:true});
+  });
+  addEventListener('load',function(){
+    setTimeout(function(){
+      if('requestIdleCallback' in window){
+        requestIdleCallback(start,{timeout:2000});
+      }else{
+        setTimeout(start,0);
+      }
+    },2500);
+  },{once:true});
+})();
+</script>`;
 
 // Noscript fallback — injected immediately after the opening <body> tag.
 const GTM_BODY = `<!-- Google Tag Manager (noscript) -->
@@ -68,12 +92,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 // grants/revocations still flow via src/lib/gtm.ts → posthog.opt_in/out_capturing().
 // Session replay masks all inputs, so anything typed into a form is never recorded.
 const POSTHOG_KEY = 'phc_ywJ2xb3rYnXnaipgNQ6tbqS5pZK8HamLUNo4bUMsingG';
-const posthogSnippet = (grantedByDefault: boolean) => `<!-- PostHog -->
-<script>
+const posthogBootstrap = (grantedByDefault: boolean) => `
 !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-posthog.init('${POSTHOG_KEY}',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only',capture_pageview:true,capture_pageleave:true,autocapture:true,cross_subdomain_cookie:true,opt_out_capturing_by_default:true,session_recording:{maskAllInputs:true},loaded:function(ph){try{var lh=/^(localhost|127\\.0\\.0\\.1)$/.test(location.hostname);if(lh)return;var c=JSON.parse(localStorage.getItem('cookieConsent')||'null');var ad=/[?&](gclid|gbraid|wbraid|fbclid|msclkid|li_fat_id|wa)=/.test(location.search)||/[?&]utm_medium=(cpc|ppc|paid|paidsocial|paid_social|display)/i.test(location.search);var allow=ad||(c?!!c.analytics:${grantedByDefault});if(allow){ph.opt_in_capturing();}}catch(e){}}});
-</script>
-<!-- End PostHog -->`;
+posthog.init('${POSTHOG_KEY}',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only',capture_pageview:true,capture_pageleave:true,autocapture:true,cross_subdomain_cookie:true,opt_out_capturing_by_default:true,session_recording:{maskAllInputs:true},loaded:function(ph){try{var lh=/^(localhost|127\\.0\\.0\\.1)$/.test(location.hostname);if(lh)return;var c=JSON.parse(localStorage.getItem('cookieConsent')||'null');var ad=/[?&](gclid|gbraid|wbraid|fbclid|msclkid|li_fat_id|wa)=/.test(location.search)||/[?&]utm_medium=(cpc|ppc|paid|paidsocial|paid_social|display)/i.test(location.search);var allow=ad||(c?!!c.analytics:${grantedByDefault});if(allow){ph.opt_in_capturing();}}catch(e){}}});`;
 
 export const onRequest: MiddlewareHandler = async (context, next) => {
 	const url = new URL(context.request.url);
@@ -117,7 +138,18 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
 	// already present in the rendered HTML. Consent defaults + PostHog opt-in are
 	// per-region: opt-out countries (no banner) start GRANTED, EEA/UK/CH DENIED.
 	if (!html.includes(GTM_ID)) {
-		html = html.replace('<head>', () => `<head>\n${gtmConsentDefault(!consentRequired)}\n${GTM_HEAD}\n${posthogSnippet(!consentRequired)}`);
+		const isHomepage = path === '';
+		const gtmScript = isHomepage
+			? deferredScript(GTM_BOOTSTRAP)
+			: immediateScript(GTM_BOOTSTRAP);
+		const posthogScript = isHomepage
+			? deferredScript(posthogBootstrap(!consentRequired))
+			: immediateScript(posthogBootstrap(!consentRequired));
+
+		html = html.replace(
+			'<head>',
+			() => `<head>\n${gtmConsentDefault(!consentRequired)}\n${gtmScript}\n${posthogScript}`,
+		);
 		// Stamp data-consent-required on <body> for EEA/UK/CH visitors only, then
 		// append the GTM noscript. Preserves any attributes the page already set
 		// (e.g. data-skip-consent-for-ads, data-floating-cta).
