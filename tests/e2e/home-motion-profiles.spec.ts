@@ -44,6 +44,10 @@ test('motion=reduced overrides a normal browser preference', async ({ page }, te
 
 test('save-data selects lite media without changing the story mode', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name === 'chromium-nojs');
+  const videoRequests: string[] = [];
+  page.on('request', request => {
+    if (request.url().includes('/video4.webm')) videoRequests.push(request.url());
+  });
   await page.addInitScript(() => {
     Object.defineProperty(navigator, 'connection', {
       configurable: true,
@@ -56,6 +60,11 @@ test('save-data selects lite media without changing the story mode', async ({ pa
   const experience = page.locator('[data-home-motion-profile]');
   await expect(experience).toHaveAttribute('data-home-motion-profile', 'full');
   await expect(experience).toHaveAttribute('data-home-media-profile', 'lite');
+  await expect(page.locator('[data-opening-video-fallback]')).toBeVisible();
+  await expect(page.locator('[data-opening-video-fallback]'))
+    .toHaveAttribute('src', '/video4-poster.webp');
+  await expect(page.locator('[data-opening-video] video')).toHaveCount(0);
+  expect(videoRequests).toEqual([]);
 });
 
 test('reduced motion advances through viewport-sized chapters', async ({ page }) => {

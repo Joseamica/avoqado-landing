@@ -6,9 +6,15 @@ interface Props {
   progress: MotionValue<number>;
   isMobile: boolean;
   autoplay: boolean;
+  liteMedia: boolean;
 }
 
-export default function OpeningVideo({ progress, isMobile, autoplay }: Props) {
+export default function OpeningVideo({
+  progress,
+  isMobile,
+  autoplay,
+  liteMedia,
+}: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoFailed, setVideoFailed] = useState(false);
   const scale = useTransform(progress, [0, 0.38], [1, isMobile ? 0.31 : 0.105]);
@@ -30,13 +36,25 @@ export default function OpeningVideo({ progress, isMobile, autoplay }: Props) {
       return;
     }
 
-    if (!autoplay || videoFailed) {
+    if (!autoplay || videoFailed || liteMedia) {
       video?.pause();
       return;
     }
 
-    void video?.play().catch(() => undefined);
-  }, [autoplay, videoFailed]);
+    if (!video) return;
+
+    const play = () => {
+      void video.play().catch(() => undefined);
+    };
+
+    if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
+      play();
+      return;
+    }
+
+    video.addEventListener('loadedmetadata', play, { once: true });
+    return () => video.removeEventListener('loadedmetadata', play);
+  }, [autoplay, liteMedia, videoFailed]);
 
   return (
     <motion.div
@@ -51,7 +69,7 @@ export default function OpeningVideo({ progress, isMobile, autoplay }: Props) {
         aria-hidden="true"
         className="absolute inset-0 size-full object-cover"
       />
-      {!videoFailed ? (
+      {!videoFailed && !liteMedia && autoplay ? (
         <video
           ref={videoRef}
           src="/video4.webm"

@@ -51,6 +51,7 @@ export default function HomepageStory() {
           <OpeningJourney
             variant="channel-handoff"
             autoplay={mounted}
+            mediaProfile={mediaProfile}
           />
           <AnimatedStory />
         </>

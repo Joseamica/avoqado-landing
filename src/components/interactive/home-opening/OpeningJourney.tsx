@@ -4,15 +4,18 @@ import ChannelHandoff from './ChannelHandoff';
 import OpeningMosaic from './OpeningMosaic';
 import OpeningVideo from './OpeningVideo';
 import SharedTileLayer from './SharedTileLayer';
+import type { MediaProfile } from '../home-story/experience-profile';
 
 export interface OpeningJourneyProps {
   variant?: 'mosaic-only' | 'channel-handoff';
   autoplay?: boolean;
+  mediaProfile?: MediaProfile;
 }
 
 export default function OpeningJourney({
   variant = 'channel-handoff',
   autoplay = true,
+  mediaProfile = 'standard',
 }: OpeningJourneyProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -59,7 +62,12 @@ export default function OpeningJourney({
         : 'relative h-[360vh] bg-black md:h-[400vh]'}
     >
       <div ref={stageRef} className="sticky left-0 top-0 h-screen w-full overflow-hidden">
-        <OpeningVideo progress={openingProgress} isMobile={isMobile} autoplay={autoplay} />
+        <OpeningVideo
+          progress={openingProgress}
+          isMobile={isMobile}
+          autoplay={autoplay}
+          liteMedia={mediaProfile === 'lite'}
+        />
         <OpeningMosaic
           progress={openingProgress}
           variant={variant}
