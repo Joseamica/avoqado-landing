@@ -2,25 +2,51 @@ import { expect, test, type Page } from 'playwright/test';
 
 declare global {
   interface Window {
-    __avoqadoOpeningRectReads: number;
+    __avoqadoOpeningLayoutReads: number;
   }
 }
 
-async function installRectCounter(page: Page) {
+async function installLayoutReadCounter(page: Page) {
   await page.addInitScript(() => {
-    const original = Element.prototype.getBoundingClientRect;
-    window.__avoqadoOpeningRectReads = 0;
-    Element.prototype.getBoundingClientRect = function (...args) {
-      if (
-        this instanceof Element
-        && this.matches(
-          '[data-shared-tile-source], [data-shared-tile-target], [data-shared-tile-overlay]',
-        )
-      ) {
-        window.__avoqadoOpeningRectReads += 1;
+    const sharedTileSelector =
+      '[data-shared-tile-source], [data-shared-tile-target], [data-shared-tile-overlay]';
+    const track = (element: unknown) => {
+      if (element instanceof Element && element.matches(sharedTileSelector)) {
+        window.__avoqadoOpeningLayoutReads += 1;
       }
-      return original.apply(this, args as []);
     };
+
+    window.__avoqadoOpeningLayoutReads = 0;
+
+    const rectDescriptor = Object.getOwnPropertyDescriptor(
+      Element.prototype,
+      'getBoundingClientRect',
+    )!;
+    const originalRect = rectDescriptor.value as typeof Element.prototype.getBoundingClientRect;
+    Object.defineProperty(Element.prototype, 'getBoundingClientRect', {
+      ...rectDescriptor,
+      value: function (...args: []) {
+        track(this);
+        return originalRect.apply(this, args);
+      },
+    });
+
+    for (const property of [
+      'offsetWidth',
+      'offsetHeight',
+      'offsetLeft',
+      'offsetTop',
+    ] as const) {
+      const descriptor = Object.getOwnPropertyDescriptor(HTMLElement.prototype, property)!;
+      const originalGet = descriptor.get!;
+      Object.defineProperty(HTMLElement.prototype, property, {
+        ...descriptor,
+        get: function () {
+          track(this);
+          return originalGet.call(this);
+        },
+      });
+    }
   });
 }
 
@@ -47,13 +73,10 @@ async function scrollOpeningRange(page: Page, start: number, end: number) {
 }
 
 test('early opening does not measure shared tiles on every frame', async ({ page }) => {
-  await installRectCounter(page);
+  await installLayoutReadCounter(page);
   await page.goto('/?motion=full');
   await expect(page.locator('[data-shared-tile-overlay]')).toHaveCount(5);
   await scrollOpeningRange(page, 0.05, 0.55);
-
-  expect(await page.evaluate(() => window.__avoqadoOpeningRectReads))
-    .toBeLessThan(200);
 
   const dockingDistances = await page.locator('[data-shared-tile-overlay]').evaluateAll(
     overlays => overlays.map(overlay => {
@@ -70,4 +93,14 @@ test('early opening does not measure shared tiles on every frame', async ({ page
     }),
   );
   expect(Math.max(...dockingDistances)).toBeLessThanOrEqual(3);
+
+  await scrollOpeningRange(page, 0.55, 0.35);
+  const sourceOpacities = await page.locator('[data-shared-tile-source]').evaluateAll(
+    sources => sources.map(source => Number.parseFloat(getComputedStyle(source).opacity)),
+  );
+  expect(Math.min(...sourceOpacities)).toBeGreaterThan(0.95);
+
+  const layoutReads = await page.evaluate(() => window.__avoqadoOpeningLayoutReads);
+  console.log(`opening shared-tile layout reads: ${layoutReads}`);
+  expect(layoutReads).toBeLessThan(300);
 });
