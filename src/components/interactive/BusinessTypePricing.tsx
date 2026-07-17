@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackGetStarted } from '../../lib/gtm';
 
@@ -335,9 +335,38 @@ function getTransactionFee(businessType: BusinessType, tierDiscount: number): st
   return `desde ${debitRate.toFixed(2)}% + $3`;
 }
 
+// Ad traffic (gyms, estéticas, tiendas) arrives via the "Precios y Comisiones" sitelink.
+// Let each campaign / landing deep-link to its giro with ?giro=<x> so the plan cards open
+// on that giro instead of the restaurant default. Accepts English keys and Spanish aliases.
+const GIRO_ALIASES: Record<string, BusinessType> = {
+  restaurants: 'restaurants',
+  restaurantes: 'restaurants',
+  retail: 'retail',
+  tiendas: 'retail',
+  services: 'services',
+  servicios: 'services',
+  beauty: 'beauty',
+  belleza: 'beauty',
+};
+
+function getGiroFromUrl(): BusinessType | null {
+  if (typeof window === 'undefined') return null;
+  const raw = new URLSearchParams(window.location.search).get('giro');
+  if (!raw) return null;
+  return GIRO_ALIASES[raw.toLowerCase().trim()] ?? null;
+}
+
 export default function BusinessTypePricing() {
   const [activeTab, setActiveTab] = useState<BusinessType>('restaurants');
   const currentPricing = pricingData[activeTab];
+
+  // Preselect the tab from ?giro= after mount. Done in an effect (not a lazy useState
+  // initializer) so the server render and first client render both start on 'restaurants'
+  // — that keeps hydration identical and avoids a mismatch warning.
+  useEffect(() => {
+    const giro = getGiroFromUrl();
+    if (giro) setActiveTab(giro);
+  }, []);
 
   return (
     <section id="plans" className="py-20 bg-gray-50">
