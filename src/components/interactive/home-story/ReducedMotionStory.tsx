@@ -19,9 +19,10 @@ export default function ReducedMotionStory({ mode = 'static' }: Props) {
           <section
             key={scene.id}
             data-story-scene={scene.id}
+            data-reduced-story-chapter={scene.id}
             className={light ? 'bg-neutral-50 text-neutral-950' : 'bg-neutral-950 text-neutral-50'}
           >
-            <div className="mx-auto flex min-h-[70dvh] max-w-6xl flex-col justify-center px-6 py-24 md:px-10">
+            <div className="mx-auto flex min-h-[90dvh] max-w-6xl flex-col justify-center px-6 py-24 md:px-10">
               <p data-narrative-eyebrow className={light ? 'text-sm font-medium text-green-800' : 'text-sm font-medium text-avoqado-green'}>
                 {scene.eyebrow}
               </p>
