@@ -189,6 +189,27 @@ test('resuelve la geometría sticky contra el viewport', async ({ page }, testIn
   }
 });
 
+test('restaura el contraste del header después de volver al inicio con scroll rápido', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop');
+  await page.goto('/');
+
+  const navigation = page.locator('[data-site-navigation]');
+  const logo = navigation.locator('img[alt="Avoqado"]');
+  await expect(navigation).toBeVisible();
+  await expect(logo).toHaveAttribute('src', '/imagotipo-white.png');
+
+  await page.evaluate(() => {
+    document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+    window.scrollTo(0, document.documentElement.scrollHeight);
+  });
+  await expect(logo).toHaveAttribute('src', '/imagotipo.png');
+
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  await expect(navigation).toHaveClass(/bg-transparent/);
+  await expect(logo).toHaveAttribute('src', '/imagotipo-white.png');
+});
+
 test('presenta canales y routing sin prometer routing bancario inteligente', async ({ page }, testInfo) => {
   test.skip(['chromium-reduced', 'chromium-nojs'].includes(testInfo.project.name));
   await page.goto('/');

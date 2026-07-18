@@ -133,18 +133,25 @@ export default function NavigationMenu() {
   // whatever section sits under it.
   useEffect(() => {
     const update = () => setIsLightUnderNav(detectLightUnderNav());
+    let settledUpdate: ReturnType<typeof setTimeout> | null = null;
+    const updateAfterScroll = () => {
+      update();
+      if (settledUpdate) clearTimeout(settledUpdate);
+      settledUpdate = setTimeout(update, 120);
+    };
     update();
     const raf = requestAnimationFrame(update);
     const timer = setTimeout(update, 250);
     window.addEventListener('load', update);
     window.addEventListener('resize', update);
-    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('scroll', updateAfterScroll, { passive: true });
     return () => {
       cancelAnimationFrame(raf);
       clearTimeout(timer);
+      if (settledUpdate) clearTimeout(settledUpdate);
       window.removeEventListener('load', update);
       window.removeEventListener('resize', update);
-      window.removeEventListener('scroll', update);
+      window.removeEventListener('scroll', updateAfterScroll);
     };
   }, [detectLightUnderNav]);
 
