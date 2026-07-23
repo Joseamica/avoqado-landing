@@ -320,17 +320,48 @@ import Layout from '../layouts/Layout.astro'
           eliminan automaticamente.
         </p>
 
-        <h3>13.4 Comparticion con terceros</h3>
+        <h3>13.4 Datos de la reservacion que se escriben en el evento</h3>
         <p>
-          Los datos obtenidos a traves de Google Calendar <strong>NO se comparten
-          con ningun tercero</strong>. No se transfieren a Blumon, BANORTE, OpenAI,
-          Sentry, Cloudflare ni a ningun otro proveedor enumerado en la seccion 4
-          de este Aviso. Los datos permanecen exclusivamente dentro de la
-          infraestructura de Avoqado y solo son visibles para los usuarios
-          autorizados del venue.
+          Cuando Avoqado crea o actualiza un evento en el Google Calendar que el
+          venue conecto, el evento incluye informacion de la reservacion. El nivel
+          de detalle es <strong>configurable por el venue</strong> (Reservaciones
+          &rarr; Configuracion &rarr; Google Calendar), con tres opciones:
+        </p>
+        <ul>
+          <li><strong>Minimo:</strong> el evento solo contiene un enlace al
+            dashboard de Avoqado. No se escribe ningun dato personal del cliente
+            final en Google Calendar.</li>
+          <li><strong>Servicio:</strong> el evento incluye los servicios reservados,
+            su duracion y su precio, pero <em>no</em> la identidad del cliente final
+            (nombre, telefono ni notas).</li>
+          <li><strong>Completo</strong> (opcion predeterminada): ademas de lo
+            anterior, el evento incluye el <strong>nombre y el telefono del cliente
+            final</strong> y las notas de la reservacion.</li>
+        </ul>
+        <p>
+          En los niveles "Servicio" y "Completo", esta escritura constituye una
+          <strong>transferencia de datos personales hacia Google</strong> (como
+          encargado del tratamiento), realizada por instruccion del venue que
+          activo la integracion y eligio el nivel de detalle. Avoqado actua como
+          encargado y el venue como responsable del tratamiento frente a sus
+          clientes finales; corresponde al venue reflejar esta transferencia en su
+          propio aviso de privacidad. El venue puede reducir en cualquier momento
+          el nivel de detalle o desconectar la integracion (seccion 13.6).
         </p>
 
-        <h3>13.5 Revocacion del acceso</h3>
+        <h3>13.5 Comparticion con otros terceros</h3>
+        <p>
+          Fuera de la escritura en el Google Calendar que el propio venue conecto
+          (seccion 13.4), los datos relacionados con esta integracion <strong>NO se
+          comparten con ningun otro tercero</strong>. No se transfieren a Blumon,
+          BANORTE, OpenAI, Sentry, Cloudflare ni a ningun otro proveedor enumerado
+          en la seccion 4 de este Aviso. Los datos permanecen dentro de la
+          infraestructura de Avoqado y del calendario que el venue eligio conectar,
+          y solo son visibles para quienes el venue haya autorizado a ver ese
+          calendario.
+        </p>
+
+        <h3>13.6 Revocacion del acceso</h3>
         <p>El usuario puede revocar el acceso a su Google Calendar en cualquier momento:</p>
         <ul>
           <li><strong>Desde Avoqado:</strong> Reservaciones &rarr; Configuracion &rarr;
@@ -342,7 +373,7 @@ import Layout from '../layouts/Layout.astro'
             asociados de su infraestructura.</li>
         </ul>
 
-        <h3>13.6 Cumplimiento de la politica de Google</h3>
+        <h3>13.7 Cumplimiento de la politica de Google</h3>
         <p>
           El uso y la transferencia de informacion recibida desde Google APIs por
           parte de Avoqado se adhiere a la
@@ -350,7 +381,7 @@ import Layout from '../layouts/Layout.astro'
           incluyendo los requisitos de Limited Use cuando estos aplican.
         </p>
 
-        <h3>13.7 Contacto</h3>
+        <h3>13.8 Contacto</h3>
         <p>
           Para cualquier consulta relacionada con esta integracion o el uso de
           datos de Google Calendar, escribanos a <strong>hola@avoqado.io</strong>.
